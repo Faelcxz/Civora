@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Civora | Integração Cidadã & Prefeitura</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            civora: {
+              deep: '#4C1D95',
+              primary: '#6D28D9',
+              medium: '#7C3AED',
+              light: '#A78BFA',
+              soft: '#EDE9FE',
+              bg: '#F8FAFC',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Leaflet CSS & JS para o Mapa Interativo Central -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F8FAFC;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar elegante em tons de roxo */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C4B5FD;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #7C3AED;
+    }
+
+    /* Ajustes do Leaflet para estética limpa e z-index controlado */
+    .leaflet-container {
+      font-family: 'Inter', sans-serif;
+      z-index: 10;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 14px;
+      box-shadow: 0 10px 25px -5px rgba(76, 29, 149, 0.18);
+      padding: 0;
+      overflow: hidden;
+    }
+    .leaflet-popup-content {
+      margin: 0;
+      width: 270px !important;
+    }
+
+    /* Marcador customizado pulsante */
+    .custom-pin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+      transition: transform 0.2s ease;
+    }
+    .custom-pin:hover {
+      transform: scale(1.18);
+    }
+
+    /* Animações suaves para overlays */
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    .animate-overlay {
+      animation: fadeInScale 0.22s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-purple-200 selection:text-purple-900">
+
+  <!-- CONTAINER PRINCIPAL DO DASHBOARD -->
+  <div class="flex min-h-screen flex-col lg:flex-row">
+
+    <!-- SIDEBAR ROXA INSPIRADA NA REFERÊNCIA -->
+    <aside class="w-full lg:w-64 bg-gradient-to-b from-[#4C1D95] via-[#5B21B6] to-[#6D28D9] text-white flex flex-col justify-between shrink-0 shadow-xl z-30">
+      <div>
+        <!-- Logo Civora -->
+        <div class="p-5 flex items-center justify-between lg:justify-start gap-3 border-b border-purple-700/50">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 flex items-center justify-center shadow-inner">
+              <i data-lucide="landmark" class="w-6 h-6 text-purple-100"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-extrabold tracking-tight leading-none text-white">Civora</h1>
+              <span class="text-[11px] font-medium text-purple-200 tracking-wide">Prefeitura & Cidadão</span>
+            </div>
+          </div>
+          <!-- Botão Menu Mobile -->
+          <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white" aria-label="Abrir menu">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Perfil Cidadão Conectado -->
+        <div class="hidden lg:flex items-center gap-3 px-5 py-4 bg-purple-950/25 border-b border-purple-700/40">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" onerror="this.src='https://placehold.co/80x80/7C3AED/FFFFFF?text=MC'" alt="Avatar Cidadã" class="w-10 h-10 rounded-full object-cover border-2 border-purple-300" />
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-white truncate">Mariana Costa</p>
+            <p class="text-xs text-purple-200 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Cidadã Verificada
+            </p>
+          </div>
+        </div>
+
+        <!-- Navegação Principal -->
+        <nav id="sidebarNav" class="hidden lg:flex flex-col gap-1.5 p-3">
+          <button onclick="switchMainView('dashboard')" id="nav-dashboard" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-white/20 text-white shadow-sm transition-all">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            <span>Mapa & Dashboard</span>
+          </button>
+
+          <button onclick="openReportModal()" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+            <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-300"></i>
+            <span>Nova Denúncia</span>
+            <span class="ml-auto text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-200 border border-amber-300/30">+ Criar</span>
+          </button>
+
+          <!-- BOTÃO CULTURA (TELA INTEIRA) -->
+          <button onclick="openCultureOverlay()" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-purple-100 hover:bg-white/15 hover:text-white transition-all group">
+            <i data-lucide="palette" class="w-5 h-5 text-pink-300 group-hover:scale-110 transition-transform"></i>
+            <span>Espaço Cultura</span>
+            <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-500/30 text-pink-100 border border-pink-300/30">Tela Cheia</span>
+          </button>
+
+          <button onclick="switchMainView('donations')" id="nav-donations" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+            <i data-lucide="heart-handshake" class="w-5 h-5 text-emerald-300"></i>
+            <span>Doações Sociais</span>
+          </button>
+
+          <div class="pt-4 pb-1 px-4">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-purple-300/80">Filtros Rápidos no Mapa</p>
+          </div>
+
+          <div class="px-3 space-y-1.5 text-xs">
+            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('buraco')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+              <span class="text-purple-100">Esburacamento na Via</span>
+            </label>
+            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('sinalizacao')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              <span class="text-purple-100">Falta de Sinalização</span>
+            </label>
+            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('danificado')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+              <span class="text-purple-100">Espaço Danificado</span>
+            </label>
+            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('acessibilidade')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
+              <span class="text-purple-100">Falta de Acessibilidade</span>
+            </label>
+            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('cultura')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-500"></span>
+              <span class="text-purple-100">Patrimônio / Obra Cultural</span>
+            </label>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Rodapé Sidebar: Status Prefeitura -->
+      <div class="hidden lg:block p-4 m-3 rounded-2xl bg-purple-950/40 border border-purple-400/20">
+        <div class="flex items-center gap-2 text-xs font-semibold text-purple-200 mb-1">
+          <i data-lucide="radio" class="w-4 h-4 text-emerald-400 animate-pulse"></i>
+          <span>Central Integrada Ativa</span>
+        </div>
+        <p class="text-[11px] text-purple-300 leading-relaxed">
+          Sincronizado em tempo real com Secretarias de Obras, Mobilidade, Cultura e Assistência Social.
+        </p>
+      </div>
+    </aside>
+
+    <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+      <!-- TOP BAR LIMPA COM BUSCA E STATUS -->
+      <header class="bg-white border-b border-slate-200/80 px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-20">
+        <div class="flex items-center gap-3 flex-1 min-w-[220px] max-w-md">
+          <div class="relative w-full">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input
+              id="searchInput"
+              type="text"
+              oninput="handleSearch(this.value)"
+              placeholder="Buscar rua, bairro ou protocolo no mapa..."
+              class="w-full pl-10 pr-4 py-2 text-sm bg-slate-100/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all"
+            />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <span class="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl bg-purple-50 text-purple-700 border border-purple-200">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+            Município Conectado • SP
+          </span>
+
+          <button onclick="openCultureOverlay()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-purple-100 text-purple-800 hover:bg-purple-200 border border-purple-200 transition-all shadow-sm">
+            <i data-lucide="palette" class="w-4 h-4 text-purple-700"></i>
+            <span>Cultura</span>
+          </button>
+
+          <button onclick="openReportModal()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#6D28D9] hover:bg-[#5B21B6] text-white shadow-md shadow-purple-600/20 transition-all">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Registrar Denúncia</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW 1: DASHBOARD & MAPA INTERATIVO -->
+      <main id="view-dashboard" class="p-4 sm:p-6 space-y-6 flex-1">
+
+        <!-- Cabeçalho da Seção -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Painel Urbano & Zeladoria Cidadã</h2>
+            <p class="text-sm text-slate-500">Clique em qualquer ponto do mapa para registrar uma nova ocorrência ou inspecionar denúncias existentes.</p>
+          </div>
+          <div class="text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm self-start sm:self-auto">
+            Atualizado agora • <span id="liveClock" class="font-semibold text-purple-700"></span>
+          </div>
+        </div>
+
+        <!-- GRID DE KPI CARDS (Inspirado na imagem 1) -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <!-- KPI 1 -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between">
+              <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                <i data-lucide="map-pinned" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Em tempo real</span>
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+              <span id="kpiTotalReports" class="text-3xl font-extrabold text-slate-900">0</span>
+              <span class="text-xs font-medium text-slate-500">ocorrências no mapa</span>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span><strong id="kpiPendingCount" class="text-rose-600">0</strong> pendentes</span>
+              <span><strong id="kpiInProgressCount" class="text-amber-600">0</strong> em análise</span>
+            </div>
+          </div>
+
+          <!-- KPI 2 -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between">
+              <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">+18% este mês</span>
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+              <span id="kpiResolvedCount" class="text-3xl font-extrabold text-slate-900">142</span>
+              <span class="text-xs font-medium text-slate-500">solucionadas pela Prefeitura</span>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span>Tempo médio: <strong class="text-slate-700">4,2 dias</strong></span>
+              <span class="text-emerald-600 font-semibold">94% aprovação</span>
+            </div>
+          </div>
+
+          <!-- KPI 3 (Acesso rápido Cultura) -->
+          <div onclick="openCultureOverlay()" class="cursor-pointer bg-gradient-to-br from-[#5B21B6] to-[#7C3AED] text-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all group">
+            <div class="flex items-start justify-between">
+              <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                <i data-lucide="palette" class="w-6 h-6 text-pink-200"></i>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20 text-white group-hover:bg-white group-hover:text-purple-900 transition-colors">Abrir Galeria →</span>
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+              <span class="text-3xl font-extrabold">38</span>
+              <span class="text-xs font-medium text-purple-200">artistas locais ativos</span>
+            </div>
+            <div class="mt-3 pt-3 border-t border-white/15 flex items-center justify-between text-xs text-purple-100">
+              <span>Exposição, Vendas & Apoio</span>
+              <span class="font-semibold underline">Tela Cheia</span>
+            </div>
+          </div>
+
+          <!-- KPI 4 (Acesso rápido Doações) -->
+          <div onclick="switchMainView('donations')" class="cursor-pointer bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all">
+            <div class="flex items-start justify-between">
+              <div class="w-11 h-11 rounded-xl bg-fuchsia-100 text-fuchsia-700 flex items-center justify-center">
+                <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">Unidades Carentes</span>
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+              <span id="kpiTotalDonated" class="text-3xl font-extrabold text-slate-900">R$ 24.850</span>
+              <span class="text-xs font-medium text-slate-500">arrecadados</span>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span><strong class="text-purple-700">6 unidades</strong> cadastradas</span>
+              <span class="text-purple-700 font-semibold">Doar agora →</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- GRID PRINCIPAL: MAPA INTERATIVO CENTRAL + LISTA DE OCORRÊNCIAS & MÉTRICAS -->
+        <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+          <!-- COLUNA DO MAPA (8 colunas no desktop) -->
+          <div class="xl:col-span-8 bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col">
+            <!-- Barra Superior do Mapa -->
+            <div class="px-5 py-3.5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-600 animate-ping"></span>
+                <h3 class="font-bold text-slate-800 text-sm sm:text-base">Mapa Interativo de Ocorrências Municipais</h3>
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="text-slate-500 hidden sm:inline">Dica: Clique no mapa para marcar um local</span>
+                <button onclick="centerMapDefault()" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-purple-50 hover:text-purple-700 font-medium text-slate-600 flex items-center gap-1 transition-colors">
+                  <i data-lucide="crosshair" class="w-3.5 h-3.5"></i> Centralizar
+                </button>
+              </div>
+            </div>
+
+            <!-- Container do Mapa Leaflet -->
+            <div class="relative w-full h-[430px] sm:h-[510px]">
+              <div id="cityMap" class="w-full h-full"></div>
+
+              <!-- Legenda Flutuante no canto do Mapa -->
+              <div class="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-xl shadow-lg border border-slate-200/80 text-xs space-y-1.5 max-w-[230px]">
+                <p class="font-bold text-slate-800 text-[11px] uppercase tracking-wider">Legenda de Denúncias</p>
+                <div class="grid grid-cols-1 gap-1 text-[11px] text-slate-600">
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span> Esburacamento na rua</div>
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span> Falta de sinalização</div>
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-orange-500 shrink-0"></span> Espaço danificado</div>
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0"></span> Falta de acessibilidade</div>
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-fuchsia-600 shrink-0"></span> Obra/Patrimônio Cultural</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUNA LATERAL DIREITA: FEED DE DENÚNCIAS & BARRAS DE CATEGORIA (4 colunas) -->
+          <div class="xl:col-span-4 flex flex-col gap-6">
+
+            <!-- Card Gráfico de Barras CSS (Estilo referência 1) -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                  <i data-lucide="bar-chart-3" class="w-4 h-4 text-purple-600"></i>
+                  Demandas por Categoria
+                </h3>
+                <span class="text-xs font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md">Ativas</span>
+              </div>
+              <div id="categoryBarsContainer" class="space-y-3 text-xs">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+
+            <!-- Feed Recente de Ocorrências -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm flex-1 flex flex-col overflow-hidden">
+              <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                <h3 class="font-bold text-slate-800 text-sm">Denúncias Recentes</h3>
+                <select id="statusFilterSelect" onchange="renderReportsList()" class="text-xs bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                  <option value="all">Todos os status</option>
+                  <option value="Pendente">Pendente</option>
+                  <option value="Em análise">Em análise</option>
+                  <option value="Resolvido">Resolvido</option>
+                </select>
+              </div>
+              <div id="reportsFeedList" class="p-4 space-y-3 overflow-y-auto max-h-[340px]">
+                <!-- Cards das denúncias renderizados via JS -->
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </main>
+
+      <!-- VIEW 2: DOAÇÕES SOCIAIS (UNIDADES CARENTES DA CIDADE) -->
+      <main id="view-donations" class="hidden p-4 sm:p-6 space-y-6 flex-1">
+        <div class="bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] rounded-2xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="space-y-2 max-w-2xl">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-purple-100">
+              <i data-lucide="heart-handshake" class="w-3.5 h-3.5"></i> Rede Solidária Municipal
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold">Doações para Unidades Carentes da Cidade</h2>
+            <p class="text-sm text-purple-100 leading-relaxed">
+              Apoie diretamente abrigos, creches comunitárias, cozinhas solidárias e centros de acolhimento homologados pela Prefeitura. Transparência total em cada recurso destinado.
+            </p>
+          </div>
+          <div class="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-4 min-w-[210px]">
+            <p class="text-xs text-purple-200">Total Arrecadado na Campanha</p>
+            <p id="donationsBannerTotal" class="text-2xl sm:text-3xl font-extrabold text-white mt-1">R$ 24.850,00</p>
+            <button onclick="switchMainView('dashboard')" class="mt-3 w-full py-2 px-3 rounded-xl bg-white text-purple-900 font-semibold text-xs hover:bg-purple-50 transition-colors">
+              ← Voltar ao Mapa Geral
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid de Unidades Carentes -->
+        <div id="socialUnitsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <!-- Renderizado via JS -->
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       OVERLAY EM TELA CHEIA: ESPAÇO CULTURA (100% DA TELA - fixed inset-0)
+       Contém: Exposição de Artes, Venda de Obras, Doação Artistas Independentes
+       e Denúncia de Patrimônio/Obra sem Investimento
+       ===================================================================== -->
+  <div id="cultureFullscreenOverlay" class="hidden fixed inset-0 z-50 bg-slate-50 flex flex-col overflow-hidden animate-overlay">
+
+    <!-- Cabeçalho Roxo do Espaço Cultura -->
+    <header class="bg-gradient-to-r from-[#3B0764] via-[#581C87] to-[#7E22CE] text-white px-4 sm:px-8 py-4 shadow-lg shrink-0">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center">
+            <i data-lucide="palette" class="w-6 h-6 text-pink-200"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Civora Cultura</h2>
+              <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-pink-500/30 border border-pink-300/40 text-pink-100">Secretaria de Cultura</span>
+            </div>
+            <p class="text-xs text-purple-200">Exposição, Fomento aos Artistas Independentes e Preservação do Patrimônio</p>
+          </div>
+        </div>
+
+        <button onclick="closeCultureOverlay()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-purple-950 hover:bg-purple-100 font-bold text-xs sm:text-sm shadow-md transition-all">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Voltar ao Mapa da Cidade</span>
+        </button>
+      </div>
+
+      <!-- Abas Internas do Espaço Cultura -->
+      <div class="max-w-7xl mx-auto mt-4 flex items-center gap-2 overflow-x-auto pb-1">
+        <button onclick="switchCultureTab('exposicao')" id="ctab-exposicao" class="culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-purple-900 shadow-sm flex items-center gap-2 shrink-0 transition-all">
+          <i data-lucide="image" class="w-4 h-4"></i>
+          <span>Exposição de Artes</span>
+        </button>
+
+        <button onclick="switchCultureTab('vendas')" id="ctab-vendas" class="culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/15 text-white hover:bg-white/25 flex items-center gap-2 shrink-0 transition-all">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span>Venda de Obras Artísticas</span>
+        </button>
+
+        <button onclick="switchCultureTab('doacao-artistas')" id="ctab-doacao-artistas" class="culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/15 text-white hover:bg-white/25 flex items-center gap-2 shrink-0 transition-all">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Doação p/ Artistas Independentes</span>
+        </button>
+
+        <button onclick="switchCultureTab('denuncia-obra')" id="ctab-denuncia-obra" class="culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-rose-500/30 border border-rose-300/40 text-white hover:bg-rose-500/50 flex items-center gap-2 shrink-0 transition-all">
+          <i data-lucide="camera" class="w-4 h-4 text-rose-200"></i>
+          <span>Denunciar Obra / Falta de Investimento</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Conteúdo Rolável do Espaço Cultura -->
+    <div class="flex-1 overflow-y-auto p-4 sm:p-8">
+      <div class="max-w-7xl mx-auto">
+
+        <!-- ABA 1: EXPOSIÇÃO DE ARTES -->
+        <div id="culture-section-exposicao" class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-purple-100 shadow-sm">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Mostra Municipal de Arte Contemporânea & Urbana</h3>
+              <p class="text-sm text-slate-500">Conheça as obras selecionadas de artistas locais em exposição nos espaços públicos e galerias virtuais da cidade.</p>
+            </div>
+            <span class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-purple-100 text-purple-800 self-start sm:self-auto">Entrada Gratuita • Acervo Digital</span>
+          </div>
+
+          <div id="artExhibitionGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards de Exposição via JS -->
+          </div>
+        </div>
+
+        <!-- ABA 2: VENDA DE OBRAS ARTÍSTICAS -->
+        <div id="culture-section-vendas" class="hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-purple-100 shadow-sm">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Feira Criativa — Aquisição Direta do Artista</h3>
+              <p class="text-sm text-slate-500">100% do valor vai diretamente para o produtor cultural local, sem taxas intermediárias da prefeitura.</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">
+              <i data-lucide="shield-check" class="w-4 h-4"></i> Certificado de Autenticidade Municipal
+            </div>
+          </div>
+
+          <div id="artShopGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards de Venda via JS -->
+          </div>
+        </div>
+
+        <!-- ABA 3: DOAÇÃO PARA ARTISTAS INDEPENDENTES -->
+        <div id="culture-section-doacao-artistas" class="hidden space-y-6">
+          <div class="bg-gradient-to-r from-purple-900 to-indigo-900 text-white p-6 rounded-2xl shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-xl font-bold">Fundo Colaborativo para Artistas Independentes</h3>
+              <p class="text-sm text-purple-200 mt-1">Ajude coletivos teatrais, muralistas, músicos de rua e artesãos a comprarem materiais e realizarem oficinas gratuitas nos bairros.</p>
+            </div>
+            <span class="px-4 py-2 rounded-xl bg-white/15 border border-white/20 text-xs font-bold shrink-0">Micro-mecenato Cidadão</span>
+          </div>
+
+          <div id="independentArtistsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards de Artistas via JS -->
+          </div>
+        </div>
+
+        <!-- ABA 4: DENÚNCIA DE OBRA / PATRIMÔNIO SEM INVESTIMENTO -->
+        <div id="culture-section-denuncia-obra" class="hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Formulário de Denúncia Cultural com Foto -->
+            <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+              <div class="border-b border-slate-100 pb-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Fiscalização do Patrimônio Cultural</span>
+                <h3 class="text-xl font-bold text-slate-900 mt-2">Reportar Obra ou Espaço Cultural sem Investimento</h3>
+                <p class="text-sm text-slate-500 mt-1">Tire uma foto da pintura, mural, monumento ou centro cultural que está sofrendo com abandono, infiltração ou falta de infraestrutura. A denúncia será enviada à Secretaria de Cultura e marcada no mapa da cidade.</p>
+              </div>
+
+              <form id="cultureReportForm" onsubmit="submitCultureReport(event)" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Nome da Obra, Monumento ou Espaço Cultural *</label>
+                  <input type="text" id="cultTitle" required placeholder="Ex: Mural Histórico da Praça Central / Teatro Municipal" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Tipo de Problema *</label>
+                    <select id="cultIssueType" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none bg-white">
+                      <option value="Pintura/Mural desgastado">Pintura / Mural desgastado</option>
+                      <option value="Falta de infraestrutura e iluminação">Falta de infraestrutura e iluminação</option>
+                      <option value="Monumento danificado / vandalizado">Monumento danificado / sem restauro</option>
+                      <option value="Espaço cultural abandonado">Espaço cultural sem investimento</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Localização / Bairro *</label>
+                    <input type="text" id="cultAddress" required placeholder="Ex: Av. Paulista, 900 - Centro" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Descrição da Situação *</label>
+                  <textarea id="cultDescription" rows="3" required placeholder="Descreva os danos visíveis, necessidade de restauração ou falta de verba/manutenção..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"></textarea>
+                </div>
+
+                <!-- Upload de Foto da Obra -->
+                <div>
+                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Foto da Obra / Local (Obrigatório) *</label>
+                  <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-purple-300 rounded-2xl cursor-pointer bg-purple-50/50 hover:bg-purple-50 transition-colors relative overflow-hidden">
+                    <div id="cultUploadPlaceholder" class="flex flex-col items-center justify-center pt-4 pb-5 text-center px-4">
+                      <i data-lucide="camera" class="w-8 h-8 text-purple-600 mb-2"></i>
+                      <p class="text-xs font-semibold text-purple-900">Clique para tirar foto ou enviar imagem da obra</p>
+                      <p class="text-[11px] text-slate-500 mt-0.5">PNG, JPG ou WEBP (Câmera ou Galeria)</p>
+                    </div>
+                    <img id="cultPhotoPreview" src="" alt="Prévia da obra" class="hidden w-full h-full object-cover" />
+                    <input type="file" id="cultPhotoInput" accept="image/*" capture="environment" onchange="previewImage(this, 'cultPhotoPreview', 'cultUploadPlaceholder')" class="hidden" />
+                  </label>
+                </div>
+
+                <div class="pt-2 flex flex-wrap items-center justify-end gap-3">
+                  <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-lg shadow-purple-600/25 flex items-center justify-center gap-2 transition-all">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Enviar Denúncia Cultural & Marcar no Mapa</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Lista de Obras em Alerta Cultural -->
+            <div class="lg:col-span-5 space-y-4">
+              <div class="bg-purple-950 text-white rounded-2xl p-5 shadow-md">
+                <h4 class="font-bold text-base flex items-center gap-2">
+                  <i data-lucide="landmark" class="w-5 h-5 text-amber-300"></i>
+                  Patrimônios Monitorados pela População
+                </h4>
+                <p class="text-xs text-purple-200 mt-1">Todas as ocorrências abaixo já estão integradas ao mapa principal do Civora para cobrança pública.</p>
+              </div>
+              <div id="cultureAlertsList" class="space-y-3">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL: NOVA DENÚNCIA URBANA (ZELADORIA MUNICIPAL)
+       ===================================================================== -->
+  <div id="reportModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-overlay my-auto">
+      <div class="bg-gradient-to-r from-[#4C1D95] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <i data-lucide="alert-octagon" class="w-5 h-5 text-amber-300"></i>
+          <h3 class="font-bold text-lg">Registrar Denúncia Urbana</h3>
+        </div>
+        <button onclick="closeReportModal()" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="urbanReportForm" onsubmit="submitUrbanReport(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Categoria do Problema *</label>
+          <select id="repCategory" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none bg-white">
+            <option value="buraco">Esburacamento na rua / Asfalto danificado</option>
+            <option value="sinalizacao">Falta de sinalização na via / Semáforo</option>
+            <option value="danificado">Espaço público danificado (Praça/Calçada)</option>
+            <option value="acessibilidade">Falta de acessibilidade (Rampa/Piso tátil)</option>
+            <option value="cultura">Patrimônio ou Obra Cultural sem investimento</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Título Resumido *</label>
+          <input type="text" id="repTitle" required placeholder="Ex: Cratera na faixa da direita próximo ao cruzamento" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Endereço / Referência *</label>
+            <input type="text" id="repAddress" required placeholder="Ex: Rua Augusta, 1420" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Coordenadas no Mapa</label>
+            <input type="text" id="repCoordsDisplay" readonly value="Centro (Padrão)" class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-slate-100 text-slate-600 font-mono" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Descrição Detalhada *</label>
+          <textarea id="repDescription" rows="2" required placeholder="Explique o risco para motoristas, pedestres ou moradores..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"></textarea>
+        </div>
+
+        <!-- Upload de Foto -->
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Anexar Foto do Local</label>
+          <label class="flex items-center justify-center w-full h-28 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer bg-purple-50/40 hover:bg-purple-50 transition-colors overflow-hidden relative">
+            <div id="repUploadPlaceholder" class="flex flex-col items-center text-center px-3">
+              <i data-lucide="image-plus" class="w-6 h-6 text-purple-600 mb-1"></i>
+              <span class="text-xs font-medium text-purple-900">Clique para adicionar foto da ocorrência</span>
+            </div>
+            <img id="repPhotoPreview" src="" alt="Preview denúncia" class="hidden w-full h-full object-cover" />
+            <input type="file" id="repPhotoInput" accept="image/*" capture="environment" onchange="previewImage(this, 'repPhotoPreview', 'repUploadPlaceholder')" class="hidden" />
+          </label>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeReportModal()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-[#6D28D9] hover:bg-[#5B21B6] text-white shadow-md">Publicar no Mapa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL GENÉRICO DE DOAÇÃO / COMPRA DE OBRA (PIX SIMULADO)
+       ===================================================================== -->
+  <div id="transactionModal" class="hidden fixed inset-0 z-[60] bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 overflow-hidden animate-overlay">
+      <div class="bg-gradient-to-r from-[#581C87] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
+        <h3 id="txModalTitle" class="font-bold text-base">Confirmar Apoio</h3>
+        <button onclick="closeTransactionModal()" class="p-1 rounded-lg bg-white/15 hover:bg-white/25">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <p id="txModalSubtitle" class="text-sm text-slate-600"></p>
+
+        <div id="txAmountPresets" class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="setTxAmount(15)" class="py-2 rounded-xl border border-purple-200 text-purple-800 font-bold text-sm hover:bg-purple-50">R$ 15</button>
+          <button type="button" onclick="setTxAmount(30)" class="py-2 rounded-xl border border-purple-200 text-purple-800 font-bold text-sm hover:bg-purple-50">R$ 30</button>
+          <button type="button" onclick="setTxAmount(60)" class="py-2 rounded-xl border border-purple-200 text-purple-800 font-bold text-sm hover:bg-purple-50">R$ 60</button>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Valor (R$)</label>
+          <input type="number" id="txAmountInput" min="1" step="1" value="30" class="w-full px-4 py-2.5 text-lg font-extrabold text-purple-900 rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+        </div>
+
+        <div class="bg-purple-50 p-3.5 rounded-xl border border-purple-100 flex items-center gap-3 text-xs text-purple-900">
+          <i data-lucide="qr-code" class="w-8 h-8 text-purple-700 shrink-0"></i>
+          <div>
+            <p class="font-bold">Transferência Instantânea PIX Civora</p>
+            <p class="text-purple-700">Repasse direto sem taxas administrativas.</p>
+          </div>
+        </div>
+
+        <button onclick="confirmTransaction()" class="w-full py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-lg transition-all">
+          Confirmar & Gerar Recibo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST DE NOTIFICAÇÃO -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- =====================================================================
+       JAVASCRIPT: DADOS, MAPA INTERATIVO, CULTURA E DOAÇÕES
+       ===================================================================== -->
+  <script>
+    // 1. DADOS INICIAIS DO SISTEMA CIVORA
+    const categoryMeta = {
+      buraco: { label: 'Esburacamento na Via', color: '#F43F5E', badgeBg: 'bg-rose-100 text-rose-800' },
+      sinalizacao: { label: 'Falta de Sinalização', color: '#F59E0B', badgeBg: 'bg-amber-100 text-amber-800' },
+      danificado: { label: 'Espaço Danificado', color: '#F97316', badgeBg: 'bg-orange-100 text-orange-800' },
+      acessibilidade: { label: 'Falta de Acessibilidade', color: '#0EA5E9', badgeBg: 'bg-sky-100 text-sky-800' },
+      cultura: { label: 'Patrimônio / Obra Cultural', color: '#C026D3', badgeBg: 'bg-fuchsia-100 text-fuchsia-800' }
+    };
+
+    let reports = [
+      {
+        id: 'CIV-1042',
+        category: 'buraco',
+        title: 'Buraco profundo próximo à faixa de pedestres',
+        address: 'Av. Paulista, 1578 - Bela Vista',
+        description: 'Asfalto cedendo na faixa de ônibus, causando risco de acidentes com motociclistas.',
+        status: 'Em análise',
+        supports: 34,
+        lat: -23.5614,
+        lng: -46.6559,
+        image: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80',
+        date: 'Hoje, 07:40'
+      },
+      {
+        id: 'CIV-1041',
+        category: 'sinalizacao',
+        title: 'Cruzamento sem placa de PARE e faixa apagada',
+        address: 'Rua Augusta, 2100 - Consolação',
+        description: 'Motoristas não reduzem a velocidade pois a sinalização horizontal desapareceu.',
+        status: 'Pendente',
+        supports: 19,
+        lat: -23.5582,
+        lng: -46.6625,
+        image: 'https://images.unsplash.com/photo-1597762470488-3877b1f538c6?auto=format&fit=crop&w=600&q=80',
+        date: 'Ontem'
+      },
+      {
+        id: 'CIV-1039',
+        category: 'acessibilidade',
+        title: 'Calçada sem rampa de acesso para cadeirantes',
+        address: 'Rua Oscar Freire, 820 - Jardins',
+        description: 'Esquina movimentada próxima à estação sem rebaixamento de guia nem piso tátil.',
+        status: 'Pendente',
+        supports: 47,
+        lat: -23.5635,
+        lng: -46.6691,
+        image: 'https://images.unsplash.com/photo-1584467735815-f778f274e296?auto=format&fit=crop&w=600&q=80',
+        date: 'Há 2 dias'
+      },
+      {
+        id: 'CIV-1035',
+        category: 'danificado',
+        title: 'Bancos quebrados e iluminação falhando na praça',
+        address: 'Praça Roosevelt - Centro',
+        description: 'Área de convivência precisa de manutenção nos bancos e troca de refletores.',
+        status: 'Resolvido',
+        supports: 62,
+        lat: -23.5489,
+        lng: -46.6462,
+        image: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=600&q=80',
+        date: 'Há 4 dias'
+      },
+      {
+        id: 'CIV-1031',
+        category: 'cultura',
+        title: 'Mural Artístico "Memórias da Cidade" descascando',
+        address: 'Viaduto Santa Ifigênia - Centro Histórico',
+        description: 'Obra pública de 2018 sofrendo com infiltração e falta de verba para restauro.',
+        status: 'Em análise',
+        supports: 88,
+        lat: -23.5415,
+        lng: -46.6358,
+        image: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=600&q=80',
+        date: 'Há 5 dias'
+      }
+    ];
+
+    // Dados do Espaço Cultura
+    const exhibitionWorks = [
+      {
+        title: 'Cores do Subúrbio',
+        artist: 'Rafael Mendes',
+        technique: 'Acrílica sobre tela • 120x90cm',
+        location: 'Centro Cultural Municipal - Ala Norte',
+        image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=700&q=80',
+        description: 'Retrato vibrante do cotidiano dos bairros periféricos e da arquitetura popular.'
+      },
+      {
+        title: 'Geometria Ancestral',
+        artist: 'Aline Tupinambá',
+        technique: 'Cerâmica e pigmentos naturais',
+        location: 'Pavilhão das Artes - Parque Municipal',
+        image: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=700&q=80',
+        description: 'Esculturas que resgatam grafismos originários e a relação com os rios urbanos.'
+      },
+      {
+        title: 'Luzes da Madrugada',
+        artist: 'Caio Oliveira',
+        technique: 'Fotografia Documental • Série Urbana',
+        location: 'Estação Cultura - Galeria Aberta',
+        image: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=700&q=80',
+        description: 'Ensaio fotográfico sobre trabalhadores noturnos e o transporte coletivo da cidade.'
+      }
+    ];
+
+    const shopWorks = [
+      {
+        id: 'ART-01',
+        title: 'Horizonte Violeta (Original)',
+        artist: 'Clara Nogueira',
+        price: 420,
+        dimensions: '80x60 cm • Tela em algodão cru',
+        image: 'https://images.unsplash.com/photo-1549490349-8643362247b5?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        id: 'ART-02',
+        title: 'Gravura Botânica Urbana #04',
+        artist: 'Lucas Ferreira',
+        price: 180,
+        dimensions: '42x30 cm • Xilogravura assinada',
+        image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        id: 'ART-03',
+        title: 'Vaso Escultórico Terracota',
+        artist: 'Oficina Barro Vivo',
+        price: 260,
+        dimensions: '32cm altura • Cerâmica artesanal',
+        image: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=700&q=80'
+      }
+    ];
+
+    const independentArtists = [
+      {
+        id: 'IND-01',
+        name: 'Coletivo Muros que Falam',
+        category: 'Arte Urbana & Muralismo',
+        goal: 5000,
+        raised: 3650,
+        bio: 'Revitalização de muros de escolas públicas com oficinas gratuitas de grafite para jovens.',
+        image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        id: 'IND-02',
+        name: 'Trupe Teatral Janela Aberta',
+        category: 'Teatro Comunitário',
+        goal: 4000,
+        raised: 2890,
+        bio: 'Apresentações gratuitas de teatro infantil em praças de bairros afastados do centro.',
+        image: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        id: 'IND-03',
+        name: 'Orquestra Jovem da Vila',
+        category: 'Música & Luthieria',
+        goal: 8000,
+        raised: 6120,
+        bio: 'Manutenção de instrumentos de corda e sopro emprestados a 65 estudantes da rede municipal.',
+        image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=700&q=80'
+      }
+    ];
+
+    // Dados de Doações Sociais (Unidades Carentes)
+    const socialUnits = [
+      {
+        id: 'SOC-01',
+        name: 'Casa de Acolhimento Esperança',
+        district: 'Jardim Novo Horizonte',
+        urgentNeed: 'Cestas básicas, leite integral e fraldas geriátricas',
+        goal: 12000,
+        raised: 9450,
+        familiesHelped: '140 famílias/mês',
+        image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        id: 'SOC-02',
+        name: 'Creche Comunitária Pequenos Passos',
+        district: 'Vila São José',
+        urgentNeed: 'Reforma do telhado da brinquedoteca e kits escolares',
+        goal: 15000,
+        raised: 10200,
+        familiesHelped: '95 crianças atendidas',
+        image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        id: 'SOC-03',
+        name: 'Cozinha Solidária Mãos Unidas',
+        district: 'Parque Industrial Sul',
+        urgentNeed: 'Gás de cozinha, hortifrúti e embalagens térmicas',
+        goal: 8000,
+        raised: 5200,
+        familiesHelped: '320 marmitas/dia',
+        image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=700&q=80'
+      }
+    ];
+
+    // Estado de Filtros e Mapa
+    let activeCategories = new Set(['buraco', 'sinalizacao', 'danificado', 'acessibilidade', 'cultura']);
+    let searchQuery = '';
+    let map;
+    let markersLayer;
+    let selectedCoords = { lat: -23.5558, lng: -46.6540 };
+    let currentTransactionContext = null;
+
+    // 2. INICIALIZAÇÃO DO MAPA LEAFLET
+    function initMap() {
+      const defaultCenter = [-23.5558, -46.6540];
+      map = L.map('cityMap', { zoomControl: true }).setView(defaultCenter, 14);
+
+      // Camada de mapa claro moderno (CartoDB Positron - combina perfeitamente com dashboard limpo)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+
+      markersLayer = L.layerGroup().addTo(map);
+
+      // Clique no mapa permite abrir denúncia já com aquelas coordenadas
+      map.on('click', function (e) {
+        selectedCoords = { lat: e.latlng.lat, lng: e.latlng.lng };
+        document.getElementById('repCoordsDisplay').value = `${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`;
+        showToast('Local selecionado no mapa! Preencha os detalhes da denúncia.', 'info');
+        openReportModal();
+      });
+
+      renderMapMarkers();
+    }
+
+    function centerMapDefault() {
+      if (map) {
+        map.setView([-23.5558, -46.6540], 14);
+      }
+    }
+
+    // 3. RENDERIZAÇÃO DOS MARCADORES NO MAPA
+    function renderMapMarkers() {
+      if (!markersLayer) return;
+      markersLayer.clearLayers();
+
+      const filtered = getFilteredReports();
+
+      filtered.forEach(rep => {
+        const meta = categoryMeta[rep.category] || categoryMeta.buraco;
+
+        const customIcon = L.divIcon({
+          className: '',
+          html: `<div class="custom-pin" style="background-color: ${meta.color}; width: 32px; height: 32px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                 </div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -30]
+        });
+
+        const statusColor = rep.status === 'Resolvido'
+          ? 'bg-emerald-100 text-emerald-800'
+          : rep.status === 'Em análise'
+            ? 'bg-amber-100 text-amber-800'
+            : 'bg-rose-100 text-rose-800';
+
+        const popupHtml = `
+          <div class="font-sans">
+            <img src="${rep.image}" onerror="this.src='https://placehold.co/400x200/7C3AED/FFFFFF?text=Registro+Civora'" class="w-full h-32 object-cover" alt="${rep.title}" />
+            <div class="p-3.5 space-y-2">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${meta.badgeBg}">${meta.label}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColor}">${rep.status}</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-sm leading-snug">${rep.title}</h4>
+              <p class="text-[11px] text-slate-500 flex items-center gap-1">📍 ${rep.address}</p>
+              <p class="text-xs text-slate-600 leading-relaxed">${rep.description}</p>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-slate-500">${rep.id} • ${rep.date}</span>
+                <button onclick="supportReport('${rep.id}')" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold transition-colors">
+                  👍 Confirmar (${rep.supports})
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const marker = L.marker([rep.lat, rep.lng], { icon: customIcon }).bindPopup(popupHtml);
+        markersLayer.addLayer(marker);
+      });
+    }
+
+    function getFilteredReports() {
+      return reports.filter(r => {
+        const matchesCategory = activeCategories.has(r.category);
+        const matchesSearch =
+          r.title.toLowerCase().includes(searchQuery) ||
+          r.address.toLowerCase().includes(searchQuery) ||
+          r.id.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesSearch;
+      });
+    }
+
+    // 4. ATUALIZAÇÃO DE KPIS, GRÁFICO DE BARRAS E LISTA RECENTE
+    function updateDashboardMetrics() {
+      const pending = reports.filter(r => r.status === 'Pendente').length;
+      const inProgress = reports.filter(r => r.status === 'Em análise').length;
+      const resolvedExtra = reports.filter(r => r.status === 'Resolvido').length;
+
+      document.getElementById('kpiTotalReports').textContent = reports.length;
+      document.getElementById('kpiPendingCount').textContent = pending;
+      document.getElementById('kpiInProgressCount').textContent = inProgress;
+      document.getElementById('kpiResolvedCount').textContent = 141 + resolvedExtra;
+
+      // Gráfico de Barras por Categoria
+      const container = document.getElementById('categoryBarsContainer');
+      container.innerHTML = '';
+      const total = reports.length || 1;
+
+      Object.keys(categoryMeta).forEach(catKey => {
+        const count = reports.filter(r => r.category === catKey).length;
+        const pct = Math.round((count / total) * 100);
+        const meta = categoryMeta[catKey];
+
+        container.innerHTML += `
+          <div>
+            <div class="flex justify-between font-medium text-slate-700 mb-1">
+              <span>${meta.label}</span>
+              <span class="font-bold text-slate-900">${count} (${pct}%)</span>
+            </div>
+            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-500" style="width: ${pct}%; background-color: ${meta.color};"></div>
+            </div>
+          </div>
+        `;
+      });
+
+      renderReportsList();
+    }
+
+    function renderReportsList() {
+      const listEl = document.getElementById('reportsFeedList');
+      const statusFilter = document.getElementById('statusFilterSelect').value;
+      const filtered = getFilteredReports().filter(r => statusFilter === 'all' || r.status === statusFilter);
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Nenhuma ocorrência encontrada com os filtros atuais.</p>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(rep => {
+        const meta = categoryMeta[rep.category];
+        const statusBadge = rep.status === 'Resolvido'
+          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+          : rep.status === 'Em análise'
+            ? 'bg-amber-50 text-amber-700 border-amber-200'
+            : 'bg-rose-50 text-rose-700 border-rose-200';
+
+        return `
+          <div onclick="focusReportOnMap('${rep.id}')" class="cursor-pointer p-3 rounded-xl border border-slate-200/80 hover:border-purple-300 hover:bg-purple-50/40 transition-all flex gap-3 items-start">
+            <img src="${rep.image}" onerror="this.src='https://placehold.co/120x120/7C3AED/FFFFFF?text=Civora'" class="w-14 h-14 rounded-lg object-cover shrink-0 border border-slate-200" alt="${rep.title}" />
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${meta.badgeBg} truncate">${meta.label}</span>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${statusBadge} shrink-0">${rep.status}</span>
+              </div>
+              <h4 class="text-xs font-bold text-slate-800 truncate">${rep.title}</h4>
+              <p class="text-[11px] text-slate-500 truncate mt-0.5">${rep.address}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function focusReportOnMap(id) {
+      const target = reports.find(r => r.id === id);
+      if (target && map) {
+        map.setView([target.lat, target.lng], 16);
+        markersLayer.eachLayer(layer => {
+          const ll = layer.getLatLng();
+          if (Math.abs(ll.lat - target.lat) < 0.0001 && Math.abs(ll.lng - target.lng) < 0.0001) {
+            layer.openPopup();
+          }
+        });
+      }
+    }
+
+    function supportReport(id) {
+      const target = reports.find(r => r.id === id);
+      if (target) {
+        target.supports += 1;
+        renderMapMarkers();
+        renderReportsList();
+        showToast(`Apoio registrado! Protocolo ${id} agora tem ${target.supports} confirmações.`, 'success');
+      }
+    }
+
+    function toggleCategoryFilter(cat) {
+      if (activeCategories.has(cat)) {
+        activeCategories.delete(cat);
+      } else {
+        activeCategories.add(cat);
+      }
+      renderMapMarkers();
+      renderReportsList();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      renderMapMarkers();
+      renderReportsList();
+    }
+
+    // 5. NAVEGAÇÃO ENTRE VIEWS E OVERLAY CULTURA EM TELA CHEIA
+    function switchMainView(viewName) {
+      document.getElementById('view-dashboard').classList.toggle('hidden', viewName !== 'dashboard');
+      document.getElementById('view-donations').classList.toggle('hidden', viewName !== 'donations');
+
+      document.getElementById('nav-dashboard').classList.toggle('bg-white/20', viewName === 'dashboard');
+      document.getElementById('nav-donations').classList.toggle('bg-white/20', viewName === 'donations');
+
+      if (viewName === 'dashboard' && map) {
+        setTimeout(() => map.invalidateSize(), 120);
+      }
+    }
+
+    function openCultureOverlay() {
+      const overlay = document.getElementById('cultureFullscreenOverlay');
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+    }
+
+    function closeCultureOverlay() {
+      const overlay = document.getElementById('cultureFullscreenOverlay');
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      if (map) setTimeout(() => map.invalidateSize(), 100);
+    }
+
+    function switchCultureTab(tabName) {
+      const tabs = ['exposicao', 'vendas', 'doacao-artistas', 'denuncia-obra'];
+      tabs.forEach(t => {
+        const section = document.getElementById(`culture-section-${t}`);
+        const btn = document.getElementById(`ctab-${t}`);
+        if (t === tabName) {
+          section.classList.remove('hidden');
+          btn.classList.remove('bg-white/15', 'text-white', 'bg-rose-500/30');
+          btn.classList.add('bg-white', 'text-purple-900', 'shadow-sm');
+        } else {
+          section.classList.add('hidden');
+          btn.classList.remove('bg-white', 'text-purple-900', 'shadow-sm');
+          if (t === 'denuncia-obra') {
+            btn.classList.add('bg-rose-500/30', 'text-white');
+          } else {
+            btn.classList.add('bg-white/15', 'text-white');
+          }
+        }
+      });
+    }
+
+    // 6. RENDERIZAÇÃO DOS CONTEÚDOS DE CULTURA E DOAÇÕES SOCIAIS
+    function renderCultureSections() {
+      // 1. Exposição de Artes
+      document.getElementById('artExhibitionGrid').innerHTML = exhibitionWorks.map(work => `
+        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-lg transition-all flex flex-col">
+          <div class="relative h-56 overflow-hidden">
+            <img src="${work.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Obra+Exposicao'" alt="${work.title}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+            <span class="absolute top-3 left-3 bg-purple-950/80 backdrop-blur-sm text-white text-[11px] font-semibold px-3 py-1 rounded-full">Em Exposição</span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h4 class="font-bold text-slate-900 text-base">${work.title}</h4>
+              <p class="text-xs font-semibold text-purple-700 mt-0.5">Artista: ${work.artist}</p>
+              <p class="text-xs text-slate-500 mt-2 leading-relaxed">${work.description}</p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+              <p>🎨 ${work.technique}</p>
+              <p>🏛️ ${work.location}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // 2. Venda de Obras Artísticas
+      document.getElementById('artShopGrid').innerHTML = shopWorks.map(item => `
+        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-lg transition-all flex flex-col">
+          <img src="${item.image}" onerror="this.src='https://placehold.co/600x400/7C3AED/FFFFFF?text=Obra+Original'" alt="${item.title}" class="w-full h-56 object-cover" />
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <h4 class="font-bold text-slate-900 text-base">${item.title}</h4>
+                <span class="text-base font-extrabold text-purple-700 shrink-0">R$ ${item.price}</span>
+              </div>
+              <p class="text-xs font-medium text-slate-600 mt-1">Por ${item.artist}</p>
+              <p class="text-[11px] text-slate-400 mt-1">${item.dimensions}</p>
+            </div>
+            <button onclick="openTransactionModal('buy-art', '${item.id}', '${item.title} (${item.artist})', ${item.price})" class="w-full py-2.5 px-4 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs sm:text-sm shadow-sm transition-colors">
+              Adquirir Obra Diretamente
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      // 3. Doação para Artistas Independentes
+      renderIndependentArtists();
+
+      // 4. Alertas Culturais
+      renderCultureAlerts();
+    }
+
+    function renderIndependentArtists() {
+      document.getElementById('independentArtistsGrid').innerHTML = independentArtists.map(art => {
+        const pct = Math.min(100, Math.round((art.raised / art.goal) * 100));
+        return `
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm flex flex-col">
+            <img src="${art.image}" onerror="this.src='https://placehold.co/600x360/581C87/FFFFFF?text=Coletivo+Cultural'" alt="${art.name}" class="w-full h-44 object-cover" />
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">${art.category}</span>
+                <h4 class="font-bold text-slate-900 text-base mt-2">${art.name}</h4>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">${art.bio}</p>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs font-semibold">
+                  <span class="text-purple-700">R$ ${art.raised.toLocaleString('pt-BR')} arrecadados</span>
+                  <span class="text-slate-500">${pct}% da meta (R$ ${art.goal.toLocaleString('pt-BR')})</span>
+                </div>
+                <div class="w-full h-2.5 bg-purple-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-purple-600 to-fuchsia-500 rounded-full" style="width: ${pct}%"></div>
+                </div>
+                <button onclick="openTransactionModal('donate-artist', '${art.id}', 'Apoio Cultural: ${art.name}', 30)" class="w-full mt-2 py-2.5 px-4 rounded-xl bg-purple-900 hover:bg-purple-800 text-white font-bold text-xs transition-colors">
+                  💜 Apoiar Artista Independente
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCultureAlerts() {
+      const culturalReports = reports.filter(r => r.category === 'cultura');
+      document.getElementById('cultureAlertsList').innerHTML = culturalReports.map(rep => `
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex gap-3.5 items-start">
+          <img src="${rep.image}" onerror="this.src='https://placehold.co/150x150/7E22CE/FFFFFF?text=Patrimonio'" class="w-20 h-20 rounded-xl object-cover shrink-0 border border-slate-200" alt="${rep.title}" />
+          <div class="min-w-0 flex-1">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-fuchsia-100 text-fuchsia-800">${rep.status}</span>
+            <h5 class="font-bold text-slate-900 text-sm mt-1">${rep.title}</h5>
+            <p class="text-[11px] text-slate-500 mt-0.5">📍 ${rep.address}</p>
+            <p class="text-xs text-slate-600 mt-1 line-clamp-2">${rep.description}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderSocialUnits() {
+      document.getElementById('socialUnitsGrid').innerHTML = socialUnits.map(unit => {
+        const pct = Math.min(100, Math.round((unit.raised / unit.goal) * 100));
+        return `
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col">
+            <div class="relative h-48">
+              <img src="${unit.image}" onerror="this.src='https://placehold.co/600x400/4C1D95/FFFFFF?text=Unidade+Social'" alt="${unit.name}" class="w-full h-full object-cover" />
+              <span class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-[11px] font-semibold px-3 py-1 rounded-full">
+                📍 ${unit.district}
+              </span>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex items-center justify-between text-xs text-emerald-700 font-semibold mb-1">
+                  <span>✓ Unidade Homologada</span>
+                  <span>${unit.familiesHelped}</span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">${unit.name}</h3>
+                <div class="mt-2 p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900">
+                  <strong>Necessidade Urgente:</strong> ${unit.urgentNeed}
+                </div>
+              </div>
+
+              <div class="space-y-2.5">
+                <div class="flex justify-between text-xs font-semibold">
+                  <span class="text-purple-700">R$ ${unit.raised.toLocaleString('pt-BR')}</span>
+                  <span class="text-slate-500">Meta: R$ ${unit.goal.toLocaleString('pt-BR')} (${pct}%)</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-[#5B21B6] to-[#9333EA] rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                </div>
+                <button onclick="openTransactionModal('donate-social', '${unit.id}', 'Doação para ${unit.name}', 50)" class="w-full py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-sm transition-colors">
+                  Doar para esta Unidade
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 7. MODAIS E ENVIO DE FORMULÁRIOS (DENÚNCIA URBANA & CULTURAL)
+    function openReportModal() {
+      document.getElementById('reportModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.add('hidden');
+    }
+
+    function previewImage(input, previewImgId, placeholderId) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.getElementById(previewImgId);
+        img.src = e.target.result;
+        img.classList.remove('hidden');
+        document.getElementById(placeholderId).classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function submitUrbanReport(e) {
+      e.preventDefault();
+      const category = document.getElementById('repCategory').value;
+      const title = document.getElementById('repTitle').value.trim();
+      const address = document.getElementById('repAddress').value.trim();
+      const description = document.getElementById('repDescription').value.trim();
+      const previewImg = document.getElementById('repPhotoPreview');
+
+      const imageSrc = (!previewImg.classList.contains('hidden') && previewImg.src)
+        ? previewImg.src
+        : 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80';
+
+      // Pequeno deslocamento aleatório caso o usuário não tenha clicado em um ponto específico
+      const lat = selectedCoords.lat + (Math.random() - 0.5) * 0.004;
+      const lng = selectedCoords.lng + (Math.random() - 0.5) * 0.004;
+
+      const newReport = {
+        id: 'CIV-' + Math.floor(1045 + Math.random() * 900),
+        category,
+        title,
+        address,
+        description,
+        status: 'Pendente',
+        supports: 1,
+        lat,
+        lng,
+        image: imageSrc,
+        date: 'Agora mesmo'
+      };
+
+      reports.unshift(newReport);
+      activeCategories.add(category);
+
+      renderMapMarkers();
+      updateDashboardMetrics();
+      renderCultureAlerts();
+
+      if (map) {
+        map.setView([lat, lng], 16);
+      }
+
+      // Reset form
+      e.target.reset();
+      previewImg.classList.add('hidden');
+      document.getElementById('repUploadPlaceholder').classList.remove('hidden');
+      closeReportModal();
+      showToast(`Denúncia ${newReport.id} publicada e marcada no mapa!`, 'success');
+    }
+
+    function submitCultureReport(e) {
+      e.preventDefault();
+      const title = document.getElementById('cultTitle').value.trim();
+      const issueType = document.getElementById('cultIssueType').value;
+      const address = document.getElementById('cultAddress').value.trim();
+      const description = document.getElementById('cultDescription').value.trim();
+      const previewImg = document.getElementById('cultPhotoPreview');
+
+      const imageSrc = (!previewImg.classList.contains('hidden') && previewImg.src)
+        ? previewImg.src
+        : 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=600&q=80';
+
+      const lat = -23.5530 + (Math.random() - 0.5) * 0.012;
+      const lng = -46.6510 + (Math.random() - 0.5) * 0.012;
+
+      const newCultureReport = {
+        id: 'CLT-' + Math.floor(200 + Math.random() * 700),
+        category: 'cultura',
+        title: `${title} (${issueType})`,
+        address,
+        description,
+        status: 'Pendente',
+        supports: 1,
+        lat,
+        lng,
+        image: imageSrc,
+        date: 'Agora mesmo'
+      };
+
+      reports.unshift(newCultureReport);
+      activeCategories.add('cultura');
+
+      renderMapMarkers();
+      updateDashboardMetrics();
+      renderCultureAlerts();
+
+      e.target.reset();
+      previewImg.classList.add('hidden');
+      document.getElementById('cultUploadPlaceholder').classList.remove('hidden');
+
+      showToast('Denúncia cultural registrada! A obra foi marcada no mapa da cidade.', 'success');
+    }
+
+    // 8. TRANSAÇÕES (DOAÇÕES E COMPRA DE OBRAS)
+    function openTransactionModal(type, targetId, label, defaultAmount) {
+      currentTransactionContext = { type, targetId, label };
+      document.getElementById('txModalTitle').textContent = type === 'buy-art' ? 'Adquirir Obra Artística' : 'Realizar Doação Solidária';
+      document.getElementById('txModalSubtitle').textContent = label;
+      document.getElementById('txAmountInput').value = defaultAmount;
+
+      // Se for compra de obra, esconde presets de doação e fixa o valor
+      const presets = document.getElementById('txAmountPresets');
+      const input = document.getElementById('txAmountInput');
+      if (type === 'buy-art') {
+        presets.classList.add('hidden');
+        input.readOnly = true;
+      } else {
+        presets.classList.remove('hidden');
+        input.readOnly = false;
+      }
+
+      document.getElementById('transactionModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeTransactionModal() {
+      document.getElementById('transactionModal').classList.add('hidden');
+    }
+
+    function setTxAmount(val) {
+      document.getElementById('txAmountInput').value = val;
+    }
+
+    function confirmTransaction() {
+      const amount = parseFloat(document.getElementById('txAmountInput').value) || 0;
+      if (amount <= 0 || !currentTransactionContext) return;
+
+      const { type, targetId, label } = currentTransactionContext;
+
+      if (type === 'donate-artist') {
+        const artist = independentArtists.find(a => a.id === targetId);
+        if (artist) artist.raised += amount;
+        renderIndependentArtists();
+        showToast(`Obrigado! Você doou R$ ${amount.toFixed(2)} para ${artist.name}.`, 'success');
+      } else if (type === 'donate-social') {
+        const unit = socialUnits.find(u => u.id === targetId);
+        if (unit) unit.raised += amount;
+        renderSocialUnits();
+
+        // Atualiza KPI global de arrecadação
+        const totalAll = socialUnits.reduce((acc, u) => acc + u.raised, 0);
+        document.getElementById('kpiTotalDonated').textContent = `R$ ${totalAll.toLocaleString('pt-BR')}`;
+        document.getElementById('donationsBannerTotal').textContent = `R$ ${totalAll.toLocaleString('pt-BR')},00`;
+
+        showToast(`Doação de R$ ${amount.toFixed(2)} confirmada para ${unit.name}!`, 'success');
+      } else if (type === 'buy-art') {
+        showToast(`Reserva confirmada! ${label} adquirida com sucesso.`, 'success');
+      }
+
+      closeTransactionModal();
+    }
+
+    // 9. UTILITÁRIOS (TOAST, RELÓGIO, MENU MOBILE)
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const bgClass = type === 'success'
+        ? 'bg-[#4C1D95] text-white border-purple-400/40'
+        : 'bg-slate-900 text-white border-slate-700';
+
+      toast.className = `${bgClass} border px-4 py-3 rounded-xl shadow-xl text-xs sm:text-sm font-medium flex items-center gap-2.5 max-w-sm animate-overlay pointer-events-auto`;
+      toast.innerHTML = `<span>${type === 'success' ? '✨' : '📍'}</span><span>${message}</span>`;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3800);
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const formatted = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const el = document.getElementById('liveClock');
+      if (el) el.textContent = formatted;
+    }
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+      const nav = document.getElementById('sidebarNav');
+      nav.classList.toggle('hidden');
+      nav.classList.toggle('flex');
+    });
+
+    // INICIALIZAÇÃO GERAL AO CARREGAR
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      updateClock();
+      setInterval(updateClock, 30000);
+      initMap();
+      updateDashboardMetrics();
+      renderCultureSections();
+      renderSocialUnits();
+    });
+  </script>
+</body>
+</html>
