@@ -1302,29 +1302,26 @@
     let map;
     let streetsLayer;
     let satelliteLayer;
+    let satelliteLabelsLayer;
     let markersLayer;
     let landmarksLayer;
-    let tempClickMarker = null;
-    let showLandmarks = true;
+    let landmarksVisible = true;
     let selectedCoords = { lat: -22.4269, lng: -45.4530 };
-    let currentTransactionContext = null;
+    let currentTransaction = null;
 
-    // Pontos de referência reais de Itajubá - MG (Prédios públicos, hospitais, universidades, rodovias e praças)
+    // Pontos-chave e estabelecimentos de referência de Itajubá - MG
     const itajubaLandmarks = [
-      { name: 'Prefeitura Municipal de Itajubá', type: 'Administração Pública', lat: -22.4253, lng: -45.4522, desc: 'Av. Dr. Jerson Dias, 500 - Estiva / Centro Administrativo' },
-      { name: 'Praça Theodomiro Santiago', type: 'Praça & Patrimônio', lat: -22.4269, lng: -45.4530, desc: 'Marco zero, comércio central e Coreto Histórico de Itajubá' },
-      { name: 'UNIFEI - Campus Prof. José Rodrigues Seabra', type: 'Universidade Federal', lat: -22.4128, lng: -45.4494, desc: 'Av. BPS, 1303 - Bairro Pinheirinho' },
-      { name: 'Hospital de Clínicas de Itajubá (HCI)', type: 'Saúde & Emergência', lat: -22.4222, lng: -45.4488, desc: 'Rua Miguel Viana, 420 - Morro Chic' },
-      { name: 'Parque Municipal de Itajubá', type: 'Lazer & Meio Ambiente', lat: -22.4215, lng: -45.4628, desc: 'Av. Poços de Caldas - Área verde, pistas e quadras' },
-      { name: 'Parque Científico e Tecnológico (PCTI) & Distrito Industrial', type: 'Inovação & Indústria', lat: -22.3992, lng: -45.4435, desc: 'Acesso pela Rodovia BR-459 - Polo tecnológico e fabril' },
-      { name: 'Rodoviária Municipal de Itajubá', type: 'Mobilidade & Transporte', lat: -22.4292, lng: -45.4558, desc: 'Terminal interurbano e linhas de ônibus municipais' }
+      { name: 'Prefeitura Municipal de Itajubá', type: 'Sede Administrativa • Centro', lat: -22.4255, lng: -45.4521 },
+      { name: 'UNIFEI - Campus Prof. José Rodrigues Seabra', type: 'Universidade Federal • Av. BPS', lat: -22.4126, lng: -45.4488 },
+      { name: 'Praça Theodomiro Santiago', type: 'Marco Zero & Patrimônio • Centro', lat: -22.4269, lng: -45.4530 },
+      { name: 'Hospital de Clínicas de Itajubá (HCI)', type: 'Saúde • Av. Renó Júnior', lat: -22.4292, lng: -45.4561 },
+      { name: 'Parque Municipal de Itajubá', type: 'Lazer & Meio Ambiente', lat: -22.4215, lng: -45.4628 },
+      { name: 'Distrito Industrial & Rodovia BR-459', type: 'Polo Industrial & Acesso Rodoviário', lat: -22.3985, lng: -45.4420 },
+      { name: 'Terminal Rodoviário de Itajubá', type: 'Mobilidade Urbana • Boa Vista', lat: -22.4239, lng: -45.4558 }
     ];
 
-    // 2. INICIALIZAÇÃO DO MAPA LEAFLET (100% FUNCIONAL EM ITAJUBÁ - MG SEM API KEY)
+    // 2. INICIALIZAÇÃO DO MAPA LEAFLET RESTRITO A ITAJUBÁ - MG
     function initMap() {
-      const mapEl = document.getElementById('cityMap');
-      if (!mapEl) return;
-
       map = L.map('cityMap', {
         center: ITAJUBA_CENTER,
         zoom: 15,
@@ -1334,208 +1331,164 @@
         maxBoundsViscosity: 1.0
       });
 
-      // Camada 1: ArcGIS World Street Map (detalhamento completo de ruas, quadras e rodovias, sem bloqueio 403)
+      // Camada 1: Mapa Urbano Detalhado (ArcGIS World Street Map - ruas, lotes, prédios e rodovias sem chave de API)
       streetsLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Município de Itajubá - MG',
+        attribution: '&copy; Esri &copy; OpenStreetMap • Município de Itajubá - MG',
+        maxNativeZoom: 18,
         maxZoom: 19
       });
 
-      // Fallback automático para OpenStreetMap.de caso necessário
-      streetsLayer.on('tileerror', function () {
-        if (map && !map._usingFallbackStreets) {
-          map._usingFallbackStreets = true;
-          map.removeLayer(streetsLayer);
-          streetsLayer = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap colaboradores • Município de Itajubá - MG',
-            maxZoom: 19
-          }).addTo(map);
-        }
-      });
-
-      // Camada 2: Satélite de Alta Resolução (Esri World Imagery - sem chave de API)
+      // Camada 2: Satélite de Alta Resolução (Esri World Imagery com maxNativeZoom 17 para evitar blocos cinzas no zoom 18-19)
       satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Itajubá - MG',
+        maxNativeZoom: 17,
         maxZoom: 19
+      });
+
+      // Rótulos de ruas e bairros sobrepostos ao modo Satélite
+      satelliteLabelsLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        maxNativeZoom: 17,
+        maxZoom: 19,
+        pane: 'overlayPane'
       });
 
       streetsLayer.addTo(map);
-      landmarksLayer = L.layerGroup().addTo(map);
       markersLayer = L.layerGroup().addTo(map);
+      landmarksLayer = L.layerGroup().addTo(map);
 
-      // Garante o redimensionamento correto do container do mapa
-      setTimeout(() => map.invalidateSize(), 200);
-      window.addEventListener('resize', () => {
-        if (map) map.invalidateSize();
-      });
+      renderLandmarks();
 
-      // Identifica a rua exata em Itajubá ao clicar no mapa (geocodificação reversa + fallback local)
+      // Clique em qualquer rua, casa ou terreno de Itajubá abre a denúncia com endereço automático
       map.on('click', async function (e) {
-        if (!ITAJUBA_BOUNDS.contains(e.latlng)) {
-          showToast('Selecione um ponto dentro dos limites municipais de Itajubá - MG.', 'info');
-          return;
-        }
-        selectedCoords = { lat: e.latlng.lat, lng: e.latlng.lng };
-        document.getElementById('repCoordsDisplay').value = `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
-
-        if (tempClickMarker) {
-          map.removeLayer(tempClickMarker);
-        }
-        const pinIcon = L.divIcon({
-          className: '',
-          html: `<div class="custom-pin animate-bounce" style="background-color: #6D28D9; width: 30px; height: 30px;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                 </div>`,
-          iconSize: [30, 30],
-          iconAnchor: [15, 30]
-        });
-        tempClickMarker = L.marker([e.latlng.lat, e.latlng.lng], { icon: pinIcon }).addTo(map);
-
-        let suggestedPlace = detectItajubaNeighborhood(e.latlng.lat, e.latlng.lng);
-        document.getElementById('repAddress').value = suggestedPlace;
-        openReportModal();
+        const lat = Number(e.latlng.lat.toFixed(5));
+        const lng = Number(e.latlng.lng.toFixed(5));
+        selectedCoords = { lat, lng };
+        document.getElementById('repCoordsDisplay').value = `${lat}, ${lng}`;
+        document.getElementById('repAddress').value = 'Buscando rua em Itajubá...';
+        openReportModal(true);
 
         try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`);
-          if (res.ok) {
-            const data = await res.json();
-            const addr = data.address || {};
-            const road = addr.road || addr.pedestrian || addr.square || '';
-            const suburb = addr.suburb || addr.neighbourhood || addr.quarter || '';
-            const houseNum = addr.house_number ? `, ${addr.house_number}` : '';
-            if (road) {
-              suggestedPlace = `${road}${houseNum}${suburb ? ' - ' + suburb : ''} • Itajubá`;
-              document.getElementById('repAddress').value = suggestedPlace;
-            }
+          const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=pt-BR`);
+          const data = await resp.json();
+          if (data && data.address) {
+            const road = data.address.road || data.address.pedestrian || data.address.suburb || 'Via Local';
+            const house = data.address.house_number ? `, ${data.address.house_number}` : '';
+            const suburb = data.address.suburb || data.address.neighbourhood || 'Itajubá';
+            document.getElementById('repAddress').value = `${road}${house} - ${suburb}, Itajubá`;
+          } else {
+            document.getElementById('repAddress').value = `Ponto marcado em Itajubá (${lat}, ${lng})`;
           }
         } catch (err) {
-          // Mantém o bairro detectado localmente se estiver offline
+          document.getElementById('repAddress').value = `Local marcado em Itajubá (${lat}, ${lng})`;
         }
       });
 
-      renderItajubaLandmarks();
       renderMapMarkers();
     }
 
-    function renderItajubaLandmarks() {
+    function renderLandmarks() {
       if (!landmarksLayer) return;
       landmarksLayer.clearLayers();
-      if (!showLandmarks) return;
+      if (!landmarksVisible) return;
 
-      itajubaLandmarks.forEach(lm => {
-        const lmIcon = L.divIcon({
+      itajubaLandmarks.forEach(spot => {
+        const icon = L.divIcon({
           className: '',
-          html: `<div title="${lm.name}" style="background:#3B0764;color:#fff;border:2px solid #E9D5FF;border-radius:8px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.25);">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
-                 </div>`,
+          html: `<div style="background:#4C1D95;color:#fff;width:24px;height:24px;border-radius:8px;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 3px 8px rgba(0,0,0,0.3);">🏛</div>`,
           iconSize: [24, 24],
           iconAnchor: [12, 12]
         });
 
-        const popupHtml = `
-          <div class="p-3.5 font-sans space-y-1.5">
-            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">${lm.type}</span>
-            <h4 class="font-bold text-slate-900 text-sm">${lm.name}</h4>
-            <p class="text-xs text-slate-600">${lm.desc}</p>
-            <button onclick="quickReportAt(${lm.lat}, ${lm.lng}, '${lm.name.replace(/'/g, "\\'")}')" class="mt-2 w-full py-1.5 px-2.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold">
-              + Registrar Ocorrência Aqui
-            </button>
-          </div>
-        `;
-        L.marker([lm.lat, lm.lng], { icon: lmIcon }).bindPopup(popupHtml).addTo(landmarksLayer);
+        L.marker([spot.lat, spot.lng], { icon })
+          .bindPopup(`
+            <div class="p-3">
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-100 text-purple-800">Referência Municipal</span>
+              <h4 class="font-bold text-slate-900 text-sm mt-1.5">${spot.name}</h4>
+              <p class="text-xs text-slate-500 mt-0.5">${spot.type}</p>
+            </div>
+          `)
+          .addTo(landmarksLayer);
       });
     }
 
     function toggleLandmarksLayer() {
-      showLandmarks = !showLandmarks;
+      landmarksVisible = !landmarksVisible;
       const btn = document.getElementById('btnToggleLandmarks');
       if (btn) {
-        btn.classList.toggle('bg-purple-50', showLandmarks);
-        btn.classList.toggle('border-purple-200', showLandmarks);
-        btn.classList.toggle('text-purple-800', showLandmarks);
-        btn.classList.toggle('bg-white', !showLandmarks);
-        btn.classList.toggle('text-slate-600', !showLandmarks);
+        btn.classList.toggle('bg-purple-50', landmarksVisible);
+        btn.classList.toggle('text-purple-800', landmarksVisible);
+        btn.classList.toggle('bg-white', !landmarksVisible);
+        btn.classList.toggle('text-slate-600', !landmarksVisible);
       }
-      renderItajubaLandmarks();
-    }
-
-    function quickReportAt(lat, lng, placeName) {
-      selectedCoords = { lat, lng };
-      document.getElementById('repCoordsDisplay').value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-      document.getElementById('repAddress').value = `${placeName} - Itajubá`;
-      openReportModal();
+      renderLandmarks();
     }
 
     function flyToItajubaSpot(lat, lng, label) {
       if (!map) return;
-      map.flyTo([lat, lng], 16, { duration: 0.9 });
-      showToast(`Visualizando: ${label}`, 'info');
+      map.flyTo([lat, lng], 17, { duration: 0.9 });
+      showToast(`Visualizando: ${label}`);
     }
 
     async function searchItajubaPlace(e) {
       e.preventDefault();
-      const query = (document.getElementById('mapPlaceSearchInput')?.value || '').trim();
-      if (!query || !map) return;
-
-      // Verifica primeiro nos pontos-chave locais de Itajubá
-      const localMatch = itajubaLandmarks.find(lm =>
-        lm.name.toLowerCase().includes(query.toLowerCase()) ||
-        lm.desc.toLowerCase().includes(query.toLowerCase())
-      );
-      if (localMatch) {
-        flyToItajubaSpot(localMatch.lat, localMatch.lng, localMatch.name);
-        return;
-      }
+      const input = document.getElementById('mapPlaceSearchInput');
+      const query = input.value.trim();
+      if (!query) return;
 
       try {
-        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Itajubá, Minas Gerais, Brasil')}&limit=1&bounded=1&viewbox=-45.555,-22.330,-45.350,-22.525`;
+        showToast(`Buscando "${query}" em Itajubá...`);
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Itajubá, Minas Gerais, Brasil')}&bounded=1&viewbox=-45.5550,-22.3300,-45.3500,-22.5250&limit=1`;
         const res = await fetch(url);
         const results = await res.json();
         if (results && results.length > 0) {
-          const lat = parseFloat(results[0].lat);
-          const lon = parseFloat(results[0].lon);
-          if (ITAJUBA_BOUNDS.contains([lat, lon])) {
-            map.flyTo([lat, lon], 17, { duration: 1.0 });
-            if (tempClickMarker) map.removeLayer(tempClickMarker);
-            tempClickMarker = L.marker([lat, lon]).addTo(map)
-              .bindPopup(`<div class="p-3 text-xs font-semibold text-slate-800">📍 ${results[0].display_name}</div>`)
-              .openPopup();
-            return;
-          }
+          const place = results[0];
+          const lat = parseFloat(place.lat);
+          const lng = parseFloat(place.lon);
+          map.flyTo([lat, lng], 18, { duration: 1 });
+          L.popup()
+            .setLatLng([lat, lng])
+            .setContent(`<div class="p-3 text-xs"><strong class="text-purple-900 block mb-1">Local Encontrado</strong><span class="text-slate-600">${place.display_name}</span></div>`)
+            .openOn(map);
+        } else {
+          showToast('Local não encontrado dentro dos limites de Itajubá.', 'error');
         }
-        showToast('Endereço não localizado dentro dos limites de Itajubá - MG.', 'info');
       } catch (err) {
-        showToast('Não foi possível consultar o endereço agora. Clique diretamente no mapa de Itajubá.', 'info');
+        showToast('Erro ao consultar endereço no mapa.', 'error');
       }
     }
 
     function locateUserInItajuba() {
-      if (!navigator.geolocation || !map) {
-        showToast('Geolocalização não disponível neste navegador.', 'info');
+      if (!navigator.geolocation) {
+        showToast('Geolocalização não suportada neste navegador.', 'error');
         return;
       }
       navigator.geolocation.getCurrentPosition(
-        pos => {
-          const { latitude, longitude } = pos.coords;
-          if (ITAJUBA_BOUNDS.contains([latitude, longitude])) {
-            map.flyTo([latitude, longitude], 17);
-            selectedCoords = { lat: latitude, lng: longitude };
-            showToast('Sua localização em Itajubá foi centralizada!', 'success');
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          if (ITAJUBA_BOUNDS.contains([lat, lng])) {
+            map.flyTo([lat, lng], 18);
+            showToast('Localização GPS encontrada em Itajubá!');
           } else {
-            centerMapDefault();
-            showToast('Seu GPS está fora de Itajubá - MG. O mapa permanece restrito ao município.', 'info');
+            map.flyTo(ITAJUBA_CENTER, 16);
+            showToast('Seu GPS está fora de Itajubá; centralizando no município.');
           }
         },
-        () => showToast('Permissão de localização negada. Clique diretamente em qualquer rua do mapa.', 'info')
+        () => {
+          map.flyTo(ITAJUBA_CENTER, 16);
+          showToast('Permissão de GPS indisponível; centralizando em Itajubá.');
+        }
       );
     }
 
     function setMapLayer(layerType) {
-      if (!map) return;
+      if (!map || !streetsLayer || !satelliteLayer || !satelliteLabelsLayer) return;
       const btnStreets = document.getElementById('btnLayerStreets');
       const btnSat = document.getElementById('btnLayerSatellite');
 
       if (layerType === 'streets') {
         if (map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+        if (map.hasLayer(satelliteLabelsLayer)) map.removeLayer(satelliteLabelsLayer);
         if (!map.hasLayer(streetsLayer)) streetsLayer.addTo(map);
         btnStreets.classList.add('bg-purple-600', 'text-white');
         btnStreets.classList.remove('text-slate-600');
@@ -1544,6 +1497,7 @@
       } else {
         if (map.hasLayer(streetsLayer)) map.removeLayer(streetsLayer);
         if (!map.hasLayer(satelliteLayer)) satelliteLayer.addTo(map);
+        if (!map.hasLayer(satelliteLabelsLayer)) satelliteLabelsLayer.addTo(map);
         btnSat.classList.add('bg-purple-600', 'text-white');
         btnSat.classList.remove('text-slate-600');
         btnStreets.classList.remove('bg-purple-600', 'text-white');
@@ -1551,35 +1505,45 @@
       }
     }
 
-    function detectItajubaNeighborhood(lat, lng) {
-      if (lat > -22.418 && lng > -45.455) return 'Região Av. BPS / Pinheirinho - Itajubá';
-      if (lat < -22.429 && lng < -45.454) return 'Bairro Estiva / Av. Jerson Dias - Itajubá';
-      if (lng < -45.460) return 'Região Parque Municipal / Av. Poços de Caldas - Itajubá';
-      if (lat > -22.424 && lng < -45.448) return 'Bairro Medicina / Boa Vista - Itajubá';
-      return 'Centro / Região Praça Theodomiro Santiago - Itajubá';
-    }
-
     function centerMapDefault() {
-      if (map) {
-        map.setView(ITAJUBA_CENTER, 15);
-      }
+      if (!map) return;
+      map.flyTo(ITAJUBA_CENTER, 15, { duration: 0.8 });
     }
 
-    // 3. RENDERIZAÇÃO DOS MARCADORES NO MAPA
+    // 3. RENDERIZAÇÃO DOS MARCADORES NO MAPA E FEED DE DENÚNCIAS
+    function getFilteredReports() {
+      const statusFilter = document.getElementById('statusFilterSelect') ? document.getElementById('statusFilterSelect').value : 'all';
+      return reports.filter(r => {
+        const matchesCat = activeCategories.has(r.category);
+        const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
+        const q = searchQuery.toLowerCase();
+        const matchesSearch = !q ||
+          r.title.toLowerCase().includes(q) ||
+          r.address.toLowerCase().includes(q) ||
+          r.id.toLowerCase().includes(q);
+        return matchesCat && matchesStatus && matchesSearch;
+      });
+    }
+
     function renderMapMarkers() {
       if (!markersLayer) return;
       markersLayer.clearLayers();
-
       const filtered = getFilteredReports();
 
       filtered.forEach(rep => {
         const meta = categoryMeta[rep.category] || categoryMeta.buraco;
+        const pinHtml = `
+          <div class="custom-pin" style="background-color: ${meta.color}; width: 32px; height: 32px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+        `;
 
-        const customIcon = L.divIcon({
+        const icon = L.divIcon({
           className: '',
-          html: `<div class="custom-pin" style="background-color: ${meta.color}; width: 32px; height: 32px;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                 </div>`,
+          html: pinHtml,
           iconSize: [32, 32],
           iconAnchor: [16, 32],
           popupAnchor: [0, -30]
@@ -1592,19 +1556,19 @@
             : 'bg-rose-100 text-rose-800';
 
         const popupHtml = `
-          <div class="font-sans">
-            <img src="${rep.image}" onerror="this.src='https://placehold.co/400x200/7C3AED/FFFFFF?text=Registro+Civora'" class="w-full h-32 object-cover" alt="${rep.title}" />
+          <div class="overflow-hidden">
+            <img src="${rep.image}" onerror="this.src='https://placehold.co/400x200/6D28D9/FFFFFF?text=Ocorrencia+Civora'" alt="${rep.title}" class="w-full h-28 object-cover" />
             <div class="p-3.5 space-y-2">
               <div class="flex items-center justify-between gap-1">
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${meta.badgeBg}">${meta.label}</span>
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColor}">${rep.status}</span>
               </div>
-              <h4 class="font-bold text-slate-900 text-sm leading-snug">${rep.title}</h4>
-              <p class="text-[11px] text-slate-500 flex items-center gap-1">📍 ${rep.address}</p>
-              <p class="text-xs text-slate-600 leading-relaxed">${rep.description}</p>
+              <h4 class="font-bold text-slate-900 text-xs leading-snug">${rep.title}</h4>
+              <p class="text-[11px] text-slate-500">${rep.address}</p>
+              <p class="text-[11px] text-slate-600 line-clamp-2">${rep.description}</p>
               <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-                <span class="text-[11px] font-semibold text-slate-500">${rep.id} • ${rep.date}</span>
-                <button onclick="supportReport('${rep.id}')" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold transition-colors">
+                <span class="text-[10px] font-mono text-slate-400">${rep.id}</span>
+                <button onclick="supportReport('${rep.id}')" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-semibold transition-colors">
                   👍 Confirmar (${rep.supports})
                 </button>
               </div>
@@ -1612,42 +1576,34 @@
           </div>
         `;
 
-        const marker = L.marker([rep.lat, rep.lng], { icon: customIcon }).bindPopup(popupHtml);
-        markersLayer.addLayer(marker);
+        L.marker([rep.lat, rep.lng], { icon })
+          .bindPopup(popupHtml)
+          .addTo(markersLayer);
       });
     }
 
-    function getFilteredReports() {
-      return reports.filter(r => {
-        const matchesCategory = activeCategories.has(r.category);
-        const matchesSearch =
-          r.title.toLowerCase().includes(searchQuery) ||
-          r.address.toLowerCase().includes(searchQuery) ||
-          r.id.toLowerCase().includes(searchQuery);
-        return matchesCategory && matchesSearch;
-      });
+    function supportReport(id) {
+      const rep = reports.find(r => r.id === id);
+      if (rep) {
+        rep.supports += 1;
+        renderMapMarkers();
+        renderReportsList();
+        showToast(`Você confirmou a ocorrência ${rep.id}! Prioridade elevada.`);
+      }
     }
 
-    // 4. ATUALIZAÇÃO DE KPIS, GRÁFICO DE BARRAS E LISTA RECENTE
-    function updateDashboardMetrics() {
-      const totalEl = document.getElementById('kpiTotalReports');
-      if (totalEl) totalEl.textContent = reports.length;
-
-      // Gráfico de Barras por Categoria
+    function renderCategoryBars() {
       const container = document.getElementById('categoryBarsContainer');
       if (!container) return;
-      container.innerHTML = '';
       const total = reports.length || 1;
 
-      Object.keys(categoryMeta).forEach(catKey => {
-        const count = reports.filter(r => r.category === catKey).length;
+      container.innerHTML = Object.entries(categoryMeta).map(([key, meta]) => {
+        const count = reports.filter(r => r.category === key).length;
         const pct = Math.round((count / total) * 100);
-        const meta = categoryMeta[catKey];
-
-        container.innerHTML += `
+        return `
           <div>
-            <div class="flex justify-between font-medium text-slate-700 mb-1">
-              <span>${meta.label}</span>
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-medium text-slate-700">${meta.label}</span>
               <span class="font-bold text-slate-900">${count} (${pct}%)</span>
             </div>
             <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
@@ -1655,23 +1611,24 @@
             </div>
           </div>
         `;
-      });
-
-      renderReportsList();
+      }).join('');
     }
 
     function renderReportsList() {
-      const listEl = document.getElementById('reportsFeedList');
-      const statusFilter = document.getElementById('statusFilterSelect').value;
-      const filtered = getFilteredReports().filter(r => statusFilter === 'all' || r.status === statusFilter);
+      const container = document.getElementById('reportsFeedList');
+      if (!container) return;
+      const filtered = getFilteredReports();
+
+      const totalEl = document.getElementById('kpiTotalReports');
+      if (totalEl) totalEl.textContent = reports.length;
 
       if (filtered.length === 0) {
-        listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Nenhuma ocorrência encontrada com os filtros atuais.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">Nenhuma ocorrência encontrada com os filtros atuais.</p>`;
         return;
       }
 
-      listEl.innerHTML = filtered.map(rep => {
-        const meta = categoryMeta[rep.category];
+      container.innerHTML = filtered.map(rep => {
+        const meta = categoryMeta[rep.category] || categoryMeta.buraco;
         const statusBadge = rep.status === 'Resolvido'
           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
           : rep.status === 'Em análise'
@@ -1679,14 +1636,14 @@
             : 'bg-rose-50 text-rose-700 border-rose-200';
 
         return `
-          <div onclick="focusReportOnMap('${rep.id}')" class="cursor-pointer p-3 rounded-xl border border-slate-200/80 hover:border-purple-300 hover:bg-purple-50/40 transition-all flex gap-3 items-start">
-            <img src="${rep.image}" onerror="this.src='https://placehold.co/120x120/7C3AED/FFFFFF?text=Civora'" class="w-14 h-14 rounded-lg object-cover shrink-0 border border-slate-200" alt="${rep.title}" />
+          <div onclick="focusReportOnMap('${rep.id}')" class="cursor-pointer p-3 rounded-xl border border-slate-200/80 hover:border-purple-300 hover:bg-purple-50/30 transition-all flex gap-3 items-start">
+            <img src="${rep.image}" onerror="this.src='https://placehold.co/120x120/6D28D9/FFFFFF?text=Civora'" alt="${rep.title}" class="w-14 h-14 rounded-lg object-cover shrink-0 border border-slate-200" />
             <div class="min-w-0 flex-1">
               <div class="flex items-center justify-between gap-1 mb-1">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${meta.badgeBg} truncate">${meta.label}</span>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${statusBadge} shrink-0">${rep.status}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${meta.badgeBg}">${meta.label}</span>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${statusBadge}">${rep.status}</span>
               </div>
-              <h4 class="text-xs font-bold text-slate-800 truncate">${rep.title}</h4>
+              <h4 class="font-bold text-slate-800 text-xs truncate">${rep.title}</h4>
               <p class="text-[11px] text-slate-500 truncate mt-0.5">${rep.address}</p>
             </div>
           </div>
@@ -1695,25 +1652,16 @@
     }
 
     function focusReportOnMap(id) {
-      const target = reports.find(r => r.id === id);
-      if (target && map) {
-        map.setView([target.lat, target.lng], 16);
+      const rep = reports.find(r => r.id === id);
+      if (rep && map) {
+        switchMainView('dashboard');
+        map.flyTo([rep.lat, rep.lng], 17, { duration: 0.8 });
         markersLayer.eachLayer(layer => {
           const ll = layer.getLatLng();
-          if (Math.abs(ll.lat - target.lat) < 0.0001 && Math.abs(ll.lng - target.lng) < 0.0001) {
+          if (Math.abs(ll.lat - rep.lat) < 0.0001 && Math.abs(ll.lng - rep.lng) < 0.0001) {
             layer.openPopup();
           }
         });
-      }
-    }
-
-    function supportReport(id) {
-      const target = reports.find(r => r.id === id);
-      if (target) {
-        target.supports += 1;
-        renderMapMarkers();
-        renderReportsList();
-        showToast(`Apoio registrado! Protocolo ${id} agora tem ${target.supports} confirmações.`, 'success');
       }
     }
 
@@ -1728,432 +1676,158 @@
     }
 
     function handleSearch(val) {
-      searchQuery = val.trim().toLowerCase();
+      searchQuery = val.trim();
       renderMapMarkers();
       renderReportsList();
     }
 
-    // 5. NAVEGAÇÃO ENTRE VIEWS E OVERLAY CULTURA EM TELA CHEIA
+    // 4. NAVEGAÇÃO ENTRE VIEWS PRINCIPAIS
     function switchMainView(viewName) {
       document.getElementById('view-dashboard').classList.toggle('hidden', viewName !== 'dashboard');
       document.getElementById('view-donations').classList.toggle('hidden', viewName !== 'donations');
       document.getElementById('view-opportunities').classList.toggle('hidden', viewName !== 'opportunities');
 
-      document.getElementById('nav-dashboard').classList.toggle('bg-white/20', viewName === 'dashboard');
-      document.getElementById('nav-donations').classList.toggle('bg-white/20', viewName === 'donations');
-      document.getElementById('nav-opportunities').classList.toggle('bg-white/20', viewName === 'opportunities');
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.remove('bg-white/20', 'font-semibold', 'shadow-sm');
+      });
+      const activeBtn = document.getElementById(`nav-${viewName}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white/20', 'font-semibold', 'shadow-sm');
+      }
 
       if (viewName === 'dashboard' && map) {
         setTimeout(() => map.invalidateSize(), 120);
       }
-      if (viewName === 'opportunities') {
-        renderOpportunities();
-      }
     }
 
-    // 5.1 PORTAL DE VAGAS, ESTÁGIOS & CURSOS (ITAJUBÁ)
-    function setOppTypeFilter(type) {
-      currentOppTypeFilter = type;
-      document.querySelectorAll('.opp-type-btn').forEach(btn => {
-        btn.classList.remove('bg-[#6D28D9]', 'text-white', 'shadow-sm');
-        btn.classList.add('bg-slate-100', 'text-slate-700');
-      });
-      const activeBtn = document.getElementById(`opp-type-${type}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
-        activeBtn.classList.add('bg-[#6D28D9]', 'text-white', 'shadow-sm');
-      }
-      renderOpportunities();
-    }
-
-    function toggleSaveOpportunity(id) {
-      if (savedOpportunities.has(id)) {
-        savedOpportunities.delete(id);
-        showToast('Oportunidade removida das salvas.', 'info');
-      } else {
-        savedOpportunities.add(id);
-        showToast('Oportunidade salva na sua lista!', 'success');
-      }
-      renderOpportunities();
-    }
-
-    function renderOpportunities() {
-      const grid = document.getElementById('opportunitiesGrid');
-      if (!grid) return;
-
-      const search = (document.getElementById('oppSearchInput')?.value || '').trim().toLowerCase();
-      const area = document.getElementById('oppAreaSelect')?.value || 'all';
-      const modality = document.getElementById('oppModalitySelect')?.value || 'all';
-      const onlySaved = document.getElementById('oppOnlySavedCheck')?.checked || false;
-
-      const filtered = opportunitiesData.filter(item => {
-        const matchType = currentOppTypeFilter === 'all' || item.type === currentOppTypeFilter;
-        const matchArea = area === 'all' || item.area === area;
-        const matchMod = modality === 'all' || item.modality === modality;
-        const matchSaved = !onlySaved || savedOpportunities.has(item.id);
-        const matchSearch =
-          item.title.toLowerCase().includes(search) ||
-          item.company.toLowerCase().includes(search) ||
-          item.location.toLowerCase().includes(search);
-        return matchType && matchArea && matchMod && matchSaved && matchSearch;
-      });
-
-      document.getElementById('oppTotalCount').textContent = filtered.length;
-      document.getElementById('oppSavedCount').textContent = savedOpportunities.size;
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full bg-white rounded-2xl p-10 text-center border border-slate-200">
-            <p class="text-sm font-bold text-slate-700">Nenhuma oportunidade encontrada com estes filtros.</p>
-            <p class="text-xs text-slate-500 mt-1">Tente selecionar "Todas" ou limpar a busca por cargo/empresa.</p>
-          </div>
-        `;
-        return;
-      }
-
-      const typeBadgeStyles = {
-        'Emprego': 'bg-purple-100 text-purple-800 border-purple-200',
-        'Estágio': 'bg-sky-100 text-sky-800 border-sky-200',
-        'Curso': 'bg-emerald-100 text-emerald-800 border-emerald-200',
-        'Jovem Aprendiz': 'bg-amber-100 text-amber-800 border-amber-200'
-      };
-
-      grid.innerHTML = filtered.map(item => {
-        const isSaved = savedOpportunities.has(item.id);
-        const badgeClass = typeBadgeStyles[item.type] || 'bg-slate-100 text-slate-800';
-        const ctaText = item.type === 'Curso' ? 'Inscrever-se no Curso' : 'Candidatar-se à Vaga';
-
-        return `
-          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all flex flex-col justify-between space-y-4">
-            <div class="space-y-2.5">
-              <div class="flex items-center justify-between gap-2">
-                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full border ${badgeClass}">${item.type}</span>
-                <div class="flex items-center gap-1.5">
-                  <span class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">${item.modality}</span>
-                  <button onclick="toggleSaveOpportunity('${item.id}')" title="Salvar oportunidade" class="p-1.5 rounded-lg border ${isSaved ? 'bg-amber-50 border-amber-300 text-amber-600' : 'border-slate-200 text-slate-400 hover:text-purple-600'} transition-colors">
-                    <i data-lucide="bookmark" class="w-4 h-4 ${isSaved ? 'fill-amber-400' : ''}"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="font-bold text-slate-900 text-base leading-snug">${item.title}</h3>
-                <p class="text-xs font-semibold text-purple-700 mt-0.5">${item.company}</p>
-              </div>
-
-              <div class="space-y-1 text-xs text-slate-600 pt-1">
-                <p class="flex items-center gap-1.5"><span class="font-semibold text-emerald-700">💰 ${item.compensation}</span></p>
-                <p class="flex items-center gap-1.5">📍 ${item.location}</p>
-                <p class="flex items-center gap-1.5">🕒 ${item.schedule}</p>
-              </div>
-
-              <p class="text-xs text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100 leading-relaxed">
-                <strong class="text-slate-700">Requisitos:</strong> ${item.requirements}
-              </p>
-            </div>
-
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-              <span class="text-[11px] text-slate-400">${item.posted}</span>
-              <button onclick="openOppApplyModal('${item.id}')" class="px-4 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm transition-colors">
-                ${ctaText}
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      lucide.createIcons();
-    }
-
-    function openOppApplyModal(id) {
-      const item = opportunitiesData.find(o => o.id === id);
-      if (!item) return;
-      document.getElementById('oppModalBadge').textContent = `${item.type} • ${item.modality}`;
-      document.getElementById('oppModalTitle').textContent = item.title;
-      document.getElementById('oppModalCompany').textContent = `${item.company} — ${item.location}`;
-      document.getElementById('oppApplyModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeOppApplyModal() {
-      document.getElementById('oppApplyModal').classList.add('hidden');
-    }
-
-    function submitOppApplication(e) {
-      e.preventDefault();
-      closeOppApplyModal();
-      showToast('Inscrição/Candidatura enviada com sucesso ao portal PAT Itajubá!', 'success');
-    }
-
-    // 5.2 MODAL DE INVESTIMENTOS E AÇÕES DA PREFEITURA DE ITAJUBÁ
-    function openGovActionModal(key) {
-      const data = govActionsData[key];
-      if (!data) return;
-      document.getElementById('govModalTitle').textContent = data.title;
-      document.getElementById('govModalBody').innerHTML = `
-        <p class="text-slate-600 leading-relaxed">${data.summary}</p>
-        <div class="space-y-2.5 pt-2">
-          <p class="text-xs font-bold uppercase tracking-wider text-purple-800">Detalhamento & Execução em Itajubá</p>
-          ${data.items.map(it => `
-            <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-100 flex items-center justify-between gap-3">
-              <div>
-                <p class="font-bold text-slate-900 text-xs sm:text-sm">${it.name}</p>
-                <span class="text-[11px] font-semibold text-emerald-700">${it.status}</span>
-              </div>
-              <span class="px-3 py-1 rounded-lg bg-white border border-purple-200 text-purple-900 font-extrabold text-xs shrink-0">${it.value}</span>
-            </div>
-          `).join('')}
-        </div>
-      `;
-      document.getElementById('govActionModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeGovActionModal() {
-      document.getElementById('govActionModal').classList.add('hidden');
-    }
-
-    function openCultureOverlay() {
-      const overlay = document.getElementById('cultureFullscreenOverlay');
-      overlay.classList.remove('hidden');
+    // 5. ESPAÇO CULTURA EM TELA INTEIRA
+    function openCultureOverlay(initialTab = 'exposicao') {
+      document.getElementById('cultureFullscreenOverlay').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      switchCultureTab(initialTab);
+      renderCultureContent();
       lucide.createIcons();
     }
 
     function closeCultureOverlay() {
-      const overlay = document.getElementById('cultureFullscreenOverlay');
-      overlay.classList.add('hidden');
+      document.getElementById('cultureFullscreenOverlay').classList.add('hidden');
       document.body.style.overflow = '';
-      if (map) setTimeout(() => map.invalidateSize(), 100);
+      if (map) setTimeout(() => map.invalidateSize(), 120);
     }
 
     function switchCultureTab(tabName) {
       const tabs = ['exposicao', 'vendas', 'doacao-artistas', 'denuncia-obra'];
       tabs.forEach(t => {
-        const section = document.getElementById(`culture-section-${t}`);
+        const sec = document.getElementById(`culture-section-${t}`);
         const btn = document.getElementById(`ctab-${t}`);
-        if (t === tabName) {
-          section.classList.remove('hidden');
-          btn.classList.remove('bg-white/15', 'text-white', 'bg-rose-500/30');
-          btn.classList.add('bg-white', 'text-purple-900', 'shadow-sm');
-        } else {
-          section.classList.add('hidden');
-          btn.classList.remove('bg-white', 'text-purple-900', 'shadow-sm');
-          if (t === 'denuncia-obra') {
-            btn.classList.add('bg-rose-500/30', 'text-white');
+        if (sec) sec.classList.toggle('hidden', t !== tabName);
+        if (btn) {
+          if (t === tabName) {
+            btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-purple-900 shadow-sm flex items-center gap-2 shrink-0 transition-all';
+          } else if (t === 'denuncia-obra') {
+            btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-rose-500/30 border border-rose-300/40 text-white hover:bg-rose-500/50 flex items-center gap-2 shrink-0 transition-all';
           } else {
-            btn.classList.add('bg-white/15', 'text-white');
+            btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/15 text-white hover:bg-white/25 flex items-center gap-2 shrink-0 transition-all';
           }
         }
       });
     }
 
-    // 6. RENDERIZAÇÃO DOS CONTEÚDOS DE CULTURA E DOAÇÕES SOCIAIS
-    function renderCultureSections() {
-      // 1. Exposição de Artes
-      document.getElementById('artExhibitionGrid').innerHTML = exhibitionWorks.map(work => `
-        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-lg transition-all flex flex-col">
-          <div class="relative h-56 overflow-hidden">
-            <img src="${work.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Obra+Exposicao'" alt="${work.title}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-            <span class="absolute top-3 left-3 bg-purple-950/80 backdrop-blur-sm text-white text-[11px] font-semibold px-3 py-1 rounded-full">Em Exposição</span>
-          </div>
-          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
-            <div>
-              <h4 class="font-bold text-slate-900 text-base">${work.title}</h4>
-              <p class="text-xs font-semibold text-purple-700 mt-0.5">Artista: ${work.artist}</p>
-              <p class="text-xs text-slate-500 mt-2 leading-relaxed">${work.description}</p>
-            </div>
-            <div class="pt-3 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
-              <p>🎨 ${work.technique}</p>
-              <p>🏛️ ${work.location}</p>
-            </div>
-          </div>
-        </div>
-      `).join('');
-
-      // 2. Venda de Obras Artísticas
-      document.getElementById('artShopGrid').innerHTML = shopWorks.map(item => `
-        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-lg transition-all flex flex-col">
-          <img src="${item.image}" onerror="this.src='https://placehold.co/600x400/7C3AED/FFFFFF?text=Obra+Original'" alt="${item.title}" class="w-full h-56 object-cover" />
-          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-            <div>
-              <div class="flex items-start justify-between gap-2">
-                <h4 class="font-bold text-slate-900 text-base">${item.title}</h4>
-                <span class="text-base font-extrabold text-purple-700 shrink-0">R$ ${item.price}</span>
-              </div>
-              <p class="text-xs font-medium text-slate-600 mt-1">Por ${item.artist}</p>
-              <p class="text-[11px] text-slate-400 mt-1">${item.dimensions}</p>
-            </div>
-            <button onclick="openTransactionModal('buy-art', '${item.id}', '${item.title} (${item.artist})', ${item.price})" class="w-full py-2.5 px-4 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs sm:text-sm shadow-sm transition-colors">
-              Adquirir Obra Diretamente
-            </button>
-          </div>
-        </div>
-      `).join('');
-
-      // 3. Doação para Artistas Independentes
-      renderIndependentArtists();
-
-      // 4. Alertas Culturais
-      renderCultureAlerts();
-    }
-
-    function renderIndependentArtists() {
-      document.getElementById('independentArtistsGrid').innerHTML = independentArtists.map(art => {
-        const pct = Math.min(100, Math.round((art.raised / art.goal) * 100));
-        return `
-          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm flex flex-col">
-            <img src="${art.image}" onerror="this.src='https://placehold.co/600x360/581C87/FFFFFF?text=Coletivo+Cultural'" alt="${art.name}" class="w-full h-44 object-cover" />
-            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+    function renderCultureContent() {
+      // Exposição de Artes
+      const expGrid = document.getElementById('artExhibitionGrid');
+      if (expGrid) {
+        expGrid.innerHTML = exhibitionWorks.map(work => `
+          <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm hover:shadow-md transition-all flex flex-col">
+            <img src="${work.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Exposicao+Civora'" alt="${work.title}" class="w-full h-52 object-cover" />
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
               <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">${art.category}</span>
-                <h4 class="font-bold text-slate-900 text-base mt-2">${art.name}</h4>
-                <p class="text-xs text-slate-500 mt-1 leading-relaxed">${art.bio}</p>
+                <span class="text-[11px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">${work.location}</span>
+                <h4 class="font-bold text-slate-900 text-base mt-2">${work.title}</h4>
+                <p class="text-xs font-semibold text-purple-800 mt-0.5">Por ${work.artist} • <span class="text-slate-500 font-normal">${work.technique}</span></p>
+                <p class="text-xs text-slate-600 mt-2 leading-relaxed">${work.description}</p>
               </div>
-              <div class="space-y-2">
-                <div class="flex justify-between text-xs font-semibold">
-                  <span class="text-purple-700">R$ ${art.raised.toLocaleString('pt-BR')} arrecadados</span>
-                  <span class="text-slate-500">${pct}% da meta (R$ ${art.goal.toLocaleString('pt-BR')})</span>
-                </div>
-                <div class="w-full h-2.5 bg-purple-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-gradient-to-r from-purple-600 to-fuchsia-500 rounded-full" style="width: ${pct}%"></div>
-                </div>
-                <button onclick="openTransactionModal('donate-artist', '${art.id}', 'Apoio Cultural: ${art.name}', 30)" class="w-full mt-2 py-2.5 px-4 rounded-xl bg-purple-900 hover:bg-purple-800 text-white font-bold text-xs transition-colors">
-                  💜 Apoiar Artista Independente
-                </button>
-              </div>
+              <button onclick="showToast('Obra adicionada ao seu roteiro cultural de Itajubá!')" class="w-full py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 font-semibold text-xs transition-colors">
+                Agendar Visita Presencial
+              </button>
             </div>
           </div>
-        `;
-      }).join('');
-    }
-
-    function renderCultureAlerts() {
-      const culturalReports = reports.filter(r => r.category === 'cultura');
-      document.getElementById('cultureAlertsList').innerHTML = culturalReports.map(rep => `
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex gap-3.5 items-start">
-          <img src="${rep.image}" onerror="this.src='https://placehold.co/150x150/7E22CE/FFFFFF?text=Patrimonio'" class="w-20 h-20 rounded-xl object-cover shrink-0 border border-slate-200" alt="${rep.title}" />
-          <div class="min-w-0 flex-1">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-fuchsia-100 text-fuchsia-800">${rep.status}</span>
-            <h5 class="font-bold text-slate-900 text-sm mt-1">${rep.title}</h5>
-            <p class="text-[11px] text-slate-500 mt-0.5">📍 ${rep.address}</p>
-            <p class="text-xs text-slate-600 mt-1 line-clamp-2">${rep.description}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderSocialUnits() {
-      document.getElementById('socialUnitsGrid').innerHTML = socialUnits.map(unit => {
-        const pct = Math.min(100, Math.round((unit.raised / unit.goal) * 100));
-        return `
-          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col">
-            <div class="relative h-48">
-              <img src="${unit.image}" onerror="this.src='https://placehold.co/600x400/4C1D95/FFFFFF?text=Unidade+Social'" alt="${unit.name}" class="w-full h-full object-cover" />
-              <span class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-sm text-white text-[11px] font-semibold px-3 py-1 rounded-full">
-                📍 ${unit.district}
-              </span>
-            </div>
-            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-              <div>
-                <div class="flex items-center justify-between text-xs text-emerald-700 font-semibold mb-1">
-                  <span>✓ Unidade Homologada</span>
-                  <span>${unit.familiesHelped}</span>
-                </div>
-                <h3 class="font-bold text-slate-900 text-lg">${unit.name}</h3>
-                <div class="mt-2 p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900">
-                  <strong>Necessidade Urgente:</strong> ${unit.urgentNeed}
-                </div>
-              </div>
-
-              <div class="space-y-2.5">
-                <div class="flex justify-between text-xs font-semibold">
-                  <span class="text-purple-700">R$ ${unit.raised.toLocaleString('pt-BR')}</span>
-                  <span class="text-slate-500">Meta: R$ ${unit.goal.toLocaleString('pt-BR')} (${pct}%)</span>
-                </div>
-                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-gradient-to-r from-[#5B21B6] to-[#9333EA] rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-                </div>
-                <button onclick="openTransactionModal('donate-social', '${unit.id}', 'Doação para ${unit.name}', 50)" class="w-full py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-sm transition-colors">
-                  Doar para esta Unidade
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // 7. MODAIS E ENVIO DE FORMULÁRIOS (DENÚNCIA URBANA & CULTURAL)
-    function openReportModal() {
-      document.getElementById('reportModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeReportModal() {
-      document.getElementById('reportModal').classList.add('hidden');
-    }
-
-    function previewImage(input, previewImgId, placeholderId) {
-      const file = input.files && input.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = document.getElementById(previewImgId);
-        img.src = e.target.result;
-        img.classList.remove('hidden');
-        document.getElementById(placeholderId).classList.add('hidden');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function submitUrbanReport(e) {
-      e.preventDefault();
-      const category = document.getElementById('repCategory').value;
-      const title = document.getElementById('repTitle').value.trim();
-      const address = document.getElementById('repAddress').value.trim();
-      const description = document.getElementById('repDescription').value.trim();
-      const previewImg = document.getElementById('repPhotoPreview');
-
-      const imageSrc = (!previewImg.classList.contains('hidden') && previewImg.src)
-        ? previewImg.src
-        : 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80';
-
-      // Pequeno deslocamento aleatório dentro de Itajubá caso o usuário não tenha clicado em um ponto específico
-      const lat = selectedCoords.lat + (Math.random() - 0.5) * 0.0025;
-      const lng = selectedCoords.lng + (Math.random() - 0.5) * 0.0025;
-
-      const newReport = {
-        id: 'CIV-' + Math.floor(1045 + Math.random() * 900),
-        category,
-        title,
-        address,
-        description,
-        status: 'Pendente',
-        supports: 1,
-        lat,
-        lng,
-        image: imageSrc,
-        date: 'Agora mesmo'
-      };
-
-      reports.unshift(newReport);
-      activeCategories.add(category);
-
-      renderMapMarkers();
-      updateDashboardMetrics();
-      renderCultureAlerts();
-
-      if (map) {
-        map.setView([lat, lng], 16);
+        `).join('');
       }
 
-      // Reset form
-      e.target.reset();
-      previewImg.classList.add('hidden');
-      document.getElementById('repUploadPlaceholder').classList.remove('hidden');
-      closeReportModal();
-      showToast(`Denúncia ${newReport.id} publicada e marcada no mapa!`, 'success');
+      // Venda de Obras Artísticas
+      const shopGrid = document.getElementById('artShopGrid');
+      if (shopGrid) {
+        shopGrid.innerHTML = shopWorks.map(item => `
+          <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm hover:shadow-md transition-all flex flex-col">
+            <img src="${item.image}" onerror="this.src='https://placehold.co/600x400/7C3AED/FFFFFF?text=Obra+Original'" alt="${item.title}" class="w-full h-52 object-cover" />
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-500">${item.artist}</span>
+                  <span class="text-base font-extrabold text-purple-800">R$ ${item.price},00</span>
+                </div>
+                <h4 class="font-bold text-slate-900 text-base mt-1">${item.title}</h4>
+                <p class="text-xs text-slate-500 mt-1">${item.dimensions}</p>
+              </div>
+              <button onclick="openTransactionModal('buy_art', '${item.id}', 'Adquirir Obra: ${item.title}', 'Valor integral repassado ao artista ${item.artist}.', ${item.price}, false)" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm transition-colors">
+                Comprar Obra Direto do Artista
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Doação para Artistas Independentes
+      const artistsGrid = document.getElementById('independentArtistsGrid');
+      if (artistsGrid) {
+        artistsGrid.innerHTML = independentArtists.map(art => {
+          const pct = Math.min(100, Math.round((art.raised / art.goal) * 100));
+          return `
+            <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm flex flex-col">
+              <img src="${art.image}" onerror="this.src='https://placehold.co/600x400/5B21B6/FFFFFF?text=Artista+Local'" alt="${art.name}" class="w-full h-48 object-cover" />
+              <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div>
+                  <span class="text-[11px] font-bold text-fuchsia-700 bg-fuchsia-50 px-2.5 py-1 rounded-full">${art.category}</span>
+                  <h4 class="font-bold text-slate-900 text-base mt-2">${art.name}</h4>
+                  <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${art.bio}</p>
+                </div>
+                <div class="space-y-2">
+                  <div class="flex justify-between text-xs">
+                    <span class="font-bold text-purple-900">R$ ${art.raised.toLocaleString('pt-BR')}</span>
+                    <span class="text-slate-500">Meta: R$ ${art.goal.toLocaleString('pt-BR')} (${pct}%)</span>
+                  </div>
+                  <div class="w-full h-2 bg-purple-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-purple-600 to-fuchsia-500 rounded-full" style="width: ${pct}%"></div>
+                  </div>
+                  <button onclick="openTransactionModal('artist', '${art.id}', 'Apoiar ${art.name}', '${art.bio}', 30, true)" class="w-full mt-2 py-2.5 rounded-xl bg-purple-900 hover:bg-purple-800 text-white font-bold text-xs transition-colors">
+                    Doar para este Coletivo / Artista
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Lista de Alertas Culturais
+      const cultAlerts = document.getElementById('cultureAlertsList');
+      if (cultAlerts) {
+        const culturalReports = reports.filter(r => r.category === 'cultura');
+        cultAlerts.innerHTML = culturalReports.map(rep => `
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex gap-3 items-start">
+            <img src="${rep.image}" onerror="this.src='https://placehold.co/150x150/9333EA/FFFFFF?text=Patrimonio'" alt="${rep.title}" class="w-16 h-16 rounded-xl object-cover shrink-0" />
+            <div class="min-w-0 flex-1">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-fuchsia-100 text-fuchsia-800">${rep.status}</span>
+              <h5 class="font-bold text-slate-900 text-xs mt-1">${rep.title}</h5>
+              <p class="text-[11px] text-slate-500 truncate">${rep.address}</p>
+              <button onclick="closeCultureOverlay(); focusReportOnMap('${rep.id}')" class="mt-1.5 text-[11px] font-bold text-purple-700 hover:underline">
+                Ver marcado no mapa →
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
     }
 
     function submitCultureReport(e) {
@@ -2164,65 +1838,159 @@
       const description = document.getElementById('cultDescription').value.trim();
       const previewImg = document.getElementById('cultPhotoPreview');
 
-      const imageSrc = (!previewImg.classList.contains('hidden') && previewImg.src)
+      const imageSrc = (previewImg && !previewImg.classList.contains('hidden') && previewImg.src)
         ? previewImg.src
         : 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=600&q=80';
 
-      const lat = -22.4269 + (Math.random() - 0.5) * 0.010;
-      const lng = -45.4530 + (Math.random() - 0.5) * 0.010;
-
-      const newCultureReport = {
-        id: 'CLT-' + Math.floor(200 + Math.random() * 700),
+      const newReport = {
+        id: `CIV-${Math.floor(1050 + Math.random() * 900)}`,
         category: 'cultura',
         title: `${title} (${issueType})`,
-        address,
+        address: address.includes('Itajubá') ? address : `${address} - Itajubá`,
         description,
         status: 'Pendente',
         supports: 1,
-        lat,
-        lng,
+        lat: ITAJUBA_CENTER[0] + (Math.random() - 0.5) * 0.015,
+        lng: ITAJUBA_CENTER[1] + (Math.random() - 0.5) * 0.015,
         image: imageSrc,
         date: 'Agora mesmo'
       };
 
-      reports.unshift(newCultureReport);
-      activeCategories.add('cultura');
-
-      renderMapMarkers();
-      updateDashboardMetrics();
-      renderCultureAlerts();
-
+      reports.unshift(newReport);
       e.target.reset();
-      previewImg.classList.add('hidden');
+      if (previewImg) previewImg.classList.add('hidden');
       document.getElementById('cultUploadPlaceholder').classList.remove('hidden');
 
-      showToast('Denúncia cultural registrada! A obra foi marcada no mapa da cidade.', 'success');
+      renderMapMarkers();
+      renderReportsList();
+      renderCategoryBars();
+      renderCultureContent();
+
+      showToast('Denúncia cultural registrada e marcada no mapa de Itajubá!');
     }
 
-    // 8. TRANSAÇÕES (DOAÇÕES E COMPRA DE OBRAS)
-    function openTransactionModal(type, targetId, label, defaultAmount) {
-      currentTransactionContext = { type, targetId, label };
-      document.getElementById('txModalTitle').textContent = type === 'buy-art' ? 'Adquirir Obra Artística' : 'Realizar Doação Solidária';
-      document.getElementById('txModalSubtitle').textContent = label;
-      document.getElementById('txAmountInput').value = defaultAmount;
-
-      // Se for compra de obra, esconde presets de doação e fixa o valor
-      const presets = document.getElementById('txAmountPresets');
-      const input = document.getElementById('txAmountInput');
-      if (type === 'buy-art') {
-        presets.classList.add('hidden');
-        input.readOnly = true;
-      } else {
-        presets.classList.remove('hidden');
-        input.readOnly = false;
+    // 6. DENÚNCIA URBANA NO MAPA
+    function openReportModal(fromMapClick = false) {
+      if (!fromMapClick) {
+        document.getElementById('repCoordsDisplay').value = `${selectedCoords.lat}, ${selectedCoords.lng}`;
       }
+      document.getElementById('reportModal').classList.remove('hidden');
+    }
 
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.add('hidden');
+    }
+
+    function previewImage(input, imgId, placeholderId) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          const img = document.getElementById(imgId);
+          img.src = ev.target.result;
+          img.classList.remove('hidden');
+          document.getElementById(placeholderId).classList.add('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function submitUrbanReport(e) {
+      e.preventDefault();
+      const category = document.getElementById('repCategory').value;
+      const title = document.getElementById('repTitle').value.trim();
+      const address = document.getElementById('repAddress').value.trim();
+      const description = document.getElementById('repDescription').value.trim();
+      const previewImg = document.getElementById('repPhotoPreview');
+
+      const imageSrc = (previewImg && !previewImg.classList.contains('hidden') && previewImg.src)
+        ? previewImg.src
+        : 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80';
+
+      const newReport = {
+        id: `CIV-${Math.floor(1050 + Math.random() * 900)}`,
+        category,
+        title,
+        address,
+        description,
+        status: 'Pendente',
+        supports: 1,
+        lat: selectedCoords.lat,
+        lng: selectedCoords.lng,
+        image: imageSrc,
+        date: 'Agora mesmo'
+      };
+
+      reports.unshift(newReport);
+      e.target.reset();
+      if (previewImg) previewImg.classList.add('hidden');
+      document.getElementById('repUploadPlaceholder').classList.remove('hidden');
+
+      closeReportModal();
+      switchMainView('dashboard');
+      renderMapMarkers();
+      renderReportsList();
+      renderCategoryBars();
+      focusReportOnMap(newReport.id);
+      showToast(`Ocorrência ${newReport.id} publicada no mapa de Itajubá!`);
+    }
+
+    // 7. DOAÇÕES SOCIAIS (UNIDADES CARENTES)
+    function renderSocialUnits() {
+      const grid = document.getElementById('socialUnitsGrid');
+      if (!grid) return;
+
+      const totalRaised = socialUnits.reduce((acc, u) => acc + u.raised, 0);
+      const bannerEl = document.getElementById('donationsBannerTotal');
+      if (bannerEl) bannerEl.textContent = `R$ ${totalRaised.toLocaleString('pt-BR')},00`;
+
+      grid.innerHTML = socialUnits.map(unit => {
+        const pct = Math.min(100, Math.round((unit.raised / unit.goal) * 100));
+        return `
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col">
+            <img src="${unit.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Unidade+Social'" alt="${unit.name}" class="w-full h-48 object-cover" />
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">${unit.district}</span>
+                  <span class="text-[11px] font-semibold text-emerald-700">${unit.familiesHelped}</span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-base mt-2">${unit.name}</h3>
+                <p class="text-xs text-slate-600 mt-1.5"><strong>Necessidade prioritária:</strong> ${unit.urgentNeed}</p>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="font-bold text-purple-900">R$ ${unit.raised.toLocaleString('pt-BR')}</span>
+                  <span class="text-slate-500">Meta: R$ ${unit.goal.toLocaleString('pt-BR')} (${pct}%)</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-[#5B21B6] to-[#A855F7] rounded-full" style="width: ${pct}%"></div>
+                </div>
+                <button onclick="openTransactionModal('social', '${unit.id}', 'Doar para ${unit.name}', 'Recurso destinado à compra de: ${unit.urgentNeed}.', 30, true)" class="w-full mt-2 py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm transition-colors">
+                  Fazer Doação Solidária
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 8. TRANSAÇÕES (DOAÇÕES E COMPRAS PIX SIMULADO)
+    function openTransactionModal(type, targetId, title, subtitle, defaultAmount, allowCustom) {
+      currentTransaction = { type, targetId };
+      document.getElementById('txModalTitle').textContent = title;
+      document.getElementById('txModalSubtitle').textContent = subtitle;
+      const input = document.getElementById('txAmountInput');
+      input.value = defaultAmount;
+      input.readOnly = !allowCustom;
+      document.getElementById('txAmountPresets').classList.toggle('hidden', !allowCustom);
       document.getElementById('transactionModal').classList.remove('hidden');
       lucide.createIcons();
     }
 
     function closeTransactionModal() {
       document.getElementById('transactionModal').classList.add('hidden');
+      currentTransaction = null;
     }
 
     function setTxAmount(val) {
@@ -2230,76 +1998,208 @@
     }
 
     function confirmTransaction() {
-      const amount = parseFloat(document.getElementById('txAmountInput').value) || 0;
-      if (amount <= 0 || !currentTransactionContext) return;
+      const amount = Number(document.getElementById('txAmountInput').value) || 0;
+      if (amount <= 0 || !currentTransaction) return;
 
-      const { type, targetId, label } = currentTransactionContext;
-
-      if (type === 'donate-artist') {
-        const artist = independentArtists.find(a => a.id === targetId);
-        if (artist) artist.raised += amount;
-        renderIndependentArtists();
-        showToast(`Obrigado! Você doou R$ ${amount.toFixed(2)} para ${artist.name}.`, 'success');
-      } else if (type === 'donate-social') {
-        const unit = socialUnits.find(u => u.id === targetId);
+      if (currentTransaction.type === 'social') {
+        const unit = socialUnits.find(u => u.id === currentTransaction.targetId);
         if (unit) unit.raised += amount;
         renderSocialUnits();
-
-        // Atualiza total arrecadado no banner de Doações Sociais
-        const totalAll = socialUnits.reduce((acc, u) => acc + u.raised, 0);
-        const bannerTotalEl = document.getElementById('donationsBannerTotal');
-        if (bannerTotalEl) {
-          bannerTotalEl.textContent = `R$ ${totalAll.toLocaleString('pt-BR')},00`;
-        }
-
-        showToast(`Doação de R$ ${amount.toFixed(2)} confirmada para ${unit.name}!`, 'success');
-      } else if (type === 'buy-art') {
-        showToast(`Reserva confirmada! ${label} adquirida com sucesso.`, 'success');
+      } else if (currentTransaction.type === 'artist') {
+        const artist = independentArtists.find(a => a.id === currentTransaction.targetId);
+        if (artist) artist.raised += amount;
+        renderCultureContent();
       }
 
       closeTransactionModal();
+      showToast(`Transação de R$ ${amount.toLocaleString('pt-BR')},00 confirmada com sucesso!`);
     }
 
-    // 9. UTILITÁRIOS (TOAST, RELÓGIO, MENU MOBILE)
+    // 9. INVESTIMENTOS DA PREFEITURA (MODAL DE TRANSPARÊNCIA)
+    function openGovActionModal(key) {
+      const data = govActionsData[key];
+      if (!data) return;
+      document.getElementById('govModalTitle').textContent = data.title;
+      document.getElementById('govModalBody').innerHTML = `
+        <p class="text-slate-600 leading-relaxed">${data.summary}</p>
+        <div class="space-y-2.5 pt-2">
+          ${data.items.map(it => `
+            <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-100 flex items-center justify-between gap-3">
+              <div>
+                <p class="font-bold text-slate-900 text-xs sm:text-sm">${it.name}</p>
+                <span class="text-[11px] font-semibold text-emerald-700">${it.status}</span>
+              </div>
+              <span class="text-xs sm:text-sm font-extrabold text-purple-800 shrink-0">${it.value}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      document.getElementById('govActionModal').classList.remove('hidden');
+    }
+
+    function closeGovActionModal() {
+      document.getElementById('govActionModal').classList.add('hidden');
+    }
+
+    // 10. VAGAS DE EMPREGO, ESTÁGIOS & CURSOS
+    function setOppTypeFilter(type) {
+      currentOppTypeFilter = type;
+      document.querySelectorAll('.opp-type-btn').forEach(btn => {
+        btn.className = 'opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50 hover:text-purple-800 transition-all';
+      });
+      const active = document.getElementById(`opp-type-${type}`);
+      if (active) {
+        active.className = 'opp-type-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-[#6D28D9] text-white shadow-sm transition-all';
+      }
+      renderOpportunities();
+    }
+
+    function toggleSaveOpportunity(id) {
+      if (savedOpportunities.has(id)) {
+        savedOpportunities.delete(id);
+        showToast('Vaga removida dos salvos.');
+      } else {
+        savedOpportunities.add(id);
+        showToast('Oportunidade salva na sua lista!');
+      }
+      renderOpportunities();
+    }
+
+    function renderOpportunities() {
+      const grid = document.getElementById('opportunitiesGrid');
+      if (!grid) return;
+
+      const q = (document.getElementById('oppSearchInput')?.value || '').toLowerCase().trim();
+      const area = document.getElementById('oppAreaSelect')?.value || 'all';
+      const modality = document.getElementById('oppModalitySelect')?.value || 'all';
+      const onlySaved = document.getElementById('oppOnlySavedCheck')?.checked || false;
+
+      const filtered = opportunitiesData.filter(opp => {
+        const matchType = currentOppTypeFilter === 'all' || opp.type === currentOppTypeFilter;
+        const matchArea = area === 'all' || opp.area === area;
+        const matchMod = modality === 'all' || opp.modality === modality;
+        const matchSaved = !onlySaved || savedOpportunities.has(opp.id);
+        const matchSearch = !q ||
+          opp.title.toLowerCase().includes(q) ||
+          opp.company.toLowerCase().includes(q) ||
+          opp.requirements.toLowerCase().includes(q);
+        return matchType && matchArea && matchMod && matchSaved && matchSearch;
+      });
+
+      const totalEl = document.getElementById('oppTotalCount');
+      const savedEl = document.getElementById('oppSavedCount');
+      if (totalEl) totalEl.textContent = filtered.length;
+      if (savedEl) savedEl.textContent = savedOpportunities.size;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-10 text-center border border-slate-200 text-slate-500 text-sm">Nenhuma vaga, estágio ou curso encontrado para os filtros selecionados.</div>`;
+        return;
+      }
+
+      const typeStyles = {
+        'Emprego': 'bg-purple-100 text-purple-800',
+        'Estágio': 'bg-sky-100 text-sky-800',
+        'Curso': 'bg-emerald-100 text-emerald-800',
+        'Jovem Aprendiz': 'bg-amber-100 text-amber-800'
+      };
+
+      grid.innerHTML = filtered.map(opp => {
+        const isSaved = savedOpportunities.has(opp.id);
+        const badgeClass = typeStyles[opp.type] || 'bg-purple-100 text-purple-800';
+        const btnLabel = opp.type === 'Curso' ? 'Inscrever-se no Curso' : 'Candidatar-se Agora';
+
+        return `
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all flex flex-col justify-between space-y-4">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full ${badgeClass}">${opp.type}</span>
+                <button onclick="toggleSaveOpportunity('${opp.id}')" class="p-1.5 rounded-lg border ${isSaved ? 'bg-amber-50 border-amber-300 text-amber-600' : 'border-slate-200 text-slate-400 hover:text-purple-700'}" title="Salvar oportunidade">
+                  <i data-lucide="bookmark" class="w-4 h-4 ${isSaved ? 'fill-amber-400' : ''}"></i>
+                </button>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-base leading-snug">${opp.title}</h3>
+                <p class="text-xs font-semibold text-purple-700 mt-0.5">${opp.company}</p>
+              </div>
+              <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-600">
+                <span class="px-2 py-0.5 rounded bg-slate-100">${opp.modality}</span>
+                <span class="px-2 py-0.5 rounded bg-slate-100">${opp.area}</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">${opp.requirements}</p>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 space-y-2.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-emerald-700">${opp.compensation}</span>
+                <span class="text-[11px] text-slate-400">${opp.posted}</span>
+              </div>
+              <p class="text-[11px] text-slate-500">📍 ${opp.location} • 🕒 ${opp.schedule}</p>
+              <button onclick="openOppApplyModal('${opp.id}')" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm transition-colors">
+                ${btnLabel}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function openOppApplyModal(id) {
+      const opp = opportunitiesData.find(o => o.id === id);
+      if (!opp) return;
+      document.getElementById('oppModalBadge').textContent = opp.type;
+      document.getElementById('oppModalTitle').textContent = opp.title;
+      document.getElementById('oppModalCompany').textContent = `${opp.company} • ${opp.location} (${opp.compensation})`;
+      document.getElementById('oppApplyModal').classList.remove('hidden');
+    }
+
+    function closeOppApplyModal() {
+      document.getElementById('oppApplyModal').classList.add('hidden');
+    }
+
+    function submitOppApplication(e) {
+      e.preventDefault();
+      closeOppApplyModal();
+      showToast('Inscrição enviada ao PAT / Empresa de Itajubá! Acompanhe pelo seu e-mail.');
+    }
+
+    // 11. UTILITÁRIOS (TOAST, RELÓGIO E MENU MOBILE)
     function showToast(message, type = 'success') {
       const container = document.getElementById('toastContainer');
+      if (!container) return;
       const toast = document.createElement('div');
-      const bgClass = type === 'success'
-        ? 'bg-[#4C1D95] text-white border-purple-400/40'
-        : 'bg-slate-900 text-white border-slate-700';
-
-      toast.className = `${bgClass} border px-4 py-3 rounded-xl shadow-xl text-xs sm:text-sm font-medium flex items-center gap-2.5 max-w-sm animate-overlay pointer-events-auto`;
-      toast.innerHTML = `<span>${type === 'success' ? '✨' : '📍'}</span><span>${message}</span>`;
-
+      const bg = type === 'error' ? 'bg-rose-600' : 'bg-purple-950 border border-purple-500/40';
+      toast.className = `${bg} text-white px-4 py-3 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2.5 animate-overlay pointer-events-auto`;
+      toast.innerHTML = `<span>${type === 'error' ? '⚠️' : '✅'}</span><span>${message}</span>`;
       container.appendChild(toast);
       setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
+        toast.remove();
       }, 3800);
     }
 
     function updateClock() {
-      const now = new Date();
-      const formatted = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       const el = document.getElementById('liveClock');
-      if (el) el.textContent = formatted;
+      if (!el) return;
+      const now = new Date();
+      el.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     }
 
-    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
       const nav = document.getElementById('sidebarNav');
       nav.classList.toggle('hidden');
       nav.classList.toggle('flex');
     });
 
-    // INICIALIZAÇÃO GERAL AO CARREGAR
-    window.addEventListener('DOMContentLoaded', () => {
+    // INICIALIZAÇÃO GERAL AO CARREGAR A PÁGINA
+    window.addEventListener('load', () => {
       lucide.createIcons();
       updateClock();
       setInterval(updateClock, 30000);
       initMap();
-      updateDashboardMetrics();
-      renderCultureSections();
+      renderCategoryBars();
+      renderReportsList();
+      renderCultureContent();
       renderSocialUnits();
       renderOpportunities();
     });
