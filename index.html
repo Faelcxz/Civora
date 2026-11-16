@@ -1323,19 +1323,30 @@
     // 2. INICIALIZAÇÃO DO MAPA LEAFLET (100% FUNCIONAL EM ITAJUBÁ - MG SEM API KEY)
     function initMap() {
       const mapEl = document.getElementById('cityMap');
-      // Camada 1: OpenStreetMap Alemanha + ArcGIS Street Map (gratuitos, sem API key e sem bloqueio 403 em iframes)
-      streetsLayer = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap colaboradores • Município de Itajubá - MG',
+      if (!mapEl) return;
+
+      map = L.map('cityMap', {
+        center: ITAJUBA_CENTER,
+        zoom: 15,
+        minZoom: 13,
+        maxZoom: 19,
+        maxBounds: ITAJUBA_BOUNDS,
+        maxBoundsViscosity: 1.0
+      });
+
+      // Camada 1: ArcGIS World Street Map (detalhamento completo de ruas, quadras e rodovias, sem bloqueio 403)
+      streetsLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Município de Itajubá - MG',
         maxZoom: 19
       });
 
-      // Fallback automático para ArcGIS World Street Map caso o servidor OSM.de oscile
+      // Fallback automático para OpenStreetMap.de caso necessário
       streetsLayer.on('tileerror', function () {
         if (map && !map._usingFallbackStreets) {
           map._usingFallbackStreets = true;
           map.removeLayer(streetsLayer);
-          streetsLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Município de Itajubá - MG',
+          streetsLayer = L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap colaboradores • Município de Itajubá - MG',
             maxZoom: 19
           }).addTo(map);
         }
