@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Civora | Integração Cidadã & Prefeitura • Itajubá - MG</title>
+  <title>Nexo Urbano | Central Inteligente & Cidadania • Itajubá - MG</title>
 
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,8 +18,8 @@
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
-            civora: {
-              deep: '#4C1D95',
+            nexo: {
+              deep: '#3B0764',
               primary: '#6D28D9',
               medium: '#7C3AED',
               light: '#A78BFA',
@@ -53,11 +53,11 @@
     .leaflet-container { font-family: 'Inter', sans-serif; z-index: 10; }
     .leaflet-popup-content-wrapper {
       border-radius: 14px;
-      box-shadow: 0 10px 25px -5px rgba(76, 29, 149, 0.22);
+      box-shadow: 0 10px 25px -5px rgba(59, 7, 100, 0.25);
       padding: 0;
       overflow: hidden;
     }
-    .leaflet-popup-content { margin: 0; width: 270px !important; }
+    .leaflet-popup-content { margin: 0; width: 280px !important; }
 
     .custom-pin {
       display: flex;
@@ -81,17 +81,19 @@
 
   <div class="flex min-h-screen flex-col lg:flex-row">
 
-    <!-- SIDEBAR ROXA -->
-    <aside class="w-full lg:w-64 bg-gradient-to-b from-[#4C1D95] via-[#5B21B6] to-[#6D28D9] text-white flex flex-col justify-between shrink-0 shadow-xl z-30">
+    <!-- ===================================================================
+         SIDEBAR ROXA - NEXO URBANO
+         =================================================================== -->
+    <aside class="w-full lg:w-68 lg:max-w-[272px] bg-gradient-to-b from-[#3B0764] via-[#581C87] to-[#6D28D9] text-white flex flex-col justify-between shrink-0 shadow-xl z-30">
       <div>
         <!-- Logo -->
         <div class="p-5 flex items-center justify-between lg:justify-start gap-3 border-b border-purple-700/50">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 flex items-center justify-center shadow-inner">
-              <i data-lucide="landmark" class="w-6 h-6 text-purple-100"></i>
+              <i data-lucide="network" class="w-6 h-6 text-purple-100"></i>
             </div>
             <div>
-              <h1 class="text-xl font-extrabold tracking-tight leading-none text-white">Civora</h1>
+              <h1 class="text-xl font-extrabold tracking-tight leading-none text-white">Nexo Urbano</h1>
               <span class="text-[11px] font-medium text-purple-200 tracking-wide">Prefeitura & Cidadão</span>
             </div>
           </div>
@@ -101,128 +103,139 @@
         </div>
 
         <!-- Perfil Cidadão -->
-        <div class="hidden lg:flex items-center gap-3 px-5 py-4 bg-purple-950/25 border-b border-purple-700/40">
+        <div class="hidden lg:flex items-center gap-3 px-5 py-3.5 bg-purple-950/30 border-b border-purple-700/40">
           <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" onerror="this.src='https://placehold.co/80x80/7C3AED/FFFFFF?text=MC'" alt="Avatar Cidadã" class="w-10 h-10 rounded-full object-cover border-2 border-purple-300" />
           <div class="min-w-0">
             <p class="text-sm font-semibold text-white truncate">Mariana Costa</p>
             <p class="text-xs text-purple-200 flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Cidadã Verificada
+              <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Cidadã Verificada • Itajubá
             </p>
           </div>
         </div>
 
-        <!-- Navegação Principal (Todas as abas abrem no mesmo padrão) -->
-        <nav id="sidebarNav" class="hidden lg:flex flex-col gap-1.5 p-3">
-          <button onclick="switchMainView('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-white/20 text-white shadow-sm transition-all">
-            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-            <span>Mapa & Bairros</span>
+        <!-- Navegação Principal -->
+        <nav id="sidebarNav" class="hidden lg:flex flex-col gap-1 p-3">
+          <button onclick="switchMainView('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-white/20 text-white shadow-sm transition-all">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Mapa & Central Urbana</span>
           </button>
 
-          <button onclick="openReportModal()" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
-            <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-300"></i>
-            <span>Nova Denúncia</span>
+          <button onclick="openReportModal()" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-300"></i>
+            <span>Nova Denúncia / Risco</span>
             <span class="ml-auto text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-200 border border-amber-300/30">+ Criar</span>
           </button>
 
-          <button onclick="switchMainView('culture')" id="nav-culture" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
-            <i data-lucide="palette" class="w-5 h-5 text-pink-300"></i>
+          <button onclick="switchMainView('culture')" id="nav-culture" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+            <i data-lucide="palette" class="w-4 h-4 text-pink-300"></i>
             <span>Espaço Cultura</span>
           </button>
 
-          <button onclick="switchMainView('donations')" id="nav-donations" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
-            <i data-lucide="heart-handshake" class="w-5 h-5 text-emerald-300"></i>
-            <span>Doações Sociais</span>
+          <button onclick="switchMainView('donations')" id="nav-donations" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+            <i data-lucide="heart-handshake" class="w-4 h-4 text-emerald-300"></i>
+            <span>Doações & Abrigos</span>
           </button>
 
-          <button onclick="switchMainView('opportunities')" id="nav-opportunities" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
-            <i data-lucide="briefcase" class="w-5 h-5 text-sky-300"></i>
+          <button onclick="switchMainView('opportunities')" id="nav-opportunities" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+            <i data-lucide="briefcase" class="w-4 h-4 text-sky-300"></i>
             <span>Vagas, Estágios & Cursos</span>
             <span class="ml-auto text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-sky-400/25 text-sky-100 border border-sky-300/30">Novo</span>
           </button>
 
-          <!-- Filtros de Serviços & Estabelecimentos no Mapa -->
-          <div class="pt-3 pb-1 px-4">
-            <p class="text-[11px] font-bold uppercase tracking-wider text-purple-300/80">Serviços & Estabelecimentos</p>
+          <!-- GRUPO 1: DEFESA CIVIL & CLIMA -->
+          <div class="pt-3 pb-1 px-3">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-purple-300/90">1. Defesa Civil & Clima</p>
           </div>
-          <div class="px-3 space-y-1 text-xs">
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
+          <div class="px-2 space-y-0.5 text-xs">
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleLayerGroup('flood')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+              <span class="text-purple-100">Risco Enchente (Rio Sapucaí)</span>
+            </label>
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleLayerGroup('shelter')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-teal-300"></span>
+              <span class="text-purple-100">Abrigos & Encostas</span>
+            </label>
+          </div>
+
+          <!-- GRUPO 2: INFRAESTRUTURA & SERVIÇOS -->
+          <div class="pt-2.5 pb-1 px-3">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-purple-300/90">2. Infraestrutura & Zeladoria</p>
+          </div>
+          <div class="px-2 space-y-0.5 text-xs">
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('energia')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+              <span class="text-purple-100">Falta de Luz / Iluminação</span>
+            </label>
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('buraco')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+              <span class="text-purple-100">Esburacamento & Vias</span>
+            </label>
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('sinalizacao')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              <span class="text-purple-100">Sinalização & Acessibilidade</span>
+            </label>
+          </div>
+
+          <!-- GRUPO 3: MOBILIDADE & SAÚDE -->
+          <div class="pt-2.5 pb-1 px-3">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-purple-300/90">3. Mobilidade & Saúde</p>
+          </div>
+          <div class="px-2 space-y-0.5 text-xs">
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
               <input type="checkbox" checked onchange="togglePoiFilter('bus')" class="accent-purple-400 rounded w-3.5 h-3.5" />
               <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
               <span class="text-purple-100">Pontos de Ônibus (Horários)</span>
             </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
               <input type="checkbox" checked onchange="togglePoiFilter('health')" class="accent-purple-400 rounded w-3.5 h-3.5" />
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-              <span class="text-purple-100">Postos de Saúde & Hospitais</span>
-            </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="togglePoiFilter('market')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-300"></span>
-              <span class="text-purple-100">Mercados & Supermercados</span>
-            </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="togglePoiFilter('workshop')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
-              <span class="text-purple-100">Oficinas & Comércio</span>
-            </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="togglePoiFilter('public')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-purple-300"></span>
-              <span class="text-purple-100">Prefeitura, Escolas & Praças</span>
+              <span class="text-purple-100">Hospitais, UBS & Farmácia</span>
             </label>
           </div>
 
-          <!-- Filtros de Denúncias no Mapa -->
-          <div class="pt-3 pb-1 px-4">
-            <p class="text-[11px] font-bold uppercase tracking-wider text-purple-300/80">Denúncias no Mapa</p>
+          <!-- GRUPO 4: ESTABELECIMENTOS & FISCALIZAÇÃO -->
+          <div class="pt-2.5 pb-1 px-3">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-purple-300/90">4. Comércio & Fiscalização</p>
           </div>
-          <div class="px-3 space-y-1 text-xs">
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('buraco')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-              <span class="text-purple-100">Esburacamento na Via</span>
+          <div class="px-2 space-y-0.5 text-xs">
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="togglePoiFilter('food')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-orange-400"></span>
+              <span class="text-purple-100">Restaurantes & Mercados</span>
             </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('sinalizacao')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-              <span class="text-purple-100">Falta de Sinalização</span>
-            </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('danificado')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
-              <span class="text-purple-100">Espaço Danificado</span>
-            </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('acessibilidade')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
-              <span class="text-purple-100">Falta de Acessibilidade</span>
-            </label>
-            <label class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/10 cursor-pointer">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('cultura')" class="accent-purple-400 rounded w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-fuchsia-500"></span>
-              <span class="text-purple-100">Patrimônio / Obra Cultural</span>
+            <label class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/10 cursor-pointer">
+              <input type="checkbox" checked onchange="togglePoiFilter('services')" class="accent-purple-400 rounded w-3.5 h-3.5" />
+              <span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span>
+              <span class="text-purple-100">Dentistas, Salões & Oficinas</span>
             </label>
           </div>
         </nav>
       </div>
 
       <!-- Rodapé Sidebar -->
-      <div class="hidden lg:block p-4 m-3 rounded-2xl bg-purple-950/40 border border-purple-400/20">
+      <div class="hidden lg:block p-3.5 m-3 rounded-2xl bg-purple-950/45 border border-purple-400/20">
         <div class="flex items-center gap-2 text-xs font-semibold text-purple-200 mb-1">
-          <i data-lucide="radio" class="w-4 h-4 text-emerald-400 animate-pulse"></i>
-          <span>Central Integrada Ativa</span>
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+          <span>Hub Regulatório Ativo</span>
         </div>
         <p class="text-[11px] text-purple-300 leading-relaxed">
-          Dados urbanos, transporte público, saúde e zeladoria sincronizados por bairro em Itajubá.
+          Defesa Civil, Vigilância Sanitária, Meio Ambiente e PROCON integrados ao mapa.
         </p>
       </div>
     </aside>
 
-    <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
+    <!-- ===================================================================
+         ÁREA DE CONTEÚDO PRINCIPAL
+         =================================================================== -->
     <div class="flex-1 flex flex-col min-w-0">
 
-      <!-- TOP BAR -->
-      <header class="bg-white border-b border-slate-200/80 px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-20">
+      <!-- TOP BAR COM SIMULADOR DE DEFESA CIVIL -->
+      <header class="bg-white border-b border-slate-200/80 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-20">
         <div class="flex items-center gap-3 flex-1 min-w-[220px] max-w-md">
           <div class="relative w-full">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
@@ -230,107 +243,144 @@
               id="searchInput"
               type="text"
               oninput="handleSearch(this.value)"
-              placeholder="Buscar rua, bairro, UBS, mercado ou protocolo..."
-              class="w-full pl-10 pr-4 py-2 text-sm bg-slate-100/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all"
+              placeholder="Buscar rua, bairro, clínica, restaurante ou ônibus..."
+              class="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-slate-100/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all"
             />
           </div>
         </div>
 
         <div class="flex items-center gap-2.5 flex-wrap">
-          <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl bg-purple-50 text-purple-800 border border-purple-200 shadow-sm">
+          <!-- Botão Simulador de Emergência Climática (Rio Sapucaí) -->
+          <button id="floodSimBtn" onclick="toggleFloodSimulation()" class="inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-all shadow-sm">
+            <span id="floodSimDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <span id="floodSimLabel">Rio Sapucaí: 1,45m (Normal) • Simular Alerta</span>
+          </button>
+
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-purple-50 text-purple-800 border border-purple-200">
             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-purple-600"></i>
             Itajubá • MG
           </span>
         </div>
       </header>
 
+      <!-- BANNER DE EMERGÊNCIA DEFESA CIVIL (OCULTO NO MODO NORMAL, ATIVO NA SIMULAÇÃO) -->
+      <div id="emergencyAlertBanner" class="hidden bg-gradient-to-r from-rose-700 via-red-600 to-amber-600 text-white px-4 sm:px-6 py-3.5 shadow-lg animate-overlay">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div class="flex items-start sm:items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 animate-pulse">
+              <i data-lucide="waves" class="w-6 h-6 text-white"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-white text-rose-700">Alerta Defesa Civil • Nível Crítico</span>
+                <span class="text-xs font-bold">Rio Sapucaí atingiu 3,85m — Risco de Transbordamento na Vila Poddis, Porto Velho e Av. BPS</span>
+              </div>
+              <p class="text-xs text-rose-100 mt-0.5">
+                Rotas ribeirinhas bloqueadas no mapa. 3 Abrigos Temporários abertos (Ginásio Tigre, Escola Estadual Major João Pereira e Poliesportivo).
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="switchMainView('donations')" class="px-3 py-1.5 rounded-lg bg-white text-rose-700 font-bold text-xs hover:bg-rose-50 transition-colors">
+              Ver Abrigos & Doar
+            </button>
+            <button onclick="toggleFloodSimulation()" class="px-3 py-1.5 rounded-lg bg-black/25 hover:bg-black/40 text-white font-semibold text-xs">
+              Encerrar Simulação
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- =================================================================
-           VIEW 1: DASHBOARD, BAIRROS & MAPA INTERATIVO DE ITAJUBÁ - MG
+           VIEW 1: MAPA & CENTRAL URBANA (DASHBOARD PRINCIPAL)
            ================================================================= -->
       <main id="view-dashboard" class="p-4 sm:p-6 space-y-6 flex-1">
 
         <!-- Cabeçalho -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Painel Urbano, Bairros & Investimentos • Itajubá - MG</h2>
-            <p class="text-sm text-slate-500">Filtre por bairro para ver indicadores de segurança, investimentos, postos de saúde, comércios e horários de ônibus no mapa.</p>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Central Urbana, Defesa Civil & Transparência • Itajubá - MG</h2>
+            <p class="text-sm text-slate-500">Monitoramento climático, serviços de luz/água/lixo, saúde, transporte público e avaliação regulatória de estabelecimentos.</p>
           </div>
           <div class="text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm self-start sm:self-auto">
-            Atualizado agora • <span id="liveClock" class="font-semibold text-purple-700"></span>
+            Sincronizado • <span id="liveClock" class="font-semibold text-purple-700"></span>
           </div>
         </div>
 
-        <!-- KPI CARDS SUPERIORES: INVESTIMENTOS & AÇÕES DA PREFEITURA -->
+        <!-- 4 KPI CARDS SUPERIORES -->
         <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          <div onclick="openGovActionModal('infra')" class="cursor-pointer bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all group">
+          <!-- Card 1: Investimentos -->
+          <div onclick="openGovActionModal('infra')" class="cursor-pointer bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all group">
             <div class="flex items-start justify-between">
-              <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                <i data-lucide="hard-hat" class="w-6 h-6"></i>
+              <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                <i data-lucide="hard-hat" class="w-5 h-5"></i>
               </div>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">Investimento</span>
+              <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">Obras & Fomento</span>
             </div>
-            <div class="mt-4 flex items-baseline gap-2">
-              <span class="text-2xl sm:text-3xl font-extrabold text-slate-900">R$ 18,4 Mi</span>
-              <span class="text-xs font-medium text-slate-500">em obras</span>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-2xl font-extrabold text-slate-900">R$ 18,4 Mi</span>
+              <span class="text-xs font-medium text-slate-500">investidos</span>
             </div>
-            <p class="text-xs text-slate-600 mt-1 font-medium">Recapeamento, drenagem e LED 100%</p>
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span><strong class="text-emerald-600">28 vias</strong> revitalizadas</span>
-              <span class="text-purple-700 font-semibold group-hover:underline">Ver detalhes →</span>
+            <p class="text-xs text-slate-600 mt-1 font-medium">Drenagem pluvial, asfalto e LED 100%</p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span><strong class="text-emerald-600">28 vias</strong> entregues</span>
+              <span class="text-purple-700 font-semibold group-hover:underline">Prestação →</span>
             </div>
           </div>
 
-          <div onclick="openGovActionModal('inovacao')" class="cursor-pointer bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all group">
+          <!-- Card 2: Energia, Água & Coleta de Lixo -->
+          <div onclick="openGovActionModal('utilities')" class="cursor-pointer bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all group">
             <div class="flex items-start justify-between">
-              <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                <i data-lucide="cpu" class="w-6 h-6"></i>
+              <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                <i data-lucide="zap" class="w-5 h-5"></i>
               </div>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">Incentivos</span>
+              <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Rede 99,2% Ativa</span>
             </div>
-            <div class="mt-4 flex items-baseline gap-2">
-              <span class="text-2xl sm:text-3xl font-extrabold text-slate-900">42</span>
-              <span class="text-xs font-medium text-slate-500">empresas incentivadas</span>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-2xl font-extrabold text-slate-900">Luz, Água & Lixo</span>
             </div>
-            <p class="text-xs text-slate-600 mt-1 font-medium">Parque Tecnológico & Distrito Industrial</p>
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span>Lei de Inovação & ISS reduzido</span>
-              <span class="text-indigo-700 font-semibold group-hover:underline">Prestação →</span>
+            <p class="text-xs text-slate-600 mt-1 font-medium">CEMIG, COPASA e Coleta Seletiva por bairro</p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span>1 manutenção programada</span>
+              <span class="text-amber-700 font-semibold group-hover:underline">Ver horários →</span>
             </div>
           </div>
 
-          <div onclick="openGovActionModal('saude')" class="cursor-pointer bg-gradient-to-br from-[#5B21B6] to-[#7C3AED] text-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all group">
+          <!-- Card 3: Saúde & Farmácia Popular -->
+          <div onclick="openGovActionModal('saude')" class="cursor-pointer bg-gradient-to-br from-[#4C1D95] to-[#7C3AED] text-white rounded-2xl p-4 sm:p-5 shadow-md hover:shadow-lg transition-all group">
             <div class="flex items-start justify-between">
-              <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
-                <i data-lucide="heart-pulse" class="w-6 h-6 text-pink-200"></i>
+              <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                <i data-lucide="heart-pulse" class="w-5 h-5 text-pink-200"></i>
               </div>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20 text-white group-hover:bg-white group-hover:text-purple-900 transition-colors">Ações Ativas →</span>
+              <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white/20 text-white">16 UBSs + HCI</span>
             </div>
-            <div class="mt-4 flex items-baseline gap-2">
-              <span class="text-2xl sm:text-3xl font-extrabold">14</span>
-              <span class="text-xs font-medium text-purple-200">programas municipais</span>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-2xl font-extrabold">22 min</span>
+              <span class="text-xs font-medium text-purple-200">espera média SUS</span>
             </div>
-            <p class="text-xs text-purple-100 mt-1 font-medium">Mutirões de Saúde, UBS & Creches</p>
-            <div class="mt-3 pt-3 border-t border-white/15 flex items-center justify-between text-xs text-purple-100">
-              <span><strong id="kpiTotalReports">5</strong> ocorrências no mapa</span>
-              <span class="font-semibold underline">Ver ações</span>
+            <p class="text-xs text-purple-100 mt-1 font-medium">Farmácia Popular, Vacinação & Castramóvel</p>
+            <div class="mt-3 pt-2.5 border-t border-white/15 flex items-center justify-between text-xs text-purple-100">
+              <span>Estoque medicamentos: 94%</span>
+              <span class="font-semibold underline">Consultar →</span>
             </div>
           </div>
 
-          <div onclick="openGovActionModal('cultura-esporte')" class="cursor-pointer bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all group">
+          <!-- Card 4: Selos Sanitários & Regulatórios -->
+          <div onclick="openGovActionModal('regulatorio')" class="cursor-pointer bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all group">
             <div class="flex items-start justify-between">
-              <div class="w-11 h-11 rounded-xl bg-fuchsia-100 text-fuchsia-700 flex items-center justify-center group-hover:bg-fuchsia-600 group-hover:text-white transition-colors">
-                <i data-lucide="trophy" class="w-6 h-6"></i>
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <i data-lucide="badge-check" class="w-5 h-5"></i>
               </div>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-fuchsia-50 text-fuchsia-700 border border-fuchsia-200">Fomento</span>
+              <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Hub Regulatório</span>
             </div>
-            <div class="mt-4 flex items-baseline gap-2">
-              <span class="text-2xl sm:text-3xl font-extrabold text-slate-900">R$ 1,2 Mi</span>
-              <span class="text-xs font-medium text-slate-500">editais & bolsas</span>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-2xl font-extrabold text-slate-900">348</span>
+              <span class="text-xs font-medium text-slate-500">selos ativos</span>
             </div>
-            <p class="text-xs text-slate-600 mt-1 font-medium">Cultura Local, Bolsa-Atleta & Praças</p>
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span><strong class="text-purple-700">118 projetos</strong> aprovados</span>
-              <span class="text-fuchsia-700 font-semibold group-hover:underline">Explorar →</span>
+            <p class="text-xs text-slate-600 mt-1 font-medium">Vigilância Sanitária, Meio Ambiente & PROCON</p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span>Vistoria remota restrita</span>
+              <span class="text-emerald-700 font-semibold group-hover:underline">Como funciona →</span>
             </div>
           </div>
         </section>
@@ -343,18 +393,18 @@
                 <i data-lucide="map" class="w-5 h-5"></i>
               </div>
               <div>
-                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Explorador de Bairros & Regiões de Itajubá</h3>
-                <p class="text-xs text-slate-500">Selecione um bairro para limitar o mapa à região e visualizar segurança, investimentos e serviços locais.</p>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Raio-X por Bairro & Região de Itajubá</h3>
+                <p class="text-xs text-slate-500">Filtre o mapa por bairro para visualizar segurança, risco de enchente, coleta de lixo, energia/água e estabelecimentos.</p>
               </div>
             </div>
 
             <div class="flex items-center gap-2 flex-wrap">
-              <label for="neighborhoodSelect" class="text-xs font-bold uppercase text-purple-900">Bairro / Região:</label>
+              <label for="neighborhoodSelect" class="text-xs font-bold uppercase text-purple-900">Bairro:</label>
               <select id="neighborhoodSelect" onchange="selectNeighborhood(this.value)" class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-xl border border-purple-300 bg-purple-50 text-purple-950 focus:ring-2 focus:ring-purple-600 focus:outline-none">
                 <option value="all">Toda a Cidade de Itajubá</option>
                 <option value="centro">Centro Histórico & Comercial</option>
-                <option value="pinheirinho">Pinheirinho / UNIFEI / BPS</option>
-                <option value="boavista">Boa Vista</option>
+                <option value="pinheirinho">Pinheirinho / UNIFEI / Av. BPS</option>
+                <option value="boavista">Boa Vista / Vila Poddis</option>
                 <option value="estiva">Estiva</option>
                 <option value="medicina">Medicina</option>
                 <option value="rebourgeon">Rebourgeon & Santo Antônio</option>
@@ -364,12 +414,10 @@
           </div>
 
           <!-- Cards de Indicadores do Bairro Selecionado -->
-          <div id="neighborhoodStatsBar" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
-            <!-- Preenchido via JS -->
-          </div>
+          <div id="neighborhoodStatsBar" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-100"></div>
         </section>
 
-        <!-- GRID PRINCIPAL: MAPA INTERATIVO CENTRAL + LISTA DE OCORRÊNCIAS -->
+        <!-- GRID PRINCIPAL: MAPA INTERATIVO CENTRAL + COLUNA LATERAL -->
         <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
 
           <!-- COLUNA DO MAPA (8 colunas) -->
@@ -378,7 +426,7 @@
             <div class="px-5 py-3.5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-purple-600 animate-ping"></span>
-                <h3 id="mapRegionTitle" class="font-bold text-slate-800 text-sm sm:text-base">Mapa Interativo Detalhado • Toda Itajubá - MG</h3>
+                <h3 id="mapRegionTitle" class="font-bold text-slate-800 text-sm sm:text-base">Mapa Interativo • Toda a Cidade de Itajubá</h3>
               </div>
               <div class="flex items-center gap-2 text-xs flex-wrap">
                 <div class="inline-flex rounded-lg border border-slate-200 bg-white p-0.5">
@@ -389,12 +437,12 @@
                   <i data-lucide="locate-fixed" class="w-3.5 h-3.5"></i> Meu GPS
                 </button>
                 <button onclick="resetNeighborhood()" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-purple-50 hover:text-purple-700 font-medium text-slate-600 flex items-center gap-1 transition-colors">
-                  <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Ver Cidade Toda
+                  <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Cidade Toda
                 </button>
               </div>
             </div>
 
-            <!-- Barra de Busca de Ruas e Estabelecimentos -->
+            <!-- Barra de Busca de Ruas e Atalhos -->
             <div class="px-5 py-2.5 bg-white border-b border-slate-100 flex flex-wrap items-center gap-2">
               <form onsubmit="searchItajubaPlace(event)" class="flex items-center gap-2 flex-1 min-w-[220px]">
                 <div class="relative flex-1">
@@ -402,20 +450,20 @@
                   <input
                     id="mapPlaceSearchInput"
                     type="text"
-                    placeholder="Buscar rua, ponto de ônibus, UBS, mercado ou oficina em Itajubá..."
+                    placeholder="Buscar rua, hospital, dentista, restaurante, oficina ou ponto..."
                     class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
                   />
                 </div>
                 <button type="submit" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold shrink-0 transition-colors">
-                  Ir no Mapa
+                  Localizar
                 </button>
               </form>
               <div class="flex items-center gap-1.5 overflow-x-auto text-[11px]">
                 <button type="button" onclick="selectNeighborhood('centro')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-medium shrink-0">Centro</button>
                 <button type="button" onclick="selectNeighborhood('pinheirinho')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-medium shrink-0">UNIFEI / BPS</button>
-                <button type="button" onclick="selectNeighborhood('estiva')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-medium shrink-0">Estiva</button>
+                <button type="button" onclick="selectNeighborhood('boavista')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-medium shrink-0">Boa Vista</button>
                 <button type="button" onclick="selectNeighborhood('medicina')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-medium shrink-0">Medicina</button>
-                <button type="button" onclick="selectNeighborhood('distrito')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-medium shrink-0">Distrito / BR-459</button>
+                <button type="button" onclick="selectNeighborhood('estiva')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-medium shrink-0">Estiva</button>
               </div>
             </div>
 
@@ -425,39 +473,40 @@
 
               <!-- Dica Flutuante Superior -->
               <div class="absolute top-3 left-14 z-[400] bg-purple-950/90 backdrop-blur-md text-white px-3 py-1.5 rounded-xl shadow-md text-[11px] font-medium pointer-events-none hidden sm:flex items-center gap-2">
-                <span>🚌 Clique nos pontos de ônibus para ver horários • 🖱️ Clique na rua para denunciar</span>
+                <span>⭐ Clique em qualquer estabelecimento p/ avaliar ou ver Selo Oficial • 🚌 Clique no ônibus p/ horários</span>
               </div>
 
               <!-- Legenda Flutuante -->
-              <div class="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-xl shadow-lg border border-slate-200/80 text-xs space-y-1.5 max-w-[235px]">
-                <p class="font-bold text-slate-800 text-[11px] uppercase tracking-wider">Legenda do Mapa</p>
+              <div class="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-xl shadow-lg border border-slate-200/80 text-xs space-y-1 max-w-[245px]">
+                <p class="font-bold text-slate-800 text-[10px] uppercase tracking-wider">Legenda Integrada</p>
                 <div class="grid grid-cols-1 gap-1 text-[11px] text-slate-600">
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500 shrink-0"></span> Área Risco Enchente / Abrigo</div>
                   <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-indigo-600 shrink-0"></span> Ponto de Ônibus (Horários)</div>
-                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span> Posto de Saúde / Hospital</div>
-                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span> Mercado / Supermercado</div>
-                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-slate-700 shrink-0"></span> Oficina / Serviços</div>
-                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span> Denúncias & Zeladoria</div>
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span> Hospital / UBS / Farmácia</div>
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-orange-500 shrink-0"></span> Estabelecimento (Selo & Nota)</div>
+                  <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span> Zeladoria / Falta de Luz</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- COLUNA LATERAL DIREITA: FEED DE DENÚNCIAS & BARRAS DE CATEGORIA (4 colunas) -->
+          <!-- COLUNA LATERAL DIREITA: ORÇAMENTO PARTICIPATIVO + OCORRÊNCIAS (4 colunas) -->
           <div class="xl:col-span-4 flex flex-col gap-6">
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm">
-              <div class="flex items-center justify-between mb-3">
-                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                  <i data-lucide="bar-chart-3" class="w-4 h-4 text-purple-600"></i>
-                  Demandas por Categoria
-                </h3>
-                <span class="text-xs font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md">Ativas</span>
+
+            <!-- WIDGET: ORÇAMENTO PARTICIPATIVO (ENQUETE DO BAIRRO) -->
+            <div class="bg-white rounded-2xl p-5 border border-purple-200/80 shadow-sm space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">Orçamento Participativo</span>
+                <span id="pollTotalVotes" class="text-xs font-semibold text-slate-500">428 votos</span>
               </div>
-              <div id="categoryBarsContainer" class="space-y-3 text-xs"></div>
+              <h3 class="font-bold text-slate-900 text-sm leading-snug">Qual deve ser a próxima obra prioritária no corredor Centro / BPS?</h3>
+              <div id="participatoryPollList" class="space-y-2.5"></div>
             </div>
 
+            <!-- WIDGET: FEED DE DENÚNCIAS & ZELADORIA -->
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm flex-1 flex flex-col overflow-hidden">
               <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
-                <h3 class="font-bold text-slate-800 text-sm">Denúncias na Região</h3>
+                <h3 class="font-bold text-slate-800 text-sm">Ocorrências Recentes</h3>
                 <select id="statusFilterSelect" onchange="renderReportsList()" class="text-xs bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-purple-500">
                   <option value="all">Todos os status</option>
                   <option value="Pendente">Pendente</option>
@@ -465,31 +514,82 @@
                   <option value="Resolvido">Resolvido</option>
                 </select>
               </div>
-              <div id="reportsFeedList" class="p-4 space-y-3 overflow-y-auto max-h-[340px]"></div>
+              <div id="reportsFeedList" class="p-4 space-y-3 overflow-y-auto max-h-[300px]"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SEÇÃO DE TRANSPARÊNCIA: OBRAS CONCLUÍDAS (ANTES E DEPOIS) -->
+        <section class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">Prestação de Contas Visual</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1.5">Denúncias Resolvidas pela Prefeitura — Antes & Depois</h3>
+              <p class="text-xs text-slate-500">Quando uma demanda cidadã é concluída, o sistema publica a comprovação fotográfica no mesmo ponto do mapa.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Caso 1 -->
+            <div class="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50/50">
+              <div class="grid grid-cols-2 gap-0.5 bg-slate-200">
+                <div class="relative">
+                  <img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=500&q=80" onerror="this.src='https://placehold.co/400x250/F43F5E/FFFFFF?text=Antes'" alt="Antes da obra" class="w-full h-40 object-cover" />
+                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-extrabold uppercase">Antes (Denúncia)</span>
+                </div>
+                <div class="relative">
+                  <img src="https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=500&q=80" onerror="this.src='https://placehold.co/400x250/10B981/FFFFFF?text=Depois'" alt="Depois da obra" class="w-full h-40 object-cover" />
+                  <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-extrabold uppercase">Depois (Concluído)</span>
+                </div>
+              </div>
+              <div class="p-4 flex items-center justify-between gap-3">
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm">Recapeamento e Iluminação LED — Parque Municipal</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Protocolo #CIV-1035 • Boa Vista • Resolvido em 4 dias</p>
+                </div>
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg shrink-0">98% Aprovação</span>
+              </div>
+            </div>
+
+            <!-- Caso 2 -->
+            <div class="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50/50">
+              <div class="grid grid-cols-2 gap-0.5 bg-slate-200">
+                <div class="relative">
+                  <img src="https://images.unsplash.com/photo-1584467735815-f778f274e296?auto=format&fit=crop&w=500&q=80" onerror="this.src='https://placehold.co/400x250/F43F5E/FFFFFF?text=Antes'" alt="Antes acessibilidade" class="w-full h-40 object-cover" />
+                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-extrabold uppercase">Antes (Sem Rampa)</span>
+                </div>
+                <div class="relative">
+                  <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&w=500&q=80" onerror="this.src='https://placehold.co/400x250/10B981/FFFFFF?text=Depois'" alt="Depois acessibilidade" class="w-full h-40 object-cover" />
+                  <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-extrabold uppercase">Depois (Acessível)</span>
+                </div>
+              </div>
+              <div class="p-4 flex items-center justify-between gap-3">
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm">Construção de Rampa e Piso Tátil — Rua Major Belo Lisboa</h4>
+                  <p class="text-xs text-slate-500 mt-0.5">Protocolo #CIV-1019 • Centro • Resolvido em 6 dias</p>
+                </div>
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg shrink-0">100% Aprovação</span>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
       <!-- =================================================================
-           VIEW 2: ESPAÇO CULTURA (NO MESMO PADRÃO DAS OUTRAS ABAS)
+           VIEW 2: ESPAÇO CULTURA (NA MESMA ÁREA PRINCIPAL)
            ================================================================= -->
       <main id="view-culture" class="hidden p-4 sm:p-6 space-y-6 flex-1">
-        <!-- Banner Superior Cultura -->
         <div class="bg-gradient-to-r from-[#3B0764] via-[#581C87] to-[#7E22CE] rounded-2xl p-6 sm:p-8 text-white shadow-lg space-y-5">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="space-y-1.5 max-w-2xl">
-              <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-pink-200 border border-pink-300/30">
-                <i data-lucide="palette" class="w-3.5 h-3.5"></i> Secretaria Municipal de Cultura • Itajubá
-              </span>
-              <h2 class="text-2xl sm:text-3xl font-extrabold">Civora Cultura & Patrimônio</h2>
-              <p class="text-sm text-purple-100">
-                Exposição de artes locais, aquisição direta de obras, apoio financeiro a artistas independentes e fiscalização cidadã do patrimônio cultural.
-              </p>
-            </div>
+          <div class="space-y-1.5 max-w-2xl">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-pink-200 border border-pink-300/30">
+              <i data-lucide="palette" class="w-3.5 h-3.5"></i> Secretaria Municipal de Cultura • Itajubá
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold">Nexo Cultura & Patrimônio</h2>
+            <p class="text-sm text-purple-100">
+              Exposição de artes locais, aquisição direta de obras, apoio financeiro a artistas independentes e fiscalização cidadã do patrimônio cultural.
+            </p>
           </div>
 
-          <!-- Abas Internas do Espaço Cultura -->
           <div class="flex items-center gap-2 overflow-x-auto pt-2 border-t border-white/15">
             <button onclick="switchCultureTab('exposicao')" id="ctab-exposicao" class="culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-purple-900 shadow-sm flex items-center gap-2 shrink-0 transition-all">
               <i data-lucide="image" class="w-4 h-4"></i>
@@ -510,97 +610,62 @@
           </div>
         </div>
 
-        <!-- ABA INTERNA 1: EXPOSIÇÃO -->
         <div id="culture-section-exposicao" class="space-y-5">
-          <div class="bg-white p-5 rounded-2xl border border-purple-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900">Mostra Municipal de Arte Contemporânea & Urbana</h3>
-              <p class="text-sm text-slate-500">Obras selecionadas de artistas itajubenses em exposição nos espaços públicos e galerias da cidade.</p>
-            </div>
-            <span class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-purple-100 text-purple-800 self-start sm:self-auto">Entrada Gratuita • Acervo Digital</span>
-          </div>
           <div id="artExhibitionGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
-        <!-- ABA INTERNA 2: VENDA DE OBRAS -->
         <div id="culture-section-vendas" class="hidden space-y-5">
-          <div class="bg-white p-5 rounded-2xl border border-purple-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900">Feira Criativa — Aquisição Direta do Artista</h3>
-              <p class="text-sm text-slate-500">100% do valor é repassado diretamente ao artista local, sem taxas intermediárias.</p>
-            </div>
-            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">Certificado de Autenticidade</span>
-          </div>
           <div id="artShopGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
-        <!-- ABA INTERNA 3: DOAÇÃO ARTISTAS INDEPENDENTES -->
         <div id="culture-section-doacao-artistas" class="hidden space-y-5">
-          <div class="bg-white p-5 rounded-2xl border border-purple-100 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900">Fundo Colaborativo para Artistas Independentes de Itajubá</h3>
-            <p class="text-sm text-slate-500 mt-0.5">Apoie coletivos teatrais, muralistas, músicos e artesãos na compra de materiais e oficinas gratuitas nos bairros.</p>
-          </div>
           <div id="independentArtistsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
-        <!-- ABA INTERNA 4: DENÚNCIA DE OBRA / PATRIMÔNIO -->
         <div id="culture-section-denuncia-obra" class="hidden">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-              <div class="border-b border-slate-100 pb-4">
-                <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Fiscalização do Patrimônio Cultural</span>
-                <h3 class="text-xl font-bold text-slate-900 mt-2">Reportar Obra ou Espaço Cultural sem Investimento</h3>
-                <p class="text-sm text-slate-500 mt-1">Tire uma foto da pintura, mural ou monumento danificado. A denúncia será marcada automaticamente no mapa de Itajubá.</p>
-              </div>
+            <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+              <h3 class="text-lg font-bold text-slate-900">Reportar Obra ou Espaço Cultural sem Investimento</h3>
               <form id="cultureReportForm" onsubmit="submitCultureReport(event)" class="space-y-4">
                 <div>
-                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Nome da Obra, Monumento ou Espaço Cultural *</label>
-                  <input type="text" id="cultTitle" required placeholder="Ex: Coreto da Praça Theodomiro Santiago / Teatro Municipal" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nome da Obra / Monumento *</label>
+                  <input type="text" id="cultTitle" required placeholder="Ex: Coreto da Praça Theodomiro Santiago" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Tipo de Problema *</label>
-                    <select id="cultIssueType" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none bg-white">
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Tipo de Problema *</label>
+                    <select id="cultIssueType" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white">
                       <option value="Pintura/Mural desgastado">Pintura / Mural desgastado</option>
-                      <option value="Falta de infraestrutura e iluminação">Falta de infraestrutura e iluminação</option>
-                      <option value="Monumento danificado / vandalizado">Monumento danificado / sem restauro</option>
-                      <option value="Espaço cultural abandonado">Espaço cultural sem investimento</option>
+                      <option value="Falta de infraestrutura">Falta de infraestrutura e iluminação</option>
+                      <option value="Monumento danificado">Monumento danificado / sem restauro</option>
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Endereço / Bairro em Itajubá *</label>
-                    <input type="text" id="cultAddress" required placeholder="Ex: Praça Central - Centro, Itajubá" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Endereço / Bairro *</label>
+                    <input type="text" id="cultAddress" required placeholder="Ex: Praça Central - Centro, Itajubá" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300" />
                   </div>
                 </div>
                 <div>
-                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Descrição da Situação *</label>
-                  <textarea id="cultDescription" rows="3" required placeholder="Descreva os danos visíveis ou falta de manutenção..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"></textarea>
+                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Descrição *</label>
+                  <textarea id="cultDescription" rows="3" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300"></textarea>
                 </div>
                 <div>
-                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Foto da Obra / Local *</label>
-                  <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-purple-300 rounded-2xl cursor-pointer bg-purple-50/50 hover:bg-purple-50 transition-colors relative overflow-hidden">
-                    <div id="cultUploadPlaceholder" class="flex flex-col items-center justify-center pt-4 pb-5 text-center px-4">
-                      <i data-lucide="camera" class="w-8 h-8 text-purple-600 mb-2"></i>
-                      <p class="text-xs font-semibold text-purple-900">Clique para tirar foto ou enviar imagem da obra</p>
+                  <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Foto da Obra *</label>
+                  <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-purple-300 rounded-2xl cursor-pointer bg-purple-50/50 hover:bg-purple-50 relative overflow-hidden">
+                    <div id="cultUploadPlaceholder" class="flex flex-col items-center text-center px-4">
+                      <i data-lucide="camera" class="w-7 h-7 text-purple-600 mb-1"></i>
+                      <p class="text-xs font-semibold text-purple-900">Tirar foto ou selecionar imagem</p>
                     </div>
-                    <img id="cultPhotoPreview" src="" alt="Prévia da obra" class="hidden w-full h-full object-cover" />
-                    <input type="file" id="cultPhotoInput" accept="image/*" capture="environment" onchange="previewImage(this, 'cultPhotoPreview', 'cultUploadPlaceholder')" class="hidden" />
+                    <img id="cultPhotoPreview" src="" alt="Prévia" class="hidden w-full h-full object-cover" />
+                    <input type="file" accept="image/*" capture="environment" onchange="previewImage(this, 'cultPhotoPreview', 'cultUploadPlaceholder')" class="hidden" />
                   </label>
                 </div>
-                <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-all">
-                  <i data-lucide="send" class="w-4 h-4"></i>
-                  <span>Enviar Denúncia Cultural & Marcar no Mapa</span>
+                <button type="submit" class="px-6 py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-lg">
+                  Publicar no Mapa de Itajubá
                 </button>
               </form>
             </div>
-            <div class="lg:col-span-5 space-y-4">
-              <div class="bg-purple-950 text-white rounded-2xl p-5 shadow-md">
-                <h4 class="font-bold text-base flex items-center gap-2">
-                  <i data-lucide="landmark" class="w-5 h-5 text-amber-300"></i>
-                  Patrimônios Monitorados em Itajubá
-                </h4>
-                <p class="text-xs text-purple-200 mt-1">Todas as ocorrências culturais aparecem integradas no mapa principal.</p>
-              </div>
+            <div class="lg:col-span-5 space-y-3">
               <div id="cultureAlertsList" class="space-y-3"></div>
             </div>
           </div>
@@ -608,21 +673,21 @@
       </main>
 
       <!-- =================================================================
-           VIEW 3: DOAÇÕES SOCIAIS (UNIDADES CARENTES DE ITAJUBÁ)
+           VIEW 3: DOAÇÕES SOCIAIS & ABRIGOS DE EMERGÊNCIA
            ================================================================= -->
       <main id="view-donations" class="hidden p-4 sm:p-6 space-y-6 flex-1">
-        <div class="bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#7C3AED] rounded-2xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="bg-gradient-to-r from-[#3B0764] via-[#6D28D9] to-[#7C3AED] rounded-2xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div class="space-y-2 max-w-2xl">
             <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-purple-100">
-              <i data-lucide="heart-handshake" class="w-3.5 h-3.5"></i> Rede Solidária Municipal • Itajubá
+              <i data-lucide="heart-handshake" class="w-3.5 h-3.5"></i> Assistência Social & Defesa Civil • Itajubá
             </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold">Doações para Unidades Carentes de Itajubá</h2>
+            <h2 class="text-2xl sm:text-3xl font-extrabold">Doações para Unidades Carentes & Abrigos Climáticos</h2>
             <p class="text-sm text-purple-100 leading-relaxed">
-              Apoie diretamente abrigos, creches comunitárias, cozinhas solidárias e centros de acolhimento homologados pela Prefeitura de Itajubá.
+              Apoie instituições sociais cadastradas e pontos de acolhimento emergencial para famílias atingidas por chuvas fortes em Itajubá.
             </p>
           </div>
           <div class="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-4 min-w-[210px]">
-            <p class="text-xs text-purple-200">Total Arrecadado na Campanha</p>
+            <p class="text-xs text-purple-200">Total Arrecadado</p>
             <p id="donationsBannerTotal" class="text-2xl sm:text-3xl font-extrabold text-white mt-1">R$ 24.850,00</p>
           </div>
         </div>
@@ -640,7 +705,7 @@
             </span>
             <h2 class="text-2xl sm:text-3xl font-extrabold">Vagas de Emprego, Estágios & Cursos</h2>
             <p class="text-sm text-purple-100 leading-relaxed">
-              Oportunidades de trabalho no Distrito Industrial, comércio local, estágios universitários e cursos gratuitos em Itajubá - MG.
+              Filtre oportunidades de trabalho no Distrito Industrial, comércio local, estágios universitários e cursos gratuitos.
             </p>
           </div>
           <div class="flex flex-wrap sm:flex-nowrap gap-3">
@@ -658,36 +723,31 @@
         <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center gap-2">
             <span class="text-xs font-bold uppercase tracking-wider text-slate-500 mr-1">Filtrar por Tipo:</span>
-            <button onclick="setOppTypeFilter('all')" id="opp-type-all" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-[#6D28D9] text-white shadow-sm transition-all">Todas</button>
-            <button onclick="setOppTypeFilter('Emprego')" id="opp-type-Emprego" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50 transition-all">💼 Emprego (CLT/PJ)</button>
-            <button onclick="setOppTypeFilter('Estágio')" id="opp-type-Estágio" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50 transition-all">🎓 Estágio</button>
-            <button onclick="setOppTypeFilter('Curso')" id="opp-type-Curso" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50 transition-all">📚 Curso Profissionalizante</button>
-            <button onclick="setOppTypeFilter('Jovem Aprendiz')" id="opp-type-Jovem Aprendiz" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50 transition-all">🚀 Jovem Aprendiz</button>
+            <button onclick="setOppTypeFilter('all')" id="opp-type-all" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-[#6D28D9] text-white shadow-sm">Todas</button>
+            <button onclick="setOppTypeFilter('Emprego')" id="opp-type-Emprego" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50">💼 Emprego</button>
+            <button onclick="setOppTypeFilter('Estágio')" id="opp-type-Estágio" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50">🎓 Estágio</button>
+            <button onclick="setOppTypeFilter('Curso')" id="opp-type-Curso" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50">📚 Curso Profissionalizante</button>
+            <button onclick="setOppTypeFilter('Jovem Aprendiz')" id="opp-type-Jovem Aprendiz" class="opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50">🚀 Jovem Aprendiz</button>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
-            <div class="relative">
-              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-              <input id="oppSearchInput" type="text" oninput="renderOpportunities()" placeholder="Cargo, curso ou empresa..." class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none" />
-            </div>
-            <select id="oppAreaSelect" onchange="renderOpportunities()" class="px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50 text-slate-700 focus:ring-2 focus:ring-purple-500 focus:outline-none">
-              <option value="all">Todas as Áreas de Atuação</option>
+            <input id="oppSearchInput" type="text" oninput="renderOpportunities()" placeholder="Cargo, curso ou empresa..." class="px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none" />
+            <select id="oppAreaSelect" onchange="renderOpportunities()" class="px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50 text-slate-700">
+              <option value="all">Todas as Áreas</option>
               <option value="Tecnologia & Engenharia">Tecnologia & Engenharia</option>
               <option value="Indústria & Produção">Indústria & Produção</option>
               <option value="Comércio & Serviços">Comércio & Serviços</option>
-              <option value="Saúde & Bem-estar">Saúde & Bem-estar</option>
               <option value="Administração & Gestão">Administração & Gestão</option>
               <option value="Cultura & Economia Criativa">Cultura & Economia Criativa</option>
             </select>
-            <select id="oppModalitySelect" onchange="renderOpportunities()" class="px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50 text-slate-700 focus:ring-2 focus:ring-purple-500 focus:outline-none">
+            <select id="oppModalitySelect" onchange="renderOpportunities()" class="px-3 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50 text-slate-700">
               <option value="all">Todas as Modalidades</option>
               <option value="Presencial">Presencial (Itajubá)</option>
               <option value="Híbrido">Híbrido</option>
-              <option value="Remoto">Remoto</option>
             </select>
-            <label class="flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-purple-200 bg-purple-50/60 cursor-pointer text-xs font-semibold text-purple-900 hover:bg-purple-100/70 transition-colors">
+            <label class="flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-purple-200 bg-purple-50/60 cursor-pointer text-xs font-semibold text-purple-900">
               <input type="checkbox" id="oppOnlySavedCheck" onchange="renderOpportunities()" class="accent-purple-600 rounded w-4 h-4" />
-              <span>Mostrar apenas vagas salvas</span>
+              <span>Apenas vagas salvas</span>
             </label>
           </div>
         </div>
@@ -698,7 +758,29 @@
   </div>
 
   <!-- =====================================================================
-       MODAL: HORÁRIOS DE ÔNIBUS & ITINERÁRIO DO PONTO SELECIONADO
+       MODAL 1: PERFIL UNIVERSAL DE ESTABELECIMENTOS (SELO + AVALIAÇÃO + DENÚNCIA PRESENCIAL)
+       ===================================================================== -->
+  <div id="establishmentModal" class="hidden fixed inset-0 z-[60] bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-purple-100 overflow-hidden animate-overlay">
+      <div class="bg-gradient-to-r from-[#3B0764] via-[#581C87] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
+        <div>
+          <span id="estSectorBadge" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/20 text-purple-100">Setor</span>
+          <h3 id="estModalName" class="font-bold text-lg mt-1">Nome do Estabelecimento</h3>
+          <p id="estModalAddress" class="text-xs text-purple-200">Endereço • Itajubá</p>
+        </div>
+        <button onclick="closeEstablishmentModal()" class="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="estModalBody" class="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+        <!-- Preenchido dinamicamente pelo JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 2: HORÁRIOS DE ÔNIBUS DO PONTO SELECIONADO
        ===================================================================== -->
   <div id="busStopModal" class="hidden fixed inset-0 z-[60] bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-purple-100 overflow-hidden animate-overlay">
@@ -714,19 +796,19 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <div id="busStopBody" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-        <!-- Preenchido via JS -->
-      </div>
+      <div id="busStopBody" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto"></div>
     </div>
   </div>
 
-  <!-- MODAL: NOVA DENÚNCIA URBANA -->
+  <!-- =====================================================================
+       MODAL 3: NOVA DENÚNCIA URBANA / DEFESA CIVIL / ENERGIA / ÁGUA
+       ===================================================================== -->
   <div id="reportModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-overlay my-auto">
       <div class="bg-gradient-to-r from-[#4C1D95] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <i data-lucide="alert-octagon" class="w-5 h-5 text-amber-300"></i>
-          <h3 class="font-bold text-lg">Registrar Denúncia Urbana</h3>
+          <h3 class="font-bold text-lg">Registrar Ocorrência Urbana / Risco</h3>
         </div>
         <button onclick="closeReportModal()" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -734,42 +816,42 @@
       </div>
       <form id="urbanReportForm" onsubmit="submitUrbanReport(event)" class="p-6 space-y-4">
         <div>
-          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Categoria do Problema *</label>
-          <select id="repCategory" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none bg-white">
-            <option value="buraco">Esburacamento na rua / Asfalto danificado</option>
-            <option value="sinalizacao">Falta de sinalização na via / Semáforo</option>
-            <option value="danificado">Espaço público danificado (Praça/Calçada)</option>
-            <option value="acessibilidade">Falta de acessibilidade (Rampa/Piso tátil)</option>
-            <option value="cultura">Patrimônio ou Obra Cultural sem investimento</option>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Categoria da Ocorrência *</label>
+          <select id="repCategory" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 bg-white">
+            <option value="energia">Falta de Energia Elétrica / Poste Apagado</option>
+            <option value="buraco">Esburacamento na Rua / Asfalto Danificado</option>
+            <option value="sinalizacao">Falta de Sinalização ou Acessibilidade</option>
+            <option value="clima">Risco de Alagamento / Deslizamento / Queda de Árvore</option>
+            <option value="cultura">Patrimônio ou Obra Cultural sem Investimento</option>
           </select>
         </div>
         <div>
           <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Título Resumido *</label>
-          <input type="text" id="repTitle" required placeholder="Ex: Cratera na faixa da direita próximo ao cruzamento" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+          <input type="text" id="repTitle" required placeholder="Ex: Transformador desarmado / Rua sem iluminação" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300" />
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Endereço / Bairro em Itajubá *</label>
-            <input type="text" id="repAddress" required placeholder="Ex: Av. BPS, 1303 - Pinheirinho" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Endereço / Bairro *</label>
+            <input type="text" id="repAddress" required placeholder="Ex: Av. BPS - Pinheirinho, Itajubá" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300" />
           </div>
           <div>
-            <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Coordenadas (Itajubá - MG)</label>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Coordenadas GPS</label>
             <input type="text" id="repCoordsDisplay" readonly value="-22.4269, -45.4530" class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-slate-100 text-slate-600 font-mono" />
           </div>
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Descrição Detalhada *</label>
-          <textarea id="repDescription" rows="2" required placeholder="Explique o risco para motoristas, pedestres ou moradores..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"></textarea>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Descrição *</label>
+          <textarea id="repDescription" rows="2" required class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300"></textarea>
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Anexar Foto do Local</label>
-          <label class="flex items-center justify-center w-full h-28 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer bg-purple-50/40 hover:bg-purple-50 transition-colors overflow-hidden relative">
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Foto do Local</label>
+          <label class="flex items-center justify-center w-full h-24 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer bg-purple-50/40 hover:bg-purple-50 overflow-hidden relative">
             <div id="repUploadPlaceholder" class="flex flex-col items-center text-center px-3">
-              <i data-lucide="image-plus" class="w-6 h-6 text-purple-600 mb-1"></i>
-              <span class="text-xs font-medium text-purple-900">Clique para adicionar foto da ocorrência</span>
+              <i data-lucide="image-plus" class="w-5 h-5 text-purple-600 mb-1"></i>
+              <span class="text-xs font-medium text-purple-900">Anexar foto da ocorrência</span>
             </div>
-            <img id="repPhotoPreview" src="" alt="Preview denúncia" class="hidden w-full h-full object-cover" />
-            <input type="file" id="repPhotoInput" accept="image/*" capture="environment" onchange="previewImage(this, 'repPhotoPreview', 'repUploadPlaceholder')" class="hidden" />
+            <img id="repPhotoPreview" src="" alt="Preview" class="hidden w-full h-full object-cover" />
+            <input type="file" accept="image/*" capture="environment" onchange="previewImage(this, 'repPhotoPreview', 'repUploadPlaceholder')" class="hidden" />
           </label>
         </div>
         <div class="pt-2 flex items-center justify-end gap-2.5">
@@ -780,14 +862,12 @@
     </div>
   </div>
 
-  <!-- MODAL DE DOAÇÃO / COMPRA DE OBRA -->
+  <!-- MODAL 4: DOAÇÃO / COMPRA -->
   <div id="transactionModal" class="hidden fixed inset-0 z-[60] bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 overflow-hidden animate-overlay">
       <div class="bg-gradient-to-r from-[#581C87] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
         <h3 id="txModalTitle" class="font-bold text-base">Confirmar Apoio</h3>
-        <button onclick="closeTransactionModal()" class="p-1 rounded-lg bg-white/15 hover:bg-white/25">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+        <button onclick="closeTransactionModal()" class="p-1 rounded-lg bg-white/15 hover:bg-white/25"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
       <div class="p-6 space-y-4">
         <p id="txModalSubtitle" class="text-sm text-slate-600"></p>
@@ -798,62 +878,52 @@
         </div>
         <div>
           <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Valor (R$)</label>
-          <input type="number" id="txAmountInput" min="1" step="1" value="30" class="w-full px-4 py-2.5 text-lg font-extrabold text-purple-900 rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+          <input type="number" id="txAmountInput" min="1" step="1" value="30" class="w-full px-4 py-2.5 text-lg font-extrabold text-purple-900 rounded-xl border border-slate-300" />
         </div>
-        <button onclick="confirmTransaction()" class="w-full py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-lg transition-all">
-          Confirmar & Gerar Recibo
-        </button>
+        <button onclick="confirmTransaction()" class="w-full py-3 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-sm shadow-lg">Confirmar & Gerar Comprovante</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: INVESTIMENTOS DA PREFEITURA -->
+  <!-- MODAL 5: DETALHES DE SERVIÇOS PÚBLICOS & TRANSPARÊNCIA -->
   <div id="govActionModal" class="hidden fixed inset-0 z-[60] bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-purple-100 overflow-hidden animate-overlay">
       <div class="bg-gradient-to-r from-[#4C1D95] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
         <div>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-200">Portal da Transparência • Itajubá - MG</span>
-          <h3 id="govModalTitle" class="font-bold text-lg">Detalhes do Investimento Municipal</h3>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-purple-200">Central Inteligente • Itajubá - MG</span>
+          <h3 id="govModalTitle" class="font-bold text-lg">Detalhes</h3>
         </div>
-        <button onclick="closeGovActionModal()" class="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closeGovActionModal()" class="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <div id="govModalBody" class="p-6 space-y-4 text-sm text-slate-700 max-h-[75vh] overflow-y-auto"></div>
     </div>
   </div>
 
-  <!-- MODAL: CANDIDATURA EM VAGA / ESTÁGIO / CURSO -->
+  <!-- MODAL 6: CANDIDATURA VAGA / ESTÁGIO / CURSO -->
   <div id="oppApplyModal" class="hidden fixed inset-0 z-[60] bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-purple-100 overflow-hidden animate-overlay">
       <div class="bg-gradient-to-r from-[#4C1D95] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
         <div>
-          <span id="oppModalBadge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/20 text-white">Candidatura</span>
-          <h3 id="oppModalTitle" class="font-bold text-base sm:text-lg mt-1">Título da Oportunidade</h3>
+          <span id="oppModalBadge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/20 text-white">Inscrição</span>
+          <h3 id="oppModalTitle" class="font-bold text-base sm:text-lg mt-1">Título</h3>
         </div>
-        <button onclick="closeOppApplyModal()" class="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closeOppApplyModal()" class="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="submitOppApplication(event)" class="p-6 space-y-4">
         <p id="oppModalCompany" class="text-xs font-semibold text-purple-700 bg-purple-50 px-3 py-2 rounded-xl border border-purple-100"></p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Nome Completo *</label>
-            <input type="text" required value="Mariana Costa" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+            <input type="text" required value="Mariana Costa" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300" />
           </div>
           <div>
-            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Telefone / WhatsApp *</label>
-            <input type="tel" required placeholder="(35) 99999-0000" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">WhatsApp *</label>
+            <input type="tel" required placeholder="(35) 99999-0000" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300" />
           </div>
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase text-slate-700 mb-1">E-mail *</label>
-          <input type="email" required value="mariana.costa@email.com" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Resumo Profissional ou Escolaridade *</label>
-          <textarea rows="3" required placeholder="Conte brevemente sua experiência ou curso..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:ring-2 focus:ring-purple-600 focus:outline-none"></textarea>
+          <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Resumo / Escolaridade *</label>
+          <textarea rows="3" required placeholder="Descreva sua formação ou experiência..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300"></textarea>
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="closeOppApplyModal()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
@@ -867,18 +937,18 @@
   <div id="toastContainer" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- =====================================================================
-       JAVASCRIPT COMPLETO E CORRIGIDO
+       JAVASCRIPT COMPLETO E VALIDADO
        ===================================================================== -->
   <script>
     const categoryMeta = {
-      buraco: { label: 'Esburacamento na Via', color: '#F43F5E', badgeBg: 'bg-rose-100 text-rose-800' },
-      sinalizacao: { label: 'Falta de Sinalização', color: '#F59E0B', badgeBg: 'bg-amber-100 text-amber-800' },
-      danificado: { label: 'Espaço Danificado', color: '#F97316', badgeBg: 'bg-orange-100 text-orange-800' },
-      acessibilidade: { label: 'Falta de Acessibilidade', color: '#0EA5E9', badgeBg: 'bg-sky-100 text-sky-800' },
-      cultura: { label: 'Patrimônio / Obra Cultural', color: '#C026D3', badgeBg: 'bg-fuchsia-100 text-fuchsia-800' }
+      energia: { label: 'Falta de Luz / Iluminação', color: '#EAB308', badgeBg: 'bg-yellow-100 text-yellow-800' },
+      buraco: { label: 'Esburacamento & Vias', color: '#F43F5E', badgeBg: 'bg-rose-100 text-rose-800' },
+      sinalizacao: { label: 'Sinalização & Acessibilidade', color: '#F59E0B', badgeBg: 'bg-amber-100 text-amber-800' },
+      clima: { label: 'Risco Climático / Encosta', color: '#06B6D4', badgeBg: 'bg-cyan-100 text-cyan-800' },
+      cultura: { label: 'Patrimônio Cultural', color: '#C026D3', badgeBg: 'bg-fuchsia-100 text-fuchsia-800' }
     };
 
-    // BAIRROS DE ITAJUBÁ - MG COM DADOS DE SEGURANÇA, INVESTIMENTOS E LIMITES
+    // BAIRROS DE ITAJUBÁ - MG
     const neighborhoodsData = {
       all: {
         name: 'Toda a Cidade de Itajubá',
@@ -886,10 +956,9 @@
         zoom: 14,
         bounds: [[-22.4750, -45.5100], [-22.3800, -45.4000]],
         crimeRate: 'Baixa • 11,4 / 100 mil hab.',
-        crimeBadge: 'Índice Seguro (Monitoramento Câmeras)',
-        investment: 'R$ 18,4 Mi em 28 frentes de obra',
-        healthInfra: '16 UBSs + Hospital de Clínicas + Santa Casa',
-        highlights: 'Cobertura integrada de transporte coletivo, escolas municipais e zeladoria.'
+        crimeBadge: 'Videomonitoramento Guarda Municipal',
+        utilities: 'CEMIG & COPASA: Operação Normal • Coleta Seletiva Ativa',
+        investment: 'R$ 18,4 Mi em 28 frentes de obra'
       },
       centro: {
         name: 'Centro Histórico & Comercial',
@@ -897,10 +966,9 @@
         zoom: 16,
         bounds: [[-22.4315, -45.4585], [-22.4215, -45.4470]],
         crimeRate: 'Muito Baixa • Patrulhamento 24h',
-        crimeBadge: 'Videomonitoramento Guarda Municipal',
-        investment: 'R$ 3,6 Mi (Revitalização Calçadão & LED)',
-        healthInfra: 'Policlínica Central & Farmácia Municipal',
-        highlights: 'Polo bancário, comércio central, Praça Theodomiro Santiago e Terminal Urbano.'
+        crimeBadge: 'Câmeras OCR Ativas',
+        utilities: 'Coleta Lixo: Diária (19h) • Seletiva: Qua/Sáb • Luz/Água: Normal',
+        investment: 'R$ 3,6 Mi (Calçadão & LED)'
       },
       pinheirinho: {
         name: 'Pinheirinho / UNIFEI / Av. BPS',
@@ -908,32 +976,29 @@
         zoom: 16,
         bounds: [[-22.4200, -45.4560], [-22.4070, -45.4415]],
         crimeRate: 'Baixa • Corredor Universitário',
-        crimeBadge: 'Ronda Escolar & Iluminação LED 100%',
-        investment: 'R$ 4,9 Mi (Duplicação & Ciclovia Av. BPS)',
-        healthInfra: 'UBS Pinheirinho & Ambulatório Acadêmico',
-        highlights: 'Campus UNIFEI, Parque Científico e Tecnológico (PCTI), repúblicas e comércio.'
+        crimeBadge: 'Ronda Escolar & LED 100%',
+        utilities: 'Coleta Lixo: Seg/Qua/Sex (08h) • Seletiva: Ter/Qui • Luz/Água: Normal',
+        investment: 'R$ 4,9 Mi (Ciclovia & Drenagem BPS)'
       },
       boavista: {
-        name: 'Bairro Boa Vista',
+        name: 'Boa Vista / Vila Poddis',
         center: [-22.4232, -45.4585],
         zoom: 16,
         bounds: [[-22.4285, -45.4655], [-22.4180, -45.4525]],
-        crimeRate: 'Baixa • Bairro Residencial',
-        crimeBadge: 'Rede Vizinhos Protegidos Ativa',
-        investment: 'R$ 2,2 Mi (Drenagem & Parque Municipal)',
-        healthInfra: 'UBS Boa Vista & Pronto Atendimento',
-        highlights: 'Terminal Rodoviário, Parque Municipal de Itajubá, supermercados e oficinas.'
+        crimeRate: 'Baixa • Monitoramento Ribeirinho',
+        crimeBadge: 'Alerta Enchente Ativo no Rio Sapucaí',
+        utilities: 'Coleta Lixo: Ter/Qui/Sáb (08h) • Seletiva: Qua • Ecoponto Parque Municipal',
+        investment: 'R$ 2,2 Mi (Drenagem & Parque)'
       },
       estiva: {
         name: 'Bairro Estiva',
         center: [-22.4322, -45.4575],
         zoom: 16,
         bounds: [[-22.4375, -45.4640], [-22.4275, -45.4515]],
-        crimeRate: 'Moderada-Baixa • Em queda (-14%)',
-        crimeBadge: 'Nova Base Comunitária',
-        investment: 'R$ 2,8 Mi (Recapeamento Av. Jerson Dias)',
-        healthInfra: 'ESF Estiva & Centro Odontológico',
-        highlights: 'Forte corredor comercial, oficinas mecânicas, mercados e acesso sul.'
+        crimeRate: 'Moderada-Baixa • Queda de 14%',
+        crimeBadge: 'Base Comunitária Sul',
+        utilities: 'Coleta Lixo: Seg/Qua/Sex (13h) • Manutenção CEMIG prevista Qui 14h',
+        investment: 'R$ 2,8 Mi (Recapeamento Av. Jerson Dias)'
       },
       medicina: {
         name: 'Bairro Medicina',
@@ -941,137 +1006,272 @@
         zoom: 16,
         bounds: [[-22.4345, -45.4620], [-22.4250, -45.4510]],
         crimeRate: 'Muito Baixa • Zona Hospitalar',
-        crimeBadge: 'Trânsito Monitorado',
-        investment: 'R$ 1,9 Mi (Acessibilidade & Saúde)',
-        healthInfra: 'Hospital de Clínicas de Itajubá (HCI) & FMIT',
-        highlights: 'Complexo hospitalar regional, Faculdade de Medicina, farmácias e clínicas.'
+        crimeBadge: 'Corredor Prioritário Ambulâncias',
+        utilities: 'Rede Elétrica Subterrânea Hospitalar • Coleta Diária (18h)',
+        investment: 'R$ 1,9 Mi (Acessibilidade & Saúde)'
       },
       rebourgeon: {
         name: 'Rebourgeon & Santo Antônio',
         center: [-22.4360, -45.4480],
         zoom: 16,
         bounds: [[-22.4420, -45.4550], [-22.4300, -45.4410]],
-        crimeRate: 'Moderada-Baixa • Patrulha Preventiva',
-        crimeBadge: 'CRAS & Ação Social Ativa',
-        investment: 'R$ 1,7 Mi (Creches & Quadras Esportivas)',
-        healthInfra: 'UBS Rebourgeon & UBS Santo Antônio',
-        highlights: 'Bairros residenciais tradicionais, escolas municipais e projetos comunitários.'
+        crimeRate: 'Moderada-Baixa • Ronda Preventiva',
+        crimeBadge: 'CRAS & Defesa Civil Comunitária',
+        utilities: 'Coleta Lixo: Ter/Qui/Sáb (13h) • Seletiva: Sex • Luz/Água: Normal',
+        investment: 'R$ 1,7 Mi (Creches & Contenção Encostas)'
       },
       distrito: {
-        name: 'Distrito Industrial / Rodovia BR-459',
+        name: 'Distrito Industrial / BR-459',
         center: [-22.3985, -45.4420],
         zoom: 15,
         bounds: [[-22.4065, -45.4520], [-22.3900, -45.4320]],
-        crimeRate: 'Baixa • Monitoramento Rodoviário PRF/GM',
-        crimeBadge: 'Portaria Inteligente & Câmeras OCR',
-        investment: 'R$ 4,1 Mi (Acesso Viário & Incentivos ISS)',
-        healthInfra: 'Ambulatório Industrial & SAMU Base Norte',
-        highlights: 'Fábricas de transformadores, autopeças, helicópteros e logística BR-459.'
+        crimeRate: 'Baixa • Monitoramento PRF/GM',
+        crimeBadge: 'Portaria Inteligente OCR',
+        utilities: 'Subestação Industrial Exclusiva • Ecoponto Resíduos Sólidos',
+        investment: 'R$ 4,1 Mi (Acesso Viário BR-459)'
       }
     };
 
-    // PONTOS DE ÔNIBUS, POSTOS DE SAÚDE, MERCADOS, OFICINAS E PRÉDIOS PÚBLICOS DE ITAJUBÁ
-    const cityPois = [
-      // Pontos de Ônibus com Horários e Destinos
+    // PONTOS DE ÔNIBUS
+    const busStops = [
       {
         id: 'BUS-01',
-        type: 'bus',
+        group: 'bus',
         neighborhood: 'centro',
         name: 'Ponto Central — Praça Theodomiro Santiago',
         address: 'Rua Major Belo Lisboa, Centro • Itajubá',
         lat: -22.4268,
         lng: -45.4529,
         lines: [
-          { code: '01', name: 'Centro ↔ UNIFEI / Pinheirinho', dest: 'Campus UNIFEI / Av. BPS', nextIn: '4 min', weekday: '06:00, 06:20, 06:40 ... a cada 15 min até 23:15', weekend: '06:30 a 22:30 (a cada 30 min)' },
+          { code: '01', name: 'Centro ↔ UNIFEI / Pinheirinho', dest: 'Campus UNIFEI / Av. BPS', nextIn: '4 min', weekday: '06:00 a 23:15 (a cada 15 min)', weekend: '06:30 a 22:30 (a cada 30 min)' },
           { code: '04', name: 'Centro ↔ Distrito Industrial / BR-459', dest: 'Distrito Industrial II', nextIn: '11 min', weekday: '05:45, 06:30, 07:15, 11:30, 17:15, 22:10', weekend: '07:00, 12:00, 18:00' },
           { code: '07', name: 'Centro ↔ Estiva / Novo Horizonte', dest: 'Terminal Bairro Novo Horizonte', nextIn: '7 min', weekday: '06:10 a 22:50 (a cada 20 min)', weekend: '07:00 a 22:00 (a cada 40 min)' }
         ]
       },
       {
         id: 'BUS-02',
-        type: 'bus',
+        group: 'bus',
         neighborhood: 'pinheirinho',
         name: 'Ponto Portaria UNIFEI — Av. BPS',
         address: 'Av. BPS, 1303 - Pinheirinho • Itajubá',
         lat: -22.4132,
         lng: -45.4487,
         lines: [
-          { code: '01', name: 'UNIFEI ↔ Centro / Terminal Rodoviário', dest: 'Centro / Rodoviária', nextIn: '3 min', weekday: '06:15 a 23:30 (a cada 15 min)', weekend: '06:45 a 22:45 (a cada 30 min)' },
+          { code: '01', name: 'UNIFEI ↔ Centro / Rodoviária', dest: 'Centro / Terminal Rodoviário', nextIn: '3 min', weekday: '06:15 a 23:30 (a cada 15 min)', weekend: '06:45 a 22:45 (a cada 30 min)' },
           { code: '12', name: 'Circular Universitário (BPS ↔ Medicina)', dest: 'Hospital de Clínicas / FMIT', nextIn: '9 min', weekday: '06:50, 07:40, 11:50, 13:10, 17:50, 22:40', weekend: 'Não opera aos domingos' }
         ]
       },
       {
         id: 'BUS-03',
-        type: 'bus',
+        group: 'bus',
         neighborhood: 'estiva',
-        name: 'Ponto Av. Jerson Dias — Comércio Estiva',
+        name: 'Ponto Av. Jerson Dias — Estiva',
         address: 'Av. Jerson Dias, 450 - Estiva • Itajubá',
         lat: -22.4319,
         lng: -45.4573,
         lines: [
-          { code: '07', name: 'Estiva ↔ Centro / Boa Vista', dest: 'Centro / Parque Municipal', nextIn: '6 min', weekday: '06:05 a 22:45 (a cada 20 min)', weekend: '07:00 a 22:00 (a cada 40 min)' },
-          { code: '09', name: 'Estiva ↔ Rebourgeon / Santa Rosa', dest: 'Bairro Santa Rosa', nextIn: '14 min', weekday: '06:30, 07:30, 09:00, 12:00, 15:00, 18:00, 21:00', weekend: '08:00, 13:00, 19:00' }
+          { code: '07', name: 'Estiva ↔ Centro / Boa Vista', dest: 'Centro / Parque Municipal', nextIn: '6 min', weekday: '06:05 a 22:45 (a cada 20 min)', weekend: '07:00 a 22:00 (a cada 40 min)' }
         ]
-      },
-      {
-        id: 'BUS-04',
-        type: 'bus',
-        neighborhood: 'boavista',
-        name: 'Ponto Terminal Rodoviário / Boa Vista',
-        address: 'Av. Poços de Caldas - Boa Vista • Itajubá',
-        lat: -22.4239,
-        lng: -45.4558,
-        lines: [
-          { code: '01', name: 'Rodoviária ↔ Centro / UNIFEI', dest: 'Campus UNIFEI', nextIn: '5 min', weekday: '06:00 a 23:15 (a cada 15 min)', weekend: '06:30 a 22:30 (a cada 30 min)' },
-          { code: '03', name: 'Interbairros Boa Vista ↔ Medicina', dest: 'Hospital de Clínicas (HCI)', nextIn: '12 min', weekday: '06:30 a 22:00 (a cada 30 min)', weekend: '07:30 a 21:00 (a cada 45 min)' }
-        ]
-      },
-      {
-        id: 'BUS-05',
-        type: 'bus',
-        neighborhood: 'distrito',
-        name: 'Ponto Distrito Industrial / Trevo BR-459',
-        address: 'Rodovia BR-459, Km 158 • Itajubá',
-        lat: -22.3988,
-        lng: -45.4422,
-        lines: [
-          { code: '04', name: 'Distrito Industrial ↔ Centro', dest: 'Praça Theodomiro Santiago', nextIn: '8 min', weekday: '06:15, 07:00, 12:00, 17:35, 22:30', weekend: '07:30, 12:30, 18:30' }
-        ]
-      },
-
-      // Postos de Saúde & Hospitais
-      { id: 'HLT-01', type: 'health', neighborhood: 'medicina', name: 'Hospital de Clínicas de Itajubá (HCI)', address: 'Av. Renó Júnior, 55 - Medicina', info: 'Pronto-Socorro 24h • Alta Complexidade SUS & Convênios', lat: -22.4292, lng: -45.4561 },
-      { id: 'HLT-02', type: 'health', neighborhood: 'centro', name: 'Policlínica Municipal & Farmácia Central', address: 'Rua Dona Maria Carneiro - Centro', info: 'Especialidades médicas, vacinação e dispensação de medicamentos (07h às 18h)', lat: -22.4252, lng: -45.4510 },
-      { id: 'HLT-03', type: 'health', neighborhood: 'pinheirinho', name: 'UBS Pinheirinho / BPS', address: 'Rua Prof. Ivan dos Santos - Pinheirinho', info: 'Atenção Básica, Pediatria, Odontologia e Vacinas (07h às 17h)', lat: -22.4158, lng: -45.4495 },
-      { id: 'HLT-04', type: 'health', neighborhood: 'boavista', name: 'UBS Boa Vista', address: 'Rua Silvestre Ferraz - Boa Vista', info: 'Clínica Geral, Pré-Natal e Curativos (07h às 17h)', lat: -22.4222, lng: -45.4602 },
-      { id: 'HLT-05', type: 'health', neighborhood: 'rebourgeon', name: 'UBS Rebourgeon / Santo Antônio', address: 'Av. Paulo Chiaradia - Rebourgeon', info: 'Estratégia Saúde da Família (ESF) e Coleta Laboratorial', lat: -22.4355, lng: -45.4485 },
-
-      // Mercados & Supermercados
-      { id: 'MKT-01', type: 'market', neighborhood: 'centro', name: 'Supermercado Central Itajubá', address: 'Av. Cel. Carneiro Júnior, 310 - Centro', info: 'Aberto hoje: 07h30 às 21h30 • Padaria & Açougue', lat: -22.4262, lng: -45.4538 },
-      { id: 'MKT-02', type: 'market', neighborhood: 'pinheirinho', name: 'Supermercado Universitário BPS', address: 'Av. BPS, 980 - Pinheirinho', info: 'Aberto hoje: 08h00 às 22h00 • Hortifrúti', lat: -22.4165, lng: -45.4478 },
-      { id: 'MKT-03', type: 'market', neighborhood: 'estiva', name: 'Atacadão & Mercado Estiva', address: 'Av. Jerson Dias, 620 - Estiva', info: 'Aberto hoje: 07h00 às 21h00 • Estacionamento próprio', lat: -22.4331, lng: -45.4582 },
-      { id: 'MKT-04', type: 'market', neighborhood: 'boavista', name: 'Empório & Mercado Boa Vista', address: 'Rua Padre Marçal Ribeiro - Boa Vista', info: 'Aberto hoje: 07h30 às 20h30', lat: -22.4244, lng: -45.4591 },
-
-      // Oficinas & Serviços Automotivos
-      { id: 'WKS-01', type: 'workshop', neighborhood: 'estiva', name: 'Auto Mecânica & Elétrica Serra Sul', address: 'Av. Jerson Dias, 290 - Estiva', info: 'Injeção eletrônica, alinhamento e socorro mecânico (08h às 18h)', lat: -22.4308, lng: -45.4562 },
-      { id: 'WKS-02', type: 'workshop', neighborhood: 'distrito', name: 'Centro Automotivo & Borracharia BR-459', address: 'Trevo Distrito Industrial - BR-459', info: 'Atendimento linha leve e pesada, pneus e suspensão', lat: -22.4012, lng: -45.4445 },
-      { id: 'WKS-03', type: 'workshop', neighborhood: 'pinheirinho', name: 'Oficina Moto & Bike BPS', address: 'Rua Geraldino Campista - Pinheirinho', info: 'Manutenção rápida de motocicletas e bicicletas', lat: -22.4148, lng: -45.4508 },
-
-      // Prédios Públicos, Escolas & Lazer
-      { id: 'PUB-01', type: 'public', neighborhood: 'centro', name: 'Prefeitura Municipal de Itajubá', address: 'Av. Dr. Jerson Dias, 500 / Sede Administrativa', info: 'Atendimento ao Cidadão, Protocolo e Secretarias (08h às 17h)', lat: -22.4255, lng: -45.4521 },
-      { id: 'PUB-02', type: 'public', neighborhood: 'pinheirinho', name: 'UNIFEI — Universidade Federal de Itajubá', address: 'Av. BPS, 1303 - Pinheirinho', info: 'Campus Prof. José Rodrigues Seabra', lat: -22.4126, lng: -45.4488 },
-      { id: 'PUB-03', type: 'public', neighborhood: 'boavista', name: 'Parque Municipal de Itajubá', address: 'Av. Poços de Caldas - Boa Vista', info: 'Pista de caminhada, quadras e área verde (06h às 21h)', lat: -22.4215, lng: -45.4628 }
+      }
     ];
 
-    // DENÚNCIAS INICIAIS
+    // ESTABELECIMENTOS UNIVERSAIS (SAÚDE, ALIMENTAÇÃO, DENTISTAS, OFICINAS, SALÕES/BARBEIROS, MERCADOS)
+    const establishments = [
+      {
+        id: 'EST-01',
+        group: 'health',
+        sector: 'Hospital / Saúde',
+        emoji: '🏥',
+        pinColor: '#059669',
+        neighborhood: 'medicina',
+        name: 'Hospital de Clínicas de Itajubá (HCI)',
+        address: 'Av. Renó Júnior, 55 - Medicina • Itajubá',
+        lat: -22.4292,
+        lng: -45.4561,
+        rating: 4.7,
+        reviewCount: 142,
+        regulator: 'Vigilância Sanitária & Conselho de Saúde',
+        sealStatus: 'Selo Sanitário & Hospitalar Ativo',
+        lastAudit: 'Vistoriado há 8 dias (Câmera Interna Restrita)',
+        auditSummary: 'Protocolo de esterilização CME, descarte de resíduos infectantes e controle de infecção hospitalar auditados remotamente pela Vigilância Sanitária.',
+        extraPublicInfo: 'Pronto-Socorro 24h • Espera média atual: 25 min • Farmácia Popular e Vacinação ativas.',
+        criteriaLabels: ['Qualidade do Tratamento', 'Tempo de Espera', 'Higiene & Acessibilidade'],
+        ifoodUrl: null,
+        reviews: [
+          { user: 'Carlos Henrique', stars: 5, text: 'Atendimento médico muito humanizado e triagem rápida na emergência.' },
+          { user: 'Fernanda Alves', stars: 4, text: 'Instalações muito limpas e equipe atenciosa.' }
+        ]
+      },
+      {
+        id: 'EST-02',
+        group: 'health',
+        sector: 'UBS & Farmácia Popular',
+        emoji: '🩺',
+        pinColor: '#10B981',
+        neighborhood: 'pinheirinho',
+        name: 'UBS Pinheirinho / Farmácia Municipal',
+        address: 'Rua Prof. Ivan dos Santos - Pinheirinho • Itajubá',
+        lat: -22.4158,
+        lng: -45.4495,
+        rating: 4.5,
+        reviewCount: 68,
+        regulator: 'Vigilância Sanitária Municipal',
+        sealStatus: 'Selo Sanitário Municipal Ativo',
+        lastAudit: 'Vistoriado há 12 dias (Câmera Interna Restrita)',
+        auditSummary: 'Câmara fria de vacinas (2°C a 8°C) e sala de curativos verificadas por telemetria e checklist fotográfico restrito à Vigilância.',
+        extraPublicInfo: 'Espera média: 18 min • Estoque Farmácia Popular: Losartana, Metformina, Insulina e Antibióticos disponíveis • Vacinação Gripe/COVID aberta.',
+        criteriaLabels: ['Atendimento da Equipe', 'Disponibilidade de Remédios', 'Organização'],
+        ifoodUrl: null,
+        reviews: [
+          { user: 'Sônia Maria', stars: 5, text: 'Consegui retirar todos os medicamentos contínuos sem fila.' }
+        ]
+      },
+      {
+        id: 'EST-03',
+        group: 'food',
+        sector: 'Restaurante & Gastronomia',
+        emoji: '🍽️',
+        pinColor: '#F97316',
+        neighborhood: 'centro',
+        name: 'Restaurante Sabor da Mantiqueira',
+        address: 'Av. Cel. Carneiro Júnior, 185 - Centro • Itajubá',
+        lat: -22.4260,
+        lng: -45.4535,
+        rating: 4.8,
+        reviewCount: 94,
+        regulator: 'Vigilância Sanitária (ANVISA / Municipal)',
+        sealStatus: 'Selo Higiene Verificada • Ouro',
+        lastAudit: 'Checklist enviado há 5 dias (Canal Restrito VISA)',
+        auditSummary: 'Câmara fria, ralos telados, rodapés, pia exclusiva de higienização e vídeo panorâmico da cozinha enviados diretamente aos fiscais da Vigilância Sanitária.',
+        extraPublicInfo: 'Almoço executivo e comida mineira • Aberto hoje: 11h às 15h e 18h30 às 23h.',
+        criteriaLabels: ['Qualidade da Comida', 'Higiene do Salão', 'Atendimento & Preço'],
+        ifoodUrl: 'https://www.ifood.com.br',
+        reviews: [
+          { user: 'Rafael Moreira', stars: 5, text: 'Comida excelente e saber que tem selo ativo da Vigilância dá muita tranquilidade.' },
+          { user: 'Juliana Dias', stars: 5, text: 'Atendimento rápido e ambiente impecável.' }
+        ]
+      },
+      {
+        id: 'EST-04',
+        group: 'food',
+        sector: 'Supermercado & Açougue',
+        emoji: '🛒',
+        pinColor: '#D97706',
+        neighborhood: 'estiva',
+        name: 'Supermercado & Açougue Estiva Sul',
+        address: 'Av. Jerson Dias, 620 - Estiva • Itajubá',
+        lat: -22.4331,
+        lng: -45.4582,
+        rating: 4.4,
+        reviewCount: 77,
+        regulator: 'Vigilância Sanitária & PROCON',
+        sealStatus: 'Selo Sanitário & Validade Ativo',
+        lastAudit: 'Vistoriado há 9 dias (Câmera Interna Restrita)',
+        auditSummary: 'Câmaras frigoríficas do açougue, área de manipulação da padaria e estoque seco verificados pela Vigilância Sanitária.',
+        extraPublicInfo: 'Aberto hoje: 07h às 21h • Estacionamento acessível.',
+        criteriaLabels: ['Frescor dos Produtos', 'Preços & Ofertas', 'Limpeza'],
+        ifoodUrl: 'https://www.ifood.com.br',
+        reviews: [
+          { user: 'Marcos Vinícius', stars: 4, text: 'Açougue muito limpo e organizado, ótimo atendimento.' }
+        ]
+      },
+      {
+        id: 'EST-05',
+        group: 'services',
+        sector: 'Clínica Odontológica / Dentista',
+        emoji: '🦷',
+        pinColor: '#EC4899',
+        neighborhood: 'centro',
+        name: 'Clínica Odontológica Sorriso Serra',
+        address: 'Rua Dona Maria Carneiro, 112 - Centro • Itajubá',
+        lat: -22.4251,
+        lng: -45.4514,
+        rating: 4.9,
+        reviewCount: 53,
+        regulator: 'Vigilância Sanitária & CRO-MG',
+        sealStatus: 'Selo Biossegurança & Esterilização Ativo',
+        lastAudit: 'Autoclave & Sala de Esterilização verificadas há 6 dias',
+        auditSummary: 'Registros fotográficos da autoclave, envelopes de esterilização datados e descarte de perfurocortantes validados exclusivamente pela Vigilância Sanitária.',
+        extraPublicInfo: 'Odontologia geral, ortodontia e urgência • Convênios e particular.',
+        criteriaLabels: ['Qualidade do Tratamento', 'Biossegurança Visível', 'Pontualidade'],
+        ifoodUrl: null,
+        reviews: [
+          { user: 'Amanda Ribeiro', stars: 5, text: 'Tratamento sem dor, tudo esterilizado e aberto na frente do paciente.' }
+        ]
+      },
+      {
+        id: 'EST-06',
+        group: 'services',
+        sector: 'Oficina Mecânica & Auto Elétrica',
+        emoji: '🔧',
+        pinColor: '#334155',
+        neighborhood: 'estiva',
+        name: 'Auto Mecânica & Diagnóstico Serra Sul',
+        address: 'Av. Jerson Dias, 290 - Estiva • Itajubá',
+        lat: -22.4308,
+        lng: -45.4562,
+        rating: 4.6,
+        reviewCount: 41,
+        regulator: 'Sec. Meio Ambiente, Posturas & PROCON',
+        sealStatus: 'Selo Ambiental & Oficina Regular Ativo',
+        lastAudit: 'Comprovação de descarte de óleo há 14 dias',
+        auditSummary: 'Caixa separadora de água e óleo, armazenamento de resíduos automotivos e alvará de funcionamento verificados pela Secretaria de Meio Ambiente.',
+        extraPublicInfo: 'Injeção eletrônica, freios, suspensão e alinhamento • Orçamento digital.',
+        criteriaLabels: ['Transparência no Orçamento', 'Qualidade do Serviço', 'Prazo de Entrega'],
+        ifoodUrl: null,
+        reviews: [
+          { user: 'Pedro Augusto', stars: 5, text: 'Mostram as peças trocadas e cumprem o orçamento combinado.' }
+        ]
+      },
+      {
+        id: 'EST-07',
+        group: 'services',
+        sector: 'Barbearia & Salão de Beleza',
+        emoji: '✂️',
+        pinColor: '#8B5CF6',
+        neighborhood: 'pinheirinho',
+        name: 'Barbearia & Estúdio Mantiqueira',
+        address: 'Av. BPS, 840 - Pinheirinho • Itajubá',
+        lat: -22.4168,
+        lng: -45.4481,
+        rating: 4.8,
+        reviewCount: 62,
+        regulator: 'Vigilância Sanitária Municipal',
+        sealStatus: 'Selo Higiene & Descartáveis Ativo',
+        lastAudit: 'Checklist de esterilização enviado há 10 dias',
+        auditSummary: 'Uso de lâminas descartáveis de uso único, esterilização de alicates/tesouras e higienização das bancadas verificados pela Vigilância Sanitária.',
+        extraPublicInfo: 'Cortes, barba e estética • Atendimento por hora marcada ou ordem de chegada.',
+        criteriaLabels: ['Qualidade do Corte/Serviço', 'Higiene dos Materiais', 'Atendimento'],
+        ifoodUrl: null,
+        reviews: [
+          { user: 'Lucas Gabriel', stars: 5, text: 'Excelente corte, ambiente limpo e lâminas descartadas na hora.' }
+        ]
+      }
+    ];
+
+    // DENÚNCIAS & ZELADORIA
     let reports = [
+      {
+        id: 'CIV-1045',
+        neighborhood: 'estiva',
+        category: 'energia',
+        title: 'Três postes com lâmpadas apagadas próximo à ponte',
+        address: 'Av. Jerson Dias, 310 - Estiva, Itajubá',
+        description: 'Trecho escuro durante a noite prejudicando pedestres e ciclistas.',
+        status: 'Em análise',
+        supports: 41,
+        lat: -22.4312,
+        lng: -45.4565,
+        image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80',
+        date: 'Hoje, 08:15'
+      },
       {
         id: 'CIV-1042',
         neighborhood: 'pinheirinho',
         category: 'buraco',
         title: 'Buraco no asfalto próximo à rotatória da UNIFEI',
         address: 'Av. BPS, 1303 - Pinheirinho, Itajubá',
-        description: 'Pavimento cedendo na pista sentido bairro, exigindo atenção redobrada de motoristas e ciclistas.',
+        description: 'Pavimento cedendo na pista sentido bairro, exigindo atenção redobrada.',
         status: 'Em análise',
         supports: 34,
         lat: -22.4139,
@@ -1083,9 +1283,9 @@
         id: 'CIV-1041',
         neighborhood: 'centro',
         category: 'sinalizacao',
-        title: 'Faixa de pedestres apagada e sem placa de travessia',
+        title: 'Faixa de pedestres apagada na Av. Cel. Carneiro Júnior',
         address: 'Av. Cel. Carneiro Júnior, 240 - Centro, Itajubá',
-        description: 'Grande fluxo de pedestres e estudantes no comércio central sem pintura visível na via.',
+        description: 'Grande fluxo de pedestres no comércio central sem pintura visível na via.',
         status: 'Pendente',
         supports: 29,
         lat: -22.4258,
@@ -1094,48 +1294,42 @@
         date: 'Ontem'
       },
       {
-        id: 'CIV-1039',
-        neighborhood: 'estiva',
-        category: 'acessibilidade',
-        title: 'Calçada sem rampa de acessibilidade na esquina',
-        address: 'Av. Jerson Dias, 410 - Estiva, Itajubá',
-        description: 'Falta rebaixamento de guia e piso tátil direcional próximo aos estabelecimentos comerciais.',
-        status: 'Pendente',
-        supports: 47,
-        lat: -22.4315,
-        lng: -45.4568,
-        image: 'https://images.unsplash.com/photo-1584467735815-f778f274e296?auto=format&fit=crop&w=600&q=80',
-        date: 'Há 2 dias'
-      },
-      {
         id: 'CIV-1035',
         neighborhood: 'boavista',
-        category: 'danificado',
-        title: 'Iluminação da pista de caminhada e bancos danificados',
+        category: 'buraco',
+        title: 'Recapeamento e iluminação do Parque Municipal',
         address: 'Parque Municipal de Itajubá - Boa Vista',
-        description: 'Trecho próximo à quadra precisa de manutenção nos bancos e substituição de luminária.',
+        description: 'Manutenção concluída pela Secretaria de Obras com comprovante Antes & Depois.',
         status: 'Resolvido',
         supports: 62,
         lat: -22.4218,
         lng: -45.4622,
         image: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=600&q=80',
-        date: 'Há 4 dias'
+        date: 'Concluído'
       },
       {
         id: 'CIV-1031',
         neighborhood: 'centro',
         category: 'cultura',
-        title: 'Fachada e pintura do Coreto Histórico precisam de restauro',
+        title: 'Fachada do Coreto Histórico precisa de restauro',
         address: 'Praça Theodomiro Santiago - Centro, Itajubá',
-        description: 'Patrimônio histórico central apresentando descascamento na pintura e infiltração.',
+        description: 'Patrimônio histórico central apresentando descascamento na pintura.',
         status: 'Em análise',
         supports: 88,
         lat: -22.4271,
         lng: -45.4534,
         image: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=600&q=80',
-        date: 'Há 5 dias'
+        date: 'Há 4 dias'
       }
     ];
+
+    // ORÇAMENTO PARTICIPATIVO (ENQUETE)
+    let pollOptions = [
+      { id: 'opt1', label: 'Ciclovia iluminada ligando Centro à UNIFEI (Av. BPS)', votes: 214 },
+      { id: 'opt2', label: 'Novas comportas e drenagem anti-enchente na Vila Poddis', votes: 146 },
+      { id: 'opt3', label: 'Castramóvel fixo e clínica veterinária pública', votes: 68 }
+    ];
+    let userVotedOptionId = null;
 
     // DADOS CULTURA
     const exhibitionWorks = [
@@ -1222,6 +1416,7 @@
       }
     ];
 
+    // DOAÇÕES SOCIAIS & ABRIGOS DE EMERGÊNCIA
     const socialUnits = [
       {
         id: 'SOC-01',
@@ -1235,65 +1430,67 @@
       },
       {
         id: 'SOC-02',
-        name: 'Creche Comunitária Pequenos Passos',
-        district: 'Bairro Santo Antônio • Itajubá',
-        urgentNeed: 'Reforma da brinquedoteca e kits escolares infantis',
+        name: 'Abrigo Defesa Civil — Ginásio Tigre (Apoio Enchentes)',
+        district: 'Centro / Boa Vista • Ponto de Apoio',
+        urgentNeed: 'Colchões, cobertores, água mineral e kits de higiene para emergências',
         goal: 15000,
         raised: 10200,
-        familiesHelped: '95 crianças atendidas',
-        image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=700&q=80'
+        familiesHelped: 'Capacidade 180 pessoas',
+        image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=700&q=80'
       },
       {
         id: 'SOC-03',
-        name: 'Cozinha Solidária Serra da Mantiqueira',
-        district: 'Bairro Rebourgeon • Itajubá',
-        urgentNeed: 'Gás de cozinha, hortifrúti e embalagens térmicas',
+        name: 'Creche Comunitária Pequenos Passos',
+        district: 'Bairro Santo Antônio • Itajubá',
+        urgentNeed: 'Kits escolares infantis e reforma da brinquedoteca',
         goal: 8000,
         raised: 5200,
-        familiesHelped: '320 marmitas/dia',
-        image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=700&q=80'
+        familiesHelped: '95 crianças atendidas',
+        image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=700&q=80'
       }
     ];
 
+    // MODAIS DE INFORMAÇÃO DE SERVIÇOS PÚBLICOS
     const govActionsData = {
       infra: {
-        title: 'Investimentos em Infraestrutura & Obras (R$ 18,4 Mi)',
-        summary: 'Pacote municipal de mobilidade urbana, recapeamento asfáltico, drenagem pluvial e modernização da iluminação pública em Itajubá.',
+        title: 'Investimentos em Infraestrutura & Drenagem (R$ 18,4 Mi)',
+        summary: 'Obras estruturantes de prevenção a enchentes no Rio Sapucaí, recapeamento viário e modernização LED em Itajubá.',
         items: [
-          { name: 'Recapeamento Av. BPS & Av. Jerson Dias', value: 'R$ 7,2 Mi', status: '85% Concluído' },
-          { name: 'Substituição de 100% dos pontos por LED', value: 'R$ 5,8 Mi', status: 'Em execução' },
-          { name: 'Contenção e Drenagem Bairro Cruzeiro / Vila Poddis', value: 'R$ 5,4 Mi', status: 'Concluído' }
+          { name: 'Macrodrenagem e Contenção Ribeirinha (Vila Poddis / BPS)', value: 'R$ 7,4 Mi', status: 'Em execução' },
+          { name: 'Recapeamento Av. BPS & Av. Jerson Dias', value: 'R$ 6,2 Mi', status: '85% Concluído' },
+          { name: 'Substituição de 100% dos pontos por LED', value: 'R$ 4,8 Mi', status: 'Concluído' }
         ]
       },
-      inovacao: {
-        title: 'Incentivos Fiscais & Ecossistema de Inovação',
-        summary: 'Apoio estratégico às empresas de base tecnológica, indústrias e startups instaladas no Parque Científico e Tecnológico de Itajubá (PCTI) e Distrito Industrial.',
+      utilities: {
+        title: 'Rede Elétrica (CEMIG), Água (COPASA) & Coleta de Lixo',
+        summary: 'Acompanhamento integrado dos serviços essenciais e cronograma de coleta seletiva por região de Itajubá.',
         items: [
-          { name: 'Redução de ISSQN para empresas de P&D e Software', value: 'Alíquota 2%', status: 'Lei Vigente' },
-          { name: 'Incubadora & Aceleração de Startups (UNIFEI / Prefeitura)', value: '26 startups', status: 'Edital Aberto' },
-          { name: 'Expansão do Distrito Industrial II (BR-459)', value: '16 indústrias', status: 'Ativo' }
+          { name: 'Abastecimento de Água (COPASA) — Reservatórios Centrais', value: '98% Nível', status: 'Operação Normal' },
+          { name: 'Manutenção Programada Rede Elétrica — Trecho Estiva', value: 'Quinta, 14h às 16h', status: 'Agendado' },
+          { name: 'Ecopontos (Entulho, Móveis e Lixo Eletrônico)', value: 'Parque Municipal & Distrito', status: 'Aberto 07h-17h' }
         ]
       },
       saude: {
-        title: 'Ações Sociais & Saúde Comunitária',
-        summary: 'Ampliação do atendimento nas Unidades Básicas de Saúde (UBS), mutirões de exames especializados e fortalecimento dos CRAS nos bairros.',
+        title: 'Saúde Pública, Farmácia Popular & Castramóvel',
+        summary: 'Monitoramento em tempo real da fila das UBSs, disponibilidade de medicamentos gratuitos e campanhas itinerantes.',
         items: [
-          { name: 'Mutirão Zera Fila de Exames e Especialidades', value: '4.200 atendimentos', status: 'Em andamento' },
-          { name: 'Reforma e Climatização das UBSs (Boa Vista e Medicina)', value: 'R$ 2,1 Mi', status: 'Concluído' },
-          { name: 'Programa Segurança Alimentar & CRAS Volante', value: '1.850 famílias', status: 'Mensal' }
+          { name: 'Farmácia Popular Municipal (Centro & Pinheirinho)', value: '94% Estoque', status: 'Disponível Hoje' },
+          { name: 'Campanha Multivacinação & Gripe (Todas as 16 UBSs)', value: '07h30 às 16h30', status: 'Sem Fila' },
+          { name: 'Castramóvel & Microchipagem Gratuita de Pets', value: 'Praça da Estiva', status: 'Esta Semana' }
         ]
       },
-      'cultura-esporte': {
-        title: 'Fomento à Cultura, Patrimônio & Esporte',
-        summary: 'Recursos destinados diretamente a artistas independentes, preservação do patrimônio histórico de Itajubá e incentivo ao esporte de base.',
+      regulatorio: {
+        title: 'Hub Regulatório & Selos de Fiscalização Preventiva',
+        summary: 'Estabelecimentos de alimentação, saúde, estética, oficinas e comércio enviam fotos e vídeos de pontos críticos em canal restrito diretamente ao órgão fiscalizador competente.',
         items: [
-          { name: 'Edital Municipal de Fomento à Cultura Local', value: 'R$ 650 Mil', status: '64 projetos' },
-          { name: 'Programa Bolsa-Atleta Itajubá', value: 'R$ 320 Mil', status: '54 atletas' },
-          { name: 'Revitalização de Quadras Poliesportivas nos Bairros', value: 'R$ 230 Mil', status: '5 praças' }
+          { name: 'Vigilância Sanitária (Restaurantes, Hospitais, Dentistas, Salões)', value: '246 Selos Ativos', status: 'Canal Restrito VISA' },
+          { name: 'Sec. Meio Ambiente & Posturas (Oficinas, Indústrias, Lava-Jatos)', value: '58 Selos Ativos', status: 'Descarte Óleo/Resíduos' },
+          { name: 'PROCON & Defesa Civil (Comércio Geral & Alvarás)', value: '44 Selos Ativos', status: 'Denúncia Presencial GPS' }
         ]
       }
     };
 
+    // VAGAS, ESTÁGIOS & CURSOS
     const opportunitiesData = [
       {
         id: 'OPP-01',
@@ -1375,23 +1572,28 @@
       }
     ];
 
-    // ESTADO GLOBAL
+    // ESTADO GLOBAL DO MAPA E CONTROLES
     const ITAJUBA_CENTER = [-22.4245, -45.4530];
     const ITAJUBA_MAX_BOUNDS = L.latLngBounds([-22.5250, -45.5550], [-22.3300, -45.3500]);
 
-    let activeCategories = new Set(['buraco', 'sinalizacao', 'danificado', 'acessibilidade', 'cultura']);
-    let activePoiTypes = new Set(['bus', 'health', 'market', 'workshop', 'public']);
+    let activeCategories = new Set(['energia', 'buraco', 'sinalizacao', 'clima', 'cultura']);
+    let activePoiGroups = new Set(['bus', 'health', 'food', 'services']);
+    let activeClimateGroups = new Set(['flood', 'shelter']);
     let selectedNeighborhood = 'all';
     let searchQuery = '';
+    let floodAlertActive = false;
     let savedOpportunities = new Set(['OPP-01']);
     let currentOppTypeFilter = 'all';
+    let currentEstablishment = null;
+    let selectedRatingStars = 5;
 
     let map;
     let streetsLayer;
     let satelliteLayer;
     let satelliteLabelsLayer;
-    let markersLayer;
+    let climateLayer;
     let poisLayer;
+    let markersLayer;
     let neighborhoodHighlightLayer;
     let selectedCoords = { lat: -22.4269, lng: -45.4530 };
     let currentTransaction = null;
@@ -1427,6 +1629,7 @@
 
       streetsLayer.addTo(map);
       neighborhoodHighlightLayer = L.layerGroup().addTo(map);
+      climateLayer = L.layerGroup().addTo(map);
       poisLayer = L.layerGroup().addTo(map);
       markersLayer = L.layerGroup().addTo(map);
 
@@ -1435,7 +1638,7 @@
         const lng = Number(e.latlng.lng.toFixed(5));
         selectedCoords = { lat, lng };
         document.getElementById('repCoordsDisplay').value = `${lat}, ${lng}`;
-        document.getElementById('repAddress').value = 'Buscando rua em Itajubá...';
+        document.getElementById('repAddress').value = 'Localizando rua em Itajubá...';
         openReportModal(true);
 
         try {
@@ -1443,23 +1646,319 @@
           const data = await resp.json();
           if (data && data.address) {
             const road = data.address.road || data.address.pedestrian || data.address.suburb || 'Via Local';
-            const house = data.address.house_number ? `, ${data.address.house_number}` : '';
             const suburb = data.address.suburb || data.address.neighbourhood || 'Itajubá';
-            document.getElementById('repAddress').value = `${road}${house} - ${suburb}, Itajubá`;
+            document.getElementById('repAddress').value = `${road} - ${suburb}, Itajubá`;
           } else {
             document.getElementById('repAddress').value = `Ponto marcado em Itajubá (${lat}, ${lng})`;
           }
         } catch (err) {
-          document.getElementById('repAddress').value = `Local marcado em Itajubá (${lat}, ${lng})`;
+          document.getElementById('repAddress').value = `Ponto marcado em Itajubá (${lat}, ${lng})`;
         }
       });
 
       updateNeighborhoodDashboard();
+      renderClimateAndShelters();
       renderPoisOnMap();
       renderMapMarkers();
     }
 
-    // SELETOR E LIMITAÇÃO POR BAIRRO
+    // SIMULADOR DE ALERTA DE ENCHENTE (RIO SAPUCAÍ)
+    function toggleFloodSimulation() {
+      floodAlertActive = !floodAlertActive;
+      const btn = document.getElementById('floodSimBtn');
+      const dot = document.getElementById('floodSimDot');
+      const label = document.getElementById('floodSimLabel');
+      const banner = document.getElementById('emergencyAlertBanner');
+
+      if (floodAlertActive) {
+        btn.className = 'inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-rose-600 text-white border border-rose-700 hover:bg-rose-700 transition-all shadow-md';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-white animate-ping';
+        label.textContent = 'ALERTA ENCHENTE: Rio 3,85m • Modo Normal';
+        banner.classList.remove('hidden');
+        if (map) map.flyTo([-22.4235, -45.4555], 15, { duration: 0.9 });
+        showToast('Simulação de Alerta de Enchente ativada no Rio Sapucaí!', 'error');
+      } else {
+        btn.className = 'inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-all shadow-sm';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+        label.textContent = 'Rio Sapucaí: 1,45m (Normal) • Simular Alerta';
+        banner.classList.add('hidden');
+        showToast('Nível do Rio Sapucaí normalizado (1,45m).');
+      }
+      renderClimateAndShelters();
+    }
+
+    // CAMADA DEFESA CIVIL: ÁREAS DE ALAGAMENTO & ABRIGOS TEMPORÁRIOS
+    function renderClimateAndShelters() {
+      if (!climateLayer) return;
+      climateLayer.clearLayers();
+
+      if (activeClimateGroups.has('flood')) {
+        const floodZones = [
+          {
+            name: 'Zona de Atenção Ribeirinha — Vila Poddis / Rio Sapucaí',
+            coords: [[-22.4255, -45.4585], [-22.4220, -45.4570], [-22.4205, -45.4535], [-22.4238, -45.4545]],
+            risk: floodAlertActive ? 'CRÍTICO: Via Alagada — Evitar tráfego' : 'Monitoramento Preventivo (Nível Normal)'
+          },
+          {
+            name: 'Planície de Inundação — Trecho Av. BPS / Porto Velho',
+            coords: [[-22.4185, -45.4518], [-22.4140, -45.4505], [-22.4135, -45.4485], [-22.4180, -45.4495]],
+            risk: floodAlertActive ? 'ALERTA: Acúmulo de água na pista lateral' : 'Drenagem monitorada por sensores'
+          }
+        ];
+
+        floodZones.forEach(zone => {
+          L.polygon(zone.coords, {
+            color: floodAlertActive ? '#E11D48' : '#06B6D4',
+            weight: floodAlertActive ? 3 : 2,
+            fillColor: floodAlertActive ? '#F43F5E' : '#22D3EE',
+            fillOpacity: floodAlertActive ? 0.35 : 0.14
+          })
+          .bindPopup(`<div class="p-3 text-xs"><strong class="text-slate-900 block mb-1">🌊 ${zone.name}</strong><span class="${floodAlertActive ? 'text-rose-700 font-bold' : 'text-cyan-800'}">${zone.risk}</span></div>`)
+          .addTo(climateLayer);
+        });
+      }
+
+      if (activeClimateGroups.has('shelter')) {
+        const shelters = [
+          { name: 'Abrigo Defesa Civil — Ginásio Poliesportivo Tigre', address: 'Boa Vista • Capacidade 180 pessoas', lat: -22.4228, lng: -45.4612, note: 'Recebendo famílias e doações de colchões/água.' },
+          { name: 'Ponto de Apoio — E.E. Major João Pereira', address: 'Centro • Capacidade 120 pessoas', lat: -22.4278, lng: -45.4512, note: 'Equipe de Assistência Social e Saúde de plantão.' }
+        ];
+
+        shelters.forEach(sh => {
+          const icon = L.divIcon({
+            className: '',
+            html: `<div class="custom-pin" style="background:#0D9488;width:28px;height:28px;font-size:13px;">⛺</div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14]
+          });
+          L.marker([sh.lat, sh.lng], { icon })
+            .bindPopup(`<div class="p-3 text-xs space-y-1"><span class="px-2 py-0.5 rounded bg-teal-100 text-teal-800 font-bold text-[10px]">Abrigo & Defesa Civil</span><h4 class="font-bold text-slate-900">${sh.name}</h4><p class="text-slate-500">${sh.address}</p><p class="text-slate-700">${sh.note}</p></div>`)
+            .addTo(climateLayer);
+        });
+      }
+    }
+
+    function toggleLayerGroup(group) {
+      if (activeClimateGroups.has(group)) activeClimateGroups.delete(group);
+      else activeClimateGroups.add(group);
+      renderClimateAndShelters();
+    }
+
+    // RENDERIZAÇÃO DE PONTOS DE ÔNIBUS E ESTABELECIMENTOS UNIVERSAIS NO MAPA
+    function renderPoisOnMap() {
+      if (!poisLayer) return;
+      poisLayer.clearLayers();
+      const q = searchQuery.toLowerCase();
+
+      // 1. Pontos de Ônibus
+      if (activePoiGroups.has('bus')) {
+        busStops
+          .filter(b => (selectedNeighborhood === 'all' || b.neighborhood === selectedNeighborhood) && (!q || b.name.toLowerCase().includes(q) || b.address.toLowerCase().includes(q)))
+          .forEach(bus => {
+            const icon = L.divIcon({
+              className: '',
+              html: `<div class="custom-pin" style="background:#4F46E5;width:28px;height:28px;font-size:13px;">🚌</div>`,
+              iconSize: [28, 28],
+              iconAnchor: [14, 14]
+            });
+            const m = L.marker([bus.lat, bus.lng], { icon });
+            m.on('click', () => openBusStopModal(bus));
+            m.bindTooltip(`🚌 ${bus.name} (Clique p/ horários)`, { direction: 'top' });
+            m.addTo(poisLayer);
+          });
+      }
+
+      // 2. Estabelecimentos Universais (Hospitais, UBS, Restaurantes, Mercados, Dentistas, Oficinas, Salões)
+      establishments
+        .filter(est => {
+          const matchGroup = activePoiGroups.has(est.group);
+          const matchNeighborhood = selectedNeighborhood === 'all' || est.neighborhood === selectedNeighborhood;
+          const matchSearch = !q || est.name.toLowerCase().includes(q) || est.sector.toLowerCase().includes(q) || est.address.toLowerCase().includes(q);
+          return matchGroup && matchNeighborhood && matchSearch;
+        })
+        .forEach(est => {
+          const icon = L.divIcon({
+            className: '',
+            html: `<div class="custom-pin" style="background:${est.pinColor};width:30px;height:30px;font-size:14px;">${est.emoji}</div>`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+          });
+          const marker = L.marker([est.lat, est.lng], { icon });
+          marker.on('click', () => openEstablishmentModal(est.id));
+          marker.bindTooltip(`${est.emoji} ${est.name} • ⭐ ${est.rating.toFixed(1)}`, { direction: 'top' });
+          marker.addTo(poisLayer);
+        });
+    }
+
+    function togglePoiFilter(group) {
+      if (activePoiGroups.has(group)) activePoiGroups.delete(group);
+      else activePoiGroups.add(group);
+      renderPoisOnMap();
+    }
+
+    // MODAL UNIVERSAL DE ESTABELECIMENTO (SELO OFICIAL + AVALIAÇÃO + DENÚNCIA PRESENCIAL)
+    function openEstablishmentModal(id) {
+      const est = establishments.find(e => e.id === id);
+      if (!est) return;
+      currentEstablishment = est;
+      selectedRatingStars = 5;
+
+      document.getElementById('estSectorBadge').textContent = `${est.emoji} ${est.sector}`;
+      document.getElementById('estModalName').textContent = est.name;
+      document.getElementById('estModalAddress').textContent = est.address;
+
+      renderEstablishmentModalBody();
+      document.getElementById('establishmentModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function renderEstablishmentModalBody() {
+      const est = currentEstablishment;
+      if (!est) return;
+      const body = document.getElementById('estModalBody');
+
+      body.innerHTML = `
+        <!-- BLOCO 1: SELO REGULATÓRIO OFICIAL (PRIVACIDADE OPERACIONAL PRESERVADA) -->
+        <div class="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h4 class="font-bold text-emerald-950 text-sm">${est.sealStatus}</h4>
+                <p class="text-[11px] font-semibold text-emerald-800">Órgão Integrado: ${est.regulator}</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white text-emerald-800 border border-emerald-200">${est.lastAudit}</span>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed">${est.auditSummary}</p>
+          <div class="text-[11px] text-slate-500 bg-white/80 px-3 py-1.5 rounded-lg border border-emerald-100">
+            🔒 <strong>Privacidade Operacional:</strong> As fotos e vídeos internos de áreas técnicas (cozinha, esterilização ou descarte) são transmitidos exclusivamente aos fiscais do órgão competente, exibindo ao público apenas a certificação de regularidade.
+          </div>
+        </div>
+
+        <!-- INFORMAÇÕES DE ATENDIMENTO + LINK EXTERNO IFOOD (SE RESTAURANTE) -->
+        <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+          <span class="text-slate-700 font-medium">${est.extraPublicInfo}</span>
+          ${est.ifoodUrl ? `
+            <a href="${est.ifoodUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shrink-0 transition-colors">
+              Abrir Cardápio no iFood ↗
+            </a>
+          ` : ''}
+        </div>
+
+        <!-- BLOCO 2: AVALIAÇÃO CIDADÃ POR ESTRELAS -->
+        <div class="space-y-3 pt-1">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-bold text-slate-900 text-sm">Avaliação Cidadã da Experiência</h4>
+              <p class="text-[11px] text-slate-500">Critérios avaliados: ${est.criteriaLabels.join(' • ')}</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xl font-extrabold text-amber-500">⭐ ${est.rating.toFixed(1)}</span>
+              <span class="block text-[11px] text-slate-500">${est.reviewCount} avaliações</span>
+            </div>
+          </div>
+
+          <!-- Formulário Nova Avaliação -->
+          <form onsubmit="submitEstablishmentReview(event)" class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200/70 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-950">Deixe sua nota (1 a 5 estrelas):</span>
+              <div class="flex items-center gap-1" id="starPickerContainer">
+                ${[1, 2, 3, 4, 5].map(num => `
+                  <button type="button" onclick="setReviewStars(${num})" class="text-lg leading-none ${num <= selectedRatingStars ? 'text-amber-400' : 'text-slate-300'} hover:scale-110 transition-transform">★</button>
+                `).join('')}
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <input id="estReviewComment" type="text" required placeholder="Comente sobre o atendimento, tratamento, orçamento ou higiene..." class="flex-1 px-3 py-2 text-xs rounded-lg border border-purple-200 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
+              <button type="submit" class="px-3.5 py-2 rounded-lg bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0">Avaliar</button>
+            </div>
+          </form>
+
+          <!-- Lista de Comentários -->
+          <div class="space-y-2 max-h-36 overflow-y-auto">
+            ${est.reviews.map(rev => `
+              <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 text-xs">
+                <div class="flex items-center justify-between mb-0.5">
+                  <span class="font-bold text-slate-800">${rev.user}</span>
+                  <span class="text-amber-500 font-bold">${'★'.repeat(rev.stars)}</span>
+                </div>
+                <p class="text-slate-600">${rev.text}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- BLOCO 3: DENÚNCIA PRESENCIAL DE IRREGULARIDADE GRAVE (ROTEAMENTO AUTOMÁTICO) -->
+        <div class="pt-3 border-t border-slate-200">
+          <details class="group">
+            <summary class="cursor-pointer list-none flex items-center justify-between p-3 rounded-xl bg-rose-50 hover:bg-rose-100/80 border border-rose-200 text-rose-900 text-xs font-bold">
+              <span class="flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600"></i>
+                Reportar Irregularidade Grave Presencial → ${est.regulator}
+              </span>
+              <span class="text-[11px] underline">Abrir protocolo</span>
+            </summary>
+            <form onsubmit="submitEstablishmentGraveReport(event)" class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
+              <p class="text-[11px] text-slate-600">
+                📍 <strong>Validação Presencial (GPS Ativo):</strong> Este canal é exclusivo para irregularidades estruturais, sanitárias ou ambientais graves observadas no local (falhas simples de entrega devem ser registradas na avaliação acima).
+              </p>
+              <textarea id="estGraveDesc" rows="2" required placeholder="Descreva a irregularidade grave observada presencialmente..." class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white"></textarea>
+              <button type="submit" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs">
+                Enviar Denúncia Presencial ao Órgão Competente
+              </button>
+            </form>
+          </details>
+        </div>
+      `;
+    }
+
+    function setReviewStars(num) {
+      selectedRatingStars = num;
+      renderEstablishmentModalBody();
+      lucide.createIcons();
+    }
+
+    function submitEstablishmentReview(e) {
+      e.preventDefault();
+      if (!currentEstablishment) return;
+      const input = document.getElementById('estReviewComment');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const totalScore = currentEstablishment.rating * currentEstablishment.reviewCount + selectedRatingStars;
+      currentEstablishment.reviewCount += 1;
+      currentEstablishment.rating = totalScore / currentEstablishment.reviewCount;
+      currentEstablishment.reviews.unshift({
+        user: 'Mariana Costa (Você)',
+        stars: selectedRatingStars,
+        text
+      });
+
+      renderPoisOnMap();
+      renderEstablishmentModalBody();
+      lucide.createIcons();
+      showToast(`Avaliação publicada em ${currentEstablishment.name}!`);
+    }
+
+    function submitEstablishmentGraveReport(e) {
+      e.preventDefault();
+      if (!currentEstablishment) return;
+      const desc = document.getElementById('estGraveDesc').value.trim();
+      if (!desc) return;
+
+      closeEstablishmentModal();
+      showToast(`Denúncia presencial encaminhada diretamente para: ${currentEstablishment.regulator}!`);
+    }
+
+    function closeEstablishmentModal() {
+      document.getElementById('establishmentModal').classList.add('hidden');
+      currentEstablishment = null;
+    }
+
+    // SELETOR DE BAIRRO
     function selectNeighborhood(key) {
       selectedNeighborhood = key;
       const selectEl = document.getElementById('neighborhoodSelect');
@@ -1478,7 +1977,6 @@
           const b = L.latLngBounds(data.bounds[0], data.bounds[1]);
           map.setMaxBounds(b.pad(0.15));
           map.fitBounds(b, { padding: [20, 20], maxZoom: 16 });
-
           L.rectangle(b, {
             color: '#7C3AED',
             weight: 2.5,
@@ -1493,7 +1991,6 @@
       renderPoisOnMap();
       renderMapMarkers();
       renderReportsList();
-      showToast(`Região selecionada: ${data.name}`);
     }
 
     function resetNeighborhood() {
@@ -1510,88 +2007,27 @@
 
       container.innerHTML = `
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
-          <p class="text-[11px] font-bold uppercase text-slate-500">Taxa de Criminalidade</p>
+          <p class="text-[11px] font-bold uppercase text-slate-500">Segurança & Monitoramento</p>
           <p class="text-sm font-extrabold text-slate-900 mt-1">${data.crimeRate}</p>
           <span class="inline-block mt-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">${data.crimeBadge}</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200/70">
+          <p class="text-[11px] font-bold uppercase text-amber-800">Luz, Água & Coleta de Lixo</p>
+          <p class="text-xs font-bold text-slate-900 mt-1 leading-snug">${data.utilities}</p>
         </div>
         <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200/70">
           <p class="text-[11px] font-bold uppercase text-purple-800">Investimentos na Região</p>
           <p class="text-sm font-extrabold text-purple-950 mt-1">${data.investment}</p>
-          <span class="inline-block mt-1 text-[11px] text-purple-700">${data.highlights}</span>
-        </div>
-        <div class="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200/70">
-          <p class="text-[11px] font-bold uppercase text-emerald-800">Saúde & Atendimento</p>
-          <p class="text-sm font-bold text-slate-900 mt-1">${data.healthInfra}</p>
-          <span class="inline-block mt-1 text-[11px] text-emerald-700">Unidades mapeadas no radar</span>
         </div>
         <div class="p-3.5 rounded-xl bg-rose-50/60 border border-rose-200/70">
-          <p class="text-[11px] font-bold uppercase text-rose-800">Denúncias na Região</p>
-          <p class="text-sm font-extrabold text-slate-900 mt-1">${regionalReports.length} ocorrências registradas</p>
+          <p class="text-[11px] font-bold uppercase text-rose-800">Ocorrências na Região</p>
+          <p class="text-sm font-extrabold text-slate-900 mt-1">${regionalReports.length} registros ativos</p>
           <span class="inline-block mt-1 text-[11px] text-rose-700">Clique no mapa para reportar</span>
         </div>
       `;
     }
 
-    // RENDERIZAÇÃO DE PONTOS DE ÔNIBUS, UBS, MERCADOS E OFICINAS NO MAPA
-    function renderPoisOnMap() {
-      if (!poisLayer) return;
-      poisLayer.clearLayers();
-
-      const poiStyles = {
-        bus: { bg: '#4F46E5', emoji: '🚌', label: 'Ponto de Ônibus' },
-        health: { bg: '#059669', emoji: '🏥', label: 'Saúde / UBS' },
-        market: { bg: '#D97706', emoji: '🛒', label: 'Mercado' },
-        workshop: { bg: '#334155', emoji: '🔧', label: 'Oficina / Serviços' },
-        public: { bg: '#6D28D9', emoji: '🏛️', label: 'Público / Educação' }
-      };
-
-      const q = searchQuery.toLowerCase();
-      const filteredPois = cityPois.filter(poi => {
-        const matchType = activePoiTypes.has(poi.type);
-        const matchNeighborhood = selectedNeighborhood === 'all' || poi.neighborhood === selectedNeighborhood;
-        const matchSearch = !q || poi.name.toLowerCase().includes(q) || poi.address.toLowerCase().includes(q);
-        return matchType && matchNeighborhood && matchSearch;
-      });
-
-      filteredPois.forEach(poi => {
-        const st = poiStyles[poi.type] || poiStyles.public;
-        const icon = L.divIcon({
-          className: '',
-          html: `<div class="custom-pin" style="background:${st.bg};width:28px;height:28px;font-size:13px;">${st.emoji}</div>`,
-          iconSize: [28, 28],
-          iconAnchor: [14, 14]
-        });
-
-        const marker = L.marker([poi.lat, poi.lng], { icon });
-
-        if (poi.type === 'bus') {
-          marker.on('click', () => openBusStopModal(poi));
-          marker.bindTooltip(`🚌 ${poi.name} (Clique p/ horários)`, { direction: 'top' });
-        } else {
-          marker.bindPopup(`
-            <div class="p-3.5 space-y-1.5">
-              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-100 text-purple-800">${st.label}</span>
-              <h4 class="font-bold text-slate-900 text-xs">${poi.name}</h4>
-              <p class="text-[11px] text-slate-500">${poi.address}</p>
-              <p class="text-[11px] text-slate-700 pt-1 border-t border-slate-100">${poi.info}</p>
-            </div>
-          `);
-        }
-
-        marker.addTo(poisLayer);
-      });
-    }
-
-    function togglePoiFilter(type) {
-      if (activePoiTypes.has(type)) {
-        activePoiTypes.delete(type);
-      } else {
-        activePoiTypes.add(type);
-      }
-      renderPoisOnMap();
-    }
-
-    // MODAL DE HORÁRIOS DE ÔNIBUS AO CLICAR NO PONTO
+    // HORÁRIOS DE ÔNIBUS
     function openBusStopModal(busStop) {
       document.getElementById('busStopTitle').textContent = busStop.name;
       const body = document.getElementById('busStopBody');
@@ -1612,14 +2048,8 @@
               </div>
               <p class="text-xs text-slate-600"><strong>Destino Final:</strong> ${line.dest}</p>
               <div class="pt-2 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                <div class="bg-slate-50 p-2 rounded-lg">
-                  <span class="font-bold text-slate-700 block">Dias Úteis:</span>
-                  <span class="text-slate-600">${line.weekday}</span>
-                </div>
-                <div class="bg-slate-50 p-2 rounded-lg">
-                  <span class="font-bold text-slate-700 block">Sábados & Domingos:</span>
-                  <span class="text-slate-600">${line.weekend}</span>
-                </div>
+                <div class="bg-slate-50 p-2 rounded-lg"><span class="font-bold text-slate-700 block">Dias Úteis:</span><span class="text-slate-600">${line.weekday}</span></div>
+                <div class="bg-slate-50 p-2 rounded-lg"><span class="font-bold text-slate-700 block">Fins de Semana:</span><span class="text-slate-600">${line.weekend}</span></div>
               </div>
             </div>
           `).join('')}
@@ -1633,56 +2063,95 @@
       document.getElementById('busStopModal').classList.add('hidden');
     }
 
+    // ORÇAMENTO PARTICIPATIVO (VOTAÇÃO AO VIVO)
+    function renderParticipatoryPoll() {
+      const container = document.getElementById('participatoryPollList');
+      const totalEl = document.getElementById('pollTotalVotes');
+      if (!container) return;
+
+      const totalVotes = pollOptions.reduce((sum, o) => sum + o.votes, 0);
+      if (totalEl) totalEl.textContent = `${totalVotes} votos`;
+
+      container.innerHTML = pollOptions.map(opt => {
+        const pct = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
+        const isVoted = userVotedOptionId === opt.id;
+        return `
+          <button onclick="voteInPoll('${opt.id}')" class="w-full text-left p-2.5 rounded-xl border ${isVoted ? 'border-purple-600 bg-purple-50' : 'border-slate-200 hover:border-purple-300 bg-slate-50/60'} transition-all space-y-1.5">
+            <div class="flex items-center justify-between gap-2 text-xs">
+              <span class="font-semibold text-slate-800">${isVoted ? '✅ ' : ''}${opt.label}</span>
+              <span class="font-extrabold text-purple-800 shrink-0">${pct}%</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-[#6D28D9] rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function voteInPoll(optionId) {
+      if (userVotedOptionId === optionId) return;
+      if (userVotedOptionId) {
+        const prev = pollOptions.find(o => o.id === userVotedOptionId);
+        if (prev) prev.votes -= 1;
+      }
+      const next = pollOptions.find(o => o.id === optionId);
+      if (next) {
+        next.votes += 1;
+        userVotedOptionId = optionId;
+        renderParticipatoryPoll();
+        showToast('Seu voto foi registrado no Orçamento Participativo!');
+      }
+    }
+
+    // BUSCA E CAMADAS DO MAPA
     async function searchItajubaPlace(e) {
       e.preventDefault();
       const query = document.getElementById('mapPlaceSearchInput').value.trim();
       if (!query) return;
 
-      const localPoi = cityPois.find(p => p.name.toLowerCase().includes(query.toLowerCase()) || p.address.toLowerCase().includes(query.toLowerCase()));
-      if (localPoi) {
-        map.flyTo([localPoi.lat, localPoi.lng], 17, { duration: 0.9 });
-        if (localPoi.type === 'bus') openBusStopModal(localPoi);
-        showToast(`Localizado: ${localPoi.name}`);
+      const estMatch = establishments.find(item => item.name.toLowerCase().includes(query.toLowerCase()) || item.sector.toLowerCase().includes(query.toLowerCase()));
+      if (estMatch) {
+        map.flyTo([estMatch.lat, estMatch.lng], 17, { duration: 0.9 });
+        openEstablishmentModal(estMatch.id);
+        return;
+      }
+
+      const busMatch = busStops.find(b => b.name.toLowerCase().includes(query.toLowerCase()));
+      if (busMatch) {
+        map.flyTo([busMatch.lat, busMatch.lng], 17, { duration: 0.9 });
+        openBusStopModal(busMatch);
         return;
       }
 
       try {
-        showToast(`Buscando "${query}" em Itajubá...`);
         const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Itajubá, Minas Gerais, Brasil')}&bounded=1&viewbox=-45.5550,-22.3300,-45.3500,-22.5250&limit=1`;
         const res = await fetch(url);
         const results = await res.json();
         if (results && results.length > 0) {
           const place = results[0];
-          const lat = parseFloat(place.lat);
-          const lng = parseFloat(place.lon);
-          map.flyTo([lat, lng], 18, { duration: 1 });
-          L.popup()
-            .setLatLng([lat, lng])
-            .setContent(`<div class="p-3 text-xs"><strong class="text-purple-900 block mb-1">Local Encontrado</strong><span class="text-slate-600">${place.display_name}</span></div>`)
-            .openOn(map);
+          map.flyTo([parseFloat(place.lat), parseFloat(place.lon)], 18, { duration: 1 });
+          showToast(`Localizado: ${place.display_name.split(',')[0]}`);
         } else {
-          showToast('Local não encontrado dentro de Itajubá.', 'error');
+          showToast('Local não encontrado em Itajubá.', 'error');
         }
       } catch (err) {
-        showToast('Erro ao consultar endereço no mapa.', 'error');
+        showToast('Erro ao consultar endereço.', 'error');
       }
     }
 
     function locateUserInItajuba() {
-      if (!navigator.geolocation) {
-        showToast('Geolocalização não suportada.', 'error');
-        return;
-      }
+      if (!navigator.geolocation) return;
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const lat = pos.coords.latitude;
           const lng = pos.coords.longitude;
           if (ITAJUBA_MAX_BOUNDS.contains([lat, lng])) {
             map.flyTo([lat, lng], 18);
-            showToast('Localização GPS encontrada em Itajubá!');
+            showToast('GPS localizado em Itajubá!');
           } else {
             map.flyTo(ITAJUBA_CENTER, 15);
-            showToast('Seu GPS está fora de Itajubá; centralizando no município.');
+            showToast('Centralizando no centro de Itajubá.');
           }
         },
         () => {
@@ -1716,7 +2185,7 @@
       }
     }
 
-    // DENÚNCIAS NO MAPA E FEED
+    // MARCADORES DE DENÚNCIA E FEED
     function getFilteredReports() {
       const statusFilter = document.getElementById('statusFilterSelect') ? document.getElementById('statusFilterSelect').value : 'all';
       return reports.filter(r => {
@@ -1724,10 +2193,7 @@
         const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
         const matchesNeighborhood = selectedNeighborhood === 'all' || r.neighborhood === selectedNeighborhood;
         const q = searchQuery.toLowerCase();
-        const matchesSearch = !q ||
-          r.title.toLowerCase().includes(q) ||
-          r.address.toLowerCase().includes(q) ||
-          r.id.toLowerCase().includes(q);
+        const matchesSearch = !q || r.title.toLowerCase().includes(q) || r.address.toLowerCase().includes(q) || r.id.toLowerCase().includes(q);
         return matchesCat && matchesStatus && matchesNeighborhood && matchesSearch;
       });
     }
@@ -1735,47 +2201,33 @@
     function renderMapMarkers() {
       if (!markersLayer) return;
       markersLayer.clearLayers();
-      const filtered = getFilteredReports();
-
-      filtered.forEach(rep => {
+      getFilteredReports().forEach(rep => {
         const meta = categoryMeta[rep.category] || categoryMeta.buraco;
-        const pinHtml = `
-          <div class="custom-pin" style="background-color: ${meta.color}; width: 30px; height: 30px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-          </div>
-        `;
-        const icon = L.divIcon({ className: '', html: pinHtml, iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -28] });
-
-        const statusColor = rep.status === 'Resolvido'
-          ? 'bg-emerald-100 text-emerald-800'
-          : rep.status === 'Em análise'
-            ? 'bg-amber-100 text-amber-800'
-            : 'bg-rose-100 text-rose-800';
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="custom-pin" style="background-color: ${meta.color}; width: 28px; height: 28px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 28],
+          popupAnchor: [0, -26]
+        });
 
         const popupHtml = `
           <div class="overflow-hidden">
-            <img src="${rep.image}" onerror="this.src='https://placehold.co/400x200/6D28D9/FFFFFF?text=Ocorrencia+Civora'" alt="${rep.title}" class="w-full h-28 object-cover" />
-            <div class="p-3.5 space-y-2">
+            <img src="${rep.image}" onerror="this.src='https://placehold.co/400x200/6D28D9/FFFFFF?text=Nexo+Urbano'" alt="${rep.title}" class="w-full h-24 object-cover" />
+            <div class="p-3 space-y-1.5">
               <div class="flex items-center justify-between gap-1">
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${meta.badgeBg}">${meta.label}</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${statusColor}">${rep.status}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">${rep.status}</span>
               </div>
               <h4 class="font-bold text-slate-900 text-xs leading-snug">${rep.title}</h4>
               <p class="text-[11px] text-slate-500">${rep.address}</p>
-              <p class="text-[11px] text-slate-600 line-clamp-2">${rep.description}</p>
-              <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between">
                 <span class="text-[10px] font-mono text-slate-400">${rep.id}</span>
-                <button onclick="supportReport('${rep.id}')" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-semibold transition-colors">
-                  👍 Confirmar (${rep.supports})
-                </button>
+                <button onclick="supportReport('${rep.id}')" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-semibold">👍 Confirmar (${rep.supports})</button>
               </div>
             </div>
           </div>
         `;
-
         L.marker([rep.lat, rep.lng], { icon }).bindPopup(popupHtml).addTo(markersLayer);
       });
     }
@@ -1786,61 +2238,32 @@
         rep.supports += 1;
         renderMapMarkers();
         renderReportsList();
-        showToast(`Você confirmou a ocorrência ${rep.id}!`);
+        showToast(`Ocorrência ${rep.id} confirmada!`);
       }
-    }
-
-    function renderCategoryBars() {
-      const container = document.getElementById('categoryBarsContainer');
-      if (!container) return;
-      const total = reports.length || 1;
-      container.innerHTML = Object.entries(categoryMeta).map(([key, meta]) => {
-        const count = reports.filter(r => r.category === key).length;
-        const pct = Math.round((count / total) * 100);
-        return `
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-medium text-slate-700">${meta.label}</span>
-              <span class="font-bold text-slate-900">${count} (${pct}%)</span>
-            </div>
-            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-              <div class="h-full rounded-full transition-all duration-500" style="width: ${pct}%; background-color: ${meta.color};"></div>
-            </div>
-          </div>
-        `;
-      }).join('');
     }
 
     function renderReportsList() {
       const container = document.getElementById('reportsFeedList');
       if (!container) return;
       const filtered = getFilteredReports();
-      const totalEl = document.getElementById('kpiTotalReports');
-      if (totalEl) totalEl.textContent = reports.length;
 
       if (filtered.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">Nenhuma ocorrência encontrada nesta região/filtro.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Nenhuma ocorrência nesta região.</p>`;
         return;
       }
 
       container.innerHTML = filtered.map(rep => {
         const meta = categoryMeta[rep.category] || categoryMeta.buraco;
-        const statusBadge = rep.status === 'Resolvido'
-          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-          : rep.status === 'Em análise'
-            ? 'bg-amber-50 text-amber-700 border-amber-200'
-            : 'bg-rose-50 text-rose-700 border-rose-200';
-
         return `
           <div onclick="focusReportOnMap('${rep.id}')" class="cursor-pointer p-3 rounded-xl border border-slate-200/80 hover:border-purple-300 hover:bg-purple-50/30 transition-all flex gap-3 items-start">
-            <img src="${rep.image}" onerror="this.src='https://placehold.co/120x120/6D28D9/FFFFFF?text=Civora'" alt="${rep.title}" class="w-14 h-14 rounded-lg object-cover shrink-0 border border-slate-200" />
+            <img src="${rep.image}" onerror="this.src='https://placehold.co/120x120/6D28D9/FFFFFF?text=Nexo'" alt="${rep.title}" class="w-12 h-12 rounded-lg object-cover shrink-0 border border-slate-200" />
             <div class="min-w-0 flex-1">
-              <div class="flex items-center justify-between gap-1 mb-1">
+              <div class="flex items-center justify-between gap-1 mb-0.5">
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded ${meta.badgeBg}">${meta.label}</span>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${statusBadge}">${rep.status}</span>
+                <span class="text-[10px] font-semibold text-slate-500">${rep.status}</span>
               </div>
               <h4 class="font-bold text-slate-800 text-xs truncate">${rep.title}</h4>
-              <p class="text-[11px] text-slate-500 truncate mt-0.5">${rep.address}</p>
+              <p class="text-[11px] text-slate-500 truncate">${rep.address}</p>
             </div>
           </div>
         `;
@@ -1851,16 +2274,8 @@
       const rep = reports.find(r => r.id === id);
       if (rep && map) {
         switchMainView('dashboard');
-        if (selectedNeighborhood !== 'all' && selectedNeighborhood !== rep.neighborhood) {
-          selectNeighborhood('all');
-        }
+        if (selectedNeighborhood !== 'all' && selectedNeighborhood !== rep.neighborhood) selectNeighborhood('all');
         map.flyTo([rep.lat, rep.lng], 17, { duration: 0.8 });
-        markersLayer.eachLayer(layer => {
-          const ll = layer.getLatLng();
-          if (Math.abs(ll.lat - rep.lat) < 0.0001 && Math.abs(ll.lng - rep.lng) < 0.0001) {
-            layer.openPopup();
-          }
-        });
       }
     }
 
@@ -1878,45 +2293,32 @@
       renderReportsList();
     }
 
-    // NAVEGAÇÃO ENTRE ABAS PRINCIPAIS (TODAS NO MESMO PADRÃO)
+    // NAVEGAÇÃO ENTRE ABAS PRINCIPAIS
     function switchMainView(viewName) {
       ['dashboard', 'culture', 'donations', 'opportunities'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if (el) el.classList.toggle('hidden', v !== viewName);
       });
 
-      document.querySelectorAll('.nav-item').forEach(btn => {
-        btn.classList.remove('bg-white/20', 'font-semibold', 'shadow-sm');
-      });
+      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('bg-white/20', 'font-semibold', 'shadow-sm'));
       const activeBtn = document.getElementById(`nav-${viewName}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-white/20', 'font-semibold', 'shadow-sm');
-      }
+      if (activeBtn) activeBtn.classList.add('bg-white/20', 'font-semibold', 'shadow-sm');
 
-      if (viewName === 'dashboard' && map) {
-        setTimeout(() => map.invalidateSize(), 120);
-      }
-      if (viewName === 'culture') {
-        renderCultureContent();
-      }
+      if (viewName === 'dashboard' && map) setTimeout(() => map.invalidateSize(), 120);
+      if (viewName === 'culture') renderCultureContent();
       lucide.createIcons();
     }
 
-    // ESPAÇO CULTURA (ABAS INTERNAS)
+    // CULTURA
     function switchCultureTab(tabName) {
-      const tabs = ['exposicao', 'vendas', 'doacao-artistas', 'denuncia-obra'];
-      tabs.forEach(t => {
+      ['exposicao', 'vendas', 'doacao-artistas', 'denuncia-obra'].forEach(t => {
         const sec = document.getElementById(`culture-section-${t}`);
         const btn = document.getElementById(`ctab-${t}`);
         if (sec) sec.classList.toggle('hidden', t !== tabName);
         if (btn) {
-          if (t === tabName) {
-            btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-purple-900 shadow-sm flex items-center gap-2 shrink-0 transition-all';
-          } else if (t === 'denuncia-obra') {
-            btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-rose-500/35 border border-rose-300/40 text-white hover:bg-rose-500/55 flex items-center gap-2 shrink-0 transition-all';
-          } else {
-            btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/15 text-white hover:bg-white/25 flex items-center gap-2 shrink-0 transition-all';
-          }
+          if (t === tabName) btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-purple-900 shadow-sm flex items-center gap-2 shrink-0';
+          else if (t === 'denuncia-obra') btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-rose-500/35 border border-rose-300/40 text-white hover:bg-rose-500/55 flex items-center gap-2 shrink-0';
+          else btn.className = 'culture-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/15 text-white hover:bg-white/25 flex items-center gap-2 shrink-0';
         }
       });
     }
@@ -1925,18 +2327,16 @@
       const expGrid = document.getElementById('artExhibitionGrid');
       if (expGrid) {
         expGrid.innerHTML = exhibitionWorks.map(work => `
-          <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm hover:shadow-md transition-all flex flex-col">
-            <img src="${work.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Exposicao+Civora'" alt="${work.title}" class="w-full h-52 object-cover" />
+          <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm flex flex-col">
+            <img src="${work.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Exposicao'" alt="${work.title}" class="w-full h-48 object-cover" />
             <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
               <div>
                 <span class="text-[11px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">${work.location}</span>
                 <h4 class="font-bold text-slate-900 text-base mt-2">${work.title}</h4>
-                <p class="text-xs font-semibold text-purple-800 mt-0.5">Por ${work.artist} • <span class="text-slate-500 font-normal">${work.technique}</span></p>
-                <p class="text-xs text-slate-600 mt-2 leading-relaxed">${work.description}</p>
+                <p class="text-xs font-semibold text-purple-800">Por ${work.artist}</p>
+                <p class="text-xs text-slate-600 mt-1.5">${work.description}</p>
               </div>
-              <button onclick="showToast('Obra adicionada ao seu roteiro cultural de Itajubá!')" class="w-full py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 font-semibold text-xs transition-colors">
-                Agendar Visita Presencial
-              </button>
+              <button onclick="showToast('Visita agendada no roteiro cultural!')" class="w-full py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 font-semibold text-xs">Agendar Visita Presencial</button>
             </div>
           </div>
         `).join('');
@@ -1945,8 +2345,8 @@
       const shopGrid = document.getElementById('artShopGrid');
       if (shopGrid) {
         shopGrid.innerHTML = shopWorks.map(item => `
-          <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm hover:shadow-md transition-all flex flex-col">
-            <img src="${item.image}" onerror="this.src='https://placehold.co/600x400/7C3AED/FFFFFF?text=Obra+Original'" alt="${item.title}" class="w-full h-52 object-cover" />
+          <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm flex flex-col">
+            <img src="${item.image}" onerror="this.src='https://placehold.co/600x400/7C3AED/FFFFFF?text=Obra'" alt="${item.title}" class="w-full h-48 object-cover" />
             <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
               <div>
                 <div class="flex items-center justify-between">
@@ -1956,9 +2356,7 @@
                 <h4 class="font-bold text-slate-900 text-base mt-1">${item.title}</h4>
                 <p class="text-xs text-slate-500 mt-1">${item.dimensions}</p>
               </div>
-              <button onclick="openTransactionModal('buy_art', '${item.id}', 'Adquirir Obra: ${item.title}', 'Valor integral repassado ao artista ${item.artist}.', ${item.price}, false)" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm transition-colors">
-                Comprar Obra Direto do Artista
-              </button>
+              <button onclick="openTransactionModal('buy_art', '${item.id}', 'Adquirir: ${item.title}', '100% repassado a ${item.artist}.', ${item.price}, false)" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs">Comprar Direto do Artista</button>
             </div>
           </div>
         `).join('');
@@ -1970,24 +2368,17 @@
           const pct = Math.min(100, Math.round((art.raised / art.goal) * 100));
           return `
             <div class="bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm flex flex-col">
-              <img src="${art.image}" onerror="this.src='https://placehold.co/600x400/5B21B6/FFFFFF?text=Artista+Local'" alt="${art.name}" class="w-full h-48 object-cover" />
-              <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <img src="${art.image}" onerror="this.src='https://placehold.co/600x400/5B21B6/FFFFFF?text=Artista'" alt="${art.name}" class="w-full h-44 object-cover" />
+              <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div>
                   <span class="text-[11px] font-bold text-fuchsia-700 bg-fuchsia-50 px-2.5 py-1 rounded-full">${art.category}</span>
                   <h4 class="font-bold text-slate-900 text-base mt-2">${art.name}</h4>
-                  <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${art.bio}</p>
+                  <p class="text-xs text-slate-600 mt-1">${art.bio}</p>
                 </div>
                 <div class="space-y-2">
-                  <div class="flex justify-between text-xs">
-                    <span class="font-bold text-purple-900">R$ ${art.raised.toLocaleString('pt-BR')}</span>
-                    <span class="text-slate-500">Meta: R$ ${art.goal.toLocaleString('pt-BR')} (${pct}%)</span>
-                  </div>
-                  <div class="w-full h-2 bg-purple-100 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-purple-600 to-fuchsia-500 rounded-full" style="width: ${pct}%"></div>
-                  </div>
-                  <button onclick="openTransactionModal('artist', '${art.id}', 'Apoiar ${art.name}', '${art.bio}', 30, true)" class="w-full mt-2 py-2.5 rounded-xl bg-purple-900 hover:bg-purple-800 text-white font-bold text-xs transition-colors">
-                    Doar para este Coletivo / Artista
-                  </button>
+                  <div class="flex justify-between text-xs"><span class="font-bold text-purple-900">R$ ${art.raised.toLocaleString('pt-BR')}</span><span class="text-slate-500">${pct}% da meta</span></div>
+                  <div class="w-full h-2 bg-purple-100 rounded-full overflow-hidden"><div class="h-full bg-purple-600 rounded-full" style="width: ${pct}%"></div></div>
+                  <button onclick="openTransactionModal('artist', '${art.id}', 'Apoiar ${art.name}', '${art.bio}', 30, true)" class="w-full py-2.5 rounded-xl bg-purple-900 hover:bg-purple-800 text-white font-bold text-xs">Doar para Coletivo / Artista</button>
                 </div>
               </div>
             </div>
@@ -1997,17 +2388,14 @@
 
       const cultAlerts = document.getElementById('cultureAlertsList');
       if (cultAlerts) {
-        const culturalReports = reports.filter(r => r.category === 'cultura');
-        cultAlerts.innerHTML = culturalReports.map(rep => `
+        cultAlerts.innerHTML = reports.filter(r => r.category === 'cultura').map(rep => `
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex gap-3 items-start">
             <img src="${rep.image}" onerror="this.src='https://placehold.co/150x150/9333EA/FFFFFF?text=Patrimonio'" alt="${rep.title}" class="w-16 h-16 rounded-xl object-cover shrink-0" />
             <div class="min-w-0 flex-1">
               <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-fuchsia-100 text-fuchsia-800">${rep.status}</span>
               <h5 class="font-bold text-slate-900 text-xs mt-1">${rep.title}</h5>
               <p class="text-[11px] text-slate-500 truncate">${rep.address}</p>
-              <button onclick="focusReportOnMap('${rep.id}')" class="mt-1.5 text-[11px] font-bold text-purple-700 hover:underline">
-                Ver marcado no mapa →
-              </button>
+              <button onclick="focusReportOnMap('${rep.id}')" class="mt-1 text-[11px] font-bold text-purple-700 hover:underline">Ver no mapa →</button>
             </div>
           </div>
         `).join('');
@@ -2022,43 +2410,33 @@
       const description = document.getElementById('cultDescription').value.trim();
       const previewImg = document.getElementById('cultPhotoPreview');
 
-      const imageSrc = (previewImg && !previewImg.classList.contains('hidden') && previewImg.src)
-        ? previewImg.src
-        : 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=600&q=80';
-
       const newReport = {
         id: `CIV-${Math.floor(1050 + Math.random() * 900)}`,
         neighborhood: 'centro',
         category: 'cultura',
         title: `${title} (${issueType})`,
-        address: address.includes('Itajubá') ? address : `${address} - Itajubá`,
+        address,
         description,
         status: 'Pendente',
         supports: 1,
-        lat: ITAJUBA_CENTER[0] + (Math.random() - 0.5) * 0.01,
-        lng: ITAJUBA_CENTER[1] + (Math.random() - 0.5) * 0.01,
-        image: imageSrc,
-        date: 'Agora mesmo'
+        lat: ITAJUBA_CENTER[0] + (Math.random() - 0.5) * 0.008,
+        lng: ITAJUBA_CENTER[1] + (Math.random() - 0.5) * 0.008,
+        image: (previewImg && !previewImg.classList.contains('hidden') && previewImg.src) ? previewImg.src : 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=600&q=80',
+        date: 'Agora'
       };
-
       reports.unshift(newReport);
       e.target.reset();
       if (previewImg) previewImg.classList.add('hidden');
       document.getElementById('cultUploadPlaceholder').classList.remove('hidden');
-
       renderMapMarkers();
       renderReportsList();
-      renderCategoryBars();
       renderCultureContent();
-      updateNeighborhoodDashboard();
-      showToast('Denúncia cultural registrada e marcada no mapa de Itajubá!');
+      showToast('Denúncia cultural publicada no mapa!');
     }
 
-    // MODAIS DE DENÚNCIA URBANA, DOAÇÃO, TRANSPARÊNCIA E VAGAS
+    // MODAIS GERAIS
     function openReportModal(fromMapClick = false) {
-      if (!fromMapClick) {
-        document.getElementById('repCoordsDisplay').value = `${selectedCoords.lat}, ${selectedCoords.lng}`;
-      }
+      if (!fromMapClick) document.getElementById('repCoordsDisplay').value = `${selectedCoords.lat}, ${selectedCoords.lng}`;
       document.getElementById('reportModal').classList.remove('hidden');
     }
 
@@ -2087,10 +2465,6 @@
       const description = document.getElementById('repDescription').value.trim();
       const previewImg = document.getElementById('repPhotoPreview');
 
-      const imageSrc = (previewImg && !previewImg.classList.contains('hidden') && previewImg.src)
-        ? previewImg.src
-        : 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80';
-
       const newReport = {
         id: `CIV-${Math.floor(1050 + Math.random() * 900)}`,
         neighborhood: selectedNeighborhood === 'all' ? 'centro' : selectedNeighborhood,
@@ -2102,23 +2476,20 @@
         supports: 1,
         lat: selectedCoords.lat,
         lng: selectedCoords.lng,
-        image: imageSrc,
-        date: 'Agora mesmo'
+        image: (previewImg && !previewImg.classList.contains('hidden') && previewImg.src) ? previewImg.src : 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80',
+        date: 'Agora'
       };
-
       reports.unshift(newReport);
       e.target.reset();
       if (previewImg) previewImg.classList.add('hidden');
       document.getElementById('repUploadPlaceholder').classList.remove('hidden');
-
       closeReportModal();
       switchMainView('dashboard');
       renderMapMarkers();
       renderReportsList();
-      renderCategoryBars();
       updateNeighborhoodDashboard();
       focusReportOnMap(newReport.id);
-      showToast(`Ocorrência ${newReport.id} publicada no mapa de Itajubá!`);
+      showToast(`Ocorrência ${newReport.id} marcada no mapa!`);
     }
 
     function renderSocialUnits() {
@@ -2131,8 +2502,8 @@
       grid.innerHTML = socialUnits.map(unit => {
         const pct = Math.min(100, Math.round((unit.raised / unit.goal) * 100));
         return `
-          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col">
-            <img src="${unit.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Unidade+Social'" alt="${unit.name}" class="w-full h-48 object-cover" />
+          <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm flex flex-col">
+            <img src="${unit.image}" onerror="this.src='https://placehold.co/600x400/6D28D9/FFFFFF?text=Social'" alt="${unit.name}" class="w-full h-44 object-cover" />
             <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
               <div>
                 <div class="flex items-center justify-between gap-2">
@@ -2140,19 +2511,12 @@
                   <span class="text-[11px] font-semibold text-emerald-700">${unit.familiesHelped}</span>
                 </div>
                 <h3 class="font-bold text-slate-900 text-base mt-2">${unit.name}</h3>
-                <p class="text-xs text-slate-600 mt-1.5"><strong>Necessidade prioritária:</strong> ${unit.urgentNeed}</p>
+                <p class="text-xs text-slate-600 mt-1.5"><strong>Prioridade:</strong> ${unit.urgentNeed}</p>
               </div>
               <div class="space-y-2">
-                <div class="flex justify-between text-xs">
-                  <span class="font-bold text-purple-900">R$ ${unit.raised.toLocaleString('pt-BR')}</span>
-                  <span class="text-slate-500">Meta: R$ ${unit.goal.toLocaleString('pt-BR')} (${pct}%)</span>
-                </div>
-                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-gradient-to-r from-[#5B21B6] to-[#A855F7] rounded-full" style="width: ${pct}%"></div>
-                </div>
-                <button onclick="openTransactionModal('social', '${unit.id}', 'Doar para ${unit.name}', 'Recurso destinado à compra de: ${unit.urgentNeed}.', 30, true)" class="w-full mt-2 py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm transition-colors">
-                  Fazer Doação Solidária
-                </button>
+                <div class="flex justify-between text-xs"><span class="font-bold text-purple-900">R$ ${unit.raised.toLocaleString('pt-BR')}</span><span class="text-slate-500">${pct}%</span></div>
+                <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-[#6D28D9] rounded-full" style="width: ${pct}%"></div></div>
+                <button onclick="openTransactionModal('social', '${unit.id}', 'Doar para ${unit.name}', '${unit.urgentNeed}', 30, true)" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs">Fazer Doação Solidária</button>
               </div>
             </div>
           </div>
@@ -2183,7 +2547,6 @@
     function confirmTransaction() {
       const amount = Number(document.getElementById('txAmountInput').value) || 0;
       if (amount <= 0 || !currentTransaction) return;
-
       if (currentTransaction.type === 'social') {
         const unit = socialUnits.find(u => u.id === currentTransaction.targetId);
         if (unit) unit.raised += amount;
@@ -2193,9 +2556,8 @@
         if (artist) artist.raised += amount;
         renderCultureContent();
       }
-
       closeTransactionModal();
-      showToast(`Transação de R$ ${amount.toLocaleString('pt-BR')},00 confirmada!`);
+      showToast(`Apoio de R$ ${amount.toLocaleString('pt-BR')},00 confirmado!`);
     }
 
     function openGovActionModal(key) {
@@ -2207,10 +2569,7 @@
         <div class="space-y-2.5 pt-2">
           ${data.items.map(it => `
             <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-100 flex items-center justify-between gap-3">
-              <div>
-                <p class="font-bold text-slate-900 text-xs sm:text-sm">${it.name}</p>
-                <span class="text-[11px] font-semibold text-emerald-700">${it.status}</span>
-              </div>
+              <div><p class="font-bold text-slate-900 text-xs sm:text-sm">${it.name}</p><span class="text-[11px] font-semibold text-emerald-700">${it.status}</span></div>
               <span class="text-xs sm:text-sm font-extrabold text-purple-800 shrink-0">${it.value}</span>
             </div>
           `).join('')}
@@ -2223,33 +2582,24 @@
       document.getElementById('govActionModal').classList.add('hidden');
     }
 
+    // VAGAS, ESTÁGIOS & CURSOS
     function setOppTypeFilter(type) {
       currentOppTypeFilter = type;
-      document.querySelectorAll('.opp-type-btn').forEach(btn => {
-        btn.className = 'opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50 transition-all';
-      });
+      document.querySelectorAll('.opp-type-btn').forEach(btn => btn.className = 'opp-type-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-purple-50');
       const active = document.getElementById(`opp-type-${type}`);
-      if (active) {
-        active.className = 'opp-type-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-[#6D28D9] text-white shadow-sm transition-all';
-      }
+      if (active) active.className = 'opp-type-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-[#6D28D9] text-white shadow-sm';
       renderOpportunities();
     }
 
     function toggleSaveOpportunity(id) {
-      if (savedOpportunities.has(id)) {
-        savedOpportunities.delete(id);
-        showToast('Vaga removida dos salvos.');
-      } else {
-        savedOpportunities.add(id);
-        showToast('Oportunidade salva!');
-      }
+      if (savedOpportunities.has(id)) savedOpportunities.delete(id);
+      else savedOpportunities.add(id);
       renderOpportunities();
     }
 
     function renderOpportunities() {
       const grid = document.getElementById('opportunitiesGrid');
       if (!grid) return;
-
       const q = (document.getElementById('oppSearchInput')?.value || '').toLowerCase().trim();
       const area = document.getElementById('oppAreaSelect')?.value || 'all';
       const modality = document.getElementById('oppModalitySelect')?.value || 'all';
@@ -2260,10 +2610,7 @@
         const matchArea = area === 'all' || opp.area === area;
         const matchMod = modality === 'all' || opp.modality === modality;
         const matchSaved = !onlySaved || savedOpportunities.has(opp.id);
-        const matchSearch = !q ||
-          opp.title.toLowerCase().includes(q) ||
-          opp.company.toLowerCase().includes(q) ||
-          opp.requirements.toLowerCase().includes(q);
+        const matchSearch = !q || opp.title.toLowerCase().includes(q) || opp.company.toLowerCase().includes(q);
         return matchType && matchArea && matchMod && matchSaved && matchSearch;
       });
 
@@ -2272,51 +2619,24 @@
       if (totalEl) totalEl.textContent = filtered.length;
       if (savedEl) savedEl.textContent = savedOpportunities.size;
 
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-10 text-center border border-slate-200 text-slate-500 text-sm">Nenhuma vaga, estágio ou curso encontrado para os filtros selecionados.</div>`;
-        return;
-      }
-
-      const typeStyles = {
-        'Emprego': 'bg-purple-100 text-purple-800',
-        'Estágio': 'bg-sky-100 text-sky-800',
-        'Curso': 'bg-emerald-100 text-emerald-800',
-        'Jovem Aprendiz': 'bg-amber-100 text-amber-800'
-      };
-
       grid.innerHTML = filtered.map(opp => {
         const isSaved = savedOpportunities.has(opp.id);
-        const badgeClass = typeStyles[opp.type] || 'bg-purple-100 text-purple-800';
-        const btnLabel = opp.type === 'Curso' ? 'Inscrever-se no Curso' : 'Candidatar-se Agora';
-
         return `
-          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-purple-300 transition-all flex flex-col justify-between space-y-4">
-            <div class="space-y-2.5">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
               <div class="flex items-center justify-between gap-2">
-                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full ${badgeClass}">${opp.type}</span>
-                <button onclick="toggleSaveOpportunity('${opp.id}')" class="p-1.5 rounded-lg border ${isSaved ? 'bg-amber-50 border-amber-300 text-amber-600' : 'border-slate-200 text-slate-400 hover:text-purple-700'}">
-                  <i data-lucide="bookmark" class="w-4 h-4 ${isSaved ? 'fill-amber-400' : ''}"></i>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">${opp.type}</span>
+                <button onclick="toggleSaveOpportunity('${opp.id}')" class="p-1.5 rounded-lg border ${isSaved ? 'bg-amber-50 border-amber-300 text-amber-600' : 'border-slate-200 text-slate-400'}">
+                  <i data-lucide="bookmark" class="w-4 h-4"></i>
                 </button>
               </div>
-              <div>
-                <h3 class="font-bold text-slate-900 text-base leading-snug">${opp.title}</h3>
-                <p class="text-xs font-semibold text-purple-700 mt-0.5">${opp.company}</p>
-              </div>
-              <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-600">
-                <span class="px-2 py-0.5 rounded bg-slate-100">${opp.modality}</span>
-                <span class="px-2 py-0.5 rounded bg-slate-100">${opp.area}</span>
-              </div>
-              <p class="text-xs text-slate-600 leading-relaxed">${opp.requirements}</p>
+              <h3 class="font-bold text-slate-900 text-base">${opp.title}</h3>
+              <p class="text-xs font-semibold text-purple-700">${opp.company}</p>
+              <p class="text-xs text-slate-600">${opp.requirements}</p>
             </div>
-            <div class="pt-3 border-t border-slate-100 space-y-2.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="font-bold text-emerald-700">${opp.compensation}</span>
-                <span class="text-[11px] text-slate-400">${opp.posted}</span>
-              </div>
-              <p class="text-[11px] text-slate-500">📍 ${opp.location} • 🕒 ${opp.schedule}</p>
-              <button onclick="openOppApplyModal('${opp.id}')" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm transition-colors">
-                ${btnLabel}
-              </button>
+            <div class="pt-3 border-t border-slate-100 space-y-2">
+              <div class="flex items-center justify-between text-xs"><span class="font-bold text-emerald-700">${opp.compensation}</span><span class="text-slate-400">${opp.modality}</span></div>
+              <button onclick="openOppApplyModal('${opp.id}')" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs">${opp.type === 'Curso' ? 'Inscrever-se' : 'Candidatar-se'}</button>
             </div>
           </div>
         `;
@@ -2329,7 +2649,7 @@
       if (!opp) return;
       document.getElementById('oppModalBadge').textContent = opp.type;
       document.getElementById('oppModalTitle').textContent = opp.title;
-      document.getElementById('oppModalCompany').textContent = `${opp.company} • ${opp.location} (${opp.compensation})`;
+      document.getElementById('oppModalCompany').textContent = `${opp.company} • ${opp.location}`;
       document.getElementById('oppApplyModal').classList.remove('hidden');
     }
 
@@ -2340,7 +2660,7 @@
     function submitOppApplication(e) {
       e.preventDefault();
       closeOppApplyModal();
-      showToast('Inscrição enviada ao PAT / Empresa de Itajubá!');
+      showToast('Inscrição confirmada com sucesso!');
     }
 
     function showToast(message, type = 'success') {
@@ -2349,15 +2669,14 @@
       const toast = document.createElement('div');
       const bg = type === 'error' ? 'bg-rose-600' : 'bg-purple-950 border border-purple-500/40';
       toast.className = `${bg} text-white px-4 py-3 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2.5 animate-overlay pointer-events-auto`;
-      toast.innerHTML = `<span>${type === 'error' ? '⚠️' : '✅'}</span><span>${message}</span>`;
+      toast.innerHTML = `<span>${type === 'error' ? '🚨' : '✅'}</span><span>${message}</span>`;
       container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3800);
+      setTimeout(() => toast.remove(), 4000);
     }
 
     function updateClock() {
       const el = document.getElementById('liveClock');
-      if (!el) return;
-      el.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      if (el) el.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     }
 
     document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
@@ -2371,7 +2690,7 @@
       updateClock();
       setInterval(updateClock, 30000);
       initMap();
-      renderCategoryBars();
+      renderParticipatoryPoll();
       renderReportsList();
       renderCultureContent();
       renderSocialUnits();
