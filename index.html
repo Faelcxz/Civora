@@ -295,9 +295,12 @@
         <input
           id="globalSearchInput"
           type="text"
+          autocomplete="off"
           placeholder="Buscar rua, bairro, UBS, restaurante ou oficina..."
           class="w-full pl-10 pr-4 py-2 text-sm rounded-xl bg-purple-50/70 border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all"
         />
+        <!-- Lista Vertical de Palpites da Busca Global -->
+        <div id="globalSearchSuggestions" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white border border-purple-200 rounded-2xl shadow-xl overflow-hidden z-[2500] max-h-72 overflow-y-auto divide-y divide-slate-100"></div>
       </div>
 
       <div class="flex items-center gap-2.5 flex-wrap">
@@ -452,15 +455,23 @@
               <option value="medicina">Medicina & Hospital de Clínicas</option>
               <option value="rebourgeon">Rebourgeon & Encosta Sul</option>
               <option value="distrito">Distrito Industrial / BR-459</option>
+              <option value="avenida">Avenida / Varginha</option>
+              <option value="oriental">Oriental & Jardim das Colinas</option>
+              <option value="cruzeiro">Cruzeiro & Santa Luzia</option>
+              <option value="santosdumont">Santos Dumont & São Sebastião</option>
+              <option value="imbel">IMBEL / Vila Izabel / Nossa Sra. de Fátima</option>
+              <option value="saojudas">São Judas Tadeu & Novo Horizonte</option>
+              <option value="santana">Santana & Vila Poddis</option>
+              <option value="saojose">São José & Açude</option>
+              <option value="piedade">Piedade & Santa Rosa</option>
+              <option value="anosdourados">Anos Dourados & Jardim Berna</option>
+              <option value="nações">Nações & Vila Rubens</option>
+              <option value="canarinhos">Canarinhos & Vale dos Pinheiros</option>
+              <option value="anois">Ano Bom & Zona Rural / Piranguçu Divisa</option>
             </select>
           </div>
         </div>
 
-        <!-- 4 Indicadores do Bairro -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
-            <span class="text-[10px] font-bold uppercase text-slate-500 block">Segurança & Criminalidade</span>
-            <strong id="nbCrimeRate" class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5 block">Baixa • 11,4 / 100 mil hab.</strong>
         <!-- 3 Indicadores Limpos do Bairro (Sem contador de registros ativos) -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100">
           <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
@@ -506,16 +517,21 @@
           </div>
 
           <!-- Busca de Endereço no Mapa -->
-          <div class="px-4 py-2.5 bg-white border-b border-slate-100 flex flex-wrap items-center gap-2">
+          <div class="px-4 py-2.5 bg-white border-b border-slate-100 flex flex-wrap items-center gap-2 relative">
             <div class="relative flex-1 min-w-[200px]">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-purple-600 absolute left-3 top-1/2 -translate-y-1/2"></i>
               <input
                 id="itajubaPlaceInput"
                 type="text"
-                placeholder="Buscar rua, bairro, hospital ou restaurante em Itajubá..."
+                autocomplete="off"
+                placeholder="Digite o início do nome da rua, avenida ou bairro..."
+                oninput="handlePlaceAutocomplete(this.value, 'mapPlaceSuggestions', 'itajubaPlaceInput')"
+                onfocus="handlePlaceAutocomplete(this.value, 'mapPlaceSuggestions', 'itajubaPlaceInput')"
                 onkeydown="if(event.key==='Enter') searchItajubaLocation()"
                 class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
+              <!-- Palpites de Ruas/Locais um embaixo do outro -->
+              <div id="mapPlaceSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-purple-200 rounded-xl shadow-xl overflow-hidden z-[2200] max-h-64 overflow-y-auto divide-y divide-slate-100"></div>
             </div>
             <button onclick="searchItajubaLocation()" class="px-3 py-1.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-semibold text-xs transition-colors">
               Ir no Mapa
@@ -1389,8 +1405,200 @@
         healthCount: 'Ambulatório Ocupacional + UPA 24h',
         commerceSummary: 'Indústrias, Transportadoras e Postos',
         bounds: [[-22.4540, -45.4780], [-22.4385, -45.4580]]
+      },
+      avenida: {
+        name: 'Avenida / Varginha',
+        center: [-22.4232, -45.4465],
+        zoom: 16,
+        crimeRate: 'Baixa • 10,1 / 100 mil hab.',
+        crimeTrend: 'Ronda comunitária e iluminação LED',
+        investment: 'R$ 2,1 Mi • Drenagem e Asfalto',
+        investmentDetail: 'Corredor Av. Paulo Chiaradia',
+        healthCount: 'UBS Varginha + Farmácia Comunitária',
+        commerceSummary: 'Comércio Local, Padarias e Serviços',
+        bounds: [[-22.4275, -45.4515], [-22.4190, -45.4415]]
+      },
+      oriental: {
+        name: 'Oriental & Jardim das Colinas',
+        center: [-22.4188, -45.4432],
+        zoom: 16,
+        crimeRate: 'Muito Baixa • 7,9 / 100 mil hab.',
+        crimeTrend: 'Vizinhança solidária integrada',
+        investment: 'R$ 1,7 Mi • Pavimentação e Praças',
+        investmentDetail: 'Revitalização de áreas verdes',
+        healthCount: 'Atendimento via UBS Pinheirinho',
+        commerceSummary: 'Residencial e Serviços de Proximidade',
+        bounds: [[-22.4225, -45.4475], [-22.4150, -45.4385]]
+      },
+      cruzeiro: {
+        name: 'Cruzeiro & Santa Luzia',
+        center: [-22.4368, -45.4615],
+        zoom: 16,
+        crimeRate: 'Baixa • 11,2 / 100 mil hab.',
+        crimeTrend: 'Monitoramento preventivo nas vias principais',
+        investment: 'R$ 2,4 Mi • Contenção e Escadarias',
+        investmentDetail: 'Acessibilidade e drenagem pluvial',
+        healthCount: 'UBS Cruzeiro • Espera média 17 min',
+        commerceSummary: 'Mercados, Açougues e Oficinas',
+        bounds: [[-22.4415, -45.4670], [-22.4320, -45.4565]]
+      },
+      santosdumont: {
+        name: 'Santos Dumont & São Sebastião',
+        center: [-22.4152, -45.4572],
+        zoom: 16,
+        crimeRate: 'Baixa • 10,4 / 100 mil hab.',
+        crimeTrend: 'Ronda escolar e câmeras nos acessos',
+        investment: 'R$ 2,0 Mi • Recapeamento e LED',
+        investmentDetail: 'Ligação Boa Vista – Santos Dumont',
+        healthCount: 'UBS Santos Dumont ativa',
+        commerceSummary: 'Comércio de Bairro e Prestadores',
+        bounds: [[-22.4195, -45.4625], [-22.4110, -45.4520]]
+      },
+      imbel: {
+        name: 'IMBEL / Vila Izabel / N. Sra. de Fátima',
+        center: [-22.4408, -45.4545],
+        zoom: 16,
+        crimeRate: 'Muito Baixa • 6,8 / 100 mil hab.',
+        crimeTrend: 'Área monitorada 24h • Baixíssima ocorrência',
+        investment: 'R$ 2,8 Mi • Mobilidade & Iluminação',
+        investmentDetail: 'Acesso Av. Cel. Aventino Ribeiro',
+        healthCount: 'Ambulatório & UBS Vila Izabel',
+        commerceSummary: 'Vila Residencial, Clubes e Comércio',
+        bounds: [[-22.4460, -45.4605], [-22.4360, -45.4485]]
+      },
+      saojudas: {
+        name: 'São Judas Tadeu & Novo Horizonte',
+        center: [-22.4435, -45.4465],
+        zoom: 16,
+        crimeRate: 'Baixa • 11,5 / 100 mil hab.',
+        crimeTrend: 'Patrulhamento preventivo reforçado',
+        investment: 'R$ 2,2 Mi • Asfalto & Creche Municipal',
+        investmentDetail: 'Ampliação da rede de ensino infantil',
+        healthCount: 'ESF São Judas Tadeu • Espera 16 min',
+        commerceSummary: 'Supermercados, Padarias e Farmácias',
+        bounds: [[-22.4485, -45.4520], [-22.4385, -45.4410]]
+      },
+      santana: {
+        name: 'Santana & Vila Poddis',
+        center: [-22.4292, -45.4478],
+        zoom: 16,
+        crimeRate: 'Baixa • 10,8 / 100 mil hab.',
+        crimeTrend: 'Sensores hidrológicos e ronda ativa',
+        investment: 'R$ 3,4 Mi • Drenagem & Macrodrenagem',
+        investmentDetail: 'Prevenção de alagamentos na Vila Poddis',
+        healthCount: 'UBS Santana + Cozinha Solidária',
+        commerceSummary: 'Comércio Tradicional e Serviços',
+        bounds: [[-22.4335, -45.4525], [-22.4250, -45.4430]]
+      },
+      saojose: {
+        name: 'São José & Açude',
+        center: [-22.4112, -45.4615],
+        zoom: 15,
+        crimeRate: 'Baixa • 9,6 / 100 mil hab.',
+        crimeTrend: 'Monitoramento nos acessos rurais e urbanos',
+        investment: 'R$ 1,8 Mi • Pavimentação & Saneamento',
+        investmentDetail: 'Extensão de rede de água e esgoto',
+        healthCount: 'ESF São José ativa',
+        commerceSummary: 'Mercearias e Serviços Locais',
+        bounds: [[-22.4165, -45.4675], [-22.4060, -45.4555]]
+      },
+      piedade: {
+        name: 'Piedade & Santa Rosa',
+        center: [-22.4352, -45.4685],
+        zoom: 16,
+        crimeRate: 'Baixa • 10,7 / 100 mil hab.',
+        crimeTrend: 'Ronda preventiva e iluminação LED 100%',
+        investment: 'R$ 1,6 Mi • Praça e Quadra Esportiva',
+        investmentDetail: 'Lazer comunitário e acessibilidade',
+        healthCount: 'ESF Santa Rosa ativa',
+        commerceSummary: 'Comércio Local e Oficinas',
+        bounds: [[-22.4400, -45.4740], [-22.4305, -45.4630]]
+      },
+      anosdourados: {
+        name: 'Anos Dourados & Jardim Berna',
+        center: [-22.4510, -45.4590],
+        zoom: 15,
+        crimeRate: 'Muito Baixa • 8,3 / 100 mil hab.',
+        crimeTrend: 'Bairro planejado com monitoramento',
+        investment: 'R$ 2,5 Mi • Duplicação & Ciclovia',
+        investmentDetail: 'Conexão rápida ao Distrito Industrial',
+        healthCount: 'Atendimento integrado Distrito / UPA',
+        commerceSummary: 'Empresas de Tecnologia e Comércio',
+        bounds: [[-22.4565, -45.4650], [-22.4455, -45.4530]]
+      },
+      nações: {
+        name: 'Nações & Vila Rubens',
+        center: [-22.4220, -45.4638],
+        zoom: 16,
+        crimeRate: 'Baixa • 10,0 / 100 mil hab.',
+        crimeTrend: 'Videomonitoramento nas vias coletoras',
+        investment: 'R$ 1,5 Mi • Recapeamento Asfáltico',
+        investmentDetail: 'Sinalização viária revitalizada',
+        healthCount: 'Cobertura UBS Boa Vista',
+        commerceSummary: 'Clínicas, Padarias e Serviços',
+        bounds: [[-22.4260, -45.4685], [-22.4180, -45.4590]]
+      },
+      canarinhos: {
+        name: 'Canarinhos & Vale dos Pinheiros',
+        center: [-22.4085, -45.4445],
+        zoom: 15,
+        crimeRate: 'Muito Baixa • 7,5 / 100 mil hab.',
+        crimeTrend: 'Ronda ambiental e patrulhamento',
+        investment: 'R$ 1,4 Mi • Preservação & Acesso',
+        investmentDetail: 'Manutenção de vias e drenagem',
+        healthCount: 'Cobertura UBS Pinheirinho',
+        commerceSummary: 'Condomínios e Serviços',
+        bounds: [[-22.4135, -45.4505], [-22.4035, -45.4385]]
+      },
+      anois: {
+        name: 'Ano Bom & Zona Rural / Divisa Piranguçu',
+        center: [-22.4620, -45.4750],
+        zoom: 14,
+        crimeRate: 'Muito Baixa • 6,5 / 100 mil hab.',
+        crimeTrend: 'Patrulha Rural da Guarda Municipal',
+        investment: 'R$ 3,0 Mi • Estradas Vicinais & Pontes',
+        investmentDetail: 'Escoamento agrícola e transporte escolar',
+        healthCount: 'Unidade Móvel Rural Itinerante',
+        commerceSummary: 'Produtores Rurais, Laticínios e Turismo',
+        bounds: [[-22.4730, -45.4900], [-22.4520, -45.4600]]
       }
     };
+
+    // CATÁLOGO LOCAL DE RUAS, AVENIDAS E PONTOS DE REFERÊNCIA DE ITAJUBÁ (PALPITES INSTANTÂNEOS)
+    const itajubaStreetsCatalog = [
+      { name: 'Avenida BPS', district: 'Pinheirinho / UNIFEI', lat: -22.4148, lng: -45.4488, type: 'Avenida' },
+      { name: 'Avenida Coronel Carneiro Júnior', district: 'Centro', lat: -22.4258, lng: -45.4528, type: 'Avenida' },
+      { name: 'Avenida Jerson Dias', district: 'Estiva', lat: -22.4322, lng: -45.4575, type: 'Avenida' },
+      { name: 'Avenida Renó Júnior', district: 'Medicina / HCI', lat: -22.4292, lng: -45.4561, type: 'Avenida' },
+      { name: 'Avenida Paulo Chiaradia', district: 'Avenida / São Vicente', lat: -22.4235, lng: -45.4472, type: 'Avenida' },
+      { name: 'Avenida Henriqueto Cardinali', district: 'Varginha', lat: -22.4215, lng: -45.4448, type: 'Avenida' },
+      { name: 'Avenida Doutor Vicente Sanches', district: 'Centro / Praça Theodomiro', lat: -22.4250, lng: -45.4519, type: 'Avenida' },
+      { name: 'Avenida Prefeito Olavo Gomes de Oliveira', district: 'Distrito Industrial / BR-459', lat: -22.4455, lng: -45.4665, type: 'Avenida' },
+      { name: 'Avenida Coronel Aventino Ribeiro', district: 'IMBEL / Vila Izabel', lat: -22.4402, lng: -45.4540, type: 'Avenida' },
+      { name: 'Rua Dona Maria Carneiro', district: 'Centro', lat: -22.4251, lng: -45.4514, type: 'Rua' },
+      { name: 'Rua Nova (Rua Major Belo Lisboa)', district: 'Centro', lat: -22.4266, lng: -45.4538, type: 'Rua' },
+      { name: 'Rua Major Belo Lisboa', district: 'Centro', lat: -22.4266, lng: -45.4538, type: 'Rua' },
+      { name: 'Rua Padre Marçal Ribeiro', district: 'Rebourgeon', lat: -22.4342, lng: -45.4475, type: 'Rua' },
+      { name: 'Rua Professor Ivan dos Santos', district: 'Pinheirinho', lat: -22.4158, lng: -45.4495, type: 'Rua' },
+      { name: 'Rua Cesário Alvim', district: 'Centro', lat: -22.4244, lng: -45.4534, type: 'Rua' },
+      { name: 'Rua Silvestre Ferraz', district: 'Centro', lat: -22.4248, lng: -45.4545, type: 'Rua' },
+      { name: 'Rua Miguel Viana', district: 'Morro Chic / Boa Vista', lat: -22.4225, lng: -45.4562, type: 'Rua' },
+      { name: 'Rua Geraldino Campista', district: 'Santo Antônio / Boa Vista', lat: -22.4205, lng: -45.4578, type: 'Rua' },
+      { name: 'Rua Doutor Américo de Oliveira', district: 'Boa Vista', lat: -22.4192, lng: -45.4590, type: 'Rua' },
+      { name: 'Rua Vital Brasil', district: 'Medicina / Centro', lat: -22.4282, lng: -45.4548, type: 'Rua' },
+      { name: 'Rua Olegário Maciel', district: 'Centro', lat: -22.4261, lng: -45.4515, type: 'Rua' },
+      { name: 'Rua Capitão Gomes', district: 'Centro / Vila Poddis', lat: -22.4278, lng: -45.4495, type: 'Rua' },
+      { name: 'Rua Domingos Vieira', district: 'Santana', lat: -22.4298, lng: -45.4472, type: 'Rua' },
+      { name: 'Rua São José', district: 'São José', lat: -22.4125, lng: -45.4605, type: 'Rua' },
+      { name: 'Rua São Sebastião', district: 'São Sebastião / Santos Dumont', lat: -22.4156, lng: -45.4568, type: 'Rua' },
+      { name: 'Rua Santa Luzia', district: 'Cruzeiro / Santa Luzia', lat: -22.4365, lng: -45.4612, type: 'Rua' },
+      { name: 'Rua João XXIII', district: 'São Judas Tadeu', lat: -22.4430, lng: -45.4468, type: 'Rua' },
+      { name: 'Rua Presidente Kennedy', district: 'Nações / Vila Rubens', lat: -22.4222, lng: -45.4635, type: 'Rua' },
+      { name: 'Rua das Acácias', district: 'Jardim das Colinas / Oriental', lat: -22.4185, lng: -45.4430, type: 'Rua' },
+      { name: 'Praça Theodomiro Santiago', district: 'Centro', lat: -22.4254, lng: -45.4523, type: 'Praça' },
+      { name: 'Praça Doutor José Braz', district: 'Centro / Mercado Municipal', lat: -22.4269, lng: -45.4529, type: 'Praça' },
+      { name: 'Parque Municipal de Itajubá', district: 'Pinheirinho / BPS', lat: -22.4185, lng: -45.4470, type: 'Parque' }
+    ];
 
     // PONTOS DE ÔNIBUS & HORÁRIOS
     const busStops = [
@@ -1766,202 +1974,469 @@
       renderReportsOnMap();
     }
 
-    // SIMULADOR DE ALERTA DE ENCHENTE (RIO SAPUCAÍ)
-    function toggleFloodSimulation() {
-      floodAlertActive = !floodAlertActive;
-      const btn = document.getElementById('floodSimBtn');
-      const dot = document.getElementById('floodSimDot');
-      const label = document.getElementById('floodSimLabel');
-      const banner = document.getElementById('emergencyAlertBanner');
-      const riskLevelEl = document.getElementById('riskRiverCurrentLevel');
-      const riskBadgeEl = document.getElementById('riskRiverStatusBadge');
+    // SELETOR DE BAIRROS / REGIÕES DE ITAJUBÁ
+    function selectNeighborhood(nbKey) {
+      selectedNeighborhood = nbKey;
+      const nb = neighborhoodsData[nbKey] || neighborhoodsData.all;
 
-      if (floodAlertActive) {
-        btn.className = 'inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-rose-600 text-white border border-rose-700 hover:bg-rose-700 transition-all shadow-md';
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-white animate-ping';
-        label.textContent = 'ALERTA ENCHENTE: Rio 3,85m • Modo Normal';
-        banner.classList.remove('hidden');
-        if (riskLevelEl) riskLevelEl.textContent = '3,85 m';
-        if (riskBadgeEl) {
-          riskBadgeEl.textContent = 'CRÍTICO: Transbordamento Ativo';
-          riskBadgeEl.className = 'inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500 text-white';
+      document.getElementById('nbCrimeRate').textContent = nb.crimeRate;
+      document.getElementById('nbCrimeTrend').textContent = nb.crimeTrend;
+      document.getElementById('nbInvestment').textContent = nb.investment;
+      document.getElementById('nbInvestmentDetail').textContent = nb.investmentDetail;
+      document.getElementById('nbHealthCount').textContent = nb.healthCount;
+      document.getElementById('nbCommerceSummary').textContent = nb.commerceSummary;
+      document.getElementById('mapRegionTitle').textContent = `Mapa Interativo • ${nb.name}`;
+
+      if (neighborhoodLayer) neighborhoodLayer.clearLayers();
+      if (map) {
+        if (nb.bounds) {
+          L.rectangle(nb.bounds, {
+            color: '#6D28D9',
+            weight: 2,
+            fillColor: '#8B5CF6',
+            fillOpacity: 0.08,
+            dashArray: '6, 6'
+          }).addTo(neighborhoodLayer);
+          map.fitBounds(nb.bounds, { padding: [25, 25] });
+        } else {
+          map.flyTo(nb.center, nb.zoom, { duration: 0.8 });
         }
-        if (map && !document.getElementById('view-dashboard').classList.contains('hidden')) {
-          map.flyTo([-22.4235, -45.4555], 15, { duration: 0.9 });
-        }
-        showToast('Simulação de Alerta de Enchente ativada no Rio Sapucaí!', 'error');
-      } else {
-        btn.className = 'inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-all shadow-sm';
-        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
-        label.textContent = 'Rio Sapucaí: 1,45m (Normal) • Simular Alerta';
-        banner.classList.add('hidden');
-        if (riskLevelEl) riskLevelEl.textContent = '1,45 m';
-        if (riskBadgeEl) {
-          riskBadgeEl.textContent = 'Normal (Cota Atenção: 2,80m)';
-          riskBadgeEl.className = 'inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/30 text-emerald-100';
-        }
-        showToast('Nível do Rio Sapucaí normalizado (1,45m).');
       }
-      renderClimateAndShelters();
-      renderRisksDashboard();
+
+      renderPoisOnMap();
+      renderReportsOnMap();
+      renderReportsList();
     }
 
-    // RENDERIZAÇÃO DA ABA EXCLUSIVA: MONITORAMENTO HIDROLÓGICO & DEFESA CIVIL
-    function renderRisksDashboard() {
-      const chartContainer = document.getElementById('riverLevelChartContainer');
-      const forecastContainer = document.getElementById('stormForecastList');
-      const incidentsContainer = document.getElementById('riskIncidentsGrid');
-      if (!chartContainer || !forecastContainer || !incidentsContainer) return;
+    function setMapBaseLayer(type) {
+      if (!map) return;
+      const btnStreets = document.getElementById('btnLayerStreets');
+      const btnSat = document.getElementById('btnLayerSatellite');
+      if (type === 'satellite') {
+        if (map.hasLayer(streetsLayer)) map.removeLayer(streetsLayer);
+        satelliteLayer.addTo(map);
+        btnSat.className = 'px-2.5 py-1 rounded-lg bg-purple-700 text-white shadow-sm transition-all';
+        btnStreets.className = 'px-2.5 py-1 rounded-lg text-slate-700 hover:text-purple-800 transition-all';
+      } else {
+        if (map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+        streetsLayer.addTo(map);
+        btnStreets.className = 'px-2.5 py-1 rounded-lg bg-purple-700 text-white shadow-sm transition-all';
+        btnSat.className = 'px-2.5 py-1 rounded-lg text-slate-700 hover:text-purple-800 transition-all';
+      }
+    }
 
-      const readings = riverDailyReadings.map((r, idx) => {
-        if (idx === riverDailyReadings.length - 1 && floodAlertActive) {
-          return { ...r, level: 3.85, rainMm: 74, status: 'Alerta' };
-        }
-        return r;
+    function toggleCategoryFilter(cat) {
+      if (activeCategories.has(cat)) activeCategories.delete(cat);
+      else activeCategories.add(cat);
+      renderReportsOnMap();
+    }
+
+    function togglePoiFilter(group) {
+      if (activePoiGroups.has(group)) activePoiGroups.delete(group);
+      else activePoiGroups.add(group);
+      renderClimateAndShelters();
+      renderPoisOnMap();
+    }
+
+    // RENDERIZA PONTOS DE ÔNIBUS E ESTABELECIMENTOS NO MAPA
+    function renderPoisOnMap() {
+      if (!poisLayer) return;
+      poisLayer.clearLayers();
+      const searchQ = (document.getElementById('globalSearchInput')?.value || '').toLowerCase().trim();
+
+      if (activePoiGroups.has('bus')) {
+        busStops.forEach(stop => {
+          if (selectedNeighborhood !== 'all' && stop.neighborhood !== selectedNeighborhood) return;
+          if (searchQ && !stop.name.toLowerCase().includes(searchQ) && !stop.street.toLowerCase().includes(searchQ)) return;
+
+          L.marker([stop.lat, stop.lng], {
+            icon: L.divIcon({
+              className: '',
+              html: `<div class="custom-pin" style="background:#4F46E5;width:30px;height:30px;font-size:14px;">🚌</div>`,
+              iconSize: [30, 30],
+              iconAnchor: [15, 15]
+            })
+          })
+          .on('click', () => openBusStopModal(stop.id))
+          .addTo(poisLayer);
+        });
+      }
+
+      establishments.forEach(est => {
+        if (!activePoiGroups.has(est.group)) return;
+        if (selectedNeighborhood !== 'all' && est.neighborhood !== selectedNeighborhood) return;
+        if (searchQ && !est.name.toLowerCase().includes(searchQ) && !est.sector.toLowerCase().includes(searchQ) && !est.address.toLowerCase().includes(searchQ)) return;
+
+        L.marker([est.lat, est.lng], {
+          icon: L.divIcon({
+            className: '',
+            html: `<div class="custom-pin" style="background:${est.pinColor};width:32px;height:32px;font-size:15px;">${est.emoji}</div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
+          })
+        })
+        .on('click', () => openEstablishmentModal(est.id, false))
+        .addTo(poisLayer);
       });
+    }
 
-      const maxScale = 4.2;
-      chartContainer.innerHTML = `
-        <div class="relative pt-6 pb-2">
-          <div class="absolute left-0 right-0 border-t-2 border-dashed border-rose-400 flex justify-end pr-2 pointer-events-none" style="bottom: ${(3.5 / maxScale) * 180 + 28}px;">
-            <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded -mt-3">Cota Transbordamento: 3,50m</span>
+    function renderReportsOnMap() {
+      if (!reportsLayer) return;
+      reportsLayer.clearLayers();
+      const searchQ = (document.getElementById('globalSearchInput')?.value || '').toLowerCase().trim();
+
+      reports.forEach(rep => {
+        if (!activeCategories.has(rep.category)) return;
+        if (selectedNeighborhood !== 'all' && rep.neighborhood !== selectedNeighborhood) return;
+        if (searchQ && !rep.title.toLowerCase().includes(searchQ) && !rep.address.toLowerCase().includes(searchQ)) return;
+
+        const meta = categoryMeta[rep.category] || categoryMeta.buraco;
+        L.marker([rep.lat, rep.lng], {
+          icon: L.divIcon({
+            className: '',
+            html: `<div class="custom-pin" style="background:${meta.color};width:28px;height:28px;font-size:12px;">!</div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14]
+          })
+        })
+        .bindPopup(`
+          <div class="text-xs space-y-1 max-w-[210px]">
+            <span class="font-bold text-[10px] uppercase px-2 py-0.5 rounded ${meta.badgeBg}">${meta.label}</span>
+            <p class="font-bold text-slate-900">${rep.title}</p>
+            <p class="text-slate-600">${rep.address}</p>
+            <p class="text-[11px] font-semibold text-purple-700">Status: ${rep.status}</p>
           </div>
+        `)
+        .addTo(reportsLayer);
+      });
+    }
 
-          <div class="grid grid-cols-7 gap-2 sm:gap-4 items-end h-[210px] px-2 border-b border-slate-200">
-            ${readings.map(item => {
-              const barHeight = Math.min(180, Math.round((item.level / maxScale) * 180));
-              let barColor = 'bg-purple-600';
-              if (item.level >= 3.5) barColor = 'bg-rose-600 animate-pulse';
-              else if (item.level >= 2.6) barColor = 'bg-amber-500';
+    // MODAL DE HORÁRIOS DE ÔNIBUS
+    function openBusStopModal(stopId) {
+      const stop = busStops.find(s => s.id === stopId);
+      if (!stop) return;
+      document.getElementById('busStopTitle').textContent = stop.name;
+      document.getElementById('busStopBody').innerHTML = `
+        <p class="text-xs text-slate-500 flex items-center gap-1.5">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-purple-600"></i> ${stop.street}
+        </p>
+        <div class="space-y-3">
+          ${stop.lines.map(line => `
+            <div class="p-4 rounded-2xl border border-purple-200 bg-purple-50/60 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-extrabold text-xs">Linha ${line.code}</span>
+                  <strong class="text-sm text-slate-900">${line.name}</strong>
+                </div>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">Próximo: ${line.nextIn}</span>
+              </div>
+              <p class="text-xs text-purple-900 font-semibold">Destino: ${line.destination}</p>
+              <div class="text-[11px] text-slate-600 space-y-1 pt-1 border-t border-purple-200/60">
+                <p><strong>Dias Úteis:</strong> ${line.weekday}</p>
+                <p><strong>Sábados, Domingos e Feriados:</strong> ${line.weekend}</p>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      document.getElementById('busStopModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeBusStopModal() {
+      document.getElementById('busStopModal').classList.add('hidden');
+    }
+
+    // MODAL DE ESTABELECIMENTO (CONSULTA PÚBLICA + MODO PRESENCIAL QR CODE EM ABAS)
+    function openEstablishmentModal(estId, unlockQr = false) {
+      const est = establishments.find(e => e.id === estId);
+      if (!est) return;
+      currentEstablishment = est;
+      if (unlockQr) {
+        qrVerifiedEstId = est.id;
+        activeReviewSealStep = 0;
+        showToast('Tag NFC / QR Code validada! Abas de avaliação liberadas.');
+      }
+      document.getElementById('estSectorBadge').textContent = est.sector;
+      document.getElementById('estModalName').textContent = est.name;
+      document.getElementById('estModalAddress').textContent = est.address;
+      renderEstablishmentModalBody();
+      document.getElementById('establishmentModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeEstablishmentModal() {
+      document.getElementById('establishmentModal').classList.add('hidden');
+    }
+
+    function renderEstablishmentModalBody() {
+      const est = currentEstablishment;
+      if (!est) return;
+      const isQrUnlocked = qrVerifiedEstId === est.id;
+      const currentCrit = starCriteriaConfig[activeReviewSealStep];
+      const currentDraft = qrDraftRatings[currentCrit.key];
+      const reqList = currentCrit.starRequirements[currentDraft.stars] || [];
+
+      document.getElementById('estModalBody').innerHTML = `
+        <!-- Quadro de Status dos 5 Selos Coloridos (Regra >= 75%) -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Selos de Qualidade (Ligam com ≥ 75% de 5★)</span>
+            <span class="text-xs font-semibold text-slate-500">${est.reviewCount} avaliações</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            ${starCriteriaConfig.map(c => {
+              const st = getSealStats(est, c.key);
               return `
-                <div class="flex flex-col items-center justify-end h-full gap-1.5">
-                  <span class="text-[11px] font-extrabold text-slate-800">${item.level.toFixed(2).replace('.', ',')}m</span>
-                  <div class="w-full max-w-[42px] rounded-t-xl ${barColor} transition-all duration-500 shadow-sm relative group" style="height: ${barHeight}px;">
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap pointer-events-none">${item.rainMm}mm chuva</span>
+                <div class="p-2.5 rounded-xl border ${st.isOn ? c.badgeClass : 'bg-slate-50 border-slate-200 text-slate-500'} space-y-1">
+                  <div class="flex items-center justify-between text-xs font-bold">
+                    <span>★ ${c.label}</span>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold ${st.isOn ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-700'}">${st.pct}% • ${st.isOn ? 'ON' : 'OFF'}</span>
                   </div>
-                  <span class="text-[11px] font-semibold text-slate-500">${item.day}</span>
+                  <div class="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                    <div class="h-full transition-all" style="width:${st.pct}%; background:${st.isOn ? c.colorHex : '#94A3B8'}"></div>
+                  </div>
                 </div>
               `;
             }).join('')}
           </div>
         </div>
-      `;
 
-      forecastContainer.innerHTML = stormForecastDays.map(f => `
-        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-1.5">
-          <div class="flex items-center justify-between gap-2">
-            <span class="font-bold text-slate-900 text-xs sm:text-sm">${f.day}</span>
-            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${f.badgeClass}">${f.riskLevel}</span>
+        <!-- Selo Fiscalizador Oficial -->
+        <div class="p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-1">
+          <div class="flex items-center justify-between flex-wrap gap-1">
+            <strong class="text-xs text-emerald-900">🛡️ ${est.sealStatus}</strong>
+            <span class="text-[11px] font-semibold text-emerald-700">${est.lastAudit}</span>
           </div>
-          <div class="flex flex-wrap items-center gap-3 text-xs">
-            <span class="text-slate-600">🌧️ Chuva: <strong>${f.rainChance}</strong> (${f.rainVolume})</span>
-            <span class="text-purple-800 font-bold bg-purple-100 px-2 py-0.5 rounded">📈 Elevação Rio: ${f.riverRisePct}</span>
-          </div>
-          <p class="text-[11px] text-slate-500 leading-relaxed">${f.note}</p>
+          <p class="text-[11px] text-slate-600">${est.auditSummary}</p>
         </div>
-      `).join('');
 
-      incidentsContainer.innerHTML = riskIncidentsData.map(inc => `
-        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${inc.badge}">${inc.type} • ${inc.neighborhood}</span>
-            <span class="text-[11px] font-bold text-slate-700">${inc.status}</span>
-          </div>
-          <h4 class="font-bold text-slate-900 text-sm">${inc.title}</h4>
-          <p class="text-xs text-slate-600 leading-relaxed">${inc.detail}</p>
-        </div>
-      `).join('');
-    }
+        <!-- Fluxo de Avaliação Exclusivo via QR Code -->
+        ${isQrUnlocked ? `
+          <div class="p-4 rounded-2xl border-2 border-purple-500 bg-purple-50/70 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-900 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Plaquinha QR Code Validada • Avalie cada selo:
+              </span>
+              <span class="text-[11px] font-bold text-purple-700">Aba ${activeReviewSealStep + 1} de ${starCriteriaConfig.length}</span>
+            </div>
 
-    // RENDERIZAÇÃO DA ABA EXCLUSIVA: AVALIAÇÕES & 5 ESTRELAS COLORIDAS
-    function renderReviewsDirectory() {
-      const grid = document.getElementById('reviewsDirectoryGrid');
-      if (!grid) return;
+            <!-- Abas dos 5 Selos -->
+            <div class="flex flex-wrap gap-1.5">
+              ${starCriteriaConfig.map((c, idx) => `
+                <button type="button" onclick="setReviewSealStep(${idx})" class="px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all ${idx === activeReviewSealStep ? 'bg-purple-700 text-white border-purple-700 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:border-purple-400'}">
+                  ★ ${c.label} (${qrDraftRatings[c.key].stars}★)
+                </button>
+              `).join('')}
+            </div>
 
-      const q = (document.getElementById('reviewsSearchInput')?.value || '').toLowerCase().trim();
-      const sector = document.getElementById('reviewsSectorFilter')?.value || 'all';
-      const starFilter = document.getElementById('reviewsStarFilter')?.value || 'all';
-
-      const filtered = establishments.filter(est => {
-        const matchSearch = !q || est.name.toLowerCase().includes(q) || est.sector.toLowerCase().includes(q) || est.address.toLowerCase().includes(q);
-        const matchSector = sector === 'all' || est.sector === sector;
-        const matchStar = starFilter === 'all' || getSealStats(est, starFilter).isOn;
-        return matchSearch && matchSector && matchStar;
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-slate-200 text-center text-sm text-slate-500">Nenhum estabelecimento encontrado com esse filtro.</div>`;
-        return;
-      }
-
-      grid.innerHTML = filtered.map(est => {
-        const earnedCount = countEarnedStars(est);
-        return `
-          <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:border-purple-300 transition-all flex flex-col justify-between space-y-4">
-            <div class="space-y-3">
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-3">
-                  <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl text-white shrink-0" style="background:${est.pinColor}">${est.emoji}</div>
-                  <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-100 text-purple-800">${est.sector}</span>
-                    <h3 class="font-bold text-slate-900 text-base mt-1">${est.name}</h3>
-                    <p class="text-xs text-slate-500">${est.address}</p>
-                  </div>
+            <!-- Seletor de Estrelas + Requisitos Dinâmicos -->
+            <div class="p-3.5 rounded-xl bg-white border border-purple-200 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h4 class="font-bold text-sm text-slate-900">Selo de ${currentCrit.label}</h4>
+                  <p class="text-[11px] text-slate-500">${currentCrit.desc}</p>
                 </div>
-                <div class="text-right shrink-0">
-                  <div class="flex items-center gap-0.5 justify-end">${renderColoredStarsRow(est, 'text-lg')}</div>
-                  <span class="text-[11px] font-bold text-slate-700 block mt-0.5">${earnedCount}/5 Selos Ligados (${est.reviewCount} aval.)</span>
+                <div class="flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-xl">
+                  ${[1, 2, 3, 4, 5].map(starNum => `
+                    <button type="button" onclick="setDraftSealStars('${currentCrit.key}', ${starNum})" class="text-xl leading-none transition-transform hover:scale-110 ${starNum <= currentDraft.stars ? currentCrit.textClass : 'text-slate-300'}">★</button>
+                  `).join('')}
+                  <span class="ml-1 text-xs font-extrabold text-slate-800">${currentDraft.stars}★</span>
                 </div>
               </div>
 
-              <!-- Status de Cada Selo (Ligado >=75% vs Desligado <75%) -->
-              <div class="flex flex-wrap gap-1.5">
-                ${starCriteriaConfig.map(c => {
-                  const st = getSealStats(est, c.key);
-                  return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${st.isOn ? c.badgeClass : 'bg-slate-100 text-slate-400 border-slate-200'}">★ ${c.label}: ${st.pct}% ${st.isOn ? '• Ligado' : '• Desligado'}</span>`;
-                }).join('')}
+              <div class="space-y-1.5">
+                <p class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Selecione os requisitos observados para ${currentDraft.stars} estrela(s):</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  ${reqList.map(req => {
+                    const checked = currentDraft.selectedReqs.has(req);
+                    return `
+                      <button type="button" onclick="toggleDraftRequirement('${currentCrit.key}', '${req.replace(/'/g, "\\'")}')" class="text-left p-2.5 rounded-xl border text-xs font-semibold transition-all flex items-center gap-2 ${checked ? 'bg-purple-600 text-white border-purple-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-purple-400'}">
+                        <span class="w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold shrink-0 ${checked ? 'bg-white text-purple-700' : 'border border-slate-400'}">${checked ? '✓' : ''}</span>
+                        <span>${req}</span>
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
               </div>
 
-              <!-- Problemas Relatados pela Comunidade -->
-              <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-1">
-                <p class="text-[11px] font-bold uppercase text-amber-900">⚠️ Pontos de Atenção / Problemas Relatados:</p>
-                <ul class="text-xs text-slate-700 list-disc pl-4 space-y-0.5">
-                  ${(est.reportedProblems || []).map(p => `<li>${p}</li>`).join('')}
-                </ul>
-              </div>
-
-              <!-- Selo Fiscalizador -->
-              <div class="text-[11px] text-emerald-800 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-200 flex items-center justify-between gap-2">
-                <span>🛡️ <strong>${est.sealStatus}</strong> (${est.regulator})</span>
+              <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                <button type="button" ${activeReviewSealStep === 0 ? 'disabled' : ''} onclick="setReviewSealStep(${activeReviewSealStep - 1})" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 disabled:opacity-40">← Selo Anterior</button>
+                ${activeReviewSealStep < starCriteriaConfig.length - 1
+                  ? `<button type="button" onclick="setReviewSealStep(${activeReviewSealStep + 1})" class="px-3.5 py-1.5 rounded-lg bg-purple-100 text-purple-900 font-bold text-xs hover:bg-purple-200">Próximo Selo (${starCriteriaConfig[activeReviewSealStep + 1].label}) →</button>`
+                  : `<span class="text-[11px] font-bold text-emerald-700">✓ Todos os 5 selos revisados</span>`
+                }
               </div>
             </div>
 
-            <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-              <button onclick="focusEstablishmentOnMap('${est.id}')" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-semibold text-xs transition-colors">
-                Ver no Mapa
+            <div class="flex gap-2">
+              <input id="qrReviewCommentInput" type="text" placeholder="Comentário final sobre sua experiência presencial no local..." class="flex-1 px-3.5 py-2 text-xs rounded-xl border border-slate-300 bg-white" />
+              <button type="button" onclick="submitQrCodeReview()" class="px-4 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0 shadow-sm">
+                Enviar Avaliação Verificada
               </button>
-              <div class="flex items-center gap-2">
-                <button onclick="openEstablishmentModal('${est.id}', false)" class="px-3 py-2 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs">
-                  Ver Avaliações
-                </button>
-                <button onclick="openEstablishmentModal('${est.id}', true)" class="px-3.5 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm flex items-center gap-1.5">
-                  <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Simular QR Code
-                </button>
+            </div>
+          </div>
+        ` : `
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="text-xs space-y-0.5">
+              <strong class="text-slate-900 block">🔒 Avaliação bloqueada pelo site</strong>
+              <p class="text-slate-600">Para avaliar este local, leia a plaquinha <strong>QR Code / Tag NFC</strong> disponível no estabelecimento.</p>
+            </div>
+            <button type="button" onclick="openEstablishmentModal('${est.id}', true)" class="px-3.5 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0 flex items-center gap-1.5">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Simular Leitura QR Code
+            </button>
+          </div>
+        `}
+
+        <!-- Lista Pública de Relatos dos Clientes -->
+        <div class="space-y-2.5">
+          <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-600">Relatos de Clientes Presenciais (${est.reviews.length})</h4>
+          ${est.reviews.map(rev => `
+            <div class="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <strong class="text-xs text-slate-900">${rev.user}</strong>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">✓ QR Code Verificado</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px] font-bold">
+                  ${starCriteriaConfig.map(c => `<span class="${c.textClass}">${(rev.summaryStars && rev.summaryStars[c.key]) || 5}★</span>`).join(' ')}
+                </div>
               </div>
+              <div class="flex flex-wrap gap-1">
+                ${(rev.tags || []).map(t => `<span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-purple-50 text-purple-800 border border-purple-100">${t}</span>`).join('')}
+              </div>
+              <p class="text-xs text-slate-600">${rev.text}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function setReviewSealStep(stepIdx) {
+      activeReviewSealStep = Math.max(0, Math.min(starCriteriaConfig.length - 1, stepIdx));
+      renderEstablishmentModalBody();
+    }
+
+    function setDraftSealStars(critKey, stars) {
+      const crit = starCriteriaConfig.find(c => c.key === critKey);
+      const defaultReqs = crit && crit.starRequirements[stars] ? [crit.starRequirements[stars][0]] : [];
+      qrDraftRatings[critKey] = {
+        stars,
+        selectedReqs: new Set(defaultReqs)
+      };
+      renderEstablishmentModalBody();
+    }
+
+    function toggleDraftRequirement(critKey, reqText) {
+      const set = qrDraftRatings[critKey].selectedReqs;
+      if (set.has(reqText)) set.delete(reqText);
+      else set.add(reqText);
+      renderEstablishmentModalBody();
+    }
+
+    function submitQrCodeReview() {
+      const est = currentEstablishment;
+      if (!est) return;
+      const comment = (document.getElementById('qrReviewCommentInput')?.value || '').trim() || 'Avaliação presencial enviada via QR Code do estabelecimento.';
+
+      est.reviewCount += 1;
+      const summaryStars = {};
+      const collectedTags = [];
+
+      starCriteriaConfig.forEach(c => {
+        const draft = qrDraftRatings[c.key];
+        summaryStars[c.key] = draft.stars;
+        if (draft.stars === 5) {
+          est.fiveStarCounts[c.key] = (est.fiveStarCounts[c.key] || 0) + 1;
+        }
+        draft.selectedReqs.forEach(r => {
+          if (collectedTags.length < 4) collectedTags.push(r);
+        });
+      });
+
+      est.reviews.unshift({
+        user: 'Cidadão Presencial',
+        verifiedQr: true,
+        summaryStars,
+        tags: collectedTags,
+        text: comment
+      });
+
+      qrVerifiedEstId = null;
+      renderEstablishmentModalBody();
+      renderReviewsDirectory();
+      showToast('Avaliação via QR Code registrada e percentuais dos selos atualizados!');
+    }
+
+    // ORÇAMENTO PARTICIPATIVO & LISTA DE OCORRÊNCIAS
+    function renderParticipatoryPoll() {
+      const container = document.getElementById('participatoryPollOptions');
+      const totalEl = document.getElementById('pollTotalVotes');
+      if (!container) return;
+      const total = pollOptions.reduce((acc, o) => acc + o.votes, 0);
+      if (totalEl) totalEl.textContent = `${total} votos`;
+
+      container.innerHTML = pollOptions.map(opt => {
+        const pct = total ? Math.round((opt.votes / total) * 100) : 0;
+        const isVoted = userVotedPollId === opt.id;
+        return `
+          <button type="button" onclick="voteParticipatoryPoll('${opt.id}')" class="w-full text-left p-3 rounded-xl border transition-all relative overflow-hidden ${isVoted ? 'border-purple-600 bg-purple-50' : 'border-slate-200 bg-slate-50/70 hover:border-purple-400'}">
+            <div class="absolute inset-y-0 left-0 bg-purple-200/40 pointer-events-none" style="width:${pct}%"></div>
+            <div class="relative flex items-center justify-between gap-2 text-xs">
+              <span class="font-semibold text-slate-800">${opt.label}</span>
+              <span class="font-extrabold text-purple-800 shrink-0">${pct}%</span>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function voteParticipatoryPoll(optId) {
+      if (userVotedPollId === optId) return;
+      if (userVotedPollId) {
+        const prev = pollOptions.find(o => o.id === userVotedPollId);
+        if (prev) prev.votes = Math.max(0, prev.votes - 1);
+      }
+      const target = pollOptions.find(o => o.id === optId);
+      if (target) target.votes += 1;
+      userVotedPollId = optId;
+      renderParticipatoryPoll();
+      showToast('Voto registrado no Orçamento Participativo!');
+    }
+
+    function renderReportsList() {
+      const listEl = document.getElementById('recentReportsList');
+      if (!listEl) return;
+      const statusFilter = document.getElementById('statusFilterSelect')?.value || 'all';
+
+      const filtered = reports.filter(r => {
+        const matchNb = selectedNeighborhood === 'all' || r.neighborhood === selectedNeighborhood;
+        const matchSt = statusFilter === 'all' || r.status === statusFilter;
+        return matchNb && matchSt;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Nenhuma ocorrência encontrada neste filtro.</p>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(r => {
+        const meta = categoryMeta[r.category] || categoryMeta.buraco;
+        return `
+          <div onclick="if(map){map.flyTo([${r.lat}, ${r.lng}], 17)}" class="cursor-pointer p-3 rounded-xl border border-slate-200 bg-slate-50/60 hover:border-purple-400 transition-all flex gap-3 items-center">
+            <img src="${r.photo}" alt="${r.title}" class="w-14 h-14 rounded-lg object-cover shrink-0" />
+            <div class="min-w-0 flex-1 space-y-1">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${meta.badgeBg}">${meta.label}</span>
+                <span class="text-[10px] font-bold text-purple-700">${r.status}</span>
+              </div>
+              <p class="text-xs font-bold text-slate-900 truncate">${r.title}</p>
+              <p class="text-[11px] text-slate-500 truncate">${r.address}</p>
             </div>
           </div>
         `;
       }).join('');
-      lucide.createIcons();
-    }
-
-    function focusEstablishmentOnMap(id) {
-      const est = establishments.find(e => e.id === id);
-      if (!est || !map) return;
-      switchMainView('dashboard');
-      if (selectedNeighborhood !== 'all' && selectedNeighborhood !== est.neighborhood) selectNeighborhood('all');
-      map.flyTo([est.lat, est.lng], 17, { duration: 0.8 });
-      setTimeout(() => openEstablishmentModal(est.id, false), 450);
     }
 
     // CAMADA DEFESA CIVIL: ABRIGOS TEMPORÁRIOS (SEM FAIXA POLIGONAL NO MAPA)
@@ -1989,632 +2464,232 @@
       }
     }
 
-    // RENDERIZAR PONTOS DE ÔNIBUS E ESTABELECIMENTOS NO MAPA
-    function renderPoisOnMap() {
-      if (!poisLayer) return;
-      poisLayer.clearLayers();
-      const q = (document.getElementById('globalSearchInput')?.value || '').toLowerCase().trim();
+    // SISTEMA INTELIGENTE DE PALPITES DE RUAS, BAIRROS E ESTABELECIMENTOS (AUTOCOMPLETE VERTICAL)
+    let nominatimDebounceTimer = null;
 
-      if (activePoiGroups.has('bus')) {
-        busStops
-          .filter(b => (selectedNeighborhood === 'all' || b.neighborhood === selectedNeighborhood) && (!q || b.name.toLowerCase().includes(q) || b.street.toLowerCase().includes(q)))
-          .forEach(stop => {
-            const icon = L.divIcon({
-              className: '',
-              html: `<div class="custom-pin" style="background:#4F46E5;width:30px;height:30px;font-size:14px;">🚌</div>`,
-              iconSize: [30, 30],
-              iconAnchor: [15, 15]
+    function normalizeText(str) {
+      return (str || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function getMatchingSuggestions(rawQuery) {
+      const q = normalizeText(rawQuery).trim();
+      if (!q) return [];
+
+      const results = [];
+      const seen = new Set();
+
+      // 1. Ruas, Avenidas e Praças de Itajubá (prioriza quem começa com o termo digitado ou tem palavra começando com o termo)
+      itajubaStreetsCatalog.forEach(st => {
+        const normName = normalizeText(st.name);
+        const normShort = normName.replace(/^(rua|avenida|av\.|praca|parque)\s+/, '');
+        if (normName.includes(q) || normShort.includes(q) || normalizeText(st.district).includes(q)) {
+          const startsPriority = normName.startsWith(q) || normShort.startsWith(q) ? 0 : 1;
+          const key = `street-${st.name}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            results.push({
+              priority: startsPriority,
+              icon: st.type === 'Avenida' ? '🛣️' : (st.type === 'Praça' || st.type === 'Parque' ? '🌳' : '📍'),
+              title: st.name,
+              subtitle: `${st.type} • Bairro ${st.district}`,
+              lat: st.lat,
+              lng: st.lng,
+              actionType: 'flyTo'
             });
-            const marker = L.marker([stop.lat, stop.lng], { icon });
-            marker.on('click', () => openBusStopModal(stop.id));
-            marker.bindTooltip(`🚌 ${stop.name} (Ver horários)`, { direction: 'top' });
-            marker.addTo(poisLayer);
-          });
+          }
+        }
+      });
+
+      // 2. Bairros de Itajubá
+      Object.entries(neighborhoodsData).forEach(([nbKey, nb]) => {
+        if (nbKey === 'all') return;
+        if (normalizeText(nb.name).includes(q)) {
+          const key = `nb-${nbKey}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            results.push({
+              priority: normalizeText(nb.name).startsWith(q) ? 0 : 2,
+              icon: '🏘️',
+              title: nb.name,
+              subtitle: 'Bairro / Região de Itajubá - MG',
+              lat: nb.center[0],
+              lng: nb.center[1],
+              nbKey,
+              actionType: 'neighborhood'
+            });
+          }
+        }
+      });
+
+      // 3. Estabelecimentos e Unidades de Saúde
+      establishments.forEach(est => {
+        if (normalizeText(est.name).includes(q) || normalizeText(est.address).includes(q) || normalizeText(est.sector).includes(q)) {
+          const key = `est-${est.id}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            results.push({
+              priority: normalizeText(est.name).startsWith(q) ? 1 : 3,
+              icon: est.emoji,
+              title: est.name,
+              subtitle: `${est.sector} • ${est.address}`,
+              lat: est.lat,
+              lng: est.lng,
+              estId: est.id,
+              actionType: 'establishment'
+            });
+          }
+        }
+      });
+
+      results.sort((a, b) => a.priority - b.priority || a.title.localeCompare(b.title));
+      return results.slice(0, 8);
+    }
+
+    function renderSuggestionDropdown(containerId, items, inputId, queryText) {
+      const box = document.getElementById(containerId);
+      if (!box) return;
+
+      if (!queryText || !queryText.trim()) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
       }
 
-      establishments
-        .filter(est => {
-          const matchGroup = activePoiGroups.has(est.group);
-          const matchNeighborhood = selectedNeighborhood === 'all' || est.neighborhood === selectedNeighborhood;
-          const matchSearch = !q || est.name.toLowerCase().includes(q) || est.sector.toLowerCase().includes(q) || est.address.toLowerCase().includes(q);
-          return matchGroup && matchNeighborhood && matchSearch;
-        })
-        .forEach(est => {
-          const icon = L.divIcon({
+      if (items.length === 0) {
+        box.innerHTML = `
+          <div class="px-3.5 py-2.5 text-xs text-slate-500 flex items-center justify-between">
+            <span>Buscando "<strong>${queryText}</strong>" no mapa de Itajubá...</span>
+          </div>
+        `;
+        box.classList.remove('hidden');
+        return;
+      }
+
+      box.innerHTML = items.map((item, idx) => `
+        <button
+          type="button"
+          onmousedown="applySearchSuggestion(${idx}, '${containerId}', '${inputId}')"
+          class="w-full text-left px-3.5 py-2.5 hover:bg-purple-50 transition-colors flex items-center gap-2.5 text-xs"
+        >
+          <span class="w-7 h-7 rounded-lg bg-purple-100/80 flex items-center justify-center text-sm shrink-0">${item.icon}</span>
+          <div class="min-w-0 flex-1">
+            <p class="font-bold text-slate-900 truncate">${item.title}</p>
+            <p class="text-[11px] text-slate-500 truncate">${item.subtitle}</p>
+          </div>
+          <span class="text-[10px] font-bold text-purple-700 shrink-0">Ir →</span>
+        </button>
+      `).join('');
+
+      box._currentItems = items;
+      box.classList.remove('hidden');
+    }
+
+    function handlePlaceAutocomplete(value, containerId, inputId) {
+      const localMatches = getMatchingSuggestions(value);
+      renderSuggestionDropdown(containerId, localMatches, inputId, value);
+
+      clearTimeout(nominatimDebounceTimer);
+      const trimmed = (value || '').trim();
+      if (trimmed.length >= 3) {
+        nominatimDebounceTimer = setTimeout(async () => {
+          try {
+            const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=-45.5150,-22.3750,-45.3900,-22.4750&q=${encodeURIComponent(trimmed + ', Itajubá, Minas Gerais')}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (!Array.isArray(data) || data.length === 0) return;
+
+            const combined = [...localMatches];
+            const existingTitles = new Set(combined.map(i => normalizeText(i.title)));
+
+            data.forEach(place => {
+              const shortName = (place.display_name || '').split(',')[0].trim();
+              const subParts = (place.display_name || '').split(',').slice(1, 3).join(',').trim();
+              if (shortName && !existingTitles.has(normalizeText(shortName))) {
+                existingTitles.add(normalizeText(shortName));
+                combined.push({
+                  priority: 4,
+                  icon: '🗺️',
+                  title: shortName,
+                  subtitle: subParts || 'Itajubá • MG',
+                  lat: parseFloat(place.lat),
+                  lng: parseFloat(place.lon),
+                  actionType: 'flyTo'
+                });
+              }
+            });
+
+            renderSuggestionDropdown(containerId, combined.slice(0, 8), inputId, trimmed);
+          } catch (e) {}
+        }, 320);
+      }
+    }
+
+    function applySearchSuggestion(index, containerId, inputId) {
+      const box = document.getElementById(containerId);
+      const input = document.getElementById(inputId);
+      if (!box || !box._currentItems || !box._currentItems[index]) return;
+
+      const item = box._currentItems[index];
+      if (input) input.value = item.title;
+      box.classList.add('hidden');
+
+      switchMainView('dashboard');
+
+      if (item.actionType === 'neighborhood' && item.nbKey) {
+        const nbSelect = document.getElementById('neighborhoodSelect');
+        if (nbSelect) nbSelect.value = item.nbKey;
+        selectNeighborhood(item.nbKey);
+        showToast(`Bairro selecionado: ${item.title}`);
+        return;
+      }
+
+      if (selectedNeighborhood !== 'all') {
+        selectedNeighborhood = 'all';
+        const nbSelect = document.getElementById('neighborhoodSelect');
+        if (nbSelect) nbSelect.value = 'all';
+        selectNeighborhood('all');
+      }
+
+      if (map && item.lat && item.lng) {
+        map.flyTo([item.lat, item.lng], 17, { duration: 0.85 });
+        if (tempClickMarker) map.removeLayer(tempClickMarker);
+        tempClickMarker = L.marker([item.lat, item.lng], {
+          icon: L.divIcon({
             className: '',
-            html: `<div class="custom-pin" style="background:${est.pinColor};width:30px;height:30px;font-size:14px;">${est.emoji}</div>`,
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
-          });
-          const marker = L.marker([est.lat, est.lng], { icon });
-          marker.on('click', () => openEstablishmentModal(est.id, false));
-          marker.bindTooltip(`${est.emoji} ${est.name} • ${countEarnedStars(est)}/5 Selos Ligados`, { direction: 'top' });
-          marker.addTo(poisLayer);
-        });
-    }
-
-    function togglePoiFilter(group) {
-      if (activePoiGroups.has(group)) activePoiGroups.delete(group);
-      else activePoiGroups.add(group);
-      renderClimateAndShelters();
-      renderPoisOnMap();
-    }
-
-    // MODAL UNIVERSAL DE ESTABELECIMENTO (CONSULTA PÚBLICA VS MODO PRESENCIAL QR CODE / TAG NFC)
-    function openEstablishmentModal(id, viaQrScan = false) {
-      const est = establishments.find(e => e.id === id);
-      if (!est) return;
-      currentEstablishment = est;
-      qrVerifiedEstId = viaQrScan ? est.id : null;
-      activeReviewSealStep = 0;
-
-      // Reinicia o rascunho de avaliação para quando o QR Code for lido
-      qrDraftRatings = {
-        quality: { stars: 5, selectedReqs: new Set([starCriteriaConfig[0].starRequirements[5][0]]) },
-        accessibility: { stars: 5, selectedReqs: new Set([starCriteriaConfig[1].starRequirements[5][0]]) },
-        hygiene: { stars: 5, selectedReqs: new Set([starCriteriaConfig[2].starRequirements[5][0]]) },
-        service: { stars: 5, selectedReqs: new Set([starCriteriaConfig[3].starRequirements[5][0]]) },
-        price: { stars: 5, selectedReqs: new Set([starCriteriaConfig[4].starRequirements[5][0]]) }
-      };
-
-      document.getElementById('estSectorBadge').textContent = `${est.emoji} ${est.sector}`;
-      document.getElementById('estModalName').textContent = est.name;
-      document.getElementById('estModalAddress').textContent = est.address;
-
-      renderEstablishmentModalBody();
-      document.getElementById('establishmentModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function simulateQrScanInModal() {
-      if (!currentEstablishment) return;
-      qrVerifiedEstId = currentEstablishment.id;
-      activeReviewSealStep = 0;
-      renderEstablishmentModalBody();
-      lucide.createIcons();
-      showToast('Tag NFC / QR Code da plaquinha validado! Abas de avaliação liberadas.');
-    }
-
-    function setActiveSealStep(index) {
-      activeReviewSealStep = index;
-      renderEstablishmentModalBody();
-      lucide.createIcons();
-    }
-
-    function setSealStarLevel(sealKey, stars) {
-      const crit = starCriteriaConfig.find(c => c.key === sealKey);
-      if (!crit) return;
-      qrDraftRatings[sealKey].stars = stars;
-      qrDraftRatings[sealKey].selectedReqs = new Set([crit.starRequirements[stars][0]]);
-      renderEstablishmentModalBody();
-      lucide.createIcons();
-    }
-
-    function toggleSealRequirement(sealKey, reqText) {
-      const set = qrDraftRatings[sealKey].selectedReqs;
-      if (set.has(reqText)) {
-        if (set.size > 1) set.delete(reqText);
-      } else {
-        set.add(reqText);
-      }
-      renderEstablishmentModalBody();
-      lucide.createIcons();
-    }
-
-    function renderEstablishmentModalBody() {
-      const est = currentEstablishment;
-      if (!est) return;
-      const body = document.getElementById('estModalBody');
-      const earnedCount = countEarnedStars(est);
-      const isQrMode = qrVerifiedEstId === est.id;
-
-      const currentCrit = starCriteriaConfig[activeReviewSealStep];
-      const currentDraft = qrDraftRatings[currentCrit.key];
-      const availableReqs = currentCrit.starRequirements[currentDraft.stars] || [];
-
-      body.innerHTML = `
-        <!-- BLOCO 1: SELO REGULATÓRIO OFICIAL -->
-        <div class="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-2">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
-                <i data-lucide="shield-check" class="w-4 h-4"></i>
-              </span>
-              <div>
-                <h4 class="font-bold text-emerald-950 text-sm">${est.sealStatus}</h4>
-                <p class="text-[11px] font-semibold text-emerald-800">Órgão Integrado: ${est.regulator}</p>
-              </div>
-            </div>
-            <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white text-emerald-800 border border-emerald-200">${est.lastAudit}</span>
-          </div>
-          <p class="text-xs text-slate-700 leading-relaxed">${est.auditSummary}</p>
-          <div class="text-[11px] text-slate-500 bg-white/80 px-3 py-1.5 rounded-lg border border-emerald-100">
-            🔒 <strong>Privacidade Operacional:</strong> Fotos e vídeos internos das áreas críticas são enviados exclusivamente aos fiscais do órgão competente.
-          </div>
-        </div>
-
-        <!-- INFORMAÇÕES + LINK EXTERNO IFOOD -->
-        <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
-          <span class="text-slate-700 font-medium">${est.extraPublicInfo}</span>
-          ${est.ifoodUrl ? `
-            <a href="${est.ifoodUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shrink-0 transition-colors">
-              Abrir Cardápio no iFood ↗
-            </a>
-          ` : ''}
-        </div>
-
-        <!-- BLOCO 2: QUADRO DE SELOS COLORIDOS (REGRA DOS 75% DE NOTAS 5 ESTRELAS) -->
-        <div class="space-y-3 pt-1">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h4 class="font-bold text-slate-900 text-sm">Painel de Selos Coloridos (Meta ≥ 75% de 5★)</h4>
-              <p class="text-[11px] text-slate-500">Se menos de 75% das avaliações forem 5 estrelas, o selo permanece desligado</p>
-            </div>
-            <div class="text-right">
-              <div class="flex items-center gap-0.5 justify-end">${renderColoredStarsRow(est, 'text-xl')}</div>
-              <span class="block text-[11px] font-bold text-slate-600">${earnedCount}/5 Selos Ligados • ${est.reviewCount} avaliações</span>
-            </div>
-          </div>
-
-          <!-- Barras de Progresso de Cada Selo (Ligado vs Desligado) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-            ${starCriteriaConfig.map(c => {
-              const st = getSealStats(est, c.key);
-              return `
-                <div class="p-3 rounded-xl border ${st.isOn ? c.badgeClass : 'bg-slate-50 text-slate-500 border-slate-200'} text-xs space-y-1.5 transition-all">
-                  <div class="flex items-center justify-between gap-1.5">
-                    <span class="font-bold flex items-center gap-1.5 truncate">
-                      <span class="${st.isOn ? c.textClass : 'text-slate-300'} text-base leading-none">★</span>
-                      <span class="truncate">${c.label}</span>
-                    </span>
-                    <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md shrink-0 ${st.isOn ? 'bg-emerald-500/15 text-emerald-700 border border-emerald-500/30' : 'bg-slate-200/80 text-slate-600'}">
-                      ${st.pct}% • ${st.isOn ? 'ON' : 'OFF'}
-                    </span>
-                  </div>
-                  <div class="w-full h-1.5 bg-slate-200/70 rounded-full overflow-hidden">
-                    <div class="h-full rounded-full transition-all duration-300" style="width:${st.pct}%; background:${st.isOn ? c.colorHex : '#94A3B8'}"></div>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-
-          <!-- ÁREA DE AVALIAÇÃO: BLOQUEADA SEM QR CODE / LIBERADA AO LER A PLAQUINHA -->
-          ${!isQrMode ? `
-            <div class="p-4 rounded-2xl bg-purple-50/80 border border-purple-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div class="space-y-1">
-                <div class="flex items-center gap-2 text-purple-950 font-bold text-xs sm:text-sm">
-                  <i data-lucide="qr-code" class="w-4 h-4 text-purple-700"></i>
-                  <span>Avaliação Exclusiva via Plaquinha QR Code / Tag NFC no Local</span>
-                </div>
-                <p class="text-[11px] text-slate-600 leading-relaxed">
-                  Pelo site você visualiza apenas os selos ativos e os relatos de quem esteve no estabelecimento. Para avaliar, aproxime o celular da Tag NFC ou leia o QR Code na mesa/balcão.
-                </p>
-              </div>
-              <button type="button" onclick="simulateQrScanInModal()" class="px-3.5 py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0 shadow-sm flex items-center gap-1.5">
-                <i data-lucide="scan-line" class="w-4 h-4"></i> Simular Leitura QR Code
-              </button>
-            </div>
-          ` : `
-            <!-- FLUXO DE AVALIAÇÃO EM ABAS POR SELO (LIBERADO VIA QR CODE) -->
-            <form onsubmit="submitEstablishmentReview(event)" class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-purple-300 space-y-4 shadow-sm">
-              <!-- Cabeçalho do Fluxo -->
-              <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200">
-                <span class="inline-flex items-center gap-2 text-xs font-bold text-slate-900">
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Plaquinha QR Code Validada • Avalie os 5 selos
-                </span>
-                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-600 text-white">
-                  Etapa ${activeReviewSealStep + 1} de ${starCriteriaConfig.length}
-                </span>
-              </div>
-
-              <!-- Abas dos 5 Selos (Stepper Horizontal Limpo) -->
-              <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-                ${starCriteriaConfig.map((c, idx) => {
-                  const active = idx === activeReviewSealStep;
-                  const draftStars = qrDraftRatings[c.key].stars;
-                  return `
-                    <button type="button" onclick="setActiveSealStep(${idx})" class="px-2.5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center justify-between gap-1 ${active ? 'bg-purple-700 text-white border-purple-500 shadow-md ring-2 ring-purple-400/40' : 'bg-white text-slate-700 border-slate-200 hover:border-purple-400'}">
-                      <span class="flex items-center gap-1 truncate">
-                        <span class="${active ? 'text-amber-300' : c.textClass}">★</span>
-                        <span class="truncate">${c.label.split(' ')[0]}</span>
-                      </span>
-                      <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'}">${draftStars}★</span>
-                    </button>
-                  `;
-                }).join('')}
-              </div>
-
-              <!-- Cartão da Aba do Selo Atual -->
-              <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-xs">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-                  <div>
-                    <div class="flex items-center gap-2">
-                      <span class="w-7 h-7 rounded-lg flex items-center justify-center text-sm font-bold text-white" style="background:${currentCrit.colorHex}">★</span>
-                      <h5 class="font-extrabold text-slate-900 text-sm sm:text-base">Selo de ${currentCrit.label}</h5>
-                    </div>
-                    <p class="text-xs text-slate-500 mt-1">${currentCrit.desc}</p>
-                  </div>
-
-                  <!-- Seletor Interativo de 1 a 5 Estrelas -->
-                  <div class="flex items-center gap-1.5 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 self-start sm:self-center">
-                    ${[1, 2, 3, 4, 5].map(num => `
-                      <button type="button" onclick="setSealStarLevel('${currentCrit.key}', ${num})" class="text-2xl leading-none transition-transform hover:scale-115 focus:outline-none ${num <= currentDraft.stars ? currentCrit.textClass : 'text-slate-300'}" title="${num} estrela(s)">★</button>
-                    `).join('')}
-                    <span class="ml-1.5 text-xs font-extrabold px-2 py-0.5 rounded-md bg-purple-600 text-white">${currentDraft.stars}★</span>
-                  </div>
-                </div>
-
-                <!-- Requisitos Dinâmicos conforme a Quantidade de Estrelas Marcadas -->
-                <div class="space-y-2">
-                  <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500 block">
-                    O que você observou neste critério? (${currentDraft.stars} estrela${currentDraft.stars > 1 ? 's' : ''})
-                  </span>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    ${availableReqs.map(req => {
-                      const checked = currentDraft.selectedReqs.has(req);
-                      return `
-                        <button type="button" onclick="toggleSealRequirement('${currentCrit.key}', '${req.replace(/'/g, "\\'")}')" class="text-left p-3 rounded-xl border text-xs transition-all flex items-start gap-2.5 ${checked ? 'bg-purple-600 border-purple-500 text-white font-semibold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-purple-400'}">
-                          <span class="w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-bold ${checked ? 'bg-white text-purple-700' : 'border border-slate-400 bg-white text-transparent'}">✓</span>
-                          <span class="leading-snug">${req}</span>
-                        </button>
-                      `;
-                    }).join('')}
-                  </div>
-                </div>
-
-                <!-- Navegação Rápida entre Abas de Selos -->
-                <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
-                  <button type="button" ${activeReviewSealStep === 0 ? 'disabled' : ''} onclick="setActiveSealStep(${Math.max(0, activeReviewSealStep - 1)})" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 font-semibold text-slate-700 disabled:opacity-40 transition-colors">
-                    ← Anterior
-                  </button>
-                  ${activeReviewSealStep < starCriteriaConfig.length - 1 ? `
-                    <button type="button" onclick="setActiveSealStep(${activeReviewSealStep + 1})" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-xs transition-colors">
-                      Próximo: ${starCriteriaConfig[activeReviewSealStep + 1].label} →
-                    </button>
-                  ` : `
-                    <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
-                      ✓ 5 selos revisados
-                    </span>
-                  `}
-                </div>
-              </div>
-
-              <!-- Comentário Final + Botão de Envio -->
-              <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
-                <input id="estReviewComment" type="text" required placeholder="Escreva um comentário curto sobre sua visita..." class="flex-1 px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 text-white font-bold text-xs shrink-0 shadow-md transition-all">
-                  Enviar Avaliação Verificada
-                </button>
-              </div>
-            </form>
-          `}
-
-          <!-- LISTA DE AVALIAÇÕES DOS OUTROS CLIENTES (VISÍVEL PARA TODOS) -->
-          <div class="space-y-2 max-h-44 overflow-y-auto pt-1">
-            <h5 class="text-xs font-bold uppercase text-slate-500">Relatos de Clientes Presenciais (${est.reviews.length})</h5>
-            ${est.reviews.map(rev => `
-              <div class="p-3 rounded-xl bg-white border border-slate-200/80 text-xs space-y-1.5">
-                <div class="flex flex-wrap items-center justify-between gap-1">
-                  <div class="flex items-center gap-1.5">
-                    <span class="font-bold text-slate-800">${rev.user}</span>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ QR Code Verificado</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 text-[11px] font-bold">
-                    ${starCriteriaConfig.map(c => {
-                      const val = (rev.summaryStars && rev.summaryStars[c.key]) || 5;
-                      return `<span class="${c.textClass}" title="${c.label}: ${val}★">${val}★</span>`;
-                    }).join('')}
-                  </div>
-                </div>
-                ${rev.tags && rev.tags.length ? `
-                  <div class="flex flex-wrap gap-1">
-                    ${rev.tags.map(t => `<span class="text-[10px] px-2 py-0.5 rounded-md bg-purple-50 text-purple-800 border border-purple-100 font-medium">${t}</span>`).join('')}
-                  </div>
-                ` : ''}
-                <p class="text-slate-600">${rev.text}</p>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <!-- BLOCO 3: DENÚNCIA PRESENCIAL DE IRREGULARIDADE GRAVE -->
-        <div class="pt-3 border-t border-slate-200">
-          <details class="group">
-            <summary class="cursor-pointer list-none flex items-center justify-between p-3 rounded-xl bg-rose-50 hover:bg-rose-100/80 border border-rose-200 text-rose-900 text-xs font-bold">
-              <span class="flex items-center gap-2">
-                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600"></i>
-                Reportar Irregularidade Grave Presencial → ${est.regulator}
-              </span>
-              <span class="text-[11px] underline">Abrir protocolo</span>
-            </summary>
-            <form onsubmit="submitEstablishmentGraveReport(event)" class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
-              <p class="text-[11px] text-slate-600">
-                📍 <strong>Validação Presencial (GPS Ativo):</strong> Este canal é exclusivo para irregularidades estruturais, sanitárias ou ambientais graves observadas no local.
-              </p>
-              <textarea id="estGraveDesc" rows="2" required placeholder="Descreva a irregularidade grave observada presencialmente..." class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white"></textarea>
-              <button type="submit" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs">
-                Enviar Denúncia Presencial ao Órgão Competente
-              </button>
-            </form>
-          </details>
-        </div>
-      `;
-    }
-
-    function submitEstablishmentReview(e) {
-      e.preventDefault();
-      if (!currentEstablishment || qrVerifiedEstId !== currentEstablishment.id) return;
-      const input = document.getElementById('estReviewComment');
-      const text = input.value.trim();
-      if (!text) return;
-
-      currentEstablishment.reviewCount += 1;
-      const summaryStars = {};
-      const collectedTags = [];
-
-      starCriteriaConfig.forEach(c => {
-        const draft = qrDraftRatings[c.key];
-        summaryStars[c.key] = draft.stars;
-        if (draft.stars === 5) {
-          currentEstablishment.fiveStarCounts[c.key] = (currentEstablishment.fiveStarCounts[c.key] || 0) + 1;
-        }
-        draft.selectedReqs.forEach(r => collectedTags.push(r));
-      });
-
-      currentEstablishment.reviews.unshift({
-        user: 'Cliente Presencial (QR Code)',
-        verifiedQr: true,
-        summaryStars,
-        tags: collectedTags.slice(0, 6),
-        text
-      });
-
-      // Encerra sessão do QR Code após envio para voltar ao modo consulta
-      qrVerifiedEstId = null;
-
-      renderPoisOnMap();
-      renderReviewsDirectory();
-      renderEstablishmentModalBody();
-      lucide.createIcons();
-      showToast(`Avaliação via QR Code registrada! Percentuais dos selos recalculados (meta ≥75%).`);
-    }
-
-    function submitEstablishmentGraveReport(e) {
-      e.preventDefault();
-      if (!currentEstablishment) return;
-      const desc = document.getElementById('estGraveDesc').value.trim();
-      if (!desc) return;
-      closeEstablishmentModal();
-      showToast(`Protocolo presencial #FIS-${Math.floor(1000 + Math.random() * 9000)} enviado para: ${currentEstablishment.regulator}!`);
-    }
-
-    function closeEstablishmentModal() {
-      document.getElementById('establishmentModal').classList.add('hidden');
-    }
-
-    // HORÁRIOS DE ÔNIBUS
-    function openBusStopModal(stopId) {
-      const stop = busStops.find(b => b.id === stopId);
-      if (!stop) return;
-      document.getElementById('busStopTitle').textContent = stop.name;
-      document.getElementById('busStopBody').innerHTML = `
-        <div class="p-3 rounded-xl bg-purple-50 border border-purple-100 text-xs text-purple-900 font-medium">
-          📍 ${stop.street} • Itajubá - MG
-        </div>
-        <div class="space-y-3">
-          ${stop.lines.map(line => `
-            <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-2">
-              <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                  <span class="px-2.5 py-1 rounded-lg bg-[#581C87] text-white font-extrabold text-xs">Linha ${line.code}</span>
-                  <h4 class="font-bold text-slate-900 text-sm">${line.name}</h4>
-                </div>
-                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">Próximo: ${line.nextIn}</span>
-              </div>
-              <p class="text-xs text-purple-800 font-semibold">🎯 Destino: ${line.destination}</p>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200/80 text-[11px]">
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200/70">
-                  <strong class="block text-slate-700 mb-0.5">Segunda a Sexta:</strong>
-                  <span class="text-slate-600">${line.weekday}</span>
-                </div>
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200/70">
-                  <strong class="block text-slate-700 mb-0.5">Sábados, Domingos e Feriados:</strong>
-                  <span class="text-slate-600">${line.weekend}</span>
-                </div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-      document.getElementById('busStopModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeBusStopModal() {
-      document.getElementById('busStopModal').classList.add('hidden');
-    }
-
-    // SELETOR DE BAIRROS
-    function selectNeighborhood(key) {
-      selectedNeighborhood = key;
-      const nb = neighborhoodsData[key] || neighborhoodsData.all;
-
-      document.getElementById('mapRegionTitle').textContent = `Mapa Interativo • ${nb.name}`;
-      document.getElementById('nbCrimeRate').textContent = nb.crimeRate;
-      document.getElementById('nbCrimeTrend').textContent = nb.crimeTrend;
-      document.getElementById('nbInvestment').textContent = nb.investment;
-      document.getElementById('nbInvestmentDetail').textContent = nb.investmentDetail;
-      document.getElementById('nbHealthCount').textContent = nb.healthCount;
-      document.getElementById('nbCommerceSummary').textContent = nb.commerceSummary;
-
-      if (neighborhoodLayer) {
-        neighborhoodLayer.clearLayers();
-        if (nb.bounds) {
-          L.rectangle(nb.bounds, {
-            color: '#6D28D9',
-            weight: 2.5,
-            fillColor: '#8B5CF6',
-            fillOpacity: 0.08,
-            dashArray: '6, 6'
-          }).addTo(neighborhoodLayer);
-          map.fitBounds(nb.bounds, { padding: [25, 25], maxZoom: 16 });
-        } else {
-          map.flyTo(nb.center, nb.zoom, { duration: 0.8 });
-        }
+            html: `<div class="custom-pin" style="background:#6D28D9;width:32px;height:32px;font-size:15px;">📍</div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
+          })
+        })
+          .bindPopup(`<div class="text-xs"><strong>${item.title}</strong><p class="text-slate-600">${item.subtitle}</p></div>`)
+          .addTo(map)
+          .openPopup();
       }
 
-      renderPoisOnMap();
-      renderReportsOnMap();
-      renderReportsList();
-    }
-
-    // ORÇAMENTO PARTICIPATIVO (ENQUETE INTERATIVA)
-    function renderParticipatoryPoll() {
-      const container = document.getElementById('participatoryPollOptions');
-      const total = pollOptions.reduce((acc, o) => acc + o.votes, 0);
-      document.getElementById('pollTotalVotes').textContent = `${total} votos`;
-
-      container.innerHTML = pollOptions.map(opt => {
-        const pct = Math.round((opt.votes / total) * 100);
-        const voted = userVotedPollId === opt.id;
-        return `
-          <button onclick="voteInPoll('${opt.id}')" class="w-full text-left p-2.5 rounded-xl border transition-all relative overflow-hidden ${voted ? 'border-purple-600 bg-purple-50/80' : 'border-slate-200 hover:border-purple-300 bg-slate-50/60'}">
-            <div class="absolute inset-y-0 left-0 bg-purple-200/45 transition-all duration-500" style="width:${pct}%"></div>
-            <div class="relative flex items-center justify-between gap-2 text-xs">
-              <span class="font-semibold text-slate-800">${voted ? '✅ ' : ''}${opt.label}</span>
-              <span class="font-extrabold text-purple-900 shrink-0">${pct}%</span>
-            </div>
-          </button>
-        `;
-      }).join('');
-    }
-
-    function voteInPoll(optionId) {
-      if (userVotedPollId === optionId) return;
-      if (userVotedPollId) {
-        const prev = pollOptions.find(o => o.id === userVotedPollId);
-        if (prev) prev.votes--;
+      if (item.actionType === 'establishment' && item.estId) {
+        setTimeout(() => openEstablishmentModal(item.estId, false), 450);
       }
-      const target = pollOptions.find(o => o.id === optionId);
-      if (target) {
-        target.votes++;
-        userVotedPollId = optionId;
-        renderParticipatoryPoll();
-        showToast('Seu voto no Orçamento Participativo foi registrado!');
-      }
-    }
 
-    // DENÚNCIAS NO MAPA E LISTA
-    function renderReportsOnMap() {
-      if (!reportsLayer) return;
-      reportsLayer.clearLayers();
-      const q = (document.getElementById('globalSearchInput')?.value || '').toLowerCase().trim();
-
-      const visible = reports.filter(r => {
-        const matchCat = activeCategories.has(r.category);
-        const matchNb = selectedNeighborhood === 'all' || r.neighborhood === selectedNeighborhood;
-        const matchSearch = !q || r.title.toLowerCase().includes(q) || r.address.toLowerCase().includes(q);
-        return matchCat && matchNb && matchSearch;
-      });
-
-      visible.forEach(rep => {
-        const meta = categoryMeta[rep.category] || categoryMeta.buraco;
-        const icon = L.divIcon({
-          className: '',
-          html: `<div class="custom-pin" style="background:${meta.color};width:28px;height:28px;font-size:12px;">!</div>`,
-          iconSize: [28, 28],
-          iconAnchor: [14, 14]
-        });
-
-        const marker = L.marker([rep.lat, rep.lng], { icon });
-        marker.bindPopup(`
-          <div class="w-60 space-y-2 text-xs">
-            <img src="${rep.photo}" alt="${rep.title}" class="w-full h-24 object-cover rounded-lg" />
-            <span class="inline-block px-2 py-0.5 rounded font-bold ${meta.badgeBg}">${meta.label}</span>
-            <h4 class="font-bold text-slate-900 text-sm">${rep.title}</h4>
-            <p class="text-slate-600">${rep.description}</p>
-            <div class="flex items-center justify-between pt-1 border-t border-slate-100">
-              <span class="font-bold text-purple-800">${rep.status}</span>
-              <button onclick="upvoteReport('${rep.id}')" class="px-2 py-1 rounded bg-purple-100 text-purple-900 font-bold">👍 ${rep.votes}</button>
-            </div>
-          </div>
-        `);
-        marker.addTo(reportsLayer);
-      });
-    }
-
-    function renderReportsList() {
-      const container = document.getElementById('recentReportsList');
-      const statusFilter = document.getElementById('statusFilterSelect').value;
-
-      const filtered = reports.filter(r => {
-        const matchStatus = statusFilter === 'all' || r.status === statusFilter;
-        const matchNb = selectedNeighborhood === 'all' || r.neighborhood === selectedNeighborhood;
-        return matchStatus && matchNb;
-      });
-
-      container.innerHTML = filtered.map(rep => {
-        const meta = categoryMeta[rep.category] || categoryMeta.buraco;
-        return `
-          <div onclick="focusReportOnMap('${rep.id}')" class="cursor-pointer p-3 rounded-xl border border-slate-200/80 hover:border-purple-300 bg-slate-50/60 hover:bg-purple-50/40 transition-all flex gap-3 items-start">
-            <img src="${rep.photo}" alt="${rep.title}" class="w-12 h-12 rounded-lg object-cover shrink-0" />
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center justify-between gap-1 mb-0.5">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${meta.badgeBg}">${meta.label}</span>
-                <span class="text-[10px] font-bold text-purple-700">${rep.status}</span>
-              </div>
-              <h4 class="text-xs font-bold text-slate-900 truncate">${rep.title}</h4>
-              <p class="text-[11px] text-slate-500 truncate">${rep.address}</p>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function focusReportOnMap(id) {
-      const rep = reports.find(r => r.id === id);
-      if (!rep || !map) return;
-      map.flyTo([rep.lat, rep.lng], 17, { duration: 0.7 });
-    }
-
-    function upvoteReport(id) {
-      const rep = reports.find(r => r.id === id);
-      if (!rep) return;
-      rep.votes += 1;
-      renderReportsOnMap();
-      renderReportsList();
-      showToast(`Apoio registrado no protocolo #${rep.id}!`);
-    }
-
-    function toggleCategoryFilter(cat) {
-      if (activeCategories.has(cat)) activeCategories.delete(cat);
-      else activeCategories.add(cat);
-      renderReportsOnMap();
-    }
-
-    // CAMADA BASE DO MAPA & BUSCA
-    function setMapBaseLayer(mode) {
-      if (!map) return;
-      const btnStreets = document.getElementById('btnLayerStreets');
-      const btnSat = document.getElementById('btnLayerSatellite');
-      if (mode === 'satellite') {
-        if (map.hasLayer(streetsLayer)) map.removeLayer(streetsLayer);
-        if (!map.hasLayer(satelliteLayer)) map.addLayer(satelliteLayer);
-        btnSat.className = 'px-2.5 py-1 rounded-lg bg-purple-700 text-white shadow-sm';
-        btnStreets.className = 'px-2.5 py-1 rounded-lg text-slate-700';
-      } else {
-        if (map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
-        if (!map.hasLayer(streetsLayer)) map.addLayer(streetsLayer);
-        btnStreets.className = 'px-2.5 py-1 rounded-lg bg-purple-700 text-white shadow-sm';
-        btnSat.className = 'px-2.5 py-1 rounded-lg text-slate-700';
-      }
+      showToast(`Localizado: ${item.title}`);
     }
 
     async function searchItajubaLocation() {
       const query = document.getElementById('itajubaPlaceInput').value.trim();
+      const box = document.getElementById('mapPlaceSuggestions');
+      if (box) box.classList.add('hidden');
       if (!query || !map) return;
+
+      const localMatches = getMatchingSuggestions(query);
+      if (localMatches.length > 0) {
+        const first = localMatches[0];
+        map.flyTo([first.lat, first.lng], 17, { duration: 0.85 });
+        showToast(`Localizado: ${first.title}`);
+        return;
+      }
+
       try {
         const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&bounded=1&viewbox=-45.5150,-22.3750,-45.3900,-22.4750&q=${encodeURIComponent(query + ', Itajubá, Minas Gerais')}`;
         const res = await fetch(url);
@@ -2788,43 +2863,66 @@
           <img src="${w.image}" alt="${w.title}" class="w-full h-44 object-cover" />
           <div class="p-4 space-y-1.5">
             <h4 class="font-bold text-slate-900 text-sm">${w.title}</h4>
-            <p class="text-xs text-purple-700 font-semibold">Por ${w.artist} • ${w.location}</p>
-            <p class="text-xs text-slate-500">${w.technique}</p>
-          </div>
-        </div>
-      `).join('');
-
-      document.getElementById('artShopGrid').innerHTML = shopWorks.map(item => `
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-          <img src="${item.image}" alt="${item.title}" class="w-full h-44 object-cover" />
-          <div class="p-4 flex items-center justify-between">
-            <div>
-              <h4 class="font-bold text-slate-900 text-sm">${item.title}</h4>
-              <p class="text-xs text-slate-500">${item.artist}</p>
+            <p class="text-xs font-semibold text-purple-700">${w.artist} • ${w.technique}</p>
+            <p class="text-[11px] text-slate-500">${w.location}</p>
+            <div class="pt-2 flex items-center justify-between">
+              <span class="text-xs font-bold text-rose-600">♥ ${w.likes} curtidas</span>
+              <button type="button" onclick="showToast('Curtida registrada na obra!')" class="px-3 py-1 rounded-lg bg-purple-50 text-purple-800 text-xs font-bold hover:bg-purple-100">Apreciar</button>
             </div>
-            <button onclick="openTransactionModal('Adquirir Obra: ${item.title}', 'Valor integral R$ ${item.price},00 direto ao artista.', ${item.price})" class="px-3 py-1.5 rounded-xl bg-purple-700 text-white font-bold text-xs">R$ ${item.price}</button>
           </div>
         </div>
       `).join('');
 
-      document.getElementById('artistsDonationGrid').innerHTML = independentArtists.map(a => `
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 flex gap-4 items-center shadow-sm">
-          <img src="${a.avatar}" alt="${a.name}" class="w-16 h-16 rounded-2xl object-cover" />
-          <div class="flex-1 space-y-1">
-            <h4 class="font-bold text-slate-900 text-sm">${a.name}</h4>
-            <p class="text-xs text-slate-600">${a.bio}</p>
-            <button onclick="openTransactionModal('Apoiar ${a.name}', '${a.specialty}', 50)" class="mt-2 px-3.5 py-1.5 rounded-xl bg-purple-700 text-white font-bold text-xs">Doar via PIX</button>
+      document.getElementById('artShopGrid').innerHTML = shopWorks.map(s => `
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <img src="${s.image}" alt="${s.title}" class="w-full h-44 object-cover" />
+          <div class="p-4 space-y-2">
+            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-purple-100 text-purple-800">${s.category}</span>
+            <h4 class="font-bold text-slate-900 text-sm">${s.title}</h4>
+            <p class="text-xs text-slate-500">Artista: ${s.artist}</p>
+            <div class="pt-2 flex items-center justify-between">
+              <strong class="text-base font-extrabold text-purple-900">R$ ${s.price},00</strong>
+              <button type="button" onclick="openTransactionModal('Adquirir Obra: ${s.title}', 'Pagamento direto 100% repassado ao artista ${s.artist}.', ${s.price})" class="px-3.5 py-1.5 rounded-xl bg-[#6D28D9] text-white text-xs font-bold">Adquirir</button>
+            </div>
           </div>
         </div>
       `).join('');
+
+      document.getElementById('artistsDonationGrid').innerHTML = independentArtists.map(a => {
+        const pct = Math.min(100, Math.round((a.raised / a.goal) * 100));
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <img src="${a.avatar}" alt="${a.name}" class="w-12 h-12 rounded-xl object-cover" />
+              <div>
+                <h4 class="font-bold text-slate-900 text-sm">${a.name}</h4>
+                <p class="text-xs text-purple-700 font-semibold">${a.specialty}</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600">${a.bio}</p>
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span class="text-purple-800">R$ ${a.raised.toLocaleString('pt-BR')} arrecadados</span>
+                <span class="text-slate-500">Meta: R$ ${a.goal.toLocaleString('pt-BR')} (${pct}%)</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-purple-100 overflow-hidden">
+                <div class="h-full bg-purple-600" style="width:${pct}%"></div>
+              </div>
+            </div>
+            <button type="button" onclick="openTransactionModal('Apoiar ${a.name}', 'Contribuição direta para fomento cultural independente em Itajubá.', 50)" class="w-full py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs">
+              Apoiar Projeto Cultural
+            </button>
+          </div>
+        `;
+      }).join('');
     }
 
     function previewCulturalPhoto(e) {
-      const file = e.target.files[0];
+      const file = e.target.files && e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = ev => {
-        document.getElementById('cultPhotoPreviewImg').src = ev.target.result;
+      reader.onload = () => {
+        document.getElementById('cultPhotoPreviewImg').src = reader.result;
         document.getElementById('cultPhotoPreviewBox').classList.remove('hidden');
       };
       reader.readAsDataURL(file);
@@ -2832,97 +2930,115 @@
 
     function submitCulturalReport(e) {
       e.preventDefault();
+      const title = document.getElementById('cultReportTitle').value.trim();
+      const address = document.getElementById('cultReportAddress').value.trim();
+      const desc = document.getElementById('cultReportDesc').value.trim();
       reports.unshift({
         id: `NX-${Math.floor(300 + Math.random() * 600)}`,
         category: 'cultura',
         neighborhood: 'centro',
-        title: document.getElementById('cultReportTitle').value.trim(),
-        address: document.getElementById('cultReportAddress').value.trim(),
-        description: document.getElementById('cultReportDesc').value.trim(),
+        title,
+        address,
+        description: desc,
         status: 'Pendente',
         lat: -22.4254,
         lng: -45.4523,
         votes: 1,
-        photo: document.getElementById('cultPhotoPreviewImg').src || 'https://placehold.co/320x180/9333ea/ffffff?text=Patrimonio',
+        photo: document.getElementById('cultPhotoPreviewImg').src || 'https://placehold.co/320x180/9333ea/ffffff?text=Patrimonio+Cultural',
         createdAt: 'Agora'
       });
+      e.target.reset();
+      document.getElementById('cultPhotoPreviewBox').classList.add('hidden');
       switchMainView('dashboard');
       renderReportsOnMap();
       renderReportsList();
-      showToast('Denúncia cultural publicada no mapa de Itajubá!');
+      showToast('Denúncia cultural enviada para o mapa e Secretaria de Cultura!');
     }
 
-    // DOAÇÕES SOCIAIS
+    // DOAÇÕES SOCIAIS & ABRIGOS
     function renderSocialUnits() {
-      document.getElementById('socialUnitsGrid').innerHTML = socialUnits.map(u => {
+      const grid = document.getElementById('socialUnitsGrid');
+      if (!grid) return;
+      grid.innerHTML = socialUnits.map(u => {
         const pct = Math.min(100, Math.round((u.raised / u.goal) * 100));
         return `
           <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between">
-            <div>
-              <img src="${u.image}" alt="${u.name}" class="w-full h-40 object-cover" />
-              <div class="p-5 space-y-2">
-                <span class="text-[11px] font-bold text-purple-700">${u.neighborhood}</span>
+            <img src="${u.image}" alt="${u.name}" class="w-full h-40 object-cover" />
+            <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">${u.neighborhood}</span>
                 <h4 class="font-bold text-slate-900 text-base">${u.name}</h4>
-                <p class="text-xs text-slate-600"><strong>Necessidade:</strong> ${u.need}</p>
-                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div class="bg-purple-600 h-full" style="width:${pct}%"></div>
-                </div>
-                <div class="flex justify-between text-xs font-bold text-slate-700">
-                  <span>R$ ${u.raised.toLocaleString('pt-BR')}</span>
-                  <span>Meta R$ ${u.goal.toLocaleString('pt-BR')}</span>
-                </div>
+                <p class="text-xs text-slate-600"><strong>Necessidade urgente:</strong> ${u.need}</p>
+                <p class="text-[11px] font-semibold text-emerald-700">${u.peopleHelped}</p>
               </div>
-            </div>
-            <div class="p-4 pt-0">
-              <button onclick="openTransactionModal('Doar para ${u.name}', '${u.need}', 50, '${u.id}')" class="w-full py-2.5 rounded-xl bg-[#6D28D9] text-white font-bold text-xs">Fazer Doação</button>
+              <div class="space-y-2 pt-2">
+                <div class="flex justify-between text-xs font-bold">
+                  <span class="text-purple-800">R$ ${u.raised.toLocaleString('pt-BR')}</span>
+                  <span class="text-slate-500">Meta: R$ ${u.goal.toLocaleString('pt-BR')} (${pct}%)</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-purple-100 overflow-hidden">
+                  <div class="h-full bg-emerald-500" style="width:${pct}%"></div>
+                </div>
+                <button type="button" onclick="openTransactionModal('Doar para ${u.name}', '${u.need}', 50, '${u.id}')" class="w-full py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm">
+                  Fazer Doação via PIX
+                </button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function openTransactionModal(title, subtitle, amount, targetUnitId = null) {
-      pendingTx = { title, amount, targetUnitId };
+    function openTransactionModal(title, subtitle, defaultAmount = 50, unitId = null) {
+      pendingTx = { title, amount: defaultAmount, targetUnitId: unitId };
       document.getElementById('txModalTitle').textContent = title;
       document.getElementById('txModalSubtitle').textContent = subtitle;
+      selectTxAmount(defaultAmount);
       document.getElementById('transactionModal').classList.remove('hidden');
-    }
-
-    function selectTxAmount(amt) {
-      pendingTx.amount = amt;
-    }
-
-    function confirmTransaction() {
-      if (pendingTx.targetUnitId) {
-        const u = socialUnits.find(x => x.id === pendingTx.targetUnitId);
-        if (u) u.raised += pendingTx.amount;
-        renderSocialUnits();
-      }
-      closeTransactionModal();
-      showToast(`Apoio de R$ ${pendingTx.amount},00 confirmado!`);
+      lucide.createIcons();
     }
 
     function closeTransactionModal() {
       document.getElementById('transactionModal').classList.add('hidden');
     }
 
+    function selectTxAmount(amt) {
+      pendingTx.amount = amt;
+      document.querySelectorAll('.tx-amt-btn').forEach(btn => {
+        const val = parseInt(btn.textContent.replace(/\D/g, ''), 10);
+        if (val === amt) {
+          btn.className = 'tx-amt-btn py-2 rounded-xl border-2 border-purple-600 bg-purple-50 text-sm font-bold text-purple-900';
+        } else {
+          btn.className = 'tx-amt-btn py-2 rounded-xl border border-purple-200 text-sm font-bold text-purple-800 hover:bg-purple-50';
+        }
+      });
+    }
+
+    function confirmTransaction() {
+      if (pendingTx.targetUnitId) {
+        const unit = socialUnits.find(u => u.id === pendingTx.targetUnitId);
+        if (unit) unit.raised += pendingTx.amount;
+        renderSocialUnits();
+      }
+      closeTransactionModal();
+      showToast(`PIX institucional de R$ ${pendingTx.amount},00 confirmado para "${pendingTx.title}"!`);
+    }
+
     // VAGAS, ESTÁGIOS & CURSOS
     function setOppTypeFilter(type) {
       currentOppTypeFilter = type;
-      document.querySelectorAll('.opp-type-pill').forEach(p => {
-        p.classList.remove('bg-purple-700', 'text-white', 'shadow-sm');
-        p.classList.add('bg-slate-100', 'text-slate-700');
+      document.querySelectorAll('.opp-type-pill').forEach(btn => {
+        btn.className = 'opp-type-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700';
       });
-      const btn = document.getElementById(`opp-pill-${type}`);
-      if (btn) {
-        btn.classList.add('bg-purple-700', 'text-white', 'shadow-sm');
-        btn.classList.remove('bg-slate-100', 'text-slate-700');
-      }
+      const active = document.getElementById(`opp-pill-${type}`);
+      if (active) active.className = 'opp-type-pill px-3.5 py-1.5 rounded-xl text-xs font-bold bg-purple-700 text-white shadow-sm';
       renderOpportunities();
     }
 
     function renderOpportunities() {
-      const q = (document.getElementById('oppSearchInput')?.value || '').toLowerCase().trim();
+      const grid = document.getElementById('opportunitiesGrid');
+      if (!grid) return;
+      const q = normalizeText(document.getElementById('oppSearchInput')?.value || '').trim();
       const area = document.getElementById('oppAreaSelect')?.value || 'all';
       const mode = document.getElementById('oppModeSelect')?.value || 'all';
 
@@ -2930,36 +3046,42 @@
         const matchType = currentOppTypeFilter === 'all' || o.type === currentOppTypeFilter;
         const matchArea = area === 'all' || o.area === area;
         const matchMode = mode === 'all' || o.mode === mode;
-        const matchQ = !q || o.title.toLowerCase().includes(q) || o.org.toLowerCase().includes(q);
+        const matchQ = !q || normalizeText(o.title).includes(q) || normalizeText(o.org).includes(q) || normalizeText(o.desc).includes(q);
         return matchType && matchArea && matchMode && matchQ;
       });
 
-      document.getElementById('opportunitiesGrid').innerHTML = filtered.map(o => `
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-3">
+      grid.innerHTML = filtered.map(o => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
           <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">${o.type}</span>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">${o.type}</span>
               <span class="text-[11px] font-semibold text-slate-500">${o.mode}</span>
             </div>
             <h4 class="font-bold text-slate-900 text-base">${o.title}</h4>
             <p class="text-xs font-semibold text-purple-700">${o.org}</p>
             <p class="text-xs text-slate-600">${o.desc}</p>
           </div>
-          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span class="text-xs font-bold text-emerald-700">${o.compensation}</span>
-            <button onclick="openOppApplyModal('${o.id}')" class="px-3.5 py-1.5 rounded-xl bg-[#6D28D9] text-white font-bold text-xs">Inscrever-se</button>
+          <div class="pt-3 border-t border-slate-100 space-y-2.5">
+            <div class="flex items-center justify-between text-xs">
+              <strong class="text-emerald-700">${o.compensation}</strong>
+              <span class="text-slate-500">${o.deadline}</span>
+            </div>
+            <button type="button" onclick="openOppApplyModal('${o.id}')" class="w-full py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm">
+              Candidatar-se / Inscrever-se
+            </button>
           </div>
         </div>
       `).join('');
     }
 
-    function openOppApplyModal(id) {
-      const opp = opportunitiesData.find(o => o.id === id);
+    function openOppApplyModal(oppId) {
+      const opp = opportunitiesData.find(o => o.id === oppId);
       if (!opp) return;
       document.getElementById('oppModalBadge').textContent = opp.type;
       document.getElementById('oppModalTitle').textContent = opp.title;
       document.getElementById('oppModalCompany').textContent = `${opp.org} • ${opp.compensation}`;
       document.getElementById('oppApplyModal').classList.remove('hidden');
+      lucide.createIcons();
     }
 
     function closeOppApplyModal() {
@@ -2968,8 +3090,193 @@
 
     function submitOppApplication(e) {
       e.preventDefault();
+      e.target.reset();
       closeOppApplyModal();
-      showToast('Inscrição enviada com sucesso para o Sine / Empresa!');
+      showToast('Inscrição enviada com sucesso!');
+    }
+
+    // =====================================================================
+    // SIMULADOR DE EMERGÊNCIA CLIMÁTICA, PAINEL DE RISCOS & DIRETÓRIO QR CODE
+    // =====================================================================
+    function toggleFloodSimulation() {
+      floodAlertActive = !floodAlertActive;
+      const banner = document.getElementById('emergencyAlertBanner');
+      const simBtn = document.getElementById('floodSimBtn');
+      const simDot = document.getElementById('floodSimDot');
+      const simLabel = document.getElementById('floodSimLabel');
+
+      if (banner) banner.classList.toggle('hidden', !floodAlertActive);
+      if (simBtn && simDot && simLabel) {
+        if (floodAlertActive) {
+          simBtn.className = 'inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-rose-600 text-white border border-rose-700 hover:bg-rose-700 transition-all shadow-sm';
+          simDot.className = 'w-2.5 h-2.5 rounded-full bg-white animate-ping';
+          simLabel.textContent = 'Rio Sapucaí: 3,85m (ALERTA) • Encerrar';
+        } else {
+          simBtn.className = 'inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-all shadow-sm';
+          simDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+          simLabel.textContent = 'Rio Sapucaí: 1,45m (Normal) • Simular Alerta';
+        }
+      }
+
+      renderRisksDashboard();
+      showToast(
+        floodAlertActive
+          ? 'Alerta de cheia ativado! Nível simulado do Rio Sapucaí: 3,85m.'
+          : 'Simulação encerrada. Rio Sapucaí em nível normal (1,45m).',
+        floodAlertActive ? 'error' : 'success'
+      );
+    }
+
+    function renderRisksDashboard() {
+      const levelEl = document.getElementById('riskRiverCurrentLevel');
+      const badgeEl = document.getElementById('riskRiverStatusBadge');
+      const maxPctEl = document.getElementById('riskMaxElevationPct');
+      const chartEl = document.getElementById('riverLevelChartContainer');
+      const forecastEl = document.getElementById('stormForecastList');
+      const incidentsEl = document.getElementById('riskIncidentsGrid');
+
+      const currentLevel = floodAlertActive ? 3.85 : 1.45;
+      if (levelEl) levelEl.textContent = `${currentLevel.toFixed(2).replace('.', ',')} m`;
+      if (badgeEl) {
+        badgeEl.textContent = floodAlertActive
+          ? 'ALERTA CRÍTICO (Acima de 3,50m)'
+          : 'Normal (Cota Atenção: 2,80m)';
+        badgeEl.className = floodAlertActive
+          ? 'inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500 text-white'
+          : 'inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/30 text-emerald-100';
+      }
+      if (maxPctEl) maxPctEl.textContent = floodAlertActive ? '+165%' : '+68%';
+
+      if (chartEl) {
+        const readings = riverDailyReadings.map((r, idx) =>
+          idx === riverDailyReadings.length - 1
+            ? { ...r, level: currentLevel, status: floodAlertActive ? 'Alerta' : 'Normal' }
+            : r
+        );
+        const maxScale = 4.2;
+        const overflowPct = Math.round((3.5 / maxScale) * 100);
+
+        chartEl.innerHTML = `
+          <div class="relative h-56 flex items-end justify-between gap-2 sm:gap-4 pt-8 pb-2 px-2 border-b border-slate-200">
+            <div class="absolute left-0 right-0 border-t-2 border-dashed border-rose-400 pointer-events-none flex justify-end" style="bottom:${overflowPct}%">
+              <span class="text-[10px] font-bold text-rose-600 bg-white px-1.5 -mt-4 rounded">Cota Transbordamento: 3,50m</span>
+            </div>
+            ${readings.map(item => {
+              const heightPct = Math.min(100, Math.max(12, Math.round((item.level / maxScale) * 100)));
+              const barColor = item.level >= 3.5 ? 'bg-rose-600' : (item.level >= 2.8 ? 'bg-amber-500' : 'bg-purple-600');
+              return `
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end z-10">
+                  <span class="text-[11px] font-extrabold text-slate-800">${item.level.toFixed(2).replace('.', ',')}m</span>
+                  <div class="w-full max-w-[44px] rounded-t-xl ${barColor} transition-all duration-300 shadow-xs" style="height:${heightPct}%"></div>
+                  <div class="text-center">
+                    <span class="block text-[11px] font-bold text-slate-700">${item.day}</span>
+                    <span class="block text-[10px] text-slate-400">${item.rainMm}mm</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      if (forecastEl) {
+        forecastEl.innerHTML = stormForecastDays.map(f => `
+          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <strong class="text-xs sm:text-sm text-slate-900">${f.day}</strong>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${f.badgeClass}">${f.riskLevel}</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <span class="font-semibold text-slate-700">🌧️ Chuva: <strong>${f.rainChance}</strong> (${f.rainVolume})</span>
+              <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-900 font-bold">📈 Elevação Rio: ${f.riverRisePct}</span>
+            </div>
+            <p class="text-[11px] text-slate-500">${f.note}</p>
+          </div>
+        `).join('');
+      }
+
+      if (incidentsEl) {
+        incidentsEl.innerHTML = riskIncidentsData.map(inc => `
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/60 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full ${inc.badge}">${inc.type}</span>
+              <span class="text-[11px] font-bold text-purple-700">${inc.neighborhood}</span>
+            </div>
+            <h4 class="font-bold text-sm text-slate-900">${inc.title}</h4>
+            <p class="text-xs font-semibold text-emerald-700">${inc.status}</p>
+            <p class="text-xs text-slate-600">${inc.detail}</p>
+          </div>
+        `).join('');
+      }
+    }
+
+    function renderReviewsDirectory() {
+      const grid = document.getElementById('reviewsDirectoryGrid');
+      if (!grid) return;
+
+      const q = normalizeText(document.getElementById('reviewsSearchInput')?.value || '').trim();
+      const sector = document.getElementById('reviewsSectorFilter')?.value || 'all';
+      const starFilter = document.getElementById('reviewsStarFilter')?.value || 'all';
+
+      const filtered = establishments.filter(est => {
+        const matchQ = !q || normalizeText(est.name).includes(q) || normalizeText(est.address).includes(q) || normalizeText(est.sector).includes(q);
+        const matchSector = sector === 'all' || est.sector === sector;
+        const matchStar = starFilter === 'all' || getSealStats(est, starFilter).isOn;
+        return matchQ && matchSector && matchStar;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-8 border border-slate-200 text-center text-sm text-slate-500">Nenhum estabelecimento encontrado com esses filtros.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(est => {
+        const earned = countEarnedStars(est);
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:border-purple-300 transition-all flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl text-white shrink-0" style="background:${est.pinColor}">${est.emoji}</div>
+                  <div>
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-700">${est.sector}</span>
+                    <h4 class="font-bold text-slate-900 text-base leading-snug">${est.name}</h4>
+                    <p class="text-xs text-slate-500">${est.address}</p>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <div class="flex items-center justify-end gap-0.5">${renderColoredStarsRow(est, 'text-lg')}</div>
+                  <span class="text-[11px] font-bold text-slate-600">${earned}/5 Selos Ligados</span>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5">
+                ${starCriteriaConfig.map(c => {
+                  const st = getSealStats(est, c.key);
+                  return `<span class="text-[11px] font-bold px-2 py-0.5 rounded-lg border ${st.isOn ? c.badgeClass : 'bg-slate-50 text-slate-400 border-slate-200'}">★ ${c.label}: ${st.pct}%</span>`;
+                }).join('')}
+              </div>
+
+              <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs space-y-1">
+                <strong class="text-amber-900 block">⚠️ Pontos de Atenção / Problemas Relatados:</strong>
+                <ul class="list-disc list-inside text-slate-700 space-y-0.5">
+                  ${(est.reportedProblems || []).map(p => `<li>${p}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+              <button type="button" onclick="openEstablishmentModal('${est.id}', false)" class="px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs transition-colors">
+                Ver Avaliações (${est.reviewCount})
+              </button>
+              <button type="button" onclick="openEstablishmentModal('${est.id}', true)" class="px-3.5 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Simular Leitura QR Code
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
     }
 
     // CONFIGURAÇÕES & MODO ESCURO
@@ -3025,9 +3332,27 @@
       document.getElementById('sidebarNav').classList.toggle('flex');
     });
 
-    document.getElementById('globalSearchInput').addEventListener('input', () => {
+    const globalSearchEl = document.getElementById('globalSearchInput');
+    globalSearchEl.addEventListener('input', (e) => {
       renderPoisOnMap();
       renderReportsOnMap();
+      handlePlaceAutocomplete(e.target.value, 'globalSearchSuggestions', 'globalSearchInput');
+    });
+    globalSearchEl.addEventListener('focus', (e) => {
+      if (e.target.value.trim()) {
+        handlePlaceAutocomplete(e.target.value, 'globalSearchSuggestions', 'globalSearchInput');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      const gBox = document.getElementById('globalSearchSuggestions');
+      const mBox = document.getElementById('mapPlaceSuggestions');
+      if (gBox && !gBox.contains(e.target) && e.target.id !== 'globalSearchInput') {
+        gBox.classList.add('hidden');
+      }
+      if (mBox && !mBox.contains(e.target) && e.target.id !== 'itajubaPlaceInput') {
+        mBox.classList.add('hidden');
+      }
     });
 
     window.addEventListener('load', () => {
