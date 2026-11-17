@@ -110,6 +110,52 @@
               </div>
             </div>
             <div>
+              <span class="text-xl font-black tracking-tight bg-gradient-to-r from-white via-purple-100 to-pink-200 bg-clip-text text-transparent">Civora</span>
+              <p class="text-[11px] font-bold text-purple-200">Portal do Cidadão • Itajubá - MG</p>
+            </div>
+          </div>
+          <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden px-3 py-1.5 rounded-xl bg-white/10 text-xs font-bold">
+            Menu
+          </button>
+        </div>
+
+        <!-- Menu de Navegação das Abas -->
+        <nav id="sidebarMenuItems" class="hidden lg:block space-y-1">
+          <button type="button" data-nav="dashboard" onclick="switchMainView('dashboard')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-bold bg-white/15 text-white shadow-sm transition-all">
+            <span>🗺️ Mapa & Central Urbana</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-400/30">Ao vivo</span>
+          </button>
+          <button type="button" data-nav="risks" onclick="switchMainView('risks')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>🌊 Riscos & Defesa Civil</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-400/25 text-cyan-200">Rio</span>
+          </button>
+          <button type="button" data-nav="reviews" onclick="switchMainView('reviews')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>⭐ Avaliações & Selos 5★</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/25 text-amber-200">QR</span>
+          </button>
+          <button type="button" data-nav="egov" onclick="switchMainView('egov')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>🏛️ Serviços & Tributos</span>
+          </button>
+          <button type="button" data-nav="health" onclick="switchMainView('health')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>🏥 Saúde SUS & Educação</span>
+          </button>
+          <button type="button" data-nav="mobility" onclick="switchMainView('mobility')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>🚌 Ônibus & Zona Azul</span>
+          </button>
+          <button type="button" data-nav="culture" onclick="switchMainView('culture')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>🎭 Cultura & Turismo</span>
+          </button>
+          <button type="button" data-nav="donations" onclick="switchMainView('donations')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>🤝 Doações & Abrigos</span>
+          </button>
+          <button type="button" data-nav="jobs" onclick="switchMainView('jobs')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>💼 Vagas, SENAI & Estágios</span>
+          </button>
+          <button type="button" data-nav="transparency" onclick="switchMainView('transparency')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+            <span>📊 Transparência & Diário</span>
+          </button>
+        </nav>
+
         <!-- Contatos Rápidos de Emergência -->
         <div class="pt-3 border-t border-white/15 space-y-2">
           <p class="text-[10px] font-extrabold uppercase tracking-wider text-purple-200/80">Emergência • Toque p/ Copiar</p>
