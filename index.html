@@ -53,18 +53,31 @@
     }
     body.dark-mode .bg-purple-50,
     body.dark-mode .bg-purple-50\/60,
-    body.dark-mode .bg-purple-50\/70 {
-      background-color: rgba(109, 40, 217, 0.16) !important;
+    body.dark-mode .bg-purple-50\/70,
+    body.dark-mode .bg-purple-50\/80,
+    body.dark-mode .bg-purple-50\/90,
+    body.dark-mode .bg-purple-100 {
+      background-color: rgba(109, 40, 217, 0.22) !important;
     }
     body.dark-mode .bg-emerald-50,
     body.dark-mode .bg-emerald-50\/60,
-    body.dark-mode .bg-emerald-50\/80 {
-      background-color: rgba(16, 185, 129, 0.14) !important;
+    body.dark-mode .bg-emerald-50\/80,
+    body.dark-mode .bg-emerald-100 {
+      background-color: rgba(16, 185, 129, 0.16) !important;
     }
     body.dark-mode .bg-amber-50,
     body.dark-mode .bg-amber-50\/70,
-    body.dark-mode .bg-amber-50\/80 {
-      background-color: rgba(245, 158, 11, 0.14) !important;
+    body.dark-mode .bg-amber-50\/80,
+    body.dark-mode .bg-amber-100 {
+      background-color: rgba(245, 158, 11, 0.16) !important;
+    }
+    body.dark-mode .bg-sky-50,
+    body.dark-mode .bg-sky-100 {
+      background-color: rgba(14, 165, 233, 0.16) !important;
+    }
+    body.dark-mode .bg-orange-50,
+    body.dark-mode .bg-orange-100 {
+      background-color: rgba(249, 115, 22, 0.16) !important;
     }
     body.dark-mode .bg-rose-50,
     body.dark-mode .bg-rose-50\/60 {
@@ -72,6 +85,10 @@
     }
     body.dark-mode .bg-cyan-50 {
       background-color: rgba(6, 182, 212, 0.15) !important;
+    }
+    body.dark-mode .bg-white\/80,
+    body.dark-mode .bg-white\/90 {
+      background-color: rgba(30, 26, 54, 0.85) !important;
     }
     body.dark-mode .border-slate-100,
     body.dark-mode .border-slate-200,
@@ -81,8 +98,10 @@
     body.dark-mode .border-purple-100,
     body.dark-mode .border-purple-200,
     body.dark-mode .border-purple-200\/60,
-    body.dark-mode .border-purple-200\/80 {
-      border-color: #2D264E !important;
+    body.dark-mode .border-purple-200\/80,
+    body.dark-mode .border-purple-400,
+    body.dark-mode .border-purple-500 {
+      border-color: #382E63 !important;
     }
     body.dark-mode .text-slate-900,
     body.dark-mode .text-slate-800,
@@ -99,7 +118,7 @@
     body.dark-mode .text-purple-900,
     body.dark-mode .text-purple-800,
     body.dark-mode .text-purple-700 {
-      color: #D8B4FE !important;
+      color: #E9D5FF !important;
     }
     body.dark-mode .text-emerald-950,
     body.dark-mode .text-emerald-800,
@@ -111,6 +130,12 @@
     body.dark-mode .text-amber-800,
     body.dark-mode .text-amber-700 {
       color: #FCD34D !important;
+    }
+    body.dark-mode .text-sky-800 {
+      color: #7DD3FC !important;
+    }
+    body.dark-mode .text-orange-800 {
+      color: #FDBA74 !important;
     }
     body.dark-mode .text-cyan-800 {
       color: #67E8F9 !important;
@@ -2132,21 +2157,22 @@
           </div>
 
           <!-- Barras de Progresso de Cada Selo (Ligado vs Desligado) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             ${starCriteriaConfig.map(c => {
               const st = getSealStats(est, c.key);
               return `
-                <div class="p-2.5 rounded-xl border ${st.isOn ? c.badgeClass : 'bg-slate-50 text-slate-500 border-slate-200'} text-xs space-y-1">
-                  <div class="flex items-center justify-between">
-                    <span class="font-bold flex items-center gap-1">
-                      <span class="${st.isOn ? c.textClass : 'text-slate-300'} text-sm">★</span> ${c.label}
+                <div class="p-3 rounded-xl border ${st.isOn ? c.badgeClass : 'bg-slate-50 text-slate-500 border-slate-200'} text-xs space-y-1.5 transition-all">
+                  <div class="flex items-center justify-between gap-1.5">
+                    <span class="font-bold flex items-center gap-1.5 truncate">
+                      <span class="${st.isOn ? c.textClass : 'text-slate-300'} text-base leading-none">★</span>
+                      <span class="truncate">${c.label}</span>
                     </span>
-                    <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${st.isOn ? 'bg-white/90 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
-                      ${st.pct}% • ${st.isOn ? 'LIGADO' : 'DESLIGADO'}
+                    <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md shrink-0 ${st.isOn ? 'bg-emerald-500/15 text-emerald-700 border border-emerald-500/30' : 'bg-slate-200/80 text-slate-600'}">
+                      ${st.pct}% • ${st.isOn ? 'ON' : 'OFF'}
                     </span>
                   </div>
-                  <div class="w-full h-1.5 bg-black/10 rounded-full overflow-hidden">
-                    <div class="h-full transition-all duration-300" style="width:${st.pct}%; background:${st.isOn ? c.colorHex : '#94A3B8'}"></div>
+                  <div class="w-full h-1.5 bg-slate-200/70 rounded-full overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-300" style="width:${st.pct}%; background:${st.isOn ? c.colorHex : '#94A3B8'}"></div>
                   </div>
                 </div>
               `;
@@ -2171,62 +2197,67 @@
             </div>
           ` : `
             <!-- FLUXO DE AVALIAÇÃO EM ABAS POR SELO (LIBERADO VIA QR CODE) -->
-            <form onsubmit="submitEstablishmentReview(event)" class="p-4 rounded-2xl bg-purple-50/90 border-2 border-purple-400 space-y-4 shadow-sm">
-              <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-purple-200">
-                <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-purple-950">
+            <form onsubmit="submitEstablishmentReview(event)" class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-purple-300 space-y-4 shadow-sm">
+              <!-- Cabeçalho do Fluxo -->
+              <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200">
+                <span class="inline-flex items-center gap-2 text-xs font-bold text-slate-900">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Plaquinha QR Code Validada • Avalie cada selo abaixo:
+                  Plaquinha QR Code Validada • Avalie os 5 selos
                 </span>
-                <span class="text-[11px] font-bold text-purple-700">Aba ${activeReviewSealStep + 1} de ${starCriteriaConfig.length}</span>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-600 text-white">
+                  Etapa ${activeReviewSealStep + 1} de ${starCriteriaConfig.length}
+                </span>
               </div>
 
-              <!-- Abas dos 5 Selos -->
-              <div class="flex flex-wrap gap-1.5">
+              <!-- Abas dos 5 Selos (Stepper Horizontal Limpo) -->
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
                 ${starCriteriaConfig.map((c, idx) => {
                   const active = idx === activeReviewSealStep;
                   const draftStars = qrDraftRatings[c.key].stars;
                   return `
-                    <button type="button" onclick="setActiveSealStep(${idx})" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${active ? 'bg-[#581C87] text-white border-[#581C87] shadow-sm' : 'bg-white text-slate-700 border-purple-200 hover:bg-purple-100'}">
-                      <span class="${c.textClass}">★</span>
-                      <span>${c.label}</span>
-                      <span class="text-[10px] px-1.5 py-0.2 rounded ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}">${draftStars}★</span>
+                    <button type="button" onclick="setActiveSealStep(${idx})" class="px-2.5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center justify-between gap-1 ${active ? 'bg-purple-700 text-white border-purple-500 shadow-md ring-2 ring-purple-400/40' : 'bg-white text-slate-700 border-slate-200 hover:border-purple-400'}">
+                      <span class="flex items-center gap-1 truncate">
+                        <span class="${active ? 'text-amber-300' : c.textClass}">★</span>
+                        <span class="truncate">${c.label.split(' ')[0]}</span>
+                      </span>
+                      <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'}">${draftStars}★</span>
                     </button>
                   `;
                 }).join('')}
               </div>
 
-              <!-- Conteúdo da Aba do Selo Atual -->
-              <div class="p-3.5 rounded-xl bg-white border border-purple-200 space-y-3">
-                <div class="flex flex-wrap items-center justify-between gap-2">
+              <!-- Cartão da Aba do Selo Atual -->
+              <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-4 shadow-xs">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                   <div>
-                    <h5 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-                      <span class="${currentCrit.textClass} text-base">★</span>
-                      Selo de ${currentCrit.label}
-                    </h5>
-                    <p class="text-[11px] text-slate-500">${currentCrit.desc}</p>
+                    <div class="flex items-center gap-2">
+                      <span class="w-7 h-7 rounded-lg flex items-center justify-center text-sm font-bold text-white" style="background:${currentCrit.colorHex}">★</span>
+                      <h5 class="font-extrabold text-slate-900 text-sm sm:text-base">Selo de ${currentCrit.label}</h5>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">${currentCrit.desc}</p>
                   </div>
 
-                  <!-- Seletor de 1 a 5 Estrelas para este Selo -->
-                  <div class="flex items-center gap-1 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200">
+                  <!-- Seletor Interativo de 1 a 5 Estrelas -->
+                  <div class="flex items-center gap-1.5 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 self-start sm:self-center">
                     ${[1, 2, 3, 4, 5].map(num => `
-                      <button type="button" onclick="setSealStarLevel('${currentCrit.key}', ${num})" class="text-xl leading-none transition-transform hover:scale-110 ${num <= currentDraft.stars ? currentCrit.textClass : 'text-slate-300'}" title="${num} estrela(s)">★</button>
+                      <button type="button" onclick="setSealStarLevel('${currentCrit.key}', ${num})" class="text-2xl leading-none transition-transform hover:scale-115 focus:outline-none ${num <= currentDraft.stars ? currentCrit.textClass : 'text-slate-300'}" title="${num} estrela(s)">★</button>
                     `).join('')}
-                    <span class="ml-1.5 text-xs font-extrabold text-slate-800">${currentDraft.stars}★</span>
+                    <span class="ml-1.5 text-xs font-extrabold px-2 py-0.5 rounded-md bg-purple-600 text-white">${currentDraft.stars}★</span>
                   </div>
                 </div>
 
                 <!-- Requisitos Dinâmicos conforme a Quantidade de Estrelas Marcadas -->
-                <div class="space-y-1.5">
-                  <span class="text-[11px] font-bold uppercase text-slate-600 block">
-                    Selecione os requisitos observados para ${currentDraft.stars} estrela(s):
+                <div class="space-y-2">
+                  <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500 block">
+                    O que você observou neste critério? (${currentDraft.stars} estrela${currentDraft.stars > 1 ? 's' : ''})
                   </span>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     ${availableReqs.map(req => {
                       const checked = currentDraft.selectedReqs.has(req);
                       return `
-                        <button type="button" onclick="toggleSealRequirement('${currentCrit.key}', '${req.replace(/'/g, "\\'")}')" class="text-left px-3 py-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-2 ${checked ? 'bg-purple-100 border-purple-500 text-purple-950 font-semibold' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}">
-                          <span>${checked ? '☑️' : '⬜'}</span>
-                          <span>${req}</span>
+                        <button type="button" onclick="toggleSealRequirement('${currentCrit.key}', '${req.replace(/'/g, "\\'")}')" class="text-left p-3 rounded-xl border text-xs transition-all flex items-start gap-2.5 ${checked ? 'bg-purple-600 border-purple-500 text-white font-semibold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-purple-400'}">
+                          <span class="w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-bold ${checked ? 'bg-white text-purple-700' : 'border border-slate-400 bg-white text-transparent'}">✓</span>
+                          <span class="leading-snug">${req}</span>
                         </button>
                       `;
                     }).join('')}
@@ -2234,23 +2265,26 @@
                 </div>
 
                 <!-- Navegação Rápida entre Abas de Selos -->
-                <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                  <button type="button" ${activeReviewSealStep === 0 ? 'disabled' : ''} onclick="setActiveSealStep(${Math.max(0, activeReviewSealStep - 1)})" class="px-3 py-1.5 rounded-lg border border-slate-200 font-semibold text-slate-600 disabled:opacity-40">
-                    ← Selo Anterior
+                <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+                  <button type="button" ${activeReviewSealStep === 0 ? 'disabled' : ''} onclick="setActiveSealStep(${Math.max(0, activeReviewSealStep - 1)})" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 font-semibold text-slate-700 disabled:opacity-40 transition-colors">
+                    ← Anterior
                   </button>
                   ${activeReviewSealStep < starCriteriaConfig.length - 1 ? `
-                    <button type="button" onclick="setActiveSealStep(${activeReviewSealStep + 1})" class="px-3.5 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-900 font-bold">
-                      Próximo Selo (${starCriteriaConfig[activeReviewSealStep + 1].label}) →
+                    <button type="button" onclick="setActiveSealStep(${activeReviewSealStep + 1})" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-xs transition-colors">
+                      Próximo: ${starCriteriaConfig[activeReviewSealStep + 1].label} →
                     </button>
                   ` : `
-                    <span class="text-[11px] font-bold text-emerald-700">✓ Todos os 5 selos revisados</span>
+                    <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+                      ✓ 5 selos revisados
+                    </span>
                   `}
                 </div>
               </div>
 
-              <div class="flex flex-col sm:flex-row gap-2">
-                <input id="estReviewComment" type="text" required placeholder="Comentário final sobre sua experiência presencial no local..." class="flex-1 px-3 py-2 text-xs rounded-xl border border-purple-200 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
-                <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0 shadow-sm">
+              <!-- Comentário Final + Botão de Envio -->
+              <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
+                <input id="estReviewComment" type="text" required placeholder="Escreva um comentário curto sobre sua visita..." class="flex-1 px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-800 hover:to-indigo-700 text-white font-bold text-xs shrink-0 shadow-md transition-all">
                   Enviar Avaliação Verificada
                 </button>
               </div>
