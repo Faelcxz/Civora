@@ -110,223 +110,172 @@
               </div>
             </div>
             <div>
-              <div class="flex items-center gap-1.5">
-                <span class="text-xl font-black tracking-tight text-white">Civora</span>
-                <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-purple-500/30 text-purple-200 border border-purple-400/30">Gov</span>
-              </div>
-              <p class="text-[11px] text-purple-200/80 font-medium">Prefeitura & Cidadão • Itajubá</p>
-            </div>
+        <!-- Contatos Rápidos de Emergência -->
+        <div class="pt-3 border-t border-white/15 space-y-2">
+          <p class="text-[10px] font-extrabold uppercase tracking-wider text-purple-200/80">Emergência • Toque p/ Copiar</p>
+          <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+            <button type="button" onclick="copyEmergencyNumber('199', 'Defesa Civil')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🌊 199 Defesa</button>
+            <button type="button" onclick="copyEmergencyNumber('193', 'Bombeiros')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🚒 193 Bomb.</button>
+            <button type="button" onclick="copyEmergencyNumber('192', 'SAMU')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🚑 192 SAMU</button>
+            <button type="button" onclick="copyEmergencyNumber('190', 'Polícia Militar')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🚓 190 Polícia</button>
           </div>
-
-          <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden px-2.5 py-1.5 rounded-xl bg-white/10 text-xs font-bold">
-            Menu
-          </button>
         </div>
-
-        <!-- Menu Principal de Navegação -->
-        <nav id="sidebarMenuItems" class="space-y-1.5">
-          <button type="button" data-nav="dashboard" onclick="switchMainView('dashboard')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-bold bg-white/15 text-white shadow-sm transition-all">
-            <span class="flex items-center gap-2.5"><span>🗺️</span> Mapa & Central Urbana</span>
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          </button>
-
-          <button type="button" data-nav="risks" onclick="switchMainView('risks')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>🌊</span> Riscos & Defesa Civil</span>
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-cyan-400/20 text-cyan-200">Rio</span>
-          </button>
-
-          <button type="button" data-nav="reviews" onclick="switchMainView('reviews')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>⭐</span> Avaliações & QR Code</span>
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-200">5★</span>
-          </button>
-
-          <button type="button" data-nav="egov" onclick="switchMainView('egov')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>🏛️</span> Serviços & Tributos</span>
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-400/25 text-purple-200">e-Gov</span>
-          </button>
-
-          <button type="button" data-nav="health" onclick="switchMainView('health')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>🏥</span> Saúde SUS & Educação</span>
-          </button>
-
-          <button type="button" data-nav="mobility" onclick="switchMainView('mobility')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>🚌</span> Ônibus & Zona Azul</span>
-          </button>
-
-          <button type="button" data-nav="culture" onclick="switchMainView('culture')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>🎭</span> Agenda & Cultura</span>
-          </button>
-
-          <button type="button" data-nav="donations" onclick="switchMainView('donations')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>🤝</span> Doações & Abrigos</span>
-          </button>
-
-          <button type="button" data-nav="jobs" onclick="switchMainView('jobs')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>💼</span> Vagas, Estágios & Cursos</span>
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200">NOVO</span>
-          </button>
-
-          <button type="button" data-nav="transparency" onclick="switchMainView('transparency')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span class="flex items-center gap-2.5"><span>📊</span> Transparência & Diário</span>
-          </button>
-        </nav>
-
-        <!-- Botão de Nova Denúncia / Ocorrência -->
-        <button type="button" onclick="openReportModal()" class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-950/30 flex items-center justify-center gap-2 transition-all">
-          <span>⚠️</span> Registrar Ocorrência na Rua
-        </button>
       </div>
 
-      <!-- Rodapé da Sidebar: Emergências + Configurações -->
-      <div class="p-4 border-t border-white/10 space-y-3 bg-black/15">
-        <div>
-          <p class="text-[10px] font-extrabold uppercase tracking-wider text-purple-300 mb-1.5">Emergência Itajubá (Toque p/ Copiar)</p>
-          <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-            <button type="button" onclick="copyEmergencyNumber('199', 'Defesa Civil')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-between font-bold">
-              <span>Def. Civil</span><span class="text-amber-300">199</span>
-            </button>
-            <button type="button" onclick="copyEmergencyNumber('193', 'Corpo de Bombeiros')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-between font-bold">
-              <span>Bombeiros</span><span class="text-rose-300">193</span>
-            </button>
-            <button type="button" onclick="copyEmergencyNumber('192', 'SAMU')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-between font-bold">
-              <span>SAMU</span><span class="text-emerald-300">192</span>
-            </button>
-            <button type="button" onclick="copyEmergencyNumber('190', 'Polícia Militar')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-between font-bold">
-              <span>Polícia</span><span class="text-sky-300">190</span>
-            </button>
-          </div>
-        </div>
-
-        <button type="button" onclick="openSettingsModal()" class="w-full py-2.5 px-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center justify-between transition-all">
-          <span class="flex items-center gap-2"><span>⚙️</span> Configurações & Tema</span>
-          <span id="sidebarThemeTag" class="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/40 text-purple-100">Claro</span>
+      <div class="p-4 border-t border-white/15">
+        <button type="button" onclick="openSettingsModal()" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-xs font-extrabold transition-all">
+          <span>⚙️ Configurações</span>
+          <span id="sidebarThemeTag" class="text-[10px] px-2 py-0.5 rounded-full bg-purple-400/25 text-purple-100">Claro</span>
         </button>
       </div>
     </aside>
 
-    <!-- ÁREA PRINCIPAL DE CONTEÚDO -->
+    <!-- CONTEÚDO PRINCIPAL -->
     <div class="flex-1 min-w-0 flex flex-col">
+      <!-- Barra Superior -->
+      <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-purple-100 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 surface-card">
+        <div class="relative flex-1 min-w-[240px] max-w-xl">
+          <input
+            id="topGlobalSearchInput"
+            type="text"
+            autocomplete="off"
+            placeholder="Buscar rua, bairro, UBS, linha de ônibus ou estabelecimento em Itajubá..."
+            oninput="handlePlaceAutocomplete(this.value, 'topPlaceSuggestions', 'topGlobalSearchInput')"
+            onfocus="handlePlaceAutocomplete(this.value, 'topPlaceSuggestions', 'topGlobalSearchInput')"
+            onkeydown="if(event.key==='Enter'){ event.preventDefault(); searchItajubaLocation('topGlobalSearchInput'); }"
+            onblur="setTimeout(() => document.getElementById('topPlaceSuggestions')?.classList.add('hidden'), 200)"
+            class="w-full pl-9 pr-4 py-2 rounded-2xl border border-purple-200 bg-slate-50 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <span class="absolute left-3 top-2 text-xs">🔍</span>
+          <div id="topPlaceSuggestions" class="hidden absolute left-0 right-0 mt-1.5 bg-white border border-purple-200 rounded-2xl shadow-2xl overflow-hidden divide-y divide-slate-100 z-[900] max-h-72 overflow-y-auto"></div>
+        </div>
 
-      <!-- BARRA SUPERIOR (PESQUISA GLOBAL + STATUS DO RIO + ATALHOS) -->
-      <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-purple-100 px-4 sm:px-6 py-3 surface-card">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-          <!-- Busca Global com Palpites Verticais -->
-          <div class="relative flex-1 min-w-[240px] max-w-xl">
-            <div class="flex items-center bg-slate-100 rounded-2xl px-3.5 py-2 border border-transparent focus-within:border-purple-500 focus-within:bg-white transition-all">
-              <span class="text-slate-400 mr-2">🔍</span>
-              <input
-                id="globalSearchInput"
-                type="text"
-                autocomplete="off"
-                placeholder="Pesquisar rua, bairro, UBS, restaurante ou serviço em Itajubá..."
-                oninput="handlePlaceAutocomplete(this.value, 'globalSearchSuggestions', 'globalSearchInput')"
-                onfocus="handlePlaceAutocomplete(this.value, 'globalSearchSuggestions', 'globalSearchInput')"
-                onblur="setTimeout(() => document.getElementById('globalSearchSuggestions')?.classList.add('hidden'), 200)"
-                class="w-full bg-transparent text-xs font-medium text-slate-800 focus:outline-none"
-              />
-            </div>
-            <div id="globalSearchSuggestions" class="hidden absolute left-0 right-0 mt-1.5 bg-white border border-purple-100 rounded-2xl shadow-2xl overflow-hidden divide-y divide-slate-100 z-50 max-h-80 overflow-y-auto"></div>
-          </div>
-
-          <!-- Status Rápido & Botões -->
-          <div class="flex flex-wrap items-center gap-2">
-            <button type="button" onclick="switchMainView('risks')" id="topRiverBadge" class="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-100 transition-all">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Rio Sapucaí: 1,45m (Normal)</span>
-            </button>
-
-            <button type="button" onclick="openHowToUseModal()" class="px-3 py-1.5 rounded-full bg-purple-50 border border-purple-200 text-purple-800 text-xs font-bold hover:bg-purple-100 transition-all">
-              ❓ Como Usar
-            </button>
-
-            <button type="button" onclick="openSettingsModal()" class="px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-200 transition-all">
-              ⚙️ Configurações
-            </button>
-          </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="topRiverBadge" onclick="switchMainView('risks')" class="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Rio Sapucaí: 1,45m (Normal)</span>
+          </button>
+          <button type="button" onclick="openReportModal()" class="px-3.5 py-1.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold shadow-sm">
+            + Reportar na Rua
+          </button>
+          <button type="button" onclick="openHowToUseModal()" class="px-3 py-1.5 rounded-full bg-purple-100 text-purple-900 text-xs font-extrabold">
+            Como Usar?
+          </button>
         </div>
       </header>
 
-      <!-- CONTEÚDO DAS ABAS -->
-      <main class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-6">
+      <main class="flex-1 p-4 sm:p-6 space-y-6 max-w-[1440px] w-full mx-auto">
 
         <!-- ========================================================= -->
-        <!-- ABA 1: MAPA & CENTRAL URBANA (PADRÃO)                     -->
+        <!-- ABA 1: MAPA & CENTRAL URBANA                              -->
         <!-- ========================================================= -->
         <section id="view-dashboard" class="space-y-6">
 
-          <!-- Banner de Boas-Vindas & Atalhos Rápidos -->
-          <div class="rounded-3xl bg-gradient-to-r from-[#4C1D95] via-[#6D28D9] to-[#3730A3] text-white p-6 shadow-xl relative overflow-hidden">
-            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-              <div class="space-y-2 max-w-2xl">
-                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-purple-100">
-                  ✨ Bem-vindo ao Civora Itajubá • Conectado à Prefeitura
-                </span>
-                <h1 class="text-2xl sm:text-3xl font-black tracking-tight">Tudo o que acontece na sua cidade, em um só lugar.</h1>
-                <p class="text-xs sm:text-sm text-purple-100/90 leading-relaxed">
-                  Explore o mapa interativo por bairro, acompanhe o nível do Rio Sapucaí, consulte horários de ônibus, emita guias municipais e verifique os selos de qualidade avaliados via QR Code no comércio local.
-                </p>
-              </div>
-              <div class="flex flex-wrap gap-2.5 shrink-0">
-                <button type="button" onclick="openReportModal()" class="px-4 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-md transition-all">
-                  ⚠️ Reportar na Rua
-                </button>
-                <button type="button" onclick="switchMainView('reviews')" class="px-4 py-2.5 rounded-2xl bg-white text-purple-900 hover:bg-purple-50 font-extrabold text-xs shadow-md transition-all">
-                  ⭐ Consultar Selos QR
-                </button>
-                <button type="button" onclick="switchMainView('egov')" class="px-4 py-2.5 rounded-2xl bg-white/15 hover:bg-white/25 text-white border border-white/25 font-bold text-xs transition-all">
-                  🏛️ Serviços Prefeitura
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Seletor de Bairro + Raio-X da Região (3 Cards Limpos) -->
+          <!-- Seletor de Bairro + Raio-X Completo da Região -->
           <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm space-y-4 surface-card">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h2 class="text-base font-extrabold text-slate-900">📍 Raio-X por Bairro & Região de Itajubá</h2>
-                <p class="text-xs text-slate-500">Selecione um bairro para focalizar no mapa e visualizar os indicadores locais.</p>
+                <h2 class="text-base font-extrabold text-slate-900">📍 Raio-X Oficial por Bairro de Itajubá - MG</h2>
+                <p class="text-xs text-slate-500">Escolha um bairro para o mapa enquadrar a região e carregar criminalidade (%), histórico, problemas estruturais, notícias datadas e risco de enchente.</p>
               </div>
               <div class="flex items-center gap-2">
                 <label for="neighborhoodSelect" class="text-[11px] font-extrabold uppercase text-purple-700">Bairro:</label>
-                <select id="neighborhoodSelect" onchange="selectNeighborhood(this.value)" class="px-3.5 py-2 rounded-2xl border border-purple-200 bg-purple-50/60 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                  <option value="all">Toda a Cidade de Itajubá</option>
-                  <option value="centro">Centro & Praça Getúlio Vargas</option>
-                  <option value="bps">BPS & Pinheirinho (UNIFEI)</option>
-                  <option value="medicina">Medicina & Morro Chic</option>
-                  <option value="avenida">Avenida & Varginha</option>
-                  <option value="estiva">Estiva & Boa Vista</option>
-                  <option value="oriental">Oriental & Jardim das Colinas</option>
-                  <option value="cruzeiro">Cruzeiro & Santa Luzia</option>
-                  <option value="santos_dumont">Santos Dumont & São Sebastião</option>
-                  <option value="imbel">IMBEL / Vila Izabel / N. Sra. de Fátima</option>
-                  <option value="sao_judas">São Judas Tadeu & Novo Horizonte</option>
-                  <option value="santana">Santana & Vila Poddis</option>
-                  <option value="sao_jose">São José & Açude</option>
-                  <option value="piedade">Piedade & Santa Rosa</option>
-                  <option value="anos_dourados">Anos Dourados & Jardim Berna</option>
-                  <option value="nacoes">Nações & Vila Rubens</option>
-                  <option value="canarinhos">Canarinhos & Vale dos Pinheiros</option>
-                  <option value="ano_bom">Ano Bom & Zona Rural</option>
+                <select id="neighborhoodSelect" onchange="selectNeighborhood(this.value)" class="px-3.5 py-2 rounded-2xl border border-purple-200 bg-purple-50/60 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500 max-w-[270px]">
+                  <option value="all">Toda a Cidade de Itajubá (37 Bairros)</option>
+                  <option value="centro">Centro (CEP 37500-001)</option>
+                  <option value="santa_rosa">Santa Rosa (CEP 37501-554)</option>
+                  <option value="pinheirinho">Pinheirinho / BPS / UNIFEI (CEP 37500-052)</option>
+                  <option value="medicina">Medicina (CEP 37502-100)</option>
+                  <option value="morro_chic">Morro Chic (CEP 37500-020)</option>
+                  <option value="avenida">Avenida (CEP 37504-000)</option>
+                  <option value="varginha">Varginha (CEP 37500-310)</option>
+                  <option value="boa_vista">Boa Vista (CEP 37505-000)</option>
+                  <option value="estiva">Estiva (CEP 37500-274)</option>
+                  <option value="rebourgeon">Rebourgeon (CEP 37503-175)</option>
+                  <option value="porto_velho">Porto Velho (CEP 37501-000)</option>
+                  <option value="sao_vicente">São Vicente (CEP 37502-000)</option>
+                  <option value="santo_antonio">Santo Antônio (CEP 37503-130)</option>
+                  <option value="vila_poddis">Vila Poddis (CEP 37503-000)</option>
+                  <option value="oriente">Oriente & Jardim das Colinas (CEP 37500-240)</option>
+                  <option value="cruzeiro">Cruzeiro (CEP 37500-204)</option>
+                  <option value="santa_luzia">Santa Luzia (CEP 37503-163)</option>
+                  <option value="santos_dumont">Santos Dumont (CEP 37504-092)</option>
+                  <option value="sao_sebastiao">São Sebastião (CEP 37502-450)</option>
+                  <option value="imbel">IMBEL (CEP 37501-338)</option>
+                  <option value="vila_isabel">Vila Isabel (CEP 37505-177)</option>
+                  <option value="nossa_senhora_fatima">Nossa Senhora de Fátima (CEP 37502-500)</option>
+                  <option value="nossa_senhora_agonia">Nossa Senhora da Agonia (CEP 37500-187)</option>
+                  <option value="santa_rita">Santa Rita de Cássia (CEP 37502-476)</option>
+                  <option value="sao_judas">São Judas Tadeu (CEP 37504-068)</option>
+                  <option value="novo_horizonte">Novo Horizonte (CEP 37505-175)</option>
+                  <option value="acude">Açude (CEP 37504-131)</option>
+                  <option value="piedade">Piedade (CEP 37504-588)</option>
+                  <option value="nacoes">Nações (CEP 37504-358)</option>
+                  <option value="vila_rubens">Vila Rubens (CEP 37505-154)</option>
+                  <option value="vila_betel">Vila Betel (CEP 37505-500)</option>
+                  <option value="jardim_bernadete">Jardim Bernadete (CEP 37503-167)</option>
+                  <option value="distrito_industrial">Distrito Industrial (CEP 37504-085)</option>
+                  <option value="morro_grande">Morro Grande (CEP 37502-700)</option>
+                  <option value="ponte_alta">Ponte Alta (CEP 37506-150)</option>
+                  <option value="anhumas">Anhumas (CEP 37502-149)</option>
+                  <option value="zona_rural">Área Rural / Capetinga / Toledos (CEP 37506-899)</option>
                 </select>
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+            <!-- 4 Cards Principais do Bairro -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
               <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-100 surface-subcard">
-                <p class="text-[10px] font-extrabold uppercase tracking-wider text-purple-700">Segurança & Monitoramento</p>
-                <p id="statSafety" class="text-lg font-black text-slate-900 mt-1">Baixa • 11,4 / 100 mil hab.</p>
-                <p class="text-[11px] text-emerald-700 font-semibold mt-0.5">Videomonitoramento Guarda Municipal</p>
+                <p class="text-[10px] font-extrabold uppercase tracking-wider text-purple-700">Criminalidade Atual (SEJUSP-MG)</p>
+                <p id="statSafety" class="text-xl font-black text-slate-900 mt-1">1,14% • Queda de 10,1%</p>
+                <p id="statSafetySub" class="text-[11px] text-emerald-700 font-semibold mt-0.5">Boletim Out/2026 • Videomonitoramento</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-cyan-50/80 border border-cyan-100 surface-subcard">
+                <p class="text-[10px] font-extrabold uppercase tracking-wider text-cyan-800">Risco de Enchente & Drenagem</p>
+                <p id="statFloodRisk" class="text-xl font-black text-slate-900 mt-1">Moderado • Cota 842,3m</p>
+                <p id="statFloodSub" class="text-[11px] text-cyan-700 font-semibold mt-0.5">Monitoramento LIH-UNIFEI & Defesa Civil</p>
               </div>
               <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 surface-subcard">
-                <p class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">Investimentos na Região</p>
-                <p id="statInvest" class="text-lg font-black text-slate-900 mt-1">R$ 18,4 Mi em 28 obras</p>
-                <p class="text-[11px] text-indigo-700 font-semibold mt-0.5">Drenagem, LED 100% e Mobilidade</p>
+                <p class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">Infraestrutura & Obras</p>
+                <p id="statInvest" class="text-xl font-black text-slate-900 mt-1">39 Unidades SUS • LED</p>
+                <p id="statInvestSub" class="text-[11px] text-indigo-700 font-semibold mt-0.5">Prefeitura Municipal de Itajubá</p>
               </div>
               <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 surface-subcard">
-                <p class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">Saúde & Serviços Próximos</p>
-                <p id="statHealth" class="text-lg font-black text-slate-900 mt-1">12 UBSs, HCI e Farmácias</p>
-                <p class="text-[11px] text-emerald-700 font-semibold mt-0.5">Selo Sanitário e Avaliação Ativos</p>
+                <p class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">Saúde, Educação & Linhas</p>
+                <p id="statHealth" class="text-xl font-black text-slate-900 mt-1">21 Linhas Valônia • HCI</p>
+                <p id="statHealthSub" class="text-[11px] text-emerald-700 font-semibold mt-0.5">Cobertura UBS/PSF e Transporte</p>
+              </div>
+            </div>
+
+            <!-- Dossiê Detalhado do Bairro Selecionado: Histórico de Criminalidade (%), Problemas Estruturais e Notícias Datadas -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
+              <!-- Gráfico Histórico de Criminalidade (%) -->
+              <div class="lg:col-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3 surface-subcard">
+                <div>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-700">Série Histórica SEJUSP-MG (2021–2026)</span>
+                  <h3 class="text-sm font-black text-slate-900">Taxa de Criminalidade (%) • <span id="crimeChartNbLabel">Itajubá</span></h3>
+                  <p class="text-[11px] text-slate-500">Índice percentual anual de ocorrências registradas por 100 hab.</p>
+                </div>
+                <div id="neighborhoodCrimeChart" class="pt-3"></div>
+                <p id="crimeAnalysisNote" class="text-[11px] text-slate-600 font-medium">Queda acumulada de 10,1% nos últimos 12 meses (Boletim SEJUSP-MG Out/2026).</p>
+              </div>
+
+              <!-- Problemas Estruturais Mapeados no Bairro -->
+              <div class="lg:col-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 surface-subcard">
+                <div>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-rose-700">Diagnóstico Urbano & Engenharia</span>
+                  <h3 class="text-sm font-black text-slate-900">Problemas Estruturais no Bairro</h3>
+                </div>
+                <div id="neighborhoodStructuralList" class="space-y-2 text-xs"></div>
+              </div>
+
+              <!-- Notícias & Marcos Históricos do Bairro com Data -->
+              <div class="lg:col-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 surface-subcard">
+                <div>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">Arquivo Jornalístico & Defesa Civil</span>
+                  <h3 class="text-sm font-black text-slate-900">Notícias & Registros Datados</h3>
+                </div>
+                <div id="neighborhoodNewsList" class="space-y-2 text-xs max-h-56 overflow-y-auto pr-1"></div>
               </div>
             </div>
           </div>
@@ -1124,138 +1073,963 @@
   <!-- JAVASCRIPT COMPLETO DA PLATAFORMA CIVORA                  -->
   <!-- ========================================================= -->
   <script>
-    // 1. DADOS DE BAIRROS DE ITAJUBÁ - MG
+    // 1. BASE OFICIAL DOS 37 BAIRROS DE ITAJUBÁ - MG (CEPs, Coordenadas, Criminalidade %, Problemas Estruturais, Notícias Datadas e Risco de Enchente)
     const neighborhoodsData = {
-      all: { name: 'Toda a Cidade de Itajubá', center: [-22.4256, -45.4528], zoom: 14, safety: 'Baixa • 11,4 / 100 mil hab.', invest: 'R$ 18,4 Mi em 28 obras', health: '12 UBSs, HCI e Farmácias' },
-      centro: { name: 'Centro & Praça Getúlio Vargas', center: [-22.4256, -45.4528], zoom: 16, safety: 'Monitorada 24h • Guarda Civil', invest: 'R$ 4,2 Mi • Revitalização LED', health: 'Policlínica Central e 6 Farmácias' },
-      bps: { name: 'BPS & Pinheirinho (UNIFEI)', center: [-22.4132, -45.4485], zoom: 16, safety: 'Baixa • Ronda Universitária', invest: 'R$ 3,8 Mi • Ciclovia & Drenagem', health: 'UBS Pinheirinho e Clínicas' },
-      medicina: { name: 'Medicina & Morro Chic', center: [-22.4215, -45.4465], zoom: 16, safety: 'Baixa • Corredor Hospitalar', invest: 'R$ 2,5 Mi • Mobilidade & Acessibilidade', health: 'Hospital de Clínicas (HCI) e UBS' },
-      avenida: { name: 'Avenida & Varginha', center: [-22.4310, -45.4565], zoom: 16, safety: 'Baixa • Patrulhamento Preventivo', invest: 'R$ 1,9 Mi • Recapeamento Viário', health: 'UBS Varginha e Drogarias' },
-      estiva: { name: 'Estiva & Boa Vista', center: [-22.4368, -45.4612], zoom: 16, safety: 'Moderada • Base Comunitária', invest: 'R$ 2,1 Mi • Comportas & Iluminação', health: 'UBS Boa Vista e Farmácia Popular' },
-      oriental: { name: 'Oriental & Jardim das Colinas', center: [-22.4190, -45.4595], zoom: 16, safety: 'Baixa • Área Residencial', invest: 'R$ 1,1 Mi • Pavimentação', health: 'UBS Oriental' },
-      cruzeiro: { name: 'Cruzeiro & Santa Luzia', center: [-22.4295, -45.4410], zoom: 16, safety: 'Baixa • Ronda Escolar', invest: 'R$ 1,3 Mi • Contenção de Encostas', health: 'UBS Cruzeiro' },
-      santos_dumont: { name: 'Santos Dumont & São Sebastião', center: [-22.4342, -45.4472], zoom: 16, safety: 'Baixa • Videomonitoramento', invest: 'R$ 1,4 Mi • Drenagem Pluvial', health: 'UBS Santos Dumont' },
-      imbel: { name: 'IMBEL / Vila Izabel / N. Sra. de Fátima', center: [-22.4415, -45.4550], zoom: 15, safety: 'Baixa • Segurança Patrimonial', invest: 'R$ 1,7 Mi • Sinalização & Vias', health: 'UBS Vila Izabel' },
-      sao_judas: { name: 'São Judas Tadeu & Novo Horizonte', center: [-22.4085, -45.4560], zoom: 15, safety: 'Baixa • Ronda Comunitária', invest: 'R$ 1,6 Mi • Nova Creche & Asfalto', health: 'UBS São Judas Tadeu' },
-      santana: { name: 'Santana & Vila Poddis', center: [-22.4240, -45.4610], zoom: 16, safety: 'Baixa • Área Central Oeste', invest: 'R$ 1,5 Mi • Galerias Rio Sapucaí', health: 'UBS Santana' },
-      sao_jose: { name: 'São José & Açude', center: [-22.4150, -45.4405], zoom: 16, safety: 'Baixa • Área Residencial', invest: 'R$ 950 mil • Iluminação LED', health: 'UBS Pinheirinho / São José' },
-      piedade: { name: 'Piedade & Santa Rosa', center: [-22.4385, -45.4390], zoom: 15, safety: 'Baixa • Ronda Rural/Urbana', invest: 'R$ 1,2 Mi • Pavimentação', health: 'UBS Santa Rosa' },
-      anos_dourados: { name: 'Anos Dourados & Jardim Berna', center: [-22.4045, -45.4495], zoom: 15, safety: 'Baixa • Zona Norte', invest: 'R$ 1,0 Mi • Praça & Esporte', health: 'UBS Novo Horizonte' },
-      nacoes: { name: 'Nações & Vila Rubens', center: [-22.4280, -45.4660], zoom: 16, safety: 'Baixa • Área Residencial', invest: 'R$ 880 mil • Acessibilidade', health: 'UBS Varginha' },
-      canarinhos: { name: 'Canarinhos & Vale dos Pinheiros', center: [-22.4120, -45.4350], zoom: 15, safety: 'Baixa • Área Verde', invest: 'R$ 790 mil • Drenagem', health: 'UBS Pinheirinho' },
-      ano_bom: { name: 'Ano Bom & Zona Rural', center: [-22.4520, -45.4450], zoom: 14, safety: 'Patrulha Rural Ativa', invest: 'R$ 2,2 Mi • Estradas Vicinais', health: 'ESF Rural Itajubá' }
-    };
-
-    // 2. CATÁLOGO BASE DE RUAS & AVENIDAS DE ITAJUBÁ
-    const itajubaStreetsCatalog = [
-      { name: 'Avenida BPS', district: 'Pinheirinho / BPS', lat: -22.4135, lng: -45.4488, type: 'Avenida' },
-      { name: 'Avenida Coronel Carneiro Júnior', district: 'Centro', lat: -22.4258, lng: -45.4525, type: 'Avenida' },
-      { name: 'Avenida Doutor Antônio Braga Filho', district: 'Varginha / Estiva', lat: -22.4315, lng: -45.4562, type: 'Avenida' },
-      { name: 'Avenida Jerson Dias', district: 'Estiva', lat: -22.4362, lng: -45.4608, type: 'Avenida' },
-      { name: 'Avenida Padre Lourenço da Costa', district: 'Morro Chic / Cruzeiro', lat: -22.4282, lng: -45.4455, type: 'Avenida' },
-      { name: 'Avenida Renó Júnior', district: 'Medicina', lat: -22.4212, lng: -45.4468, type: 'Avenida' },
-      { name: 'Rua Dona Maria Carneiro', district: 'Centro', lat: -22.4248, lng: -45.4518, type: 'Rua' },
-      { name: 'Rua Major Belo Lisboa', district: 'Centro', lat: -22.4265, lng: -45.4535, type: 'Rua' },
-      { name: 'Rua Geraldino Campista', district: 'Santo Antônio / Centro', lat: -22.4235, lng: -45.4548, type: 'Rua' },
-      { name: 'Praça Getúlio Vargas', district: 'Centro', lat: -22.4254, lng: -45.4522, type: 'Praça' },
-      { name: 'Parque Municipal de Itajubá', district: 'Varginha', lat: -22.4328, lng: -45.4585, type: 'Parque' }
-    ];
-
-    // 3. DEFINIÇÃO DOS 5 SELOS COLORIDOS & REQUISITOS DINÂMICOS POR ESTRELA (1★ a 5★)
-    const sealDefinitions = [
-      {
-        key: 'quality',
-        label: 'Qualidade',
-        fullTitle: 'Selo de Qualidade (Estrela Verde)',
-        subtitle: 'Sabor, temperatura, apresentação ou eficiência técnica',
-        colorHex: '#10B981',
-        badgeClass: 'bg-emerald-600 text-white',
-        criteriaByStars: {
-          5: ['Comida bem temperada / Execução impecável', 'Boa temperatura ao servir / Funciona perfeitamente', 'Boa aparência e apresentação', 'Sabor agradável / Resultado excelente'],
-          4: ['Melhorar tempero / Pequeno ajuste técnico', 'Temperatura ok', 'Aparência não tão agradável', 'Bom resultado geral, mas pode evoluir'],
-          3: ['Tempero neutro ou irregular', 'Temperatura abaixo do ideal', 'Apresentação simples demais', 'Serviço mediano'],
-          2: ['Comida fria ou mal preparada', 'Apresentação descuidada', 'Qualidade abaixo do esperado', 'Necessita revisão urgente'],
-          1: ['Produto impróprio ou serviço falho', 'Totalmente fora do padrão esperado', 'Péssima experiência técnica', 'Não recomendo pela qualidade']
-        }
+      all: {
+        name: 'Toda a Cidade de Itajubá (37 Bairros)',
+        center: [-22.4256, -45.4528],
+        zoom: 14,
+        safety: '1,14% • Queda de 10,1%',
+        safetySub: 'Boletim SEJUSP-MG Out/2026 • 11,4 ocorr./mil hab.',
+        floodRisk: 'Moderado • 10 Estações',
+        floodSub: 'Monitoramento Rio Sapucaí, Rib. José Pereira e Cór. Piranguçu',
+        invest: '39 Unidades SUS • LED 100%',
+        investSub: 'Prefeitura Municipal de Itajubá (CNPJ 18.025.940/0001-09)',
+        health: '21 Linhas Valônia • HCI & UBSs',
+        healthSub: 'Cobertura integral urbana e rural',
+        crimeHistory: [
+          { year: '2021', pct: 1.58 },
+          { year: '2022', pct: 1.49 },
+          { year: '2023', pct: 1.41 },
+          { year: '2024', pct: 1.33 },
+          { year: '2025', pct: 1.27 },
+          { year: '2026', pct: 1.14 }
+        ],
+        crimeNote: 'Segundo a SEJUSP-MG (Out/2026), Itajubá registrou redução de 10,1% nos crimes violentos e patrimoniais nos últimos 12 meses.',
+        structuralIssues: [
+          { loc: 'Calha urbana do Rio Sapucaí (Centro / Varginha / Santa Rosa)', desc: 'Estrangulamento de seção hidráulica em cheias acima de 2,80m (Estudo LIH-UNIFEI).', lat: -22.4275, lng: -45.4555 },
+          { loc: 'Corredor Av. BPS / Rotatória UNIFEI', desc: 'Saturação de fluxo viário nos horários de pico (7h30 e 18h) e desgaste asfáltico.', lat: -22.4125, lng: -45.4485 },
+          { loc: 'Encostas Rebourgeon / Cruzeiro', desc: 'Monitoramento geotécnico contínuo em períodos de chuva acumulada > 60mm/24h.', lat: -22.4288, lng: -45.4408 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Monitoramento Hidrológico Espiaí registra 0,50m na Passarela José Miguel e Ponte do Batalhão', source: 'Defesa Civil Itajubá' },
+          { date: '04/10/2026', title: 'Boletim SEJUSP-MG confirma queda de 10,1% na criminalidade em Itajubá em 12 meses', source: 'SEJUSP-MG' },
+          { date: '20/10/2026', title: 'SENAI CFP Aureliano Chaves abre edital Jovem Aprendiz 2027 para indústrias de Itajubá', source: 'FIEMG / SENAI' }
+        ]
       },
-      {
-        key: 'accessibility',
-        label: 'Acessibilidade',
-        fullTitle: 'Selo de Acessibilidade (Estrela Azul)',
-        subtitle: 'Rampas, banheiro adaptado, sinalização tátil e circulação',
-        colorHex: '#0EA5E9',
-        badgeClass: 'bg-sky-600 text-white',
-        criteriaByStars: {
-          5: ['Rampa com inclinação adequada', 'Banheiro adaptado e sinalizado', 'Corredores amplos sem obstáculos', 'Atendimento preparado para PCD/Idosos'],
-          4: ['Possui rampa, mas falta corrimão', 'Acesso principal bom, interior estreito', 'Banheiro adaptado precisa de manutenção', 'Boa disposição para ajudar'],
-          3: ['Degrau na entrada sem rampa fixa', 'Pouco espaço entre mesas/balcões', 'Sinalização tátil inexistente', 'Acesso parcial'],
-          2: ['Acesso difícil para cadeirantes', 'Banheiro inacessível', 'Calçada obstruída', 'Falta adaptação básica'],
-          1: ['Totalmente inacessível (escadas sem rampa)', 'Barreiras físicas graves', 'Sem qualquer suporte para PCD', 'Risco de queda no acesso']
-        }
+      centro: {
+        name: 'Centro (CEP 37500-001)',
+        center: [-22.4256, -45.4526],
+        zoom: 16,
+        safety: '1,38% • Furtos em queda',
+        safetySub: 'Videomonitoramento Guarda Civil & 56º BPM',
+        floodRisk: 'Alto em Cheias • Cota 842,2m',
+        floodSub: 'Estação Passarela José Miguel (0,50m atual)',
+        invest: 'Policlínica & Farmácia de Todos',
+        investSub: 'Praça Amélia Braga • Av. Cel. Carneiro Júnior',
+        health: 'Terminal Urbano (18 Linhas)',
+        healthSub: 'Praça Dr. José Braz / Mercado Municipal',
+        crimeHistory: [
+          { year: '2021', pct: 1.92 }, { year: '2022', pct: 1.81 }, { year: '2023', pct: 1.69 },
+          { year: '2024', pct: 1.55 }, { year: '2025', pct: 1.46 }, { year: '2026', pct: 1.38 }
+        ],
+        crimeNote: 'Maior concentração comercial; queda de 14% em furtos a transeuntes após câmeras inteligentes.',
+        structuralIssues: [
+          { loc: 'Rua Xavier Lisboa / Av. Cel. Carneiro Júnior', desc: 'Cota topográfica baixa (842,20m) sujeita a refluxo pluvial em chuvas intensas.', lat: -22.4258, lng: -45.4525 },
+          { loc: 'Calçadão e entorno do Mercado Municipal', desc: 'Necessidade de nivelamento de rampas táteis e reorganização de carga/descarga.', lat: -22.4244, lng: -45.4534 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Estação Passarela José Miguel marca 0,50m (19% da calha) com fluxo normal', source: 'Alerta Itajubá' },
+          { date: '18/08/2026', title: 'Prefeitura conclui modernização de luminárias LED na Praça Getúlio Vargas', source: 'PMI Obras' },
+          { date: '12/01/2023', title: 'Drenagem profunda instalada na Rua Dona Maria Carneiro reduz pontos de poça', source: 'Secretaria de Obras' }
+        ]
       },
-      {
-        key: 'hygiene',
-        label: 'Higiene & Selo',
-        fullTitle: 'Selo de Higiene & Regularidade (Estrela Amarela)',
-        subtitle: 'Limpeza do salão, sanitários, manipulação e selo VISA',
-        colorHex: '#F59E0B',
-        badgeClass: 'bg-amber-500 text-slate-950',
-        criteriaByStars: {
-          5: ['Ambiente e mesas impecavelmente limpos', 'Banheiros higienizados e abastecidos', 'Equipe com touca/luvas e boas práticas', 'Selo sanitário visível e atualizado'],
-          4: ['Salão limpo, banheiro precisa de reposição', 'Boa organização geral', 'Higiene satisfatória nos utensílios', 'Pequenos detalhes de limpeza'],
-          3: ['Limpeza razoável em horário de pico', 'Mesas demoram a ser higienizadas', 'Banheiro com limpeza regular', 'Pode melhorar organização'],
-          2: ['Mesas sujas ou lixeiras cheias', 'Banheiro mal conservado', 'Falta de cuidado na manipulação', 'Odor desagradável no local'],
-          1: ['Falta grave de higiene visível', 'Utensílios ou ambiente sujos', 'Risco sanitário aparente', 'Necessita fiscalização']
-        }
+      santa_rosa: {
+        name: 'Santa Rosa (CEP 37501-554)',
+        center: [-22.4435, -45.4625],
+        zoom: 16,
+        safety: '0,92% • Baixa Incidência',
+        safetySub: 'Ronda Preventiva Zona Sul • 56º BPM',
+        floodRisk: 'Alto (Montante Rio Sapucaí)',
+        floodSub: 'Estação-base LIH-UNIFEI & Pluviômetro Santa Rosa',
+        invest: 'PSF Santa Rosa (CNES 2212714)',
+        investSub: 'Atendimento Atenção Primária e Vacinação',
+        health: '8 Linhas Expresso Valônia',
+        healthSub: 'Linhas 01, 02, 03A, 03B, 04A, 04B, 05, 06, 11A/B/C',
+        crimeHistory: [
+          { year: '2021', pct: 1.24 }, { year: '2022', pct: 1.18 }, { year: '2023', pct: 1.10 },
+          { year: '2024', pct: 1.03 }, { year: '2025', pct: 0.98 }, { year: '2026', pct: 0.92 }
+        ],
+        crimeNote: 'Bairro residencial tranquilo na entrada sul da cidade, com baixa taxa de ocorrências.',
+        structuralIssues: [
+          { loc: 'Trecho a montante do Rio Sapucaí • Santa Rosa', desc: 'Ponto de entrada da onda de cheia vinda de Wenceslau Braz; requer limpeza de margens.', lat: -22.4442, lng: -45.4635 },
+          { loc: 'Acesso rodoviário BR-459 / Santa Rosa', desc: 'Necessidade de melhoria na sinalização horizontal e iluminação no trevo.', lat: -22.4420, lng: -45.4605 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Pluviômetro Estação Santa Rosa registra 0,0 mm acumulado nas últimas 24h', source: 'Defesa Civil Itajubá' },
+          { date: '14/05/2026', title: 'Expresso Valônia amplia horários das linhas 03B e 04B Santa Rosa – Rebourgeon', source: 'Mobilidade Urbana' },
+          { date: '15/09/2024', title: 'PSF Santa Rosa recebe novos equipamentos odontológicos e sala de triagem', source: 'Secretaria de Saúde' }
+        ]
       },
-      {
-        key: 'service',
-        label: 'Atendimento',
-        fullTitle: 'Selo de Atendimento (Estrela Roxa)',
-        subtitle: 'Cordialidade, agilidade, transparência e resolução',
-        colorHex: '#8B5CF6',
-        badgeClass: 'bg-purple-600 text-white',
-        criteriaByStars: {
-          5: ['Atendimento cordial e acolhedor', 'Tempo de espera rápido e organizado', 'Informações claras e transparentes', 'Equipe atenciosa do início ao fim'],
-          4: ['Equipe educada, mas pequena demora', 'Bom atendimento no geral', 'Comunicação clara', 'Pequena fila no horário de pico'],
-          3: ['Atendimento apressado ou frio', 'Espera acima do informado', 'Falta de atenção aos pedidos', 'Serviço apenas burocrático'],
-          2: ['Muita demora sem justificativa', 'Equipe desorganizada', 'Erro no pedido ou agendamento', 'Pouca disposição para resolver'],
-          1: ['Atendimento desrespeitoso', 'Abandono na fila ou espera extrema', 'Não resolveram o problema', 'Experiência muito negativa']
-        }
+      pinheirinho: {
+        name: 'Pinheirinho / BPS / UNIFEI (CEP 37500-052)',
+        center: [-22.4132, -45.4485],
+        zoom: 16,
+        safety: '1,08% • Ronda Universitária',
+        safetySub: 'Patrulhamento integrado entorno Campus UNIFEI',
+        floodRisk: 'Moderado • Rib. José Pereira',
+        floodSub: 'Estação UNIFEI (0,15m • 7% da calha)',
+        invest: 'Campus UNIFEI & Parque Científico',
+        investSub: 'Corredor Av. BPS • Ciclovia e Drenagem',
+        health: 'Linhas 01, 02, 03B, 06, 11A',
+        healthSub: 'Integração direta Campus – Centro – Santa Rosa',
+        crimeHistory: [
+          { year: '2021', pct: 1.52 }, { year: '2022', pct: 1.44 }, { year: '2023', pct: 1.31 },
+          { year: '2024', pct: 1.22 }, { year: '2025', pct: 1.15 }, { year: '2026', pct: 1.08 }
+        ],
+        crimeNote: 'Redução contínua de furtos de bicicletas e celulares após reforço de iluminação na Av. BPS.',
+        structuralIssues: [
+          { loc: 'Rotatória da UNIFEI / Av. BPS', desc: 'Formação de lâmina d’água superficial em chuvas de verão e desgaste no pavimento.', lat: -22.4115, lng: -45.4478 },
+          { loc: 'Travessia de pedestres Portaria 1 UNIFEI', desc: 'Alto fluxo estudantil demanda faixa elevada iluminada.', lat: -22.4130, lng: -45.4486 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Estação Ribeirão José Pereira – UNIFEI marca 0,15m (7%) em nível normal', source: 'Espiaí / Defesa Civil' },
+          { date: '22/08/2026', title: 'LIH-UNIFEI atualiza modelos hidrológicos de prevenção de enchentes para a bacia do Sapucaí', source: 'UNIFEI' },
+          { date: '10/03/2025', title: 'Recapeamento asfáltico concluído em trechos críticos da Av. BPS', source: 'PMI Obras' }
+        ]
       },
-      {
-        key: 'price',
-        label: 'Preço Justo',
-        fullTitle: 'Selo de Preço Justo (Estrela Laranja)',
-        subtitle: 'Custo-benefício, clareza na tabela de preços e nota fiscal',
-        colorHex: '#F97316',
-        badgeClass: 'bg-orange-500 text-white',
-        criteriaByStars: {
-          5: ['Excelente custo-benefício', 'Preços claros e visíveis na tabela', 'Cobrança exata sem taxas ocultas', 'Emissão de nota fiscal sem burocracia'],
-          4: ['Preço condizente com a entrega', 'Tabela clara, valor um pouco acima da média', 'Bom custo-benefício', 'Pagamento facilitado'],
-          3: ['Preço elevado pelo que entrega', 'Porção ou serviço pequeno para o valor', 'Taxa adicional pouco clara', 'Custo-benefício regular'],
-          2: ['Caro para a qualidade oferecida', 'Divergência entre preço anunciado e cobrado', 'Falta de transparência no orçamento', 'Não compensa o valor'],
-          1: ['Cobrança abusiva ou indevida', 'Preço oculto até o pagamento', 'Recusa de comprovante/nota', 'Péssimo custo-benefício']
-        }
+      medicina: {
+        name: 'Medicina (CEP 37502-100)',
+        center: [-22.4212, -45.4465],
+        zoom: 16,
+        safety: '0,96% • Corredor Hospitalar',
+        safetySub: 'Segurança reforçada no entorno do HCI e FMIT',
+        floodRisk: 'Baixo • Cota Elevada',
+        floodSub: 'Estação Pluviométrica Medicina (0,0 mm hoje)',
+        invest: 'Hospital de Clínicas (HCI) & FMIT',
+        investSub: 'UBS Medicina I (CNES 3038483)',
+        health: 'Linhas 04, 08, 13 Valônia',
+        healthSub: 'Corredor direto Hospital – Mercado – Anhumas',
+        crimeHistory: [
+          { year: '2021', pct: 1.30 }, { year: '2022', pct: 1.21 }, { year: '2023', pct: 1.14 },
+          { year: '2024', pct: 1.07 }, { year: '2025', pct: 1.01 }, { year: '2026', pct: 0.96 }
+        ],
+        crimeNote: 'Índice estável e baixo, com movimento intenso de estudantes e profissionais de saúde.',
+        structuralIssues: [
+          { loc: 'Av. Renó Júnior (entorno Hospital de Clínicas)', desc: 'Déficit de vagas rotativas para pacientes e necessidade de alargamento de calçadas.', lat: -22.4214, lng: -45.4466 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Hospital de Clínicas de Itajubá amplia protocolos digitais de triagem', source: 'Saúde Itajubá' },
+          { date: '05/06/2025', title: 'Nova sinalização hospitalar e semáforo sonoro instalados na Av. Renó Júnior', source: 'Trânsito Itajubá' }
+        ]
+      },
+      morro_chic: {
+        name: 'Morro Chic (CEP 37500-020)',
+        center: [-22.4242, -45.4488],
+        zoom: 16,
+        safety: '0,89% • Baixa Criminalidade',
+        safetySub: 'Área residencial tradicional monitorada',
+        floodRisk: 'Baixo (Topografia Alta)',
+        floodSub: 'Estação Pluviométrica Morro Chic ativa',
+        invest: 'Escolas Tradicionais & Clínicas',
+        investSub: 'Rua Miguel Viana e entorno',
+        health: 'Linhas 04, 08, 13 Valônia',
+        healthSub: 'Acesso rápido ao Centro e Medicina',
+        crimeHistory: [
+          { year: '2021', pct: 1.18 }, { year: '2022', pct: 1.12 }, { year: '2023', pct: 1.05 },
+          { year: '2024', pct: 0.99 }, { year: '2025', pct: 0.93 }, { year: '2026', pct: 0.89 }
+        ],
+        crimeNote: 'Um dos bairros com menor índice de ocorrências da região central.',
+        structuralIssues: [
+          { loc: 'Vias inclinadas entre Morro Chic e Centro', desc: 'Drenagem superficial acelerada em tempestades exigindo limpeza frequente de bocas de lobo.', lat: -22.4245, lng: -45.4492 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Pluviômetro Morro Chic registra estabilidade climática sem acumulados críticos', source: 'Defesa Civil' },
+          { date: '19/04/2025', title: 'Revitalização da sinalização escolar nas ruas do Morro Chic', source: 'Prefeitura' }
+        ]
+      },
+      avenida: {
+        name: 'Avenida (CEP 37504-000)',
+        center: [-22.4312, -45.4535],
+        zoom: 16,
+        safety: '1,12% • Corredor Comercial',
+        safetySub: 'Patrulhamento 56º BPM e Guarda Municipal',
+        floodRisk: 'Moderado • Prox. Rio Sapucaí',
+        floodSub: 'Estação Ponte do Batalhão (0,50m • 14%)',
+        invest: 'SESI SENAI CFP Aureliano Chaves',
+        investSub: 'Rua Dr. Luiz Rennó, 715 • Polo Técnico',
+        health: 'PSF Avenida / São Judas',
+        healthSub: 'Corredor de ônibus Centro – Zona Sul',
+        crimeHistory: [
+          { year: '2021', pct: 1.48 }, { year: '2022', pct: 1.39 }, { year: '2023', pct: 1.32 },
+          { year: '2024', pct: 1.24 }, { year: '2025', pct: 1.18 }, { year: '2026', pct: 1.12 }
+        ],
+        crimeNote: 'Boa iluminação e fluxo comercial constante contribuem para redução anual.',
+        structuralIssues: [
+          { loc: 'Cruzamentos da Rua Dr. Luiz Rennó', desc: 'Necessidade de reforço na pintura de faixas de pedestres próximo ao SENAI.', lat: -22.4318, lng: -45.4532 }
+        ],
+        news: [
+          { date: '14/11/2026', title: 'Unidade SESI SENAI Aureliano Chaves aplica provas do Jovem Aprendiz 2027', source: 'FIEMG Itajubá' },
+          { date: '13/11/2026', title: 'Estação Ponte do Batalhão registra nível normal de 0,50m no Rio Sapucaí', source: 'Defesa Civil' }
+        ]
+      },
+      varginha: {
+        name: 'Varginha (CEP 37500-310)',
+        center: [-22.4325, -45.4582],
+        zoom: 16,
+        safety: '1,19% • Monitoramento Urbano',
+        safetySub: 'Ronda preventiva Parque Municipal e av. principais',
+        floodRisk: 'Alto • Planície Rio Sapucaí',
+        floodSub: 'Estação Varginha & Estação FEPI (0,49m • 10%)',
+        invest: 'Parque Municipal & FEPI',
+        investSub: '92 logradouros • Lazer e Educação Superior',
+        health: 'Linhas 04A, 04B, 05, 11C Valônia',
+        healthSub: 'Atendimento regular Varginha – Centro – Santa Rosa',
+        crimeHistory: [
+          { year: '2021', pct: 1.56 }, { year: '2022', pct: 1.47 }, { year: '2023', pct: 1.38 },
+          { year: '2024', pct: 1.31 }, { year: '2025', pct: 1.25 }, { year: '2026', pct: 1.19 }
+        ],
+        crimeNote: 'Bairro extenso (92 ruas) com queda gradual de ocorrências patrimoniais.',
+        structuralIssues: [
+          { loc: 'Av. Dr. Antônio Braga Filho / Margem do Sapucaí', desc: 'Área historicamente vulnerável ao extravasamento do canal secundário em grandes cheias.', lat: -22.4315, lng: -45.4562 },
+          { loc: 'Entorno do Parque Municipal de Itajubá', desc: 'Manutenção periódica de ciclovia e drenagem pluvial lateral.', lat: -22.4328, lng: -45.4585 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Estação Hidrológica FEPI marca 0,49m (10% da cota de alerta)', source: 'Espiaí Itajubá' },
+          { date: '02/09/2026', title: 'Parque Municipal recebe festival gastronômico e melhorias na pista de caminhada', source: 'Cultura Itajubá' }
+        ]
+      },
+      boa_vista: {
+        name: 'Boa Vista (CEP 37505-000)',
+        center: [-22.4385, -45.4630],
+        zoom: 16,
+        safety: '1,21% • Base Comunitária',
+        safetySub: 'Policiamento comunitário ativo',
+        floodRisk: 'Moderado • Córregos Locais',
+        floodSub: 'Drenagem pluvial em monitoramento',
+        invest: 'PSF Boa Vista (CNES 5285550)',
+        investSub: '76 logradouros • Atenção Básica',
+        health: 'Linha 11A Novo Horizonte – Santa Rosa',
+        healthSub: 'Via Boa Vista / Rodovia',
+        crimeHistory: [
+          { year: '2021', pct: 1.64 }, { year: '2022', pct: 1.52 }, { year: '2023', pct: 1.43 },
+          { year: '2024', pct: 1.34 }, { year: '2025', pct: 1.27 }, { year: '2026', pct: 1.21 }
+        ],
+        crimeNote: 'Queda de 26% acumulada desde 2021 com ampliação da iluminação pública.',
+        structuralIssues: [
+          { loc: 'Ruas de declive acentuado na parte alta da Boa Vista', desc: 'Erosão de sarjetas e necessidade de contenção pontual de águas pluviais.', lat: -22.4392, lng: -45.4640 }
+        ],
+        news: [
+          { date: '28/09/2026', title: 'PSF Boa Vista realiza mutirão preventivo de hipertensão e diabetes', source: 'Saúde Itajubá' },
+          { date: '11/04/2025', title: 'Operação tapa-buracos e limpeza de galerias concluída nas vias principais', source: 'PMI Obras' }
+        ]
+      },
+      estiva: {
+        name: 'Estiva (CEP 37500-274)',
+        center: [-22.4362, -45.4608],
+        zoom: 16,
+        safety: '1,16% • Corredor Av. Jerson Dias',
+        safetySub: 'Ronda ostensiva na ligação Centro – Sul',
+        floodRisk: 'Alto • Prox. Rio Sapucaí',
+        floodSub: 'Monitoramento contínuo da ponte e comportas',
+        invest: 'Corredor Comercial Av. Jerson Dias',
+        investSub: '26 logradouros • Oficinas e Comércio',
+        health: 'Linhas 09, 11B, 11C Valônia',
+        healthSub: 'Ligação rápida ao Terminal e Rodoviária',
+        crimeHistory: [
+          { year: '2021', pct: 1.54 }, { year: '2022', pct: 1.45 }, { year: '2023', pct: 1.36 },
+          { year: '2024', pct: 1.28 }, { year: '2025', pct: 1.21 }, { year: '2026', pct: 1.16 }
+        ],
+        crimeNote: 'Estabilidade nos indicadores com reforço de câmeras na Av. Jerson Dias.',
+        structuralIssues: [
+          { loc: 'Av. Jerson Dias próximo à ponte', desc: 'Pontos de iluminação pública em manutenção e acúmulo de água em tempestades.', lat: -22.4365, lng: -45.4615 }
+        ],
+        news: [
+          { date: '10/11/2026', title: 'Equipe de iluminação pública programa troca de luminárias na Av. Jerson Dias', source: 'Zeladoria Itajubá' },
+          { date: '19/07/2025', title: 'Recapeamento do trecho comercial da Estiva melhora fluidez do transporte', source: 'PMI' }
+        ]
+      },
+      rebourgeon: {
+        name: 'Rebourgeon (CEP 37503-175)',
+        center: [-22.4265, -45.4365],
+        zoom: 16,
+        safety: '1,04% • Monitoramento Encostas',
+        safetySub: 'Ronda preventiva e Defesa Civil comunitária',
+        floodRisk: 'Baixo Enchente / Atenção Encostas',
+        floodSub: 'Estação Pluviométrica Rebourgeon ativa',
+        invest: 'PSF Rebourgeon (CNES 2212684)',
+        investSub: '79 logradouros • Saúde e Infraestrutura',
+        health: 'Linhas 03A, 03B, 04A, 04B, 08, 17',
+        healthSub: 'Ampla cobertura de ônibus para Centro e Santa Rosa',
+        crimeHistory: [
+          { year: '2021', pct: 1.41 }, { year: '2022', pct: 1.32 }, { year: '2023', pct: 1.25 },
+          { year: '2024', pct: 1.17 }, { year: '2025', pct: 1.10 }, { year: '2026', pct: 1.04 }
+        ],
+        crimeNote: 'Bairro populoso (79 ruas) com queda consistente nas ocorrências.',
+        structuralIssues: [
+          { loc: 'Rua Padre Marçal Ribeiro e trechos altos do Rebourgeon', desc: 'Obstrução de bueiros por galhos/folhas e necessidade de muros de arrimo preventivos.', lat: -22.4272, lng: -45.4358 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Pluviômetro Rebourgeon registra 0,0 mm hoje; encostas em nível seguro', source: 'Defesa Civil' },
+          { date: '03/08/2026', title: 'Expresso Valônia consolida novos trajetos 03B e 04B via Santa Luzia', source: 'Transporte Itajubá' }
+        ]
+      },
+      porto_velho: {
+        name: 'Porto Velho (CEP 37501-000)',
+        center: [-22.4355, -45.4515],
+        zoom: 16,
+        safety: '1,09% • Área Residencial',
+        safetySub: 'Patrulhamento regular 56º BPM',
+        floodRisk: 'Moderado • Cota Ribeirão',
+        floodSub: 'Galerias pluviais monitoradas',
+        invest: '21 Logradouros Urbanizados',
+        investSub: 'Pavimentação e Iluminação LED',
+        health: 'Acesso UBS Santos Dumont / Avenida',
+        healthSub: 'Corredor de transporte Zona Sul',
+        crimeHistory: [
+          { year: '2021', pct: 1.45 }, { year: '2022', pct: 1.36 }, { year: '2023', pct: 1.29 },
+          { year: '2024', pct: 1.21 }, { year: '2025', pct: 1.14 }, { year: '2026', pct: 1.09 }
+        ],
+        crimeNote: 'Redução contínua nos últimos 5 anos.',
+        structuralIssues: [
+          { loc: 'Redes de drenagem interligadas ao Rib. José Pereira', desc: 'Necessidade de desassoreamento preventivo antes do período chuvoso.', lat: -22.4355, lng: -45.4515 }
+        ],
+        news: [
+          { date: '14/09/2026', title: 'Limpeza preventiva de bocas de lobo realizada nas vias do Porto Velho', source: 'Defesa Civil' }
+        ]
+      },
+      sao_vicente: {
+        name: 'São Vicente (CEP 37502-000)',
+        center: [-22.4185, -45.4525],
+        zoom: 16,
+        safety: '1,11% • Área Mista',
+        safetySub: 'Ronda comercial e residencial',
+        floodRisk: 'Moderado • Prox. Calha Central',
+        floodSub: 'Drenagem ligada ao Rio Sapucaí',
+        invest: 'UBS São Vicente (CNES 7459335)',
+        investSub: '52 logradouros • Saúde e Comércio',
+        health: 'Linhas Centro / BPS / Oriente',
+        healthSub: 'Fácil deslocamento a pé e de ônibus',
+        crimeHistory: [
+          { year: '2021', pct: 1.49 }, { year: '2022', pct: 1.40 }, { year: '2023', pct: 1.31 },
+          { year: '2024', pct: 1.24 }, { year: '2025', pct: 1.17 }, { year: '2026', pct: 1.11 }
+        ],
+        crimeNote: 'Indicadores sob controle com policiamento integrado.',
+        structuralIssues: [
+          { loc: 'Interseções com o corredor da Av. BPS', desc: 'Congestionamento nos horários de entrada/saída acadêmica.', lat: -22.4185, lng: -45.4525 }
+        ],
+        news: [
+          { date: '21/10/2026', title: 'UBS São Vicente amplia horário de sala de vacinação para trabalhadores', source: 'Saúde Itajubá' }
+        ]
+      },
+      santo_antonio: {
+        name: 'Santo Antônio (CEP 37503-130)',
+        center: [-22.4235, -45.4548],
+        zoom: 16,
+        safety: '1,05% • Monitorada',
+        safetySub: 'Entorno Ginásio Poliesportivo e Centro',
+        floodRisk: 'Moderado • Ponte Santo Antônio',
+        floodSub: 'Estação Pluviométrica Ponte Santo Antônio',
+        invest: 'PSF Santo Antônio (CNES 5285569)',
+        investSub: '18 logradouros • Esporte e Saúde',
+        health: 'Ginásio Poliesportivo (Abrigo Polo)',
+        healthSub: 'Ponto oficial de apoio da Defesa Civil',
+        crimeHistory: [
+          { year: '2021', pct: 1.39 }, { year: '2022', pct: 1.31 }, { year: '2023', pct: 1.23 },
+          { year: '2024', pct: 1.16 }, { year: '2025', pct: 1.10 }, { year: '2026', pct: 1.05 }
+        ],
+        crimeNote: 'Área movimentada por atividades esportivas e escolares.',
+        structuralIssues: [
+          { loc: 'Cabeceira da Ponte Santo Antônio', desc: 'Monitoramento constante do nível do rio e juntas de dilatação da ponte.', lat: -22.4235, lng: -45.4548 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Estação Ponte Santo Antônio marca 0,0 mm de chuva acumulada hoje', source: 'Espiaí Itajubá' }
+        ]
+      },
+      vila_poddis: {
+        name: 'Vila Poddis (CEP 37503-000)',
+        center: [-22.4242, -45.4595],
+        zoom: 16,
+        safety: '1,07% • Residencial',
+        safetySub: 'Ronda preventiva e iluminação LED',
+        floodRisk: 'Alto • Planície Rio Sapucaí',
+        floodSub: 'Sistema de comportas e bombeamento pluvial',
+        invest: '27 Logradouros • Drenagem',
+        investSub: 'Prioridade no Orçamento Participativo',
+        health: 'Linhas 03A e 04A Valônia',
+        healthSub: 'Ligação direta Rebourgeon – Vila Poddis – Santa Rosa',
+        crimeHistory: [
+          { year: '2021', pct: 1.42 }, { year: '2022', pct: 1.34 }, { year: '2023', pct: 1.26 },
+          { year: '2024', pct: 1.19 }, { year: '2025', pct: 1.12 }, { year: '2026', pct: 1.07 }
+        ],
+        crimeNote: 'Bairro tradicional com baixa taxa de criminalidade.',
+        structuralIssues: [
+          { loc: 'Sistema de comportas e drenagem Vila Poddis', desc: 'Dependência de bombeamento mecânico quando o Rio Sapucaí ultrapassa 2,90m.', lat: -22.4242, lng: -45.4595 }
+        ],
+        news: [
+          { date: '08/10/2026', title: 'Defesa Civil realiza teste preventivo nas comportas e bombas da Vila Poddis', source: 'Defesa Civil Itajubá' }
+        ]
+      },
+      oriente: {
+        name: 'Oriente & Jardim das Colinas (CEP 37500-240)',
+        center: [-22.4182, -45.4592],
+        zoom: 16,
+        safety: '0,94% • Baixa Incidência',
+        safetySub: 'Área residencial monitorada',
+        floodRisk: 'Baixo • Cota Elevada',
+        floodSub: 'Estação Pluviométrica R. Augusto de Almeida',
+        invest: 'PSF Jardim das Colinas (CNES 3038521)',
+        investSub: 'Atendimento Saúde da Família',
+        health: 'Linhas 05 e 07 Expresso Valônia',
+        healthSub: 'Jardim das Colinas – Santa Rosa / Cruzeiro – Cafona',
+        crimeHistory: [
+          { year: '2021', pct: 1.25 }, { year: '2022', pct: 1.18 }, { year: '2023', pct: 1.11 },
+          { year: '2024', pct: 1.04 }, { year: '2025', pct: 0.99 }, { year: '2026', pct: 0.94 }
+        ],
+        crimeNote: 'Um dos índices mais baixos entre os bairros urbanos.',
+        structuralIssues: [
+          { loc: 'Ruas de acesso entre Oriente e Jardim das Colinas', desc: 'Necessidade de redutores de velocidade e manutenção de guias.', lat: -22.4182, lng: -45.4592 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Pluviômetro R. Augusto de Almeida (Jardim das Colinas) registra 0,0 mm', source: 'Alerta Itajubá' }
+        ]
+      },
+      cruzeiro: {
+        name: 'Cruzeiro (CEP 37500-204)',
+        center: [-22.4295, -45.4410],
+        zoom: 16,
+        safety: '1,02% • Ronda Escolar',
+        safetySub: 'Segurança comunitária ativa',
+        floodRisk: 'Baixo Enchente / Atenção Taludes',
+        floodSub: 'Drenagem pluvial de encosta',
+        invest: 'PSF Cruzeiro (CNES 2212706)',
+        investSub: '26 logradouros • Saúde e Educação',
+        health: 'Linhas 02, 07, 17 Expresso Valônia',
+        healthSub: 'Cruzeiro – Santa Rosa / Cafona / Rebourgeon',
+        crimeHistory: [
+          { year: '2021', pct: 1.36 }, { year: '2022', pct: 1.28 }, { year: '2023', pct: 1.21 },
+          { year: '2024', pct: 1.14 }, { year: '2025', pct: 1.08 }, { year: '2026', pct: 1.02 }
+        ],
+        crimeNote: 'Bairro tradicional com boa integração comunitária.',
+        structuralIssues: [
+          { loc: 'Vias íngremes do Cruzeiro', desc: 'Escoamento rápido de enxurradas exige manutenção constante de grelhas.', lat: -22.4295, lng: -45.4410 }
+        ],
+        news: [
+          { date: '12/08/2026', title: 'PSF Cruzeiro recebe reforma na sala de acolhimento e farmácia básica', source: 'Saúde Itajubá' }
+        ]
+      },
+      santa_luzia: {
+        name: 'Santa Luzia (CEP 37503-163)',
+        center: [-22.4280, -45.4385],
+        zoom: 16,
+        safety: '0,99% • Baixa Criminalidade',
+        safetySub: 'Ronda preventiva Leste',
+        floodRisk: 'Baixo • Cota Alta',
+        floodSub: 'Sem histórico de inundação fluvial',
+        invest: 'PSF Santa Luzia (CNES 3038548)',
+        investSub: '8 logradouros • Atendimento PSF',
+        health: 'Linhas 03B, 04B, 17 Expresso Valônia',
+        healthSub: 'Novo trajeto integrado via Santa Luzia',
+        crimeHistory: [
+          { year: '2021', pct: 1.31 }, { year: '2022', pct: 1.24 }, { year: '2023', pct: 1.17 },
+          { year: '2024', pct: 1.10 }, { year: '2025', pct: 1.04 }, { year: '2026', pct: 0.99 }
+        ],
+        crimeNote: 'Queda contínua na taxa anual.',
+        structuralIssues: [
+          { loc: 'Ligação viária Santa Luzia – Rebourgeon', desc: 'Alargamento de curvas para passagem segura dos ônibus das linhas 03B e 04B.', lat: -22.4280, lng: -45.4385 }
+        ],
+        news: [
+          { date: '03/08/2026', title: 'Novas linhas 03B e 04B passam a atender diretamente o bairro Santa Luzia', source: 'Expresso Valônia' }
+        ]
+      },
+      santos_dumont: {
+        name: 'Santos Dumont (CEP 37504-092)',
+        center: [-22.4342, -45.4472],
+        zoom: 16,
+        safety: '1,13% • Monitorada',
+        safetySub: 'Videomonitoramento e ronda regular',
+        floodRisk: 'Moderado • Rio Sapucaí',
+        floodSub: 'Estação Hidrológica Santos Dumont (0,41m • 8%)',
+        invest: '12 Logradouros • Telemetria',
+        investSub: 'Estação telemétrica Defesa Civil',
+        health: 'Acesso linhas Av. Renó Júnior / Avenida',
+        healthSub: 'Transporte próximo ao corredor central',
+        crimeHistory: [
+          { year: '2021', pct: 1.50 }, { year: '2022', pct: 1.41 }, { year: '2023', pct: 1.33 },
+          { year: '2024', pct: 1.25 }, { year: '2025', pct: 1.19 }, { year: '2026', pct: 1.13 }
+        ],
+        crimeNote: 'Redução de 24% desde 2021.',
+        structuralIssues: [
+          { loc: 'Margem do Rio Sapucaí no Santos Dumont', desc: 'Monitoramento hidrométrico contínuo da lâmina d’água.', lat: -22.4342, lng: -45.4472 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Estação Rio Sapucaí – Bairro Santos Dumont registra 0,41m (8% da cota)', source: 'Espiaí Itajubá' }
+        ]
+      },
+      sao_sebastiao: {
+        name: 'São Sebastião (CEP 37502-450)',
+        center: [-22.4328, -45.4445],
+        zoom: 16,
+        safety: '1,06% • Área Residencial',
+        safetySub: 'Ronda comunitária ativa',
+        floodRisk: 'Baixo • Cota Intermediária',
+        floodSub: 'Drenagem urbana regular',
+        invest: '17 Logradouros • Pavimentação',
+        investSub: 'Iluminação LED instalada',
+        health: 'Acesso UBS Cruzeiro / Medicina',
+        healthSub: 'Transporte coletivo próximo',
+        crimeHistory: [
+          { year: '2021', pct: 1.40 }, { year: '2022', pct: 1.32 }, { year: '2023', pct: 1.24 },
+          { year: '2024', pct: 1.18 }, { year: '2025', pct: 1.11 }, { year: '2026', pct: 1.06 }
+        ],
+        crimeNote: 'Bairro residencial com baixa incidência.',
+        structuralIssues: [
+          { loc: 'Calçadas e travessias internas', desc: 'Adequação pontual de acessibilidade para idosos.', lat: -22.4328, lng: -45.4445 }
+        ],
+        news: [
+          { date: '17/06/2026', title: 'Mutirão de limpeza urbana e poda preventiva realizado no São Sebastião', source: 'Zeladoria' }
+        ]
+      },
+      imbel: {
+        name: 'IMBEL (CEP 37501-338)',
+        center: [-22.4415, -45.4550],
+        zoom: 16,
+        safety: '0,85% • Segurança Patrimonial',
+        safetySub: 'Vigilância industrial e 56º BPM',
+        floodRisk: 'Baixo • Área Planejada',
+        floodSub: 'Drenagem industrial mantida',
+        invest: 'Polo Industrial & Histórico',
+        investSub: '11 logradouros • Emprego e Tecnologia',
+        health: 'Linhas Corredor Sul / Itavel',
+        healthSub: 'Integração Centro – Santa Rosa',
+        crimeHistory: [
+          { year: '2021', pct: 1.12 }, { year: '2022', pct: 1.05 }, { year: '2023', pct: 0.99 },
+          { year: '2024', pct: 0.94 }, { year: '2025', pct: 0.89 }, { year: '2026', pct: 0.85 }
+        ],
+        crimeNote: 'Um dos menores índices de ocorrência da cidade.',
+        structuralIssues: [
+          { loc: 'Acesso viário na transição IMBEL – Vila Isabel', desc: 'Sinalização de velocidade e travessia em horários de turno.', lat: -22.4415, lng: -45.4550 }
+        ],
+        news: [
+          { date: '09/10/2026', title: 'Parceria SENAI e indústrias locais amplia vagas de aprendizagem técnica', source: 'FIEMG / Itajubá' }
+        ]
+      },
+      vila_isabel: {
+        name: 'Vila Isabel (CEP 37505-177)',
+        center: [-22.4445, -45.4565],
+        zoom: 16,
+        safety: '1,15% • Monitorada',
+        safetySub: 'Ronda preventiva Zona Sul',
+        floodRisk: 'Baixo Enchente / Atenção Morro',
+        floodSub: 'Estação Pluviométrica Morro do Vila Isabel',
+        invest: 'PSF Vila Isabel (CNES 5285666)',
+        investSub: '12 logradouros • Atenção Primária',
+        health: 'Linha 01 Vila Isabel – Santa Rosa – Itavel',
+        healthSub: 'Linha troncal frequente',
+        crimeHistory: [
+          { year: '2021', pct: 1.53 }, { year: '2022', pct: 1.44 }, { year: '2023', pct: 1.35 },
+          { year: '2024', pct: 1.28 }, { year: '2025', pct: 1.21 }, { year: '2026', pct: 1.15 }
+        ],
+        crimeNote: 'Queda constante nos últimos anos.',
+        structuralIssues: [
+          { loc: 'Encosta do Morro do Vila Isabel', desc: 'Monitoramento pluviométrico contínuo pela Defesa Civil.', lat: -22.4445, lng: -45.4565 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Estação Morro do Vila Isabel registra 0,1 mm de precipitação nas últimas 24h', source: 'Espiaí Itajubá' }
+        ]
+      },
+      nossa_senhora_fatima: {
+        name: 'Nossa Senhora de Fátima (CEP 37502-500)',
+        center: [-22.4375, -45.4510],
+        zoom: 16,
+        safety: '1,10% • Residencial',
+        safetySub: 'Ronda preventiva regular',
+        floodRisk: 'Baixo • Cota Elevada',
+        floodSub: 'Escoamento pluvial adequado',
+        invest: 'PSF N. Sra. de Fátima (CNES 7908261)',
+        investSub: '18 logradouros • Saúde da Família',
+        health: 'Acesso linhas Zona Sul / Avenida',
+        healthSub: 'Transporte coletivo integrado',
+        crimeHistory: [
+          { year: '2021', pct: 1.46 }, { year: '2022', pct: 1.38 }, { year: '2023', pct: 1.30 },
+          { year: '2024', pct: 1.22 }, { year: '2025', pct: 1.16 }, { year: '2026', pct: 1.10 }
+        ],
+        crimeNote: 'Indicadores em queda sustentada.',
+        structuralIssues: [
+          { loc: 'Vias de ligação com Santos Dumont', desc: 'Manutenção periódica de pavimento e sinalização.', lat: -22.4375, lng: -45.4510 }
+        ],
+        news: [
+          { date: '04/09/2026', title: 'PSF Nossa Senhora de Fátima amplia agenda de pré-natal e pediatria', source: 'Saúde Itajubá' }
+        ]
+      },
+      nossa_senhora_agonia: {
+        name: 'Nossa Senhora da Agonia (CEP 37500-187)',
+        center: [-22.4268, -45.4480],
+        zoom: 16,
+        safety: '1,03% • Área Central/Leste',
+        safetySub: 'Proximidade com policiamento central',
+        floodRisk: 'Baixo • Encosta Suave',
+        floodSub: 'Sem registro de alagamento fluvial',
+        invest: '13 Logradouros Urbanizados',
+        investSub: 'Iluminação 100% LED',
+        health: 'Acesso Policlínica Central / Cruzeiro',
+        healthSub: 'Linhas 02, 07, 17 próximas',
+        crimeHistory: [
+          { year: '2021', pct: 1.37 }, { year: '2022', pct: 1.29 }, { year: '2023', pct: 1.21 },
+          { year: '2024', pct: 1.14 }, { year: '2025', pct: 1.08 }, { year: '2026', pct: 1.03 }
+        ],
+        crimeNote: 'Bairro tranquilo próximo ao Centro.',
+        structuralIssues: [
+          { loc: 'Ruas estreitas de ligação ao Cruzeiro', desc: 'Regulamentação de estacionamento unilateral para passagem de caminhões/ônibus.', lat: -22.4268, lng: -45.4480 }
+        ],
+        news: [
+          { date: '15/07/2026', title: 'Sinalização viária renovada no corredor Nossa Senhora da Agonia', source: 'Trânsito Itajubá' }
+        ]
+      },
+      santa_rita: {
+        name: 'Santa Rita de Cássia (CEP 37502-476)',
+        center: [-22.4395, -45.4480],
+        zoom: 16,
+        safety: '1,08% • Residencial',
+        safetySub: 'Ronda comunitária regular',
+        floodRisk: 'Baixo • Cota Alta',
+        floodSub: 'Drenagem pluvial operante',
+        invest: 'UBS Santa Rita de Cássia (CNES 2212773)',
+        investSub: '23 logradouros • Unidade Básica',
+        health: 'Transporte Zona Sul',
+        healthSub: 'Acesso rápido ao Centro',
+        crimeHistory: [
+          { year: '2021', pct: 1.44 }, { year: '2022', pct: 1.36 }, { year: '2023', pct: 1.28 },
+          { year: '2024', pct: 1.20 }, { year: '2025', pct: 1.14 }, { year: '2026', pct: 1.08 }
+        ],
+        crimeNote: 'Queda de 25% nas ocorrências desde 2021.',
+        structuralIssues: [
+          { loc: 'Acessos locais entre Santa Rita e Piedade', desc: 'Manutenção de sarjetas e recapeamento pontual.', lat: -22.4395, lng: -45.4480 }
+        ],
+        news: [
+          { date: '19/08/2026', title: 'UBS Santa Rita de Cássia integra prontuário eletrônico municipal', source: 'Saúde Itajubá' }
+        ]
+      },
+      sao_judas: {
+        name: 'São Judas Tadeu (CEP 37504-068)',
+        center: [-22.4335, -45.4525],
+        zoom: 16,
+        safety: '1,12% • Monitorada',
+        safetySub: 'Patrulhamento corredor Avenida',
+        floodRisk: 'Moderado • Drenagem Pluvial',
+        floodSub: 'Monitorado pela Defesa Civil',
+        invest: 'PSF Avenida / São Judas (CNES 5285518)',
+        investSub: '8 logradouros • Saúde da Família',
+        health: 'Linhas Corredor Sul / Centro',
+        healthSub: 'Fácil acesso ao transporte',
+        crimeHistory: [
+          { year: '2021', pct: 1.48 }, { year: '2022', pct: 1.40 }, { year: '2023', pct: 1.31 },
+          { year: '2024', pct: 1.24 }, { year: '2025', pct: 1.18 }, { year: '2026', pct: 1.12 }
+        ],
+        crimeNote: 'Indicadores estáveis e em queda.',
+        structuralIssues: [
+          { loc: 'Confluência com Av. Dr. Luiz Rennó', desc: 'Necessidade de sincronismo semafórico em horário comercial.', lat: -22.4335, lng: -45.4525 }
+        ],
+        news: [
+          { date: '02/10/2026', title: 'PSF Avenida / São Judas Tadeu amplia atendimento odontológico', source: 'Saúde Itajubá' }
+        ]
+      },
+      novo_horizonte: {
+        name: 'Novo Horizonte (CEP 37505-175)',
+        center: [-22.4485, -45.4650],
+        zoom: 16,
+        safety: '1,18% • Ronda Comunitária',
+        safetySub: 'Policiamento preventivo Zona Sul',
+        floodRisk: 'Baixo • Topografia Elevada',
+        floodSub: 'Sem risco de transbordamento do Rio Sapucaí',
+        invest: '42 Logradouros • Expansão Urbana',
+        investSub: 'Pavimentação e Iluminação LED',
+        health: 'Linhas 11A, 11B, 11C Novo Horizonte – Santa Rosa',
+        healthSub: 'Três variantes de itinerário via Boa Vista, Bahamas e Varginha',
+        crimeHistory: [
+          { year: '2021', pct: 1.59 }, { year: '2022', pct: 1.49 }, { year: '2023', pct: 1.40 },
+          { year: '2024', pct: 1.32 }, { year: '2025', pct: 1.24 }, { year: '2026', pct: 1.18 }
+        ],
+        crimeNote: 'Bairro em crescimento com queda gradual da taxa percentual.',
+        structuralIssues: [
+          { loc: 'Vias de ligação Novo Horizonte – Boa Vista', desc: 'Manutenção de drenagem pluvial e pavimentação em trechos de expansão.', lat: -22.4485, lng: -45.4650 }
+        ],
+        news: [
+          { date: '11/09/2026', title: 'Linhas 11A, 11B e 11C mantêm atendimento integrado Novo Horizonte – Santa Rosa', source: 'Expresso Valônia' }
+        ]
+      },
+      acude: {
+        name: 'Açude (CEP 37504-131)',
+        center: [-22.4160, -45.4415],
+        zoom: 16,
+        safety: '1,01% • Residencial',
+        safetySub: 'Ronda preventiva Norte',
+        floodRisk: 'Moderado • Rib. José Pereira',
+        floodSub: 'Monitoramento da barragem e calha',
+        invest: '64 Logradouros • Infraestrutura',
+        investSub: 'Rede pluvial e iluminação LED',
+        health: 'Acesso UBS Pinheirinho / UNIFEI',
+        healthSub: 'Transporte coletivo próximo',
+        crimeHistory: [
+          { year: '2021', pct: 1.35 }, { year: '2022', pct: 1.27 }, { year: '2023', pct: 1.20 },
+          { year: '2024', pct: 1.13 }, { year: '2025', pct: 1.07 }, { year: '2026', pct: 1.01 }
+        ],
+        crimeNote: 'Bairro grande (64 ruas) com baixa criminalidade.',
+        structuralIssues: [
+          { loc: 'Trechos próximos ao Ribeirão José Pereira', desc: 'Limpeza periódica de margens e controle de assoreamento.', lat: -22.4160, lng: -45.4415 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Estação Barragem do Ribeirão José Pereira marca 0,10m (4% da calha)', source: 'Espiaí Itajubá' }
+        ]
+      },
+      piedade: {
+        name: 'Piedade (CEP 37504-588)',
+        center: [-22.4410, -45.4420],
+        zoom: 16,
+        safety: '1,05% • Residencial',
+        safetySub: 'Ronda preventiva regular',
+        floodRisk: 'Moderado • Córrego Piranguçu',
+        floodSub: 'Estação Hidrológica Bairro Piedade (0,00m)',
+        invest: 'PSF Piedade (CNES 6245781)',
+        investSub: '15 logradouros • Saúde da Família',
+        health: 'Linha 08 Rebourgeon – Medicina – Via Piedade',
+        healthSub: 'Ligação direta com hospitais e Centro',
+        crimeHistory: [
+          { year: '2021', pct: 1.40 }, { year: '2022', pct: 1.32 }, { year: '2023', pct: 1.24 },
+          { year: '2024', pct: 1.17 }, { year: '2025', pct: 1.11 }, { year: '2026', pct: 1.05 }
+        ],
+        crimeNote: 'Queda contínua dos índices.',
+        structuralIssues: [
+          { loc: 'Calha do Córrego Piranguçu na Piedade', desc: 'Monitoramento telemétrico constante em chuvas de verão.', lat: -22.4410, lng: -45.4420 }
+        ],
+        news: [
+          { date: '13/11/2026', title: 'Estação Córrego Piranguçu – Bairro Piedade opera em nível normal (0,00m)', source: 'Defesa Civil' }
+        ]
+      },
+      nacoes: {
+        name: 'Nações (CEP 37504-358)',
+        center: [-22.4290, -45.4655],
+        zoom: 16,
+        safety: '0,97% • Residencial',
+        safetySub: 'Patrulhamento preventivo Oeste',
+        floodRisk: 'Baixo • Cota Intermediária',
+        floodSub: 'Drenagem urbana regular',
+        invest: '15 Logradouros Urbanizados',
+        investSub: 'Pavimentação e áreas verdes',
+        health: 'Linha 06 Jardim das Nações – Santa Rosa',
+        healthSub: 'Itinerário via Rodovia',
+        crimeHistory: [
+          { year: '2021', pct: 1.29 }, { year: '2022', pct: 1.22 }, { year: '2023', pct: 1.15 },
+          { year: '2024', pct: 1.08 }, { year: '2025', pct: 1.02 }, { year: '2026', pct: 0.97 }
+        ],
+        crimeNote: 'Bairro residencial tranquilo.',
+        structuralIssues: [
+          { loc: 'Acesso viário Jardim das Nações – Varginha', desc: 'Manutenção de sinalização horizontal.', lat: -22.4290, lng: -45.4655 }
+        ],
+        news: [
+          { date: '24/08/2026', title: 'Linha 06 Jardim das Nações – Santa Rosa recebe ajuste de horários nos horários de pico', source: 'Mobilidade' }
+        ]
+      },
+      vila_rubens: {
+        name: 'Vila Rubens (CEP 37505-154)',
+        center: [-22.4345, -45.4655],
+        zoom: 16,
+        safety: '1,09% • Residencial',
+        safetySub: 'Ronda preventiva regular',
+        floodRisk: 'Baixo • Cota Elevada',
+        floodSub: 'Sem registro de alagamento fluvial',
+        invest: 'UBS Vila Rubens (CNES 2776316)',
+        investSub: '10 logradouros • Unidade de Saúde',
+        health: 'Transporte integrado Varginha / Boa Vista',
+        healthSub: 'Atendimento próximo',
+        crimeHistory: [
+          { year: '2021', pct: 1.45 }, { year: '2022', pct: 1.37 }, { year: '2023', pct: 1.29 },
+          { year: '2024', pct: 1.21 }, { year: '2025', pct: 1.15 }, { year: '2026', pct: 1.09 }
+        ],
+        crimeNote: 'Redução gradual ao longo dos anos.',
+        structuralIssues: [
+          { loc: 'Ruas de ligação Vila Rubens – Boa Vista', desc: 'Conservação de pavimento e drenagem.', lat: -22.4345, lng: -45.4655 }
+        ],
+        news: [
+          { date: '10/09/2026', title: 'UBS Vila Rubens realiza campanha de atualização vacinal infantil', source: 'Saúde Itajubá' }
+        ]
+      },
+      vila_betel: {
+        name: 'Vila Betel (CEP 37505-500)',
+        center: [-22.4465, -45.4610],
+        zoom: 16,
+        safety: '1,12% • Residencial',
+        safetySub: 'Ronda comunitária Sul',
+        floodRisk: 'Baixo • Cota Alta',
+        floodSub: 'Drenagem pluvial regular',
+        invest: 'Infraestrutura Residencial',
+        investSub: 'Iluminação LED instalada',
+        health: 'Acesso PSF Vila Isabel / Boa Vista',
+        healthSub: 'Linhas Zona Sul',
+        crimeHistory: [
+          { year: '2021', pct: 1.48 }, { year: '2022', pct: 1.39 }, { year: '2023', pct: 1.31 },
+          { year: '2024', pct: 1.24 }, { year: '2025', pct: 1.18 }, { year: '2026', pct: 1.12 }
+        ],
+        crimeNote: 'Estabilidade nos indicadores.',
+        structuralIssues: [
+          { loc: 'Acessos locais na região Sul', desc: 'Manutenção periódica de vias.', lat: -22.4465, lng: -45.4610 }
+        ],
+        news: [
+          { date: '15/06/2026', title: 'Manutenção de iluminação pública concluída na Vila Betel', source: 'Zeladoria' }
+        ]
+      },
+      jardim_bernadete: {
+        name: 'Jardim Bernadete (CEP 37503-167)',
+        center: [-22.4225, -45.4395],
+        zoom: 16,
+        safety: '0,95% • Residencial',
+        safetySub: 'Ronda preventiva Leste',
+        floodRisk: 'Baixo • Cota Elevada',
+        floodSub: 'Sem risco fluvial',
+        invest: '12 Logradouros Urbanizados',
+        investSub: 'Pavimentação e iluminação',
+        health: 'Acesso PSF Cruzeiro / Santa Luzia',
+        healthSub: 'Linhas 03B, 04B, 17',
+        crimeHistory: [
+          { year: '2021', pct: 1.27 }, { year: '2022', pct: 1.20 }, { year: '2023', pct: 1.13 },
+          { year: '2024', pct: 1.06 }, { year: '2025', pct: 1.00 }, { year: '2026', pct: 0.95 }
+        ],
+        crimeNote: 'Bairro tranquilo e residencial.',
+        structuralIssues: [
+          { loc: 'Vias inclinadas de acesso', desc: 'Manutenção de sarjetas pluviais.', lat: -22.4225, lng: -45.4395 }
+        ],
+        news: [
+          { date: '22/07/2026', title: 'Sinalização viária revitalizada no Jardim Bernadete', source: 'Trânsito' }
+        ]
+      },
+      distrito_industrial: {
+        name: 'Distrito Industrial (CEP 37504-085)',
+        center: [-22.4495, -45.4685],
+        zoom: 15,
+        safety: '0,88% • Segurança Industrial',
+        safetySub: 'Vigilância empresarial e 56º BPM',
+        floodRisk: 'Baixo • Drenagem Industrial',
+        floodSub: 'Bacias de contenção internas',
+        invest: '9 Logradouros • Geração de Empregos',
+        investSub: 'Grandes indústrias e logística',
+        health: 'Linhas Especiais / Santa Rosa',
+        healthSub: 'Fretados e transporte coletivo',
+        crimeHistory: [
+          { year: '2021', pct: 1.16 }, { year: '2022', pct: 1.09 }, { year: '2023', pct: 1.03 },
+          { year: '2024', pct: 0.97 }, { year: '2025', pct: 0.92 }, { year: '2026', pct: 0.88 }
+        ],
+        crimeNote: 'Baixíssima ocorrência patrimonial.',
+        structuralIssues: [
+          { loc: 'Acesso de carretas na BR-459 / Distrito Industrial', desc: 'Fluxo intenso de veículos pesados exige manutenção constante do pavimento.', lat: -22.4495, lng: -45.4685 }
+        ],
+        news: [
+          { date: '20/10/2026', title: 'Indústrias do Distrito Industrial abrem vagas técnicas via Programa Jovem Aprendiz SENAI', source: 'FIEMG / PMI' }
+        ]
+      },
+      morro_grande: {
+        name: 'Morro Grande (CEP 37502-700)',
+        center: [-22.4110, -45.4350],
+        zoom: 15,
+        safety: '0,91% • Área Verde/Residencial',
+        safetySub: 'Patrulhamento preventivo',
+        floodRisk: 'Baixo • Topografia Alta',
+        floodSub: 'Nascentes monitoradas',
+        invest: 'Preservação & Acesso',
+        investSub: 'Iluminação e manutenção de vias',
+        health: 'Acesso UBS Pinheirinho',
+        healthSub: 'Transporte coletivo integrado',
+        crimeHistory: [
+          { year: '2021', pct: 1.22 }, { year: '2022', pct: 1.15 }, { year: '2023', pct: 1.08 },
+          { year: '2024', pct: 1.02 }, { year: '2025', pct: 0.96 }, { year: '2026', pct: 0.91 }
+        ],
+        crimeNote: 'Área tranquila.',
+        structuralIssues: [
+          { loc: 'Drenagem de águas pluviais em encosta', desc: 'Conservação de canaletas laterais.', lat: -22.4110, lng: -45.4350 }
+        ],
+        news: [
+          { date: '11/08/2026', title: 'Manutenção preventiva das estradas e acessos do Morro Grande', source: 'Obras Itajubá' }
+        ]
+      },
+      ponte_alta: {
+        name: 'Ponte Alta (CEP 37506-150)',
+        center: [-22.4035, -45.4480],
+        zoom: 15,
+        safety: '0,93% • Ronda Rural/Norte',
+        safetySub: 'Patrulhamento preventivo Norte',
+        floodRisk: 'Moderado • Ribeirão',
+        floodSub: 'Monitoramento de ponte e drenagem',
+        invest: 'Acesso Norte & Estradas',
+        investSub: 'Manutenção viária periódica',
+        health: 'EAP Juru / Equipe Rural',
+        healthSub: 'Atendimento itinerante',
+        crimeHistory: [
+          { year: '2021', pct: 1.24 }, { year: '2022', pct: 1.17 }, { year: '2023', pct: 1.10 },
+          { year: '2024', pct: 1.04 }, { year: '2025', pct: 0.98 }, { year: '2026', pct: 0.93 }
+        ],
+        crimeNote: 'Baixa incidência.',
+        structuralIssues: [
+          { loc: 'Cabeceira da ponte e drenagem lateral', desc: 'Limpeza periódica após chuvas fortes.', lat: -22.4035, lng: -45.4480 }
+        ],
+        news: [
+          { date: '05/09/2026', title: 'Secretaria de Agricultura e Obras realiza patrolamento na região de Ponte Alta', source: 'PMI' }
+        ]
+      },
+      anhumas: {
+        name: 'Anhumas (CEP 37502-149)',
+        center: [-22.4165, -45.4260],
+        zoom: 15,
+        safety: '0,90% • Baixa Criminalidade',
+        safetySub: 'Patrulha Rural e Comunitária',
+        floodRisk: 'Baixo • Cota Elevada',
+        floodSub: 'Sem risco de cheia do Rio Sapucaí',
+        invest: 'UBS Medicina I / Anhumas (CNES 3038483)',
+        investSub: '17 logradouros • Saúde e Infraestrutura',
+        health: 'Linha 13 Mercado – Anhumas Via Medicina',
+        healthSub: 'Atendimento regular Expresso Valônia',
+        crimeHistory: [
+          { year: '2021', pct: 1.20 }, { year: '2022', pct: 1.13 }, { year: '2023', pct: 1.07 },
+          { year: '2024', pct: 1.01 }, { year: '2025', pct: 0.95 }, { year: '2026', pct: 0.90 }
+        ],
+        crimeNote: 'Região tranquila com excelente cobertura de ônibus.',
+        structuralIssues: [
+          { loc: 'Estrada de ligação Medicina – Anhumas', desc: 'Conservação de acostamento e drenagem pluvial.', lat: -22.4165, lng: -45.4260 }
+        ],
+        news: [
+          { date: '18/09/2026', title: 'Linha 13 Mercado – Anhumas mantém horários ampliados via Medicina', source: 'Expresso Valônia' }
+        ]
+      },
+      zona_rural: {
+        name: 'Área Rural / Capetinga / Toledos / Ano Bom (CEP 37506-899)',
+        center: [-22.4620, -45.4450],
+        zoom: 13,
+        safety: '0,82% • Patrulha Rural 56º BPM',
+        safetySub: 'Georreferenciamento de propriedades rurais',
+        floodRisk: 'Monitorado (4 Estações Rurais)',
+        floodSub: 'Estações Toledos 1, Toledos 2, Capetinga e Ano Bom',
+        invest: 'PSF Zona Rural I e II',
+        investSub: 'Estradas vicinais e pontes rurais',
+        health: 'Linhas 09, 09B, 12, 14, 15, 18 Valônia',
+        healthSub: 'Ano Bom, Goiabal, Freire, Barra, Água Limpa, Rancho Grande',
+        crimeHistory: [
+          { year: '2021', pct: 1.10 }, { year: '2022', pct: 1.03 }, { year: '2023', pct: 0.97 },
+          { year: '2024', pct: 0.91 }, { year: '2025', pct: 0.86 }, { year: '2026', pct: 0.82 }
+        ],
+        crimeNote: 'Programa Patrulha Rural reduz furtos em propriedades.',
+        structuralIssues: [
+          { loc: 'Estradas vicinais Toledos / Capetinga / Ano Bom', desc: 'Manutenção de mata-burros, pontes de madeira/concreto e cascalhamento.', lat: -22.4620, lng: -45.4450 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Estações pluviométricas Ano Bom, Capetinga, Toledos 1 e 2 registram 0,0 mm hoje', source: 'Espiaí Itajubá' },
+          { date: '14/10/2026', title: 'Linhas rurais 09, 12, 14, 15 e 18 operam com horários regulares no Mercado e Rodoviária', source: 'Expresso Valônia' }
+        ]
       }
-    ];
-
-    // 4. ESTABELECIMENTOS E UNIDADES DE ITAJUBÁ (COM CONTAGEM DE 5★ POR SELO)
+    };
+    // 4. ESTABELECIMENTOS E UNIDADES REAIS DE ITAJUBÁ - MG (CNES, VISA, COMÉRCIO LOCAL)
     const establishments = [
       {
         id: 'est-1',
         category: 'food',
         sector: 'Restaurante & Gastronomia',
         emoji: '🍽️',
-        name: 'Restaurante Sabor da Mantiqueira',
-        address: 'Av. Cel. Carneiro Júnior, 185 - Centro • Itajubá',
-        lat: -22.4255,
-        lng: -45.4526,
+        name: 'Divino Restaurante e Café',
+        address: 'Rua Major Belo Lisboa, 210 - Centro • Itajubá',
+        lat: -22.4262,
+        lng: -45.4532,
         sealBadge: 'Selo Higiene Verificada • Ouro',
         sealDate: 'Vistoriado há 5 dias',
-        sealAgency: 'Vigilância Sanitária Municipal (VISA Itajubá)',
-        sealDesc: 'Câmara fria, ralos telados, pia exclusiva de higienização e controle de temperatura validados pela Vigilância Sanitária.',
-        issues: ['Poucas mesas disponíveis entre 12h15 e 13h00'],
+        sealAgency: 'Vigilância Sanitária de Itajubá (CNES 7782918)',
+        sealDesc: 'Cozinha, câmaras frias, controle de temperatura e boas práticas de manipulação auditados pela Vigilância Sanitária Municipal.',
+        issues: ['Fila no buffet executivo entre 12h15 e 13h00'],
         sealStats: {
           quality: { fiveStarCount: 84, totalCount: 94 },
           accessibility: { fiveStarCount: 74, totalCount: 94 },
@@ -1264,19 +2038,18 @@
           price: { fiveStarCount: 72, totalCount: 94 }
         },
         reviews: [
-          { author: 'Rafael Moreira', date: 'Há 2 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada', 'Rampa com inclinação adequada'], comment: 'Comida mineira excelente, banheiro adaptado e selo da Vigilância Sanitária ativo.' },
-          { author: 'Juliana Prado', date: 'Há 6 dias', stars: { quality: 5, accessibility: 4, hygiene: 5, service: 4, price: 4 }, tags: ['Boa temperatura ao servir', 'Ambiente limpo'], comment: 'Muito saboroso e limpo, só estava bem cheio no horário de almoço.' }
+          { author: 'Rafael Moreira', date: 'Há 2 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada / Execução impecável', 'Rampa com inclinação adequada'], comment: 'Parmegiana excelente, ambiente muito limpo e selo VISA ativo.' }
         ]
       },
       {
         id: 'est-2',
         category: 'health',
-        sector: 'Hospital / Saúde',
+        sector: 'Hospital Geral & Alta Complexidade',
         emoji: '🏥',
         name: 'Hospital de Clínicas de Itajubá (HCI)',
-        address: 'Av. Renó Júnior, 55 - Medicina • Itajubá',
-        lat: -22.4214,
-        lng: -45.4466,
+        address: 'Rua Miguel Viana, 420 - Morro Chic / Medicina • Itajubá',
+        lat: -22.4218,
+        lng: -45.4472,
         sealBadge: 'Acreditação Hospitalar & CCIH Ativa',
         sealDate: 'Auditoria contínua',
         sealAgency: 'Secretaria Municipal de Saúde & ANVISA',
@@ -1290,91 +2063,334 @@
           price: { fiveStarCount: 108, totalCount: 130 }
         },
         reviews: [
-          { author: 'Carlos Henrique', date: 'Ontem', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Execução impecável', 'Rampa com inclinação adequada'], comment: 'Atendimento médico humanizado, rampa acessível e triagem organizada.' }
+          { author: 'Carlos Henrique', date: 'Ontem', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada / Execução impecável', 'Rampa com inclinação adequada'], comment: 'Atendimento médico humanizado, rampa acessível e triagem organizada.' }
         ]
       },
       {
         id: 'est-3',
-        category: 'service',
-        sector: 'Clínica Odontológica / Dentista',
-        emoji: '🦷',
-        name: 'Clínica Odontológica Sorriso Serra',
-        address: 'Rua Dona Maria Carneiro, 112 - Centro • Itajubá',
-        lat: -22.4247,
-        lng: -45.4519,
-        sealBadge: 'Selo Biossegurança & Autoclave Ativo',
-        sealDate: 'Verificado há 6 dias',
-        sealAgency: 'Vigilância Sanitária & CRO-MG',
-        sealDesc: 'Ciclos de autoclave, envelopes datados e descarte de perfurocortantes auditados regularmente.',
-        issues: ['Escada curta na recepção sem rampa fixa (em adaptação)'],
+        category: 'health',
+        sector: 'Saúde Pública SUS • CNES 2212617',
+        emoji: '🩺',
+        name: 'Policlínica de Itajubá & Farmácia de Todos',
+        address: 'Praça Amélia Braga, 1 - Centro • Itajubá',
+        lat: -22.4250,
+        lng: -45.4516,
+        sealBadge: 'Unidade Pública Regulada • SUS',
+        sealDate: 'Ativo • CNES 9939598',
+        sealAgency: 'Prefeitura Municipal de Itajubá • SMS',
+        sealDesc: 'Atendimento especializado SUS, dispensação gratuita de medicamentos e vacinação.',
+        issues: ['Alta procura no início da manhã para retirada de medicamentos'],
         sealStats: {
-          quality: { fiveStarCount: 48, totalCount: 53 },
-          accessibility: { fiveStarCount: 28, totalCount: 53 },
-          hygiene: { fiveStarCount: 51, totalCount: 53 },
-          service: { fiveStarCount: 46, totalCount: 53 },
-          price: { fiveStarCount: 41, totalCount: 53 }
+          quality: { fiveStarCount: 78, totalCount: 95 },
+          accessibility: { fiveStarCount: 82, totalCount: 95 },
+          hygiene: { fiveStarCount: 85, totalCount: 95 },
+          service: { fiveStarCount: 72, totalCount: 95 },
+          price: { fiveStarCount: 92, totalCount: 95 }
         },
         reviews: [
-          { author: 'Amanda Ribeiro', date: 'Há 3 dias', stars: { quality: 5, accessibility: 3, hygiene: 5, service: 5, price: 5 }, tags: ['Materiais esterilizados', 'Atendimento cordial'], comment: 'Tratamento sem dor e tudo aberto na frente do paciente.' }
+          { author: 'Mariana Souza', date: 'Há 3 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 4, price: 5 }, tags: ['Atendimento cordial e acolhedor'], comment: 'Consegui todos os remédios gratuitos pelo SUS sem burocracia.' }
         ]
       },
       {
         id: 'est-4',
         category: 'food',
-        sector: 'Supermercado & Açougue',
-        emoji: '🛒',
-        name: 'Supermercado & Açougue Sul de Minas',
-        address: 'Av. BPS, 890 - Pinheirinho • Itajubá',
-        lat: -22.4142,
-        lng: -45.4489,
-        sealBadge: 'Selo Cadeia Fria & Açougue Regulares',
-        sealDate: 'Vistoriado há 9 dias',
-        sealAgency: 'VISA Itajubá & IMA',
-        sealDesc: 'Balcões refrigerados entre 0°C e 4°C, rastreabilidade de carnes e corredor acessível verificados.',
-        issues: ['Fila nos caixas após as 18h'],
+        sector: 'Pizzaria & Gastronomia',
+        emoji: '🍕',
+        name: 'Fogão do Mira',
+        address: 'Av. Renó Júnior, 340 - Medicina • Itajubá',
+        lat: -22.4206,
+        lng: -45.4461,
+        sealBadge: 'Selo Higiene & Forno Regulares',
+        sealDate: 'Vistoriado há 8 dias',
+        sealAgency: 'Vigilância Sanitária de Itajubá',
+        sealDesc: 'Manipulação de massas, refrigeração de insumos e higienização auditados.',
+        issues: ['Estacionamento disputado nos fins de semana'],
         sealStats: {
-          quality: { fiveStarCount: 64, totalCount: 80 },
-          accessibility: { fiveStarCount: 68, totalCount: 80 },
-          hygiene: { fiveStarCount: 65, totalCount: 80 },
-          service: { fiveStarCount: 52, totalCount: 80 },
-          price: { fiveStarCount: 63, totalCount: 80 }
+          quality: { fiveStarCount: 68, totalCount: 76 },
+          accessibility: { fiveStarCount: 58, totalCount: 76 },
+          hygiene: { fiveStarCount: 64, totalCount: 76 },
+          service: { fiveStarCount: 61, totalCount: 76 },
+          price: { fiveStarCount: 60, totalCount: 76 }
         },
         reviews: [
-          { author: 'Lucas Andrade', date: 'Há 4 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 4, price: 5 }, tags: ['Cortes frescos', 'Corredores amplos'], comment: 'Açougue muito limpo e preços justos perto da UNIFEI.' }
+          { author: 'Lucas Andrade', date: 'Há 4 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada / Execução impecável'], comment: 'Melhor pizza da região da Medicina, bem recheada e quentinha.' }
         ]
       },
       {
         id: 'est-5',
-        category: 'service',
-        sector: 'Oficina Mecânica & Auto Center',
-        emoji: '🔧',
-        name: 'Auto Center Mantiqueira Bosch Service',
-        address: 'Av. Jerson Dias, 310 - Estiva • Itajubá',
-        lat: -22.4358,
-        lng: -45.4602,
-        sealBadge: 'Selo Ambiental & Descarte de Óleo',
-        sealDate: 'Vistoriado há 12 dias',
-        sealAgency: 'Secretaria de Meio Ambiente & PROCON',
-        sealDesc: 'Caixa separadora de água e óleo, descarte certificado de filtros e orçamento prévio detalhado.',
-        issues: ['Necessário agendar revisão com 2 dias de antecedência'],
+        category: 'food',
+        sector: 'Cafeteria & Padaria Artesanal',
+        emoji: '☕',
+        name: 'Café do Vadinho & Óikí Cafés Especiais',
+        address: 'Av. Cel. Carneiro Júnior, 142 - Centro • Itajubá',
+        lat: -22.4255,
+        lng: -45.4526,
+        sealBadge: 'Selo Boas Práticas • Café Mantiqueira',
+        sealDate: 'Vistoriado há 6 dias',
+        sealAgency: 'VISA Itajubá',
+        sealDesc: 'Controle sanitário de estufas, vitrines refrigeradas e origem certificada de cafés da Serra da Mantiqueira.',
+        issues: ['Poucas tomadas para notebook no salão principal'],
         sealStats: {
-          quality: { fiveStarCount: 39, totalCount: 45 },
-          accessibility: { fiveStarCount: 34, totalCount: 45 },
-          hygiene: { fiveStarCount: 36, totalCount: 45 },
-          service: { fiveStarCount: 38, totalCount: 45 },
-          price: { fiveStarCount: 35, totalCount: 45 }
+          quality: { fiveStarCount: 81, totalCount: 88 },
+          accessibility: { fiveStarCount: 69, totalCount: 88 },
+          hygiene: { fiveStarCount: 79, totalCount: 88 },
+          service: { fiveStarCount: 77, totalCount: 88 },
+          price: { fiveStarCount: 71, totalCount: 88 }
         },
         reviews: [
-          { author: 'Marcelo Tavares', date: 'Há 5 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Orçamento transparente', 'Execução impecável'], comment: 'Mostram as peças trocadas e cumprem o prazo.' }
+          { author: 'Amanda Ribeiro', date: 'Há 2 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Boa temperatura ao servir / Funciona perfeitamente'], comment: 'Café especial da Mantiqueira impecável e atendimento rápido.' }
+        ]
+      },
+      {
+        id: 'est-6',
+        category: 'service',
+        sector: 'Odontologia Pública & Especialidades',
+        emoji: '🦷',
+        name: 'Centro de Especialidades Odontológicas (CEO Itajubá)',
+        address: 'Rua Dona Maria Carneiro, 190 - Centro • Itajubá',
+        lat: -22.4247,
+        lng: -45.4519,
+        sealBadge: 'Selo Biossegurança & Autoclave • CNES 9543562',
+        sealDate: 'Verificado há 4 dias',
+        sealAgency: 'Vigilância Sanitária & CRO-MG',
+        sealDesc: 'Ciclos de autoclave, envelopes datados e descarte de perfurocortantes auditados regularmente.',
+        issues: ['Agendamento de especialidades demanda encaminhamento prévio da UBS'],
+        sealStats: {
+          quality: { fiveStarCount: 48, totalCount: 53 },
+          accessibility: { fiveStarCount: 42, totalCount: 53 },
+          hygiene: { fiveStarCount: 51, totalCount: 53 },
+          service: { fiveStarCount: 46, totalCount: 53 },
+          price: { fiveStarCount: 50, totalCount: 53 }
+        },
+        reviews: [
+          { author: 'Fernanda Alves', date: 'Há 5 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Ambiente e mesas impecavelmente limpos'], comment: 'Excelente estrutura odontológica e biossegurança rigorosa.' }
+        ]
+      },
+      {
+        id: 'est-7',
+        category: 'food',
+        sector: 'Hamburgueria & Lanches',
+        emoji: '🍔',
+        name: 'El Ternazo & Kombi Garage Bar',
+        address: 'Av. BPS, 640 - Pinheirinho • Itajubá',
+        lat: -22.4148,
+        lng: -45.4488,
+        sealBadge: 'Selo Manipulação & Cadeia Fria Ativo',
+        sealDate: 'Vistoriado há 9 dias',
+        sealAgency: 'VISA Itajubá',
+        sealDesc: 'Armazenamento refrigerado de carnes artesanais e higienização de chapas verificados.',
+        issues: ['Tempo de entrega maior às sextas-feiras à noite'],
+        sealStats: {
+          quality: { fiveStarCount: 73, totalCount: 82 },
+          accessibility: { fiveStarCount: 63, totalCount: 82 },
+          hygiene: { fiveStarCount: 68, totalCount: 82 },
+          service: { fiveStarCount: 65, totalCount: 82 },
+          price: { fiveStarCount: 64, totalCount: 82 }
+        },
+        reviews: [
+          { author: 'Pedro Henrique', date: 'Ontem', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada / Execução impecável'], comment: 'Hambúrguer artesanal muito bom perto da UNIFEI.' }
+        ]
+      },
+      {
+        id: 'est-8',
+        category: 'health',
+        sector: 'Atenção Primária • CNES 2212714',
+        emoji: '🏥',
+        name: 'PSF Santa Rosa',
+        address: 'Rua Principal Santa Rosa, s/n - Santa Rosa • Itajubá',
+        lat: -22.4436,
+        lng: -45.4622,
+        sealBadge: 'Unidade Saúde da Família Ativa',
+        sealDate: 'Auditoria SMS Itajubá',
+        sealDesc: 'Consultas médicas, enfermagem, vacinação e acompanhamento domiciliar para moradores do bairro Santa Rosa.',
+        issues: ['Necessidade de ampliação da cobertura externa na recepção'],
+        sealStats: {
+          quality: { fiveStarCount: 44, totalCount: 52 },
+          accessibility: { fiveStarCount: 41, totalCount: 52 },
+          hygiene: { fiveStarCount: 47, totalCount: 52 },
+          service: { fiveStarCount: 43, totalCount: 52 },
+          price: { fiveStarCount: 52, totalCount: 52 }
+        },
+        reviews: [
+          { author: 'José Antônio', date: 'Há 4 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Atendimento cordial e acolhedor'], comment: 'Equipe muito atenciosa com os moradores do Santa Rosa.' }
         ]
       }
     ];
 
-    // 5. PONTOS DE ÔNIBUS E OCORRÊNCIAS
+    // 5. PONTOS DE ÔNIBUS REAIS DA EXPRESSO VALÔNIA EM ITAJUBÁ - MG
     const busStops = [
-      { id: 'bus-1', name: 'Terminal Praça Getúlio Vargas (Centro)', lat: -22.4252, lng: -45.4520, lines: [{ line: '01 - Circular UNIFEI / BPS', next: '4 min', freq: '15 min' }, { line: '04 - Medicina / Morro Chic', next: '9 min', freq: '20 min' }, { line: '09 - Estiva / Boa Vista', next: '11 min', freq: '25 min' }] },
-      { id: 'bus-2', name: 'Ponto Portaria Principal UNIFEI (Av. BPS)', lat: -22.4128, lng: -45.4482, lines: [{ line: '01 - Circular Centro / Rodoviária', next: '6 min', freq: '15 min' }, { line: '12 - Pinheirinho / São Judas', next: '14 min', freq: '30 min' }] },
-      { id: 'bus-3', name: 'Ponto Hospital de Clínicas (Av. Renó Júnior)', lat: -22.4210, lng: -45.4462, lines: [{ line: '04 - Centro / Medicina', next: '7 min', freq: '20 min' }] }
+      {
+        id: 'bus-1',
+        name: 'Terminal Mercado Municipal (Centro)',
+        lat: -22.4243,
+        lng: -45.4535,
+        lines: [
+          { line: '12 - Mercado / Freire (Via São Pedro)', next: '07:00 • 11:30 • 16:00', freq: 'Horário fixo Valônia' },
+          { line: '13 - Mercado / Anhumas (Via Medicina)', next: '12 min', freq: '40 min' },
+          { line: '14 - Mercado / Barra (Via Rio Manso)', next: '25 min', freq: '60 min' },
+          { line: '15 - Água Limpa / Mercado', next: '18 min', freq: '50 min' },
+          { line: '18 - Rancho Grande / Mercado', next: '32 min', freq: '60 min' },
+          { line: '7B - Figueiras / Mercado', next: '22 min', freq: '50 min' }
+        ]
+      },
+      {
+        id: 'bus-2',
+        name: 'Ponto Praça Dr. José Braz / Rodoviária',
+        lat: -22.4265,
+        lng: -45.4548,
+        lines: [
+          { line: '09 - Rodoviária / Ano Bom', next: '08 min', freq: '30 min' },
+          { line: '09B - Goiabal / Rodoviária', next: '28 min', freq: '60 min' },
+          { line: '01 - Vila Isabel / Santa Rosa / Itavel', next: '06 min', freq: '20 min' }
+        ]
+      },
+      {
+        id: 'bus-3',
+        name: 'Ponto Santa Rosa (Corredor Sul / Itavel)',
+        lat: -22.4435,
+        lng: -45.4628,
+        lines: [
+          { line: '01 - Vila Isabel / Santa Rosa / Itavel', next: '05 min', freq: '20 min' },
+          { line: '02 - Cruzeiro / Santa Rosa (Via Rodovia)', next: '14 min', freq: '30 min' },
+          { line: '03B - Santa Rosa / Rebourgeon (Via Santa Luzia)', next: '11 min', freq: '25 min' },
+          { line: '04B - Santa Rosa / Rebourgeon (Via Varginha)', next: '17 min', freq: '25 min' },
+          { line: '05 - Jardim das Colinas / Santa Rosa', next: '21 min', freq: '35 min' },
+          { line: '06 - Jardim das Nações / Santa Rosa', next: '24 min', freq: '40 min' },
+          { line: '11A/B/C - Novo Horizonte / Santa Rosa', next: '09 min', freq: '20 min' }
+        ]
+      },
+      {
+        id: 'bus-4',
+        name: 'Ponto UNIFEI / Av. BPS (Pinheirinho)',
+        lat: -22.4128,
+        lng: -45.4482,
+        lines: [
+          { line: '02 - Cruzeiro / Santa Rosa (Via Rodovia)', next: '07 min', freq: '25 min' },
+          { line: '06 - Jardim das Nações / Santa Rosa (Via Rodovia)', next: '15 min', freq: '35 min' },
+          { line: '11A - Novo Horizonte / Santa Rosa (Via Rodovia)', next: '19 min', freq: '30 min' }
+        ]
+      },
+      {
+        id: 'bus-5',
+        name: 'Ponto Hospital de Clínicas / Medicina',
+        lat: -22.4212,
+        lng: -45.4465,
+        lines: [
+          { line: '08 - Rebourgeon / Medicina (Via Piedade)', next: '10 min', freq: '30 min' },
+          { line: '13 - Mercado / Anhumas (Via Medicina)', next: '16 min', freq: '40 min' }
+        ]
+      },
+      {
+        id: 'bus-6',
+        name: 'Ponto Terminal Bairro Rebourgeon',
+        lat: -22.4265,
+        lng: -45.4362,
+        lines: [
+          { line: '03A - Santa Rosa / Rebourgeon (Via Vila Poddis)', next: '12 min', freq: '30 min' },
+          { line: '03B - Santa Rosa / Rebourgeon (Via Santa Luzia)', next: '08 min', freq: '25 min' },
+          { line: '04A/B - Santa Rosa / Rebourgeon (Via Varginha)', next: '15 min', freq: '25 min' },
+          { line: '17 - Rebourgeon / Cruzeiro (Via Moquém)', next: '23 min', freq: '45 min' }
+        ]
+      },
+      {
+        id: 'bus-7',
+        name: 'Ponto Novo Horizonte / Boa Vista',
+        lat: -22.4482,
+        lng: -45.4648,
+        lines: [
+          { line: '11A - Novo Horizonte / Santa Rosa (Via Boa Vista)', next: '07 min', freq: '25 min' },
+          { line: '11B - Novo Horizonte / Santa Rosa (Via Bahamas)', next: '14 min', freq: '30 min' },
+          { line: '11C - Novo Horizonte / Santa Rosa (Via Varginha)', next: '21 min', freq: '30 min' }
+        ]
+      },
+      {
+        id: 'bus-8',
+        name: 'Ponto Cruzeiro / Jardim das Colinas',
+        lat: -22.4292,
+        lng: -45.4412,
+        lines: [
+          { line: '07 - Cruzeiro / Cafona (Via Jardim das Colinas)', next: '13 min', freq: '35 min' },
+          { line: '02 - Cruzeiro / Santa Rosa (Via Itavel)', next: '19 min', freq: '30 min' }
+        ]
+      }
+    ];
+
+    const sealDefinitions = [
+      {
+        key: 'quality',
+        label: 'Qualidade',
+        fullTitle: 'Selo Verde • Qualidade do Produto / Serviço',
+        subtitle: 'Sabor, temperatura, apresentação ou eficiência técnica',
+        colorHex: '#10B981',
+        badgeClass: 'bg-emerald-100 text-emerald-800',
+        criteriaByStars: {
+          5: ['Comida bem temperada / Execução impecável', 'Boa temperatura ao servir / Funciona perfeitamente', 'Boa aparência e apresentação', 'Sabor agradável / Resultado excelente'],
+          4: ['Melhorar tempero / Pequeno ajuste técnico', 'Temperatura ok', 'Aparência não tão agradável', 'Bom no geral, mas pode evoluir'],
+          3: ['Tempero neutro ou irregular', 'Demora na entrega do prato/serviço', 'Apresentação simples demais', 'Resultado apenas mediano'],
+          2: ['Servido frio ou fora do padrão', 'Qualidade abaixo do esperado', 'Necessita revisão técnica imediata', 'Insatisfação parcial'],
+          1: ['Produto impróprio ou serviço falho', 'Péssima apresentação / execução', 'Temperatura inadequada', 'Não recomendo']
+        }
+      },
+      {
+        key: 'accessibility',
+        label: 'Acessibilidade',
+        fullTitle: 'Selo Azul • Acessibilidade & Estrutura Física',
+        subtitle: 'Rampas, banheiros adaptados, sinalização e circulação',
+        colorHex: '#0EA5E9',
+        badgeClass: 'bg-sky-100 text-sky-800',
+        criteriaByStars: {
+          5: ['Rampa com inclinação adequada', 'Banheiro adaptado e sinalizado', 'Corredores amplos sem obstáculos', 'Atendimento inclusivo (Libras / Braille)'],
+          4: ['Possui rampa, mas falta corrimão', 'Banheiro acessível precisa de manutenção', 'Circulação boa na maior parte', 'Sinalização visual pode melhorar'],
+          3: ['Degrau na entrada sem rampa fixa', 'Espaço apertado entre mesas/balcões', 'Falta vaga preferencial demarcada', 'Acessibilidade parcial'],
+          2: ['Difícil acesso para cadeirantes', 'Banheiro sem adaptação', 'Obstáculos na calçada/entrada', 'Sinalização precária'],
+          1: ['Totalmente inacessível', 'Escadas sem alternativa', 'Sem condições mínimas de mobilidade', 'Risco de queda no acesso']
+        }
+      },
+      {
+        key: 'hygiene',
+        label: 'Higiene & Selo',
+        fullTitle: 'Selo Amarelo • Higiene & Segurança Sanitária',
+        subtitle: 'Limpeza do salão, banheiros, manipulação e selo VISA',
+        colorHex: '#F59E0B',
+        badgeClass: 'bg-amber-100 text-amber-800',
+        criteriaByStars: {
+          5: ['Ambiente e mesas impecavelmente limpos', 'Equipe usando touca/luvas e uniforme limpo', 'Banheiros higienizados e abastecidos', 'Selo da Vigilância Sanitária visível'],
+          4: ['Salão limpo, mas banheiro precisa reposição', 'Boa higiene geral', 'Lixeiras cheias no horário de pico', 'Limpeza satisfatória'],
+          3: ['Mesas demoram para ser higienizadas', 'Organização regular do balcão', 'Odor ou umidade em área interna', 'Precisa reforçar limpeza'],
+          2: ['Falta de higiene nos utensílios/banheiro', 'Manipulação sem cuidados adequados', 'Acúmulo de resíduos visível', 'Atenção sanitária necessária'],
+          1: ['Condições sanitárias críticas', 'Sujeira aparente no salão/cozinha', 'Risco à saúde do consumidor', 'Denúncia sanitária recomendada']
+        }
+      },
+      {
+        key: 'service',
+        label: 'Atendimento',
+        fullTitle: 'Selo Roxo • Atendimento & Agilidade',
+        subtitle: 'Cordialidade, tempo de espera e resolução de dúvidas',
+        colorHex: '#8B5CF6',
+        badgeClass: 'bg-purple-100 text-purple-800',
+        criteriaByStars: {
+          5: ['Atendimento cordial e acolhedor', 'Tempo de espera rápido', 'Equipe bem treinada e atenciosa', 'Clareza nas informações'],
+          4: ['Equipe educada, mas um pouco lenta', 'Boa receptividade', 'Pequena fila no caixa', 'Atendimento satisfatório'],
+          3: ['Demora acima do normal', 'Atendimento apressado ou impessoal', 'Falta de comunicação sobre espera', 'Experiência mediana'],
+          2: ['Desorganização na fila/pedidos', 'Falta de atenção da equipe', 'Erro no pedido ou cadastro', 'Espera excessiva'],
+          1: ['Atendimento desrespeitoso', 'Abandono no balcão/mesa', 'Total descaso com o cliente', 'Péssima experiência']
+        }
+      },
+      {
+        key: 'price',
+        label: 'Preço Justo',
+        fullTitle: 'Selo Laranja • Preço Justo & Transparência',
+        subtitle: 'Custo-benefício, clareza de valores e nota fiscal',
+        colorHex: '#F97316',
+        badgeClass: 'bg-orange-100 text-orange-800',
+        criteriaByStars: {
+          5: ['Excelente custo-benefício', 'Preços claros e visíveis no cardápio/tabela', 'Emissão espontânea de nota fiscal', 'Aceita PIX, cartões e benefícios'],
+          4: ['Preço dentro da média de Itajubá', 'Boa relação qualidade/valor', 'Taxas explicadas antes do pagamento', 'Valor justo'],
+          3: ['Preço um pouco elevado para a porção/serviço', 'Cardápio com valores desatualizados', 'Poucas opções econômicas', 'Custo-benefício regular'],
+          2: ['Valor alto sem entrega correspondente', 'Cobrança adicional pouco clara', 'Falta de transparência no orçamento', 'Caro pelo que oferece'],
+          1: ['Preço abusivo', 'Cobrança indevida na conta', 'Sem tabela de preços visível', 'Não emite comprovante']
+        }
+      }
     ];
 
     const urbanReports = [
@@ -1416,6 +2432,24 @@
       service: { stars: 5, tags: [] },
       price: { stars: 5, tags: [] }
     };
+    let dynamicOsmStreetsCache = [];
+    let osmCatalogLoaded = false;
+
+    const itajubaStreetsCatalog = [
+      { name: 'Avenida BPS', district: 'Pinheirinho / UNIFEI • Itajubá', lat: -22.4132, lng: -45.4485, type: 'Avenida' },
+      { name: 'Avenida Coronel Carneiro Júnior', district: 'Centro • Itajubá', lat: -22.4256, lng: -45.4526, type: 'Avenida' },
+      { name: 'Avenida Renó Júnior', district: 'Medicina • Itajubá', lat: -22.4212, lng: -45.4465, type: 'Avenida' },
+      { name: 'Avenida Jerson Dias', district: 'Estiva • Itajubá', lat: -22.4362, lng: -45.4608, type: 'Avenida' },
+      { name: 'Avenida Doutor Antônio Braga Filho', district: 'Varginha • Itajubá', lat: -22.4315, lng: -45.4562, type: 'Avenida' },
+      { name: 'Rua Major Belo Lisboa', district: 'Centro • Itajubá', lat: -22.4262, lng: -45.4532, type: 'Rua' },
+      { name: 'Rua Dona Maria Carneiro', district: 'Centro • Itajubá', lat: -22.4247, lng: -45.4519, type: 'Rua' },
+      { name: 'Rua Miguel Viana', district: 'Morro Chic • Itajubá', lat: -22.4218, lng: -45.4472, type: 'Rua' },
+      { name: 'Rua Doutor Luiz Rennó', district: 'Avenida • Itajubá', lat: -22.4318, lng: -45.4532, type: 'Rua' },
+      { name: 'Rua Padre Marçal Ribeiro', district: 'Rebourgeon • Itajubá', lat: -22.4272, lng: -45.4358, type: 'Rua' },
+      { name: 'Praça Getúlio Vargas', district: 'Centro • Itajubá', lat: -22.4252, lng: -45.4520, type: 'Praça' },
+      { name: 'Praça Amélia Braga', district: 'Centro • Itajubá', lat: -22.4250, lng: -45.4516, type: 'Praça' },
+      { name: 'Bairro Santa Rosa (Principal)', district: 'Santa Rosa • Itajubá', lat: -22.4435, lng: -45.4625, type: 'Bairro' }
+    ];
 
     const layerVisibility = {
       shelter: true, light: true, pothole: true, signage: true,
@@ -1505,6 +2539,175 @@
       document.execCommand('copy');
       temp.remove();
       showToast(`Telefone ${label} (${num}) copiado!`);
+    }
+
+    function normalizeText(str) {
+      return (str || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    }
+
+    async function loadFullItajubaStreetIndex() {
+      if (osmCatalogLoaded) return;
+      try {
+        const overpassQuery = `[out:json][timeout:18];way["highway"]["name"](-22.4750,-45.5150,-22.3750,-45.3900);out center tags;`;
+        const res = await fetch('https://overpass-api.de/api/interpreter', {
+          method: 'POST',
+          body: 'data=' + encodeURIComponent(overpassQuery)
+        });
+        const data = await res.json();
+        if (!data || !Array.isArray(data.elements)) return;
+        const grouped = new Map();
+        data.elements.forEach(el => {
+          const streetName = el.tags && el.tags.name ? el.tags.name.trim() : '';
+          if (!streetName || !el.center) return;
+          const norm = normalizeText(streetName);
+          if (!grouped.has(norm)) {
+            grouped.set(norm, {
+              name: streetName,
+              district: el.tags['addr:suburb'] || el.tags.neighbourhood || 'Itajubá • MG',
+              latSum: 0,
+              lngSum: 0,
+              count: 0,
+              type: /^av/i.test(streetName) ? 'Avenida' : (/^pra/i.test(streetName) ? 'Praça' : 'Rua')
+            });
+          }
+          const entry = grouped.get(norm);
+          entry.latSum += el.center.lat;
+          entry.lngSum += el.center.lon;
+          entry.count += 1;
+        });
+        dynamicOsmStreetsCache = Array.from(grouped.values()).map(item => ({
+          name: item.name,
+          district: item.district,
+          lat: item.latSum / item.count,
+          lng: item.lngSum / item.count,
+          type: item.type
+        }));
+        osmCatalogLoaded = true;
+      } catch (e) {}
+    }
+
+    function handlePlaceAutocomplete(query, containerId, inputId) {
+      const box = document.getElementById(containerId);
+      if (!box) return;
+      const normQ = normalizeText(query);
+      if (!normQ) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      const combined = [
+        ...itajubaStreetsCatalog,
+        ...dynamicOsmStreetsCache,
+        ...establishments.map(e => ({ name: e.name, district: e.address, lat: e.lat, lng: e.lng, type: 'Local' })),
+        ...busStops.map(b => ({ name: b.name, district: 'Ponto Expresso Valônia', lat: b.lat, lng: b.lng, type: 'Ônibus' }))
+      ];
+
+      const seen = new Set();
+      const matches = [];
+      for (const item of combined) {
+        const key = normalizeText(item.name);
+        if (seen.has(key)) continue;
+        if (key.includes(normQ) || normalizeText(item.district).includes(normQ)) {
+          seen.add(key);
+          matches.push(item);
+          if (matches.length >= 8) break;
+        }
+      }
+
+      if (!matches.length) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      box.innerHTML = matches.map(m => `
+        <button type="button" onmousedown="selectSuggestedLocation('${m.name.replace(/'/g, "\\'")}', '${m.district.replace(/'/g, "\\'")}', ${m.lat}, ${m.lng}, '${inputId}', '${containerId}')" class="w-full px-3.5 py-2.5 text-left hover:bg-purple-50 flex items-center justify-between gap-2 text-xs transition-colors">
+          <div>
+            <p class="font-extrabold text-slate-900">${m.name}</p>
+            <p class="text-[11px] text-slate-500">${m.district}</p>
+          </div>
+          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 shrink-0">${m.type}</span>
+        </button>
+      `).join('');
+      box.classList.remove('hidden');
+    }
+
+    function selectSuggestedLocation(title, subtitle, lat, lng, inputId, containerId) {
+      const inp = document.getElementById(inputId);
+      if (inp) inp.value = title;
+      document.getElementById(containerId)?.classList.add('hidden');
+      switchMainView('dashboard');
+      highlightSearchedLocationOnMap(title, subtitle, lat, lng);
+    }
+
+    function highlightSearchedLocationOnMap(title, subtitle, lat, lng) {
+      if (!map) return;
+      if (selectedStreetHighlightLayer) selectedStreetHighlightLayer.clearLayers();
+      if (tempClickMarker) {
+        map.removeLayer(tempClickMarker);
+        tempClickMarker = null;
+      }
+      map.flyTo([lat, lng], 17, { duration: 0.85 });
+      L.circle([lat, lng], {
+        radius: 130,
+        color: '#6D28D9',
+        weight: 3,
+        fillColor: '#8B5CF6',
+        fillOpacity: 0.18
+      }).addTo(selectedStreetHighlightLayer);
+
+      tempClickMarker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: '',
+          html: `<div class="custom-pin" style="background:#6D28D9;width:34px;height:34px;font-size:15px;">📍</div>`,
+          iconSize: [34, 34],
+          iconAnchor: [17, 17]
+        })
+      })
+        .bindPopup(`<div class="text-xs"><p class="font-extrabold text-purple-800">${title}</p><p class="text-[11px] text-slate-500">${subtitle}</p></div>`)
+        .addTo(map)
+        .openPopup();
+    }
+
+    async function searchItajubaLocation(inputId = 'itajubaPlaceInput') {
+      const val = document.getElementById(inputId)?.value.trim();
+      if (!val) return;
+      const normQ = normalizeText(val);
+
+      const localMatch = [...itajubaStreetsCatalog, ...dynamicOsmStreetsCache].find(s => normalizeText(s.name).includes(normQ));
+      if (localMatch) {
+        selectSuggestedLocation(localMatch.name, localMatch.district, localMatch.lat, localMatch.lng, inputId, 'mapPlaceSuggestions');
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(val + ', Itajubá, MG, Brasil')}`);
+        const results = await res.json();
+        if (results && results[0]) {
+          selectSuggestedLocation(val, results[0].display_name, parseFloat(results[0].lat), parseFloat(results[0].lon), inputId, 'mapPlaceSuggestions');
+          return;
+        }
+      } catch (e) {}
+
+      showToast('Local não encontrado. Tente o início do nome da rua ou bairro.', 'error');
+    }
+
+    function resetMapCenter() {
+      selectNeighborhood('all');
+      const sel = document.getElementById('neighborhoodSelect');
+      if (sel) sel.value = 'all';
+    }
+
+    function locateUserGPS() {
+      if (!navigator.geolocation || !map) {
+        showToast('Geolocalização indisponível no navegador.', 'error');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          highlightSearchedLocationOnMap('Sua Localização Atual (GPS)', 'Itajubá - MG', pos.coords.latitude, pos.coords.longitude);
+        },
+        () => showToast('Permissão de GPS negada ou indisponível.', 'error')
+      );
     }
 
     // 8. INICIALIZAÇÃO DO MAPA LEAFLET + BUSCA DE RUAS DE ITAJUBÁ
@@ -1637,341 +2840,97 @@
       const nb = neighborhoodsData[nbKey] || neighborhoodsData.all;
       document.getElementById('currentNeighborhoodTitle').textContent = nb.name;
       document.getElementById('statSafety').textContent = nb.safety;
+      const safetySubEl = document.getElementById('statSafetySub');
+      if (safetySubEl) safetySubEl.textContent = nb.safetySub || 'Dados oficiais SEJUSP-MG';
+
+      const floodEl = document.getElementById('statFloodRisk');
+      const floodSubEl = document.getElementById('statFloodSub');
+      if (floodEl) floodEl.textContent = nb.floodRisk || 'Monitorado';
+      if (floodSubEl) floodSubEl.textContent = nb.floodSub || 'Defesa Civil Itajubá';
+
       document.getElementById('statInvest').textContent = nb.invest;
+      const investSubEl = document.getElementById('statInvestSub');
+      if (investSubEl) investSubEl.textContent = nb.investSub || 'Prefeitura Municipal de Itajubá';
+
       document.getElementById('statHealth').textContent = nb.health;
-      if (map) map.flyTo(nb.center, nb.zoom, { duration: 0.85 });
-    }
+      const healthSubEl = document.getElementById('statHealthSub');
+      if (healthSubEl) healthSubEl.textContent = nb.healthSub || 'Cobertura Municipal';
 
-    function resetMapCenter() {
-      selectedNeighborhood = 'all';
-      const sel = document.getElementById('neighborhoodSelect');
-      if (sel) sel.value = 'all';
-      selectNeighborhood('all');
-    }
+      renderNeighborhoodDossier(nb);
 
-    function locateUserGPS() {
-      if (!navigator.geolocation) {
-        showToast('GPS não suportado neste navegador.', 'error');
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          if (map) map.flyTo([pos.coords.latitude, pos.coords.longitude], 16);
-          showToast('Localização GPS centralizada!');
-        },
-        () => showToast('Não foi possível obter o GPS agora.', 'error')
-      );
-    }
-
-    // 9. BUSCA INTELIGENTE DE RUAS, BAIRROS E LOCAIS (PALPITES VERTICAIS + OPENSTREETMAP)
-    let nominatimDebounceTimer = null;
-    let dynamicOsmStreetsCache = [];
-    let osmCatalogLoaded = false;
-
-    async function loadFullItajubaStreetIndex() {
-      if (osmCatalogLoaded) return;
-      try {
-        const overpassQuery = '[out:json][timeout:18];way["highway"]["name"](-22.4750,-45.5150,-22.3750,-45.3900);out center tags;';
-        const res = await fetch('https://overpass-api.de/api/interpreter', {
-          method: 'POST',
-          body: 'data=' + encodeURIComponent(overpassQuery)
-        });
-        const data = await res.json();
-        if (!data || !Array.isArray(data.elements)) return;
-
-        const grouped = new Map();
-        data.elements.forEach(el => {
-          const streetName = el.tags && el.tags.name ? el.tags.name.trim() : '';
-          if (!streetName || !el.center) return;
-          const norm = normalizeText(streetName);
-          if (!grouped.has(norm)) {
-            grouped.set(norm, {
-              name: streetName,
-              district: el.tags['addr:suburb'] || el.tags.neighbourhood || 'Itajubá • MG',
-              latSum: 0,
-              lngSum: 0,
-              count: 0,
-              type: /^av/i.test(streetName) ? 'Avenida' : (/^pra/i.test(streetName) ? 'Praça' : 'Rua')
-            });
-          }
-          const entry = grouped.get(norm);
-          entry.latSum += el.center.lat;
-          entry.lngSum += el.center.lon;
-          entry.count += 1;
-        });
-
-        dynamicOsmStreetsCache = Array.from(grouped.values()).map(item => ({
-          name: item.name,
-          district: item.district,
-          lat: item.latSum / item.count,
-          lng: item.lngSum / item.count,
-          type: item.type
-        }));
-        osmCatalogLoaded = true;
-      } catch (e) {}
-    }
-
-    function highlightSearchedLocationOnMap(title, subtitle, lat, lng, geojson = null) {
-      if (!map) return;
-      if (selectedStreetHighlightLayer) selectedStreetHighlightLayer.clearLayers();
-      if (tempClickMarker) {
-        map.removeLayer(tempClickMarker);
-        tempClickMarker = null;
-      }
-
-      if (geojson) {
-        const geoLayer = L.geoJSON(geojson, {
-          style: { color: '#6D28D9', weight: 6, opacity: 0.85 }
-        }).addTo(selectedStreetHighlightLayer);
-        const bounds = geoLayer.getBounds();
-        if (bounds && bounds.isValid()) {
-          map.fitBounds(bounds, { padding: [45, 45], maxZoom: 17 });
-        } else {
-          map.flyTo([lat, lng], 17, { duration: 0.85 });
+      if (map) {
+        map.flyTo(nb.center, nb.zoom, { duration: 0.9 });
+        if (selectedStreetHighlightLayer) selectedStreetHighlightLayer.clearLayers();
+        if (nbKey !== 'all') {
+          L.circle(nb.center, {
+            radius: nb.zoom >= 16 ? 380 : 850,
+            color: '#7C3AED',
+            weight: 2,
+            fillColor: '#8B5CF6',
+            fillOpacity: 0.12
+          }).addTo(selectedStreetHighlightLayer);
         }
-      } else {
-        map.flyTo([lat, lng], 17, { duration: 0.85 });
       }
-
-      tempClickMarker = L.marker([lat, lng], {
-        icon: L.divIcon({
-          className: '',
-          html: `<div class="custom-pin" style="background:#6D28D9;width:34px;height:34px;font-size:16px;">📍</div>`,
-          iconSize: [34, 34],
-          iconAnchor: [17, 17]
-        })
-      })
-        .bindPopup(`<div class="text-xs space-y-0.5"><strong>${title}</strong><p class="text-slate-600">${subtitle}</p></div>`)
-        .addTo(map)
-        .openPopup();
     }
 
-    function normalizeText(str) {
-      return (str || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    }
+    function renderNeighborhoodDossier(nb) {
+      const labelEl = document.getElementById('crimeChartNbLabel');
+      const chartEl = document.getElementById('neighborhoodCrimeChart');
+      const noteEl = document.getElementById('crimeAnalysisNote');
+      const structEl = document.getElementById('neighborhoodStructuralList');
+      const newsEl = document.getElementById('neighborhoodNewsList');
+      if (!chartEl || !structEl || !newsEl) return;
 
-    function getMatchingSuggestions(rawQuery) {
-      const q = normalizeText(rawQuery).trim();
-      if (!q) return [];
+      if (labelEl) labelEl.textContent = nb.name.split('(')[0].trim();
+      if (noteEl) noteEl.textContent = nb.crimeNote || '';
 
-      const results = [];
-      const seen = new Set();
-      const combinedCatalog = [...itajubaStreetsCatalog, ...dynamicOsmStreetsCache];
+      const history = nb.crimeHistory || [];
+      const maxPct = Math.max(...history.map(h => h.pct), 2.0);
+      chartEl.innerHTML = `
+        <div class="grid grid-cols-6 gap-1.5 items-end h-28 pt-2">
+          ${history.map((h, idx) => {
+            const hPct = Math.max(18, Math.round((h.pct / maxPct) * 100));
+            const isLast = idx === history.length - 1;
+            return `
+              <div class="flex flex-col items-center justify-end h-full gap-1">
+                <span class="text-[10px] font-black ${isLast ? 'text-emerald-700' : 'text-slate-700'}">${h.pct.toFixed(2).replace('.', ',')}%</span>
+                <div class="w-full max-w-[26px] rounded-t-lg ${isLast ? 'bg-emerald-500' : 'bg-purple-600'}" style="height:${hPct}%"></div>
+                <span class="text-[10px] font-bold text-slate-500">${h.year}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
 
-      combinedCatalog.forEach(st => {
-        const normName = normalizeText(st.name);
-        const normShort = normName.replace(/^(rua|avenida|av\.|praca|parque)\s+/, '');
-        if (normName.includes(q) || normShort.includes(q) || normalizeText(st.district).includes(q)) {
-          const startsPriority = normName.startsWith(q) || normShort.startsWith(q) ? 0 : 1;
-          const key = `street-${normName}`;
-          if (!seen.has(key)) {
-            seen.add(key);
-            results.push({
-              priority: startsPriority,
-              icon: st.type === 'Avenida' ? '🛣️' : (st.type === 'Praça' || st.type === 'Parque' ? '🌳' : '📍'),
-              title: st.name,
-              subtitle: `${st.type} • ${st.district}`,
-              lat: st.lat,
-              lng: st.lng,
-              actionType: 'flyTo'
-            });
-          }
-        }
-      });
-
-      Object.entries(neighborhoodsData).forEach(([nbKey, nb]) => {
-        if (nbKey === 'all') return;
-        if (normalizeText(nb.name).includes(q)) {
-          const key = `nb-${nbKey}`;
-          if (!seen.has(key)) {
-            seen.add(key);
-            results.push({
-              priority: normalizeText(nb.name).startsWith(q) ? 0 : 2,
-              icon: '🏘️',
-              title: nb.name,
-              subtitle: 'Bairro / Região de Itajubá - MG',
-              lat: nb.center[0],
-              lng: nb.center[1],
-              nbKey,
-              actionType: 'neighborhood'
-            });
-          }
-        }
-      });
-
-      establishments.forEach(est => {
-        if (normalizeText(est.name).includes(q) || normalizeText(est.address).includes(q) || normalizeText(est.sector).includes(q)) {
-          const key = `est-${est.id}`;
-          if (!seen.has(key)) {
-            seen.add(key);
-            results.push({
-              priority: normalizeText(est.name).startsWith(q) ? 1 : 3,
-              icon: est.emoji,
-              title: est.name,
-              subtitle: `${est.sector} • ${est.address}`,
-              lat: est.lat,
-              lng: est.lng,
-              estId: est.id,
-              actionType: 'establishment'
-            });
-          }
-        }
-      });
-
-      results.sort((a, b) => a.priority - b.priority || a.title.localeCompare(b.title));
-      return results.slice(0, 10);
-    }
-
-    function renderSuggestionDropdown(containerId, items, inputId, queryText) {
-      const box = document.getElementById(containerId);
-      if (!box) return;
-
-      if (!queryText || !queryText.trim()) {
-        box.classList.add('hidden');
-        box.innerHTML = '';
-        return;
-      }
-
-      if (items.length === 0) {
-        box.innerHTML = `<div class="px-3.5 py-2.5 text-xs text-slate-500">Buscando "<strong>${queryText}</strong>" nas ruas de Itajubá...</div>`;
-        box.classList.remove('hidden');
-        return;
-      }
-
-      box.innerHTML = items.map((item, idx) => `
-        <button type="button" onmousedown="applySearchSuggestion(${idx}, '${containerId}', '${inputId}')" class="w-full text-left px-3.5 py-2.5 hover:bg-purple-50 transition-colors flex items-center gap-2.5 text-xs">
-          <span class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center text-sm shrink-0">${item.icon}</span>
-          <div class="min-w-0 flex-1">
-            <p class="font-bold text-slate-900 truncate">${item.title}</p>
-            <p class="text-[11px] text-slate-500 truncate">${item.subtitle}</p>
-          </div>
-          <span class="text-[10px] font-bold text-purple-700 shrink-0">Ir →</span>
-        </button>
+      structEl.innerHTML = (nb.structuralIssues || []).map(st => `
+        <div onclick="if(map){ map.flyTo([${st.lat}, ${st.lng}], 17); }" class="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-rose-400 cursor-pointer space-y-0.5 transition-all surface-card">
+          <p class="font-extrabold text-rose-700 text-[11px]">📍 ${st.loc}</p>
+          <p class="text-[11px] text-slate-600 leading-snug">${st.desc}</p>
+        </div>
       `).join('');
 
-      box._currentItems = items;
-      box.classList.remove('hidden');
+      newsEl.innerHTML = (nb.news || []).map(nw => `
+        <div class="p-2.5 rounded-xl bg-white border border-slate-200 space-y-0.5 surface-card">
+          <div class="flex items-center justify-between text-[10px] font-extrabold text-indigo-700">
+            <span>📅 ${nw.date}</span>
+            <span>${nw.source}</span>
+          </div>
+          <p class="text-[11px] font-bold text-slate-800 leading-snug">${nw.title}</p>
+        </div>
+      `).join('');
     }
 
-    function handlePlaceAutocomplete(value, containerId, inputId) {
-      const localMatches = getMatchingSuggestions(value);
-      renderSuggestionDropdown(containerId, localMatches, inputId, value);
-
-      clearTimeout(nominatimDebounceTimer);
-      const trimmed = (value || '').trim();
-      if (trimmed.length >= 2) {
-        nominatimDebounceTimer = setTimeout(async () => {
-          try {
-            const url = `https://nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&limit=6&bounded=1&viewbox=-45.5150,-22.3750,-45.3900,-22.4750&q=${encodeURIComponent(trimmed + ', Itajubá, Minas Gerais')}`;
-            const res = await fetch(url);
-            const data = await res.json();
-            if (!Array.isArray(data) || data.length === 0) return;
-
-            const combined = [...localMatches];
-            const existingTitles = new Set(combined.map(i => normalizeText(i.title)));
-
-            data.forEach(place => {
-              const shortName = (place.display_name || '').split(',')[0].trim();
-              const subParts = (place.display_name || '').split(',').slice(1, 3).join(',').trim();
-              if (shortName && !existingTitles.has(normalizeText(shortName))) {
-                existingTitles.add(normalizeText(shortName));
-                combined.push({
-                  priority: 4,
-                  icon: '🗺️',
-                  title: shortName,
-                  subtitle: subParts || 'Itajubá • MG',
-                  lat: parseFloat(place.lat),
-                  lng: parseFloat(place.lon),
-                  geojson: place.geojson || null,
-                  actionType: 'flyTo'
-                });
-              }
-            });
-
-            renderSuggestionDropdown(containerId, combined.slice(0, 10), inputId, trimmed);
-          } catch (e) {}
-        }, 280);
-      }
-    }
-
-    function applySearchSuggestion(index, containerId, inputId) {
-      const box = document.getElementById(containerId);
-      const input = document.getElementById(inputId);
-      if (!box || !box._currentItems || !box._currentItems[index]) return;
-
-      const item = box._currentItems[index];
-      if (input) input.value = item.title;
-      box.classList.add('hidden');
-
-      switchMainView('dashboard');
-
-      if (item.actionType === 'neighborhood' && item.nbKey) {
-        const nbSelect = document.getElementById('neighborhoodSelect');
-        if (nbSelect) nbSelect.value = item.nbKey;
-        selectNeighborhood(item.nbKey);
-        showToast(`Bairro selecionado: ${item.title}`);
-        return;
-      }
-
-      if (item.lat && item.lng) {
-        highlightSearchedLocationOnMap(item.title, item.subtitle, item.lat, item.lng, item.geojson || null);
-      }
-
-      if (item.actionType === 'establishment' && item.estId) {
-        setTimeout(() => openEstablishmentModal(item.estId, false), 450);
-      }
-      showToast(`Localizado: ${item.title}`);
-    }
-
-    async function searchItajubaLocation() {
-      const query = document.getElementById('itajubaPlaceInput').value.trim();
-      document.getElementById('mapPlaceSuggestions')?.classList.add('hidden');
-      if (!query || !map) return;
-
-      const localMatches = getMatchingSuggestions(query);
-      if (localMatches.length > 0) {
-        const first = localMatches[0];
-        highlightSearchedLocationOnMap(first.title, first.subtitle, first.lat, first.lng, first.geojson || null);
-        showToast(`Localizado: ${first.title}`);
-        return;
-      }
-
-      try {
-        const url = `https://nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&limit=1&bounded=1&viewbox=-45.5150,-22.3750,-45.3900,-22.4750&q=${encodeURIComponent(query + ', Itajubá, Minas Gerais')}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data && data.length > 0) {
-          const shortName = data[0].display_name.split(',')[0].trim();
-          highlightSearchedLocationOnMap(shortName, 'Itajubá • MG', parseFloat(data[0].lat), parseFloat(data[0].lon), data[0].geojson || null);
-          showToast(`Localizado: ${shortName}`);
-        } else {
-          showToast('Local não encontrado em Itajubá.', 'error');
-        }
-      } catch (err) {
-        showToast('Erro ao consultar endereço.', 'error');
-      }
-    }
-
-    // 10. SISTEMA DE AVALIAÇÃO VIA QR CODE + REGRA DOS 75% POR SELO COLORIDO
     function computeSealPercentage(est, sealKey) {
-      const st = est.sealStats[sealKey];
-      if (!st || !st.totalCount) return 0;
-      return Math.round((st.fiveStarCount / st.totalCount) * 100);
+      const stat = est.sealStats && est.sealStats[sealKey];
+      if (!stat || !stat.totalCount) return 0;
+      return Math.round((stat.fiveStarCount / stat.totalCount) * 100);
     }
 
-    function openEstablishmentModal(estId, startWithQr = false) {
+    function openEstablishmentModal(estId, unlockQr = false) {
       const est = establishments.find(e => e.id === estId);
       if (!est) return;
-      currentEstId = estId;
-      qrUnlockedForCurrentModal = startWithQr;
-      currentWizardStep = 0;
-      wizardDraft = {
-        quality: { stars: 5, tags: [] },
-        accessibility: { stars: 5, tags: [] },
-        hygiene: { stars: 5, tags: [] },
-        service: { stars: 5, tags: [] },
-        price: { stars: 5, tags: [] }
-      };
+      currentEstId = est.id;
+      qrUnlockedForCurrentModal = !!unlockQr;
 
       document.getElementById('modalEstSector').textContent = `${est.emoji} ${est.sector}`;
       document.getElementById('modalEstName').textContent = est.name;
@@ -1984,64 +2943,72 @@
       const issuesList = document.getElementById('modalEstIssuesList');
       issuesList.innerHTML = (est.issues && est.issues.length)
         ? est.issues.map(i => `<li>${i}</li>`).join('')
-        : '<li>Nenhum problema recorrente registrado pela comunidade.</li>';
+        : '<li>Nenhum ponto crítico relatado recentemente.</li>';
 
       renderEstablishmentSealsInModal(est);
       renderEstablishmentReviewsInModal(est);
 
-      document.getElementById('qrLockedBanner').classList.toggle('hidden', startWithQr);
-      document.getElementById('qrEvaluationWizard').classList.toggle('hidden', !startWithQr);
-      if (startWithQr) renderQrWizard();
+      currentWizardStep = 0;
+      wizardDraft = {
+        quality: { stars: 5, tags: [] },
+        accessibility: { stars: 5, tags: [] },
+        hygiene: { stars: 5, tags: [] },
+        service: { stars: 5, tags: [] },
+        price: { stars: 5, tags: [] }
+      };
+
+      if (qrUnlockedForCurrentModal) {
+        document.getElementById('qrLockedBanner').classList.add('hidden');
+        document.getElementById('qrEvaluationWizard').classList.remove('hidden');
+        renderQrWizard();
+      } else {
+        document.getElementById('qrLockedBanner').classList.remove('hidden');
+        document.getElementById('qrEvaluationWizard').classList.add('hidden');
+      }
 
       document.getElementById('establishmentModal').classList.remove('hidden');
     }
 
     function renderEstablishmentSealsInModal(est) {
-      let activeSeals = 0;
-      const grid = document.getElementById('modalEstSealsGrid');
-      grid.innerHTML = sealDefinitions.map(seal => {
-        const pct = computeSealPercentage(est, seal.key);
+      let activeCount = 0;
+      const cards = sealDefinitions.map(s => {
+        const pct = computeSealPercentage(est, s.key);
         const isOn = pct >= 75;
-        if (isOn) activeSeals++;
+        if (isOn) activeCount += 1;
         return `
-          <div class="p-3 rounded-2xl border ${isOn ? 'bg-white border-purple-200 shadow-sm' : 'bg-slate-100/80 border-slate-200 opacity-75'} surface-subcard">
+          <div class="p-3 rounded-2xl border ${isOn ? 'bg-white border-purple-200' : 'bg-slate-100 border-slate-200 opacity-75'} space-y-1.5 surface-subcard">
             <div class="flex items-center justify-between gap-1">
-              <span class="text-xs font-black flex items-center gap-1" style="color:${isOn ? seal.colorHex : '#64748B'}">
-                ★ ${seal.label}
+              <span class="text-xs font-black flex items-center gap-1">
+                <span style="color:${isOn ? s.colorHex : '#94A3B8'}">★</span> ${s.label}
               </span>
-              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${isOn ? seal.badgeClass : 'bg-slate-300 text-slate-700'}">
-                ${pct}% • ${isOn ? 'ON' : 'OFF'}
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${isOn ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">
+                ${isOn ? 'ON' : 'OFF'}
               </span>
             </div>
-            <div class="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
-              <div class="h-full rounded-full transition-all" style="width:${pct}%;background:${isOn ? seal.colorHex : '#94A3B8'}"></div>
+            <div class="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
+              <div class="h-full rounded-full" style="width:${pct}%; background:${isOn ? s.colorHex : '#94A3B8'}"></div>
             </div>
+            <p class="text-[10px] font-bold text-slate-500">${pct}% notas 5★ (Meta: 75%)</p>
           </div>
         `;
       }).join('');
 
-      document.getElementById('modalEstActiveCount').textContent = `${activeSeals}/5 Selos Ligados`;
+      document.getElementById('modalEstActiveCount').textContent = `${activeCount}/5 Selos Ligados`;
+      document.getElementById('modalEstSealsGrid').innerHTML = cards;
     }
 
     function renderEstablishmentReviewsInModal(est) {
       const list = document.getElementById('modalEstReviewsList');
       list.innerHTML = est.reviews.map(rev => `
-        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 surface-subcard">
-          <div class="flex flex-wrap items-center justify-between gap-1">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-extrabold">${rev.author}</span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">✓ QR Code Verificado</span>
-            </div>
-            <div class="flex items-center gap-1.5 text-[11px] font-black">
-              <span class="text-emerald-600">${rev.stars.quality}★</span>
-              <span class="text-sky-600">${rev.stars.accessibility}★</span>
-              <span class="text-amber-500">${rev.stars.hygiene}★</span>
-              <span class="text-purple-600">${rev.stars.service}★</span>
-              <span class="text-orange-500">${rev.stars.price}★</span>
-            </div>
+        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 surface-subcard">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-extrabold">${rev.author}</span>
+            <span class="text-[11px] text-slate-500">${rev.date}</span>
           </div>
-          ${rev.tags && rev.tags.length ? `<div class="flex flex-wrap gap-1">${rev.tags.map(t => `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-lg bg-purple-100 text-purple-900">${t}</span>`).join('')}</div>` : ''}
-          <p class="text-xs text-slate-600">${rev.comment}</p>
+          <div class="flex flex-wrap gap-1">
+            ${(rev.tags || []).map(t => `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">${t}</span>`).join('')}
+          </div>
+          <p class="text-xs text-slate-700">${rev.comment}</p>
         </div>
       `).join('');
     }
@@ -2423,20 +3390,20 @@
 
       const items = tab === 'places'
         ? [
-            { tag: 'Patrimônio', title: 'Teatro Municipal Christiane Riêra', desc: 'Principal palco de espetáculos, concertos e festivais de Itajubá.' },
-            { tag: 'Memória', title: 'Museu Municipal Wenceslau Braz', desc: 'Acervo histórico da cidade e da indústria nacional.' },
-            { tag: 'Natureza', title: 'Parque Municipal de Itajubá', desc: 'Trilhas ecológicas, lago e área de lazer para toda a família.' }
+            { tag: 'Patrimônio • Centro', title: 'Teatro Municipal Christiane Riêra', desc: 'Principal palco de espetáculos, concertos sinfônicos, festivais de dança e peças teatrais de Itajubá.' },
+            { tag: 'Memória • Praça Wenceslau Braz', title: 'Museu Municipal Wenceslau Braz', desc: 'Acervo histórico da cidade, documentos do ex-presidente itajubense e história da indústria nacional.' },
+            { tag: 'Natureza • Bairro Varginha', title: 'Parque Municipal de Itajubá (Parque da Cidade)', desc: 'Trilhas ecológicas, lago, pistas de caminhada e arena para shows e festivais ao ar livre.' }
           ]
         : tab === 'artists'
         ? [
-            { tag: 'Edital Aberto', title: 'Chamamento Cultural Lei Paulo Gustavo / Aldir Blanc', desc: 'Inscrições para músicos, grupos teatrais e artesãos locais.' },
-            { tag: 'Artesanato', title: 'Feira de Artesanato da Praça Getúlio Vargas', desc: 'Exposição semanal aos sábados das 9h às 14h.' },
-            { tag: 'Música', title: 'Orquestra & Bandas Universitárias UNIFEI', desc: 'Cadastro de bandas independentes para eventos municipais.' }
+            { tag: 'Edital Municipal', title: 'Chamamento Cultural Lei Paulo Gustavo & PNAB Itajubá', desc: 'Fomento direto para músicos, grupos teatrais, audiovisual e artesãos cadastrados na SECULT.' },
+            { tag: 'Artesanato • Sábados', title: 'Feira de Artesanato da Praça Getúlio Vargas', desc: 'Exposição semanal de bordados, madeira, cerâmica e quitandas mineiras no Centro.' },
+            { tag: 'Extensão Universitária', title: 'Projetos Culturais & Bateria UNIFEI', desc: 'Oficinas musicais, coral universitário e eventos abertos à comunidade itajubense.' }
           ]
         : [
-            { tag: 'Sexta • 20h', title: 'Mostra de Música Instrumental da Mantiqueira', desc: 'Teatro Municipal • Entrada gratuita mediante retirada de ingresso.' },
-            { tag: 'Sábado • 10h', title: 'Feira Gastronômica & Cultural no Parque Municipal', desc: 'Culinária mineira, espaço kids e apresentações acústicas.' },
-            { tag: 'Domingo • 16h', title: 'Cine Praça • Sessão Aberta à Comunidade', desc: 'Praça Getúlio Vargas • Traga sua cadeira!' }
+            { tag: 'Temporada Nov/2026 • Teatro', title: 'Espetáculos Musicais & Mostras Teatrais', desc: 'Teatro Municipal Christiane Riêra • Programação oficial de novembro com sessões noturnas.' },
+            { tag: 'Fins de Semana • Parque da Cidade', title: 'Programação Sertanejo, Pagode & Feira Gastronômica', desc: 'Parque Municipal de Itajubá (Varginha) • Música ao vivo e gastronomia mineira.' },
+            { tag: 'Dezembro/2026 • Especial Fim de Ano', title: 'Espetáculo O Quebra-Nozes & Cantata Natalina', desc: 'Apresentações natalinas no Teatro Municipal e Praça Getúlio Vargas.' }
           ];
 
       grid.innerHTML = items.map(it => `
@@ -2472,17 +3439,19 @@
       const grid = document.getElementById('opportunitiesGrid');
       if (!grid) return;
       const list = [
-        { type: 'Estágio • Engenharia / TI', title: 'Estágio em Automação & Dados Industriais', org: 'Parque Científico e Tecnológico de Itajubá (PCTI) • R$ 1.650 + VT' },
-        { type: 'Emprego CLT • PAT Itajubá', title: 'Técnico em Eletrotécnica / Manutenção', org: 'Distrito Industrial de Itajubá • R$ 3.400 + Benefícios' },
-        { type: 'Curso Gratuito • Prefeitura & SENAI', title: 'Qualificação em Desenvolvimento Web & IA Aplicada', org: '120 horas • Certificado Oficial • Inscrições Abertas' },
-        { type: 'Emprego CLT • Comércio', title: 'Atendente de Farmácia & Saúde', org: 'Centro • Itajubá • R$ 2.150 + Vale Alimentação' }
+        { type: 'Jovem Aprendiz • FIEMG / SENAI 2027', title: 'Aprendizagem Industrial em Eletroeletrônica e Mecânica', org: 'SESI SENAI CFP Aureliano Chaves (Rua Dr. Luiz Rennó, 715 - Avenida) • Início aulas: Jan/2027 • Bolsa + Contrato Indústria' },
+        { type: 'Curso Técnico • SENAI Itajubá', title: 'Técnico em Automação Industrial & Administração', org: 'SESI SENAI Itajubá • Contato: (35) 3623-1788 • Laboratórios Indústria 4.0' },
+        { type: 'Qualificação Profissional • SENAI', title: 'CLP, Comando CNC, Soldagem MIG/MAG/TIG, NR-10 e Excel Avançado', org: 'CFP Aureliano Chaves • Certificação oficial FIEMG para indústrias do Distrito Industrial' },
+        { type: 'Estágio & P&D • UNIFEI / PCTI', title: 'Estágio em Engenharia Elétrica, Computação e Gestão de Projetos', org: 'Parque Científico e Tecnológico de Itajubá (Av. BPS) • Bolsa estágio + Auxílio transporte' },
+        { type: 'Emprego CLT • Polo Industrial', title: 'Operador de Centro de Usinagem CNC & Eletricista Industrial', org: 'Distrito Industrial de Itajubá (CEP 37504-085) • Encaminhamento direto via Balcão Civora' },
+        { type: 'Saúde & Comércio • Centro / Medicina', title: 'Técnico em Enfermagem, Farmácia e Atendimento Comercial', org: 'Corredor Hospitalar (Medicina) e Centro • Contratação imediata' }
       ];
       grid.innerHTML = list.map(op => `
         <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm space-y-2.5 surface-card">
           <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800">${op.type}</span>
           <h3 class="text-base font-black">${op.title}</h3>
-          <p class="text-xs text-slate-500">${op.org}</p>
-          <button type="button" onclick="showToast('Candidatura enviada via Balcão Digital Civora!')" class="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-extrabold">Candidatar-se Agora</button>
+          <p class="text-xs text-slate-500 leading-relaxed">${op.org}</p>
+          <button type="button" onclick="showToast('Inscrição/Currículo registrado para: ${op.title}')" class="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-extrabold">Candidatar-se / Inscrever</button>
         </div>
       `).join('');
     }
@@ -2543,6 +3512,7 @@
       } catch (e) {}
 
       initMap();
+      renderNeighborhoodDossier(neighborhoodsData.all);
       renderParticipatoryPoll();
       renderReportsList();
       renderRisksDashboard();
