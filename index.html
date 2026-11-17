@@ -164,9 +164,9 @@
 <body class="min-h-screen flex flex-col lg:flex-row antialiased selection:bg-purple-600 selection:text-white">
 
   <!-- =====================================================================
-       SIDEBAR ROXA (SEM PERFIL DE USUÁRIO, FOCO INSTITUCIONAL ITAJUBÁ - MG)
+       SIDEBAR ROXA FIXA NA TELA (SEM ROLAGEM JUNTO COM A PÁGINA E SEM FILTROS)
        ===================================================================== -->
-  <aside class="w-full lg:w-72 bg-gradient-to-b from-[#3B0764] via-[#581C87] to-[#6D28D9] text-white flex flex-col justify-between shrink-0 shadow-xl z-30">
+  <aside class="w-full lg:w-72 lg:sticky lg:top-0 lg:h-screen bg-gradient-to-b from-[#3B0764] via-[#581C87] to-[#6D28D9] text-white flex flex-col justify-between shrink-0 shadow-xl z-30">
     <div>
       <!-- Cabeçalho Institucional -->
       <div class="p-5 flex items-center justify-between border-b border-white/15">
@@ -184,117 +184,50 @@
         </button>
       </div>
 
-      <!-- Navegação Principal -->
-      <nav id="sidebarNav" class="hidden lg:flex flex-col gap-1 p-3">
-        <button onclick="switchMainView('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-white/20 text-white shadow-sm transition-all">
+      <!-- Navegação Principal (Fixa) -->
+      <nav id="sidebarNav" class="hidden lg:flex flex-col gap-1.5 p-3.5">
+        <button onclick="switchMainView('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold bg-white/20 text-white shadow-sm transition-all">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
           <span>Mapa & Central Urbana</span>
         </button>
 
-        <button onclick="switchMainView('risks')" id="nav-risks" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+        <button onclick="switchMainView('risks')" id="nav-risks" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
           <i data-lucide="waves" class="w-4 h-4 text-cyan-300"></i>
           <span>Monitoramento & Defesa Civil</span>
           <span class="ml-auto text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-cyan-400/20 text-cyan-200 border border-cyan-300/30">Rio</span>
         </button>
 
-        <button onclick="switchMainView('reviews')" id="nav-reviews" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
-          <i data-lucide="star" class="w-4 h-4 text-amber-300"></i>
-          <span>Avaliações & 5 Estrelas</span>
+        <button onclick="switchMainView('reviews')" id="nav-reviews" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+          <i data-lucide="qr-code" class="w-4 h-4 text-amber-300"></i>
+          <span>Avaliações & QR Code</span>
         </button>
 
-        <button onclick="openReportModal()" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+        <button onclick="openReportModal()" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
           <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-300"></i>
           <span>Nova Denúncia / Risco</span>
           <span class="ml-auto text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-rose-400/20 text-rose-200 border border-rose-300/30">+ Criar</span>
         </button>
 
-        <button onclick="switchMainView('culture')" id="nav-culture" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+        <button onclick="switchMainView('culture')" id="nav-culture" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
           <i data-lucide="palette" class="w-4 h-4 text-pink-300"></i>
           <span>Espaço Cultura</span>
         </button>
 
-        <button onclick="switchMainView('donations')" id="nav-donations" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+        <button onclick="switchMainView('donations')" id="nav-donations" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
           <i data-lucide="heart-handshake" class="w-4 h-4 text-emerald-300"></i>
           <span>Doações & Abrigos</span>
         </button>
 
-        <button onclick="switchMainView('opportunities')" id="nav-opportunities" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
+        <button onclick="switchMainView('opportunities')" id="nav-opportunities" class="nav-item flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-purple-100 hover:bg-white/15 hover:text-white transition-all">
           <i data-lucide="briefcase" class="w-4 h-4 text-sky-300"></i>
           <span>Vagas, Estágios & Cursos</span>
           <span class="ml-auto text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-sky-400/25 text-sky-100 border border-sky-300/30">Novo</span>
         </button>
-
-        <!-- GRUPO 1: DEFESA CIVIL & CLIMA -->
-        <div class="mt-3 pt-3 border-t border-white/15 px-2">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-cyan-200 mb-2">1. Defesa Civil & Clima</p>
-          <div class="space-y-1.5 text-xs">
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="togglePoiFilter('shelter')" class="rounded accent-teal-400 w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-teal-300"></span>
-              <span>Abrigos & Pontos de Apoio</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- GRUPO 2: INFRAESTRUTURA & ZELADORIA -->
-        <div class="mt-3 pt-3 border-t border-white/15 px-2">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-purple-200 mb-2">2. Infraestrutura & Zeladoria</p>
-          <div class="space-y-1.5 text-xs">
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('energia')" class="rounded accent-yellow-400 w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
-              <span>Falta de Luz / Iluminação</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('buraco')" class="rounded accent-rose-400 w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-              <span>Esburacamento & Vias</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="toggleCategoryFilter('sinalizacao')" class="rounded accent-amber-400 w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-              <span>Sinalização & Acessibilidade</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- GRUPO 3: MOBILIDADE & SAÚDE -->
-        <div class="mt-3 pt-3 border-t border-white/15 px-2">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-purple-200 mb-2">3. Mobilidade & Saúde</p>
-          <div class="space-y-1.5 text-xs">
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="togglePoiFilter('bus')" class="rounded accent-indigo-400 w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
-              <span>Pontos de Ônibus (Horários)</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="togglePoiFilter('health')" class="rounded accent-emerald-400 w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-              <span>Hospitais, UBS & Farmácia</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- GRUPO 4: COMÉRCIO & FISCALIZAÇÃO SETORIAL -->
-        <div class="mt-3 pt-3 border-t border-white/15 px-2">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-purple-200 mb-2">4. Comércio & Fiscalização</p>
-          <div class="space-y-1.5 text-xs">
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="togglePoiFilter('food')" class="rounded accent-orange-400 w-3.5 h-3.5" />
-              <span class="w-2.5 h-2.5 rounded-full bg-orange-400"></span>
-              <span>Restaurantes & Mercados</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer hover:text-white text-purple-100">
-              <input type="checkbox" checked onchange="togglePoiFilter('services')" class="rounded accent-pink-400 w-3.5 h-3.5" />
-              <span>Dentistas, Salões & Oficinas</span>
-            </label>
-          </div>
-        </div>
       </nav>
     </div>
 
     <!-- Rodapé Sidebar -->
-    <div class="hidden lg:block p-4 m-3 rounded-2xl bg-white/10 border border-white/15 text-xs text-purple-100 space-y-3">
+    <div class="hidden lg:block p-4 m-3.5 rounded-2xl bg-white/10 border border-white/15 text-xs text-purple-100 space-y-3">
       <div>
         <div class="flex items-center gap-2 font-semibold text-white mb-1">
           <i data-lucide="shield-check" class="w-4 h-4 text-emerald-300"></i>
@@ -304,9 +237,9 @@
           Integrado à Defesa Civil, Vigilância Sanitária, Meio Ambiente, Mobilidade e PROCON de Itajubá.
         </p>
       </div>
-      <button onclick="openSettingsModal()" class="w-full py-2 px-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all border border-white/15">
+      <button onclick="openSettingsModal()" class="w-full py-2.5 px-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all border border-white/15">
         <i data-lucide="settings" class="w-4 h-4 text-purple-200"></i>
-        <span>Configurações & Aparência</span>
+        <span>Configurações & Modo Escuro</span>
       </button>
     </div>
   </aside>
@@ -564,13 +497,52 @@
             </button>
           </div>
 
+          <!-- FILTROS DE CAMADAS INTEGRADOS NO PRÓPRIO MAPA -->
+          <div class="px-4 py-2.5 bg-purple-50/70 border-b border-purple-100 flex flex-wrap items-center gap-1.5 text-[11px]">
+            <span class="font-extrabold uppercase tracking-wider text-purple-900 mr-1 flex items-center gap-1">
+              <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Camadas no Mapa:
+            </span>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="togglePoiFilter('shelter')" class="accent-teal-600 rounded" />
+              <span class="w-2 h-2 rounded-full bg-teal-500"></span> Abrigos
+            </label>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('energia')" class="accent-yellow-500 rounded" />
+              <span class="w-2 h-2 rounded-full bg-yellow-400"></span> Luz / Energia
+            </label>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('buraco')" class="accent-rose-600 rounded" />
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span> Buracos & Vias
+            </label>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="toggleCategoryFilter('sinalizacao')" class="accent-amber-500 rounded" />
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span> Sinalização
+            </label>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="togglePoiFilter('bus')" class="accent-indigo-600 rounded" />
+              <span class="w-2 h-2 rounded-full bg-indigo-600"></span> Ônibus
+            </label>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="togglePoiFilter('health')" class="accent-emerald-600 rounded" />
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Saúde / UBS
+            </label>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="togglePoiFilter('food')" class="accent-orange-500 rounded" />
+              <span class="w-2 h-2 rounded-full bg-orange-500"></span> Restaurantes & Mercados
+            </label>
+            <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-200 cursor-pointer hover:border-purple-400 font-semibold text-slate-700 shadow-xs">
+              <input type="checkbox" checked onchange="togglePoiFilter('services')" class="accent-pink-500 rounded" />
+              <span class="w-2 h-2 rounded-full bg-pink-500"></span> Serviços & Oficinas
+            </label>
+          </div>
+
           <!-- Container do Mapa Leaflet -->
           <div class="relative w-full h-[460px] sm:h-[540px] z-0">
             <div id="cityMap" class="w-full h-full z-0"></div>
 
             <!-- Dica Flutuante Superior -->
             <div class="absolute top-3 left-14 z-[400] bg-purple-950/90 backdrop-blur-md text-white px-3 py-1.5 rounded-xl shadow-md text-[11px] font-medium pointer-events-none hidden sm:flex items-center gap-2">
-              <span>⭐ Clique em qualquer estabelecimento p/ avaliar ou ver Selo Oficial • 🚌 Clique no ônibus p/ horários</span>
+              <span>📱 Avaliações só são feitas lendo o QR Code / Tag NFC no local • No site você consulta os selos ativos</span>
             </div>
 
             <!-- Legenda Flutuante -->
@@ -746,37 +718,43 @@
          ================================================================= -->
     <main id="view-reviews" class="hidden p-4 sm:p-6 space-y-6 flex-1">
       <div class="bg-gradient-to-r from-[#3B0764] via-[#6D28D9] to-[#7C3AED] rounded-2xl p-6 sm:p-8 text-white shadow-lg space-y-5">
-        <div class="max-w-3xl space-y-1.5">
-          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-amber-200 border border-amber-300/30">
-            <i data-lucide="award" class="w-3.5 h-3.5"></i> Transparência Cidadã & Selo Oficial
-          </span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold">Avaliação de Estabelecimentos & 5 Estrelas Coloridas</h2>
-          <p class="text-sm text-purple-100">
-            Pesquise qualquer estabelecimento de Itajubá (restaurantes, hospitais, dentistas, mercados, oficinas, barbearias), veja problemas relatados pela comunidade e avalie pelos 5 critérios coloridos.
-          </p>
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="max-w-3xl space-y-1.5">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-amber-200 border border-amber-300/30">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Validação Presencial por Plaquinha QR Code / Tag NFC
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold">Selos de Qualidade & Avaliações Verificadas</h2>
+            <p class="text-sm text-purple-100">
+              Pelo site você consulta as avaliações dos clientes e quais selos atingiram <strong>75% ou mais de notas 5 estrelas</strong> para ficarem ligados. Para avaliar um local, é necessário escanear a plaquinha QR Code / Tag no estabelecimento.
+            </p>
+          </div>
+          <div class="bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl p-4 text-xs space-y-1 shrink-0 max-w-xs">
+            <strong class="text-amber-300 uppercase tracking-wider block">Regra de Ativação do Selo</strong>
+            <p class="text-purple-100 leading-relaxed">Cada selo colorido só acende quando <strong>≥ 75% das avaliações</strong> daquele critério recebem <strong>5 estrelas</strong> com requisitos positivos.</p>
+          </div>
         </div>
 
         <!-- Legenda das 5 Estrelas Coloridas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-3 border-t border-white/15 text-xs">
           <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2.5 border border-white/15 flex items-center gap-2">
-            <span class="text-lg text-sky-400">★</span>
-            <div><strong class="block text-white">Estrela Azul</strong><span class="text-[11px] text-purple-200">Acessibilidade & Estrutura</span></div>
+            <span class="text-lg text-emerald-400">★</span>
+            <div><strong class="block text-white">Selo Qualidade</strong><span class="text-[11px] text-purple-200">Tempero, temperatura e execução</span></div>
           </div>
           <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2.5 border border-white/15 flex items-center gap-2">
-            <span class="text-lg text-emerald-400">★</span>
-            <div><strong class="block text-white">Estrela Verde</strong><span class="text-[11px] text-purple-200">Qualidade (Comida/Serviço)</span></div>
+            <span class="text-lg text-sky-400">★</span>
+            <div><strong class="block text-white">Selo Acessibilidade</strong><span class="text-[11px] text-purple-200">Rampas, piso tátil e adaptação</span></div>
           </div>
           <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2.5 border border-white/15 flex items-center gap-2">
             <span class="text-lg text-amber-300">★</span>
-            <div><strong class="block text-white">Estrela Amarela</strong><span class="text-[11px] text-purple-200">Higiene & Selo Sanitário</span></div>
+            <div><strong class="block text-white">Selo Higiene & VISA</strong><span class="text-[11px] text-purple-200">Limpeza visível e sanitização</span></div>
           </div>
           <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2.5 border border-white/15 flex items-center gap-2">
             <span class="text-lg text-fuchsia-300">★</span>
-            <div><strong class="block text-white">Estrela Roxa</strong><span class="text-[11px] text-purple-200">Atendimento & Agilidade</span></div>
+            <div><strong class="block text-white">Selo Atendimento</strong><span class="text-[11px] text-purple-200">Agilidade, cordialidade e respeito</span></div>
           </div>
           <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2.5 border border-white/15 flex items-center gap-2">
             <span class="text-lg text-orange-400">★</span>
-            <div><strong class="block text-white">Estrela Laranja</strong><span class="text-[11px] text-purple-200">Preço Justo & Orçamento</span></div>
+            <div><strong class="block text-white">Selo Preço Justo</strong><span class="text-[11px] text-purple-200">Orçamento claro e custo-benefício</span></div>
           </div>
         </div>
       </div>
@@ -808,12 +786,12 @@
           </div>
           <div class="md:col-span-3">
             <select id="reviewsStarFilter" onchange="renderReviewsDirectory()" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 bg-slate-50 text-slate-700 focus:ring-2 focus:ring-purple-600">
-              <option value="all">Filtrar por Estrela Conquistada</option>
-              <option value="accessibility">★ Azul — Com Acessibilidade</option>
-              <option value="quality">★ Verde — Alta Qualidade</option>
-              <option value="hygiene">★ Amarela — Higiene Verificada</option>
-              <option value="service">★ Roxa — Bom Atendimento</option>
-              <option value="price">★ Laranja — Preço Justo</option>
+              <option value="all">Filtrar por Selo Ligado (≥75%)</option>
+              <option value="quality">★ Verde — Qualidade Ligado</option>
+              <option value="accessibility">★ Azul — Acessibilidade Ligado</option>
+              <option value="hygiene">★ Amarela — Higiene Ligado</option>
+              <option value="service">★ Roxa — Atendimento Ligado</option>
+              <option value="price">★ Laranja — Preço Justo Ligado</option>
             </select>
           </div>
         </div>
@@ -1133,83 +1111,136 @@
   <!-- MODAL 7: CONFIGURAÇÕES DO SISTEMA & MODO ESCURO -->
   <div id="settingsModal" class="hidden fixed inset-0 z-[3000] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-purple-100 overflow-hidden animate-overlay">
-      <div class="bg-gradient-to-r from-[#3B0764] via-[#581C87] to-[#7C3AED] px-6 py-4 text-white flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
+      <div class="bg-gradient-to-r from-[#3B0764] to-[#6D28D9] px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
           <i data-lucide="settings" class="w-5 h-5 text-purple-200"></i>
-          <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-200 block">Preferências da Plataforma</span>
-            <h3 class="font-bold text-base sm:text-lg leading-tight">Configurações</h3>
-          </div>
+          <h3 class="font-bold text-base">Configurações do Sistema</h3>
         </div>
         <button onclick="closeSettingsModal()" class="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
+          <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-
-      <div class="p-6 space-y-5">
-        <!-- Alternador de Modo Escuro -->
-        <div class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
-              <i data-lucide="moon" class="w-5 h-5"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-900 text-sm">Modo Escuro</h4>
-              <p class="text-xs text-slate-500">Tema noturno para maior conforto visual</p>
-            </div>
+      <div class="p-6 space-y-4">
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <div>
+            <h4 class="font-bold text-slate-900 text-sm">Modo Escuro (Dark Mode)</h4>
+            <p class="text-xs text-slate-500">Alterna o tema visual da plataforma</p>
           </div>
-          <button id="darkModeToggleBtn" type="button" onclick="toggleDarkMode()" aria-pressed="false" class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-slate-300 transition-colors duration-200 ease-in-out focus:outline-none">
-            <span id="darkModeToggleKnob" class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+          <button
+            id="darkModeToggleBtn"
+            type="button"
+            role="switch"
+            aria-checked="false"
+            onclick="toggleDarkMode()"
+            class="w-12 h-7 rounded-full bg-slate-300 p-1 transition-colors flex items-center"
+          >
+            <span id="darkModeToggleKnob" class="w-5 h-5 rounded-full bg-white shadow transform transition-transform translate-x-0"></span>
           </button>
         </div>
 
-        <!-- Opção rápida de Camada do Mapa -->
-        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
-          <div class="flex items-center gap-2">
-            <i data-lucide="map" class="w-4 h-4 text-purple-600"></i>
-            <h4 class="font-bold text-slate-900 text-sm">Visualização Padrão do Mapa</h4>
+        <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 text-xs uppercase">Camada Padrão do Mapa</h4>
+          <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+            <button type="button" onclick="setMapBaseLayer('streets'); closeSettingsModal();" class="py-2 px-3 rounded-lg bg-white border border-purple-200 text-purple-900 hover:bg-purple-100">Ruas & Lotes</button>
+            <button type="button" onclick="setMapBaseLayer('satellite'); closeSettingsModal();" class="py-2 px-3 rounded-lg bg-white border border-purple-200 text-purple-900 hover:bg-purple-100">Satélite Aéreo</button>
           </div>
-          <div class="grid grid-cols-2 gap-2">
-            <button type="button" onclick="setMapBaseLayer('streets'); showToast('Mapa alterado para Ruas & Lotes')" class="py-2 px-3 rounded-xl border border-purple-200 bg-purple-50 text-purple-900 font-bold text-xs hover:bg-purple-100 transition-colors">
-              🗺️ Ruas & Lotes
-            </button>
-            <button type="button" onclick="setMapBaseLayer('satellite'); showToast('Mapa alterado para Satélite')" class="py-2 px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs hover:bg-purple-50 transition-colors">
-              🛰️ Imagem Satélite
-            </button>
-          </div>
-        </div>
-
-        <div class="flex justify-end pt-1">
-          <button type="button" onclick="closeSettingsModal()" class="px-5 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm">
-            Concluir
-          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TOAST CONTAINER -->
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-[3500] flex flex-col gap-2 pointer-events-none"></div>
+  <!-- TOASTS DE NOTIFICAÇÃO -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-[3500] flex flex-col gap-2 max-w-sm pointer-events-none"></div>
 
   <!-- =====================================================================
-       JAVASCRIPT COMPLETO E VALIDADO
+       SCRIPT PRINCIPAL DA APLICAÇÃO
        ===================================================================== -->
   <script>
     const categoryMeta = {
-      energia: { label: 'Falta de Luz / Iluminação', color: '#EAB308', badgeBg: 'bg-yellow-100 text-yellow-800' },
-      buraco: { label: 'Esburacamento & Vias', color: '#F43F5E', badgeBg: 'bg-rose-100 text-rose-800' },
-      sinalizacao: { label: 'Sinalização & Acessibilidade', color: '#F59E0B', badgeBg: 'bg-amber-100 text-amber-800' },
-      clima: { label: 'Risco Climático / Encosta', color: '#06B6D4', badgeBg: 'bg-cyan-100 text-cyan-800' },
-      cultura: { label: 'Patrimônio Cultural', color: '#C026D3', badgeBg: 'bg-fuchsia-100 text-fuchsia-800' }
+      energia: { label: 'Falta de Luz / Energia', color: '#EAB308', badgeBg: 'bg-yellow-100 text-yellow-800' },
+      buraco: { label: 'Buraco / Via Danificada', color: '#E11D48', badgeBg: 'bg-rose-100 text-rose-800' },
+      sinalizacao: { label: 'Sinalização / Acessibilidade', color: '#F59E0B', badgeBg: 'bg-amber-100 text-amber-800' },
+      clima: { label: 'Defesa Civil / Risco Climático', color: '#0891B2', badgeBg: 'bg-cyan-100 text-cyan-800' },
+      cultura: { label: 'Patrimônio / Obra Cultural', color: '#9333EA', badgeBg: 'bg-purple-100 text-purple-800' }
     };
 
-    // SISTEMA DE 5 ESTRELAS COLORIDAS POR CRITÉRIO
+    // SISTEMA DE 5 ESTRELAS COLORIDAS POR CRITÉRIO + REQUISITOS DINÂMICOS POR QUANTIDADE DE ESTRELAS (1 A 5)
     const starCriteriaConfig = [
-      { key: 'accessibility', label: 'Acessibilidade', colorHex: '#0284C7', textClass: 'text-sky-500', badgeClass: 'bg-sky-50 text-sky-800 border-sky-200', desc: 'Rampas, piso tátil, banheiros adaptados e acesso inclusivo' },
-      { key: 'quality', label: 'Qualidade', colorHex: '#10B981', textClass: 'text-emerald-500', badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200', desc: 'Qualidade da comida, tratamento médico ou serviço técnico' },
-      { key: 'hygiene', label: 'Higiene & Selo', colorHex: '#F59E0B', textClass: 'text-amber-400', badgeClass: 'bg-amber-50 text-amber-800 border-amber-200', desc: 'Limpeza visível, esterilização e regularidade sanitária' },
-      { key: 'service', label: 'Atendimento', colorHex: '#9333EA', textClass: 'text-purple-600', badgeClass: 'bg-purple-50 text-purple-800 border-purple-200', desc: 'Cordialidade, agilidade na fila e respeito ao cidadão' },
-      { key: 'price', label: 'Preço Justo', colorHex: '#F97316', textClass: 'text-orange-500', badgeClass: 'bg-orange-50 text-orange-800 border-orange-200', desc: 'Transparência no orçamento e custo-benefício' }
+      {
+        key: 'quality',
+        label: 'Qualidade',
+        colorHex: '#10B981',
+        textClass: 'text-emerald-500',
+        badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+        desc: 'Sabor, temperatura, apresentação ou eficiência técnica',
+        starRequirements: {
+          5: ['Comida bem temperada / Execução impecável', 'Boa temperatura ao servir / Funciona perfeitamente', 'Boa aparência e apresentação', 'Sabor agradável / Resultado excelente'],
+          4: ['Melhorar tempero / Ajuste fino', 'Temperatura ok', 'Aparência não tão agradável', 'Bom resultado geral, mas pode evoluir'],
+          3: ['Tempero neutro ou irregular', 'Chegou morno / Execução mediana', 'Apresentação simples demais', 'Atende apenas o básico'],
+          2: ['Tempero desagradável / Falha técnica', 'Temperatura inadequada (frio/quente demais)', 'Aparência ruim', 'Abaixo do esperado'],
+          1: ['Impróprio para consumo / Serviço não funcionou', 'Totalmente frio ou mal executado', 'Péssima aparência', 'Experiência muito negativa']
+        }
+      },
+      {
+        key: 'accessibility',
+        label: 'Acessibilidade',
+        colorHex: '#0284C7',
+        textClass: 'text-sky-500',
+        badgeClass: 'bg-sky-50 text-sky-800 border-sky-200',
+        desc: 'Rampas, piso tátil, banheiros adaptados e acesso inclusivo',
+        starRequirements: {
+          5: ['Rampa com inclinação adequada', 'Banheiro adaptado limpo e desobstruído', 'Circulação livre entre mesas/corredores', 'Sinalização visual e tátil clara'],
+          4: ['Possui rampa, mas corredor um pouco estreito', 'Banheiro adaptado funcional, falta barra de apoio', 'Acesso bom na entrada principal', 'Sinalização básica presente'],
+          3: ['Degrau pequeno na entrada sem rampa móvel', 'Banheiro comum apertado', 'Circulação regular', 'Falta orientação para PCD'],
+          2: ['Escada sem alternativa acessível', 'Sem banheiro adaptado', 'Mobiliário bloqueando passagem', 'Difícil locomoção interna'],
+          1: ['Totalmente inacessível para cadeirantes/idosos', 'Barreiras físicas graves na entrada', 'Sem qualquer adaptação', 'Risco de queda ou acidente']
+        }
+      },
+      {
+        key: 'hygiene',
+        label: 'Higiene & Selo',
+        colorHex: '#F59E0B',
+        textClass: 'text-amber-400',
+        badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+        desc: 'Limpeza visível, esterilização e regularidade sanitária',
+        starRequirements: {
+          5: ['Ambiente e mesas impecavelmente limpos', 'Equipe usando touca/luvas e uniforme limpo', 'Banheiros higienizados e abastecidos', 'Materiais descartáveis/esterilizados abertos na hora'],
+          4: ['Salão limpo, mas demora para recolher mesas', 'Higiene geral boa', 'Banheiro ok, faltou papel toalha', 'Organização satisfatória'],
+          3: ['Limpeza mediana nos horários de pico', 'Lixeiras cheias no salão', 'Piso um pouco engordurado/molhado', 'Precisa de mais atenção na limpeza'],
+          2: ['Mesas sujas por muito tempo', 'Falta de cuidado visível com higiene', 'Banheiro mal conservado', 'Desorganização aparente'],
+          1: ['Sujeira grave visível no ambiente', 'Falta crítica de higiene dos atendentes', 'Risco sanitário evidente', 'Denúncia presencial recomendada']
+        }
+      },
+      {
+        key: 'service',
+        label: 'Atendimento',
+        colorHex: '#9333EA',
+        textClass: 'text-purple-600',
+        badgeClass: 'bg-purple-50 text-purple-800 border-purple-200',
+        desc: 'Cordialidade, agilidade na fila e respeito ao cidadão',
+        starRequirements: {
+          5: ['Atendimento cordial e acolhedor', 'Tempo de espera rápido', 'Informações claras e sem erros', 'Equipe atenciosa do início ao fim'],
+          4: ['Equipe educada, mas tempo de espera um pouco alto', 'Bom atendimento geral', 'Pequena demora no caixa/recepção', 'Atenciosos quando solicitados'],
+          3: ['Atendimento apressado / impessoal', 'Fila moderada sem orientação', 'Demora razoável para ser atendido', 'Poderia ser mais cordial'],
+          2: ['Muita demora e falta de organização na fila', 'Atendente pouco receptivo', 'Erro no pedido ou agendamento', 'Falta de comunicação'],
+          1: ['Desrespeito ou grosseria no atendimento', 'Espera excessiva sem justificativa', 'Abandono do cliente', 'Péssima postura profissional']
+        }
+      },
+      {
+        key: 'price',
+        label: 'Preço Justo',
+        colorHex: '#F97316',
+        textClass: 'text-orange-500',
+        badgeClass: 'bg-orange-50 text-orange-800 border-orange-200',
+        desc: 'Transparência no orçamento e custo-benefício',
+        starRequirements: {
+          5: ['Excelente custo-benefício pelo que entrega', 'Preços visíveis e sem taxas surpresa', 'Orçamento detalhado antes do serviço', 'Porções/entregas honestas'],
+          4: ['Preço dentro da média da cidade', 'Boa entrega pelo valor cobrado', 'Tabela clara, mas adicionais caros', 'Custo-benefício justo'],
+          3: ['Valor um pouco acima do esperado', 'Entrega apenas compatível com o preço', 'Poucas opções econômicas', 'Custo-benefício mediano'],
+          2: ['Caro para a qualidade oferecida', 'Falta de clareza nos valores extras', 'Porção/serviço reduzido pelo preço', 'Não compensa o valor'],
+          1: ['Preço abusivo / Cobrança indevida', 'Valor final diferente do combinado', 'Péssimo custo-benefício', 'Falta total de transparência']
+        }
+      }
     ];
 
     // DADOS DE MONITORAMENTO HIDROLÓGICO & TEMPESTADES (RIO SAPUCAÍ)
@@ -1375,7 +1406,7 @@
       }
     ];
 
-    // ESTABELECIMENTOS UNIVERSAIS (SAÚDE, ALIMENTAÇÃO, DENTISTAS, OFICINAS, SALÕES/BARBEIROS, MERCADOS)
+    // ESTABELECIMENTOS UNIVERSAIS (CADA SELO TEM % DE AVALIAÇÕES 5 ESTRELAS -> LIGA SE >= 75%)
     const establishments = [
       {
         id: 'EST-01',
@@ -1389,7 +1420,7 @@
         lat: -22.4292,
         lng: -45.4561,
         reviewCount: 142,
-        coloredStars: { accessibility: true, quality: true, hygiene: true, service: true, price: true },
+        fiveStarCounts: { quality: 124, accessibility: 130, hygiene: 135, service: 112, price: 118 },
         reportedProblems: ['Tempo de espera maior na triagem ortopédica às segundas-feiras (média 45 min)'],
         regulator: 'Vigilância Sanitária & Conselho de Saúde',
         sealStatus: 'Selo Sanitário & Hospitalar Ativo',
@@ -1398,8 +1429,8 @@
         extraPublicInfo: 'Pronto-Socorro 24h • Espera média atual: 25 min • Farmácia Popular e Vacinação ativas.',
         ifoodUrl: null,
         reviews: [
-          { user: 'Carlos Henrique', earnedKeys: ['accessibility', 'quality', 'hygiene', 'service', 'price'], text: 'Atendimento médico muito humanizado, rampa acessível e triagem rápida na emergência.' },
-          { user: 'Fernanda Alves', earnedKeys: ['accessibility', 'quality', 'hygiene', 'service'], text: 'Instalações muito limpas e equipe atenciosa.' }
+          { user: 'Carlos Henrique', verifiedQr: true, summaryStars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Execução impecável', 'Rampa com inclinação adequada', 'Atendimento cordial'], text: 'Atendimento médico muito humanizado, rampa acessível e triagem rápida na emergência.' },
+          { user: 'Fernanda Alves', verifiedQr: true, summaryStars: { quality: 5, accessibility: 5, hygiene: 5, service: 4, price: 5 }, tags: ['Ambiente limpo', 'Equipe educada, mas espera um pouco alto'], text: 'Instalações muito limpas e equipe atenciosa.' }
         ]
       },
       {
@@ -1414,7 +1445,7 @@
         lat: -22.4158,
         lng: -45.4495,
         reviewCount: 68,
-        coloredStars: { accessibility: true, quality: true, hygiene: true, service: true, price: true },
+        fiveStarCounts: { quality: 56, accessibility: 58, hygiene: 61, service: 53, price: 65 },
         reportedProblems: ['Falta pontual de tiras de glicemia no fim do mês (reposição agendada)'],
         regulator: 'Vigilância Sanitária Municipal',
         sealStatus: 'Selo Sanitário Municipal Ativo',
@@ -1423,7 +1454,7 @@
         extraPublicInfo: 'Espera média: 18 min • Estoque Farmácia Popular: Losartana, Metformina, Insulina e Antibióticos disponíveis.',
         ifoodUrl: null,
         reviews: [
-          { user: 'Sônia Maria', earnedKeys: ['accessibility', 'quality', 'hygiene', 'service', 'price'], text: 'Consegui retirar todos os medicamentos contínuos sem fila e com acesso adaptado.' }
+          { user: 'Sônia Maria', verifiedQr: true, summaryStars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Circulação livre', 'Tempo de espera rápido'], text: 'Consegui retirar todos os medicamentos contínuos sem fila e com acesso adaptado.' }
         ]
       },
       {
@@ -1437,8 +1468,8 @@
         address: 'Av. Cel. Carneiro Júnior, 185 - Centro • Itajubá',
         lat: -22.4260,
         lng: -45.4535,
-        reviewCount: 94,
-        coloredStars: { accessibility: true, quality: true, hygiene: true, service: true, price: true },
+        reviewCount: 100,
+        fiveStarCounts: { quality: 88, accessibility: 82, hygiene: 91, service: 79, price: 84 },
         reportedProblems: ['Poucas mesas disponíveis entre 12h15 e 13h00'],
         regulator: 'Vigilância Sanitária (ANVISA / Municipal)',
         sealStatus: 'Selo Higiene Verificada • Ouro',
@@ -1447,8 +1478,8 @@
         extraPublicInfo: 'Almoço executivo e comida mineira • Aberto hoje: 11h às 15h e 18h30 às 23h.',
         ifoodUrl: 'https://www.ifood.com.br',
         reviews: [
-          { user: 'Rafael Moreira', earnedKeys: ['accessibility', 'quality', 'hygiene', 'service', 'price'], text: 'Comida excelente, banheiro adaptado e selo ativo da Vigilância Sanitária.' },
-          { user: 'Juliana Dias', earnedKeys: ['quality', 'hygiene', 'service'], text: 'Atendimento rápido e ambiente impecável.' }
+          { user: 'Rafael Moreira', verifiedQr: true, summaryStars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada', 'Boa temperatura ao servir', 'Banheiro adaptado limpo'], text: 'Comida excelente, banheiro adaptado e selo ativo da Vigilância Sanitária.' },
+          { user: 'Juliana Dias', verifiedQr: true, summaryStars: { quality: 4, accessibility: 5, hygiene: 5, service: 4, price: 5 }, tags: ['Temperatura ok', 'Ambiente e mesas impecavelmente limpos'], text: 'Atendimento rápido e ambiente impecável.' }
         ]
       },
       {
@@ -1462,9 +1493,9 @@
         address: 'Av. Jerson Dias, 620 - Estiva • Itajubá',
         lat: -22.4331,
         lng: -45.4582,
-        reviewCount: 77,
-        coloredStars: { accessibility: true, quality: true, hygiene: true, service: false, price: true },
-        reportedProblems: ['Fila nos caixas nos sábados pela manhã (faltando Estrela Roxa de Atendimento ágil)'],
+        reviewCount: 80,
+        fiveStarCounts: { quality: 68, accessibility: 64, hygiene: 70, service: 42, price: 66 },
+        reportedProblems: ['Fila nos caixas nos sábados pela manhã (Selo Atendimento em 52% — desligado até atingir 75%)'],
         regulator: 'Vigilância Sanitária & PROCON',
         sealStatus: 'Selo Sanitário & Validade Ativo',
         lastAudit: 'Vistoriado há 9 dias (Câmera Interna Restrita)',
@@ -1472,7 +1503,7 @@
         extraPublicInfo: 'Aberto hoje: 07h às 21h • Estacionamento acessível.',
         ifoodUrl: 'https://www.ifood.com.br',
         reviews: [
-          { user: 'Marcos Vinícius', earnedKeys: ['accessibility', 'quality', 'hygiene', 'price'], text: 'Açougue muito limpo e preço justo, só precisa abrir mais caixas no sábado.' }
+          { user: 'Marcos Vinícius', verifiedQr: true, summaryStars: { quality: 5, accessibility: 5, hygiene: 5, service: 3, price: 5 }, tags: ['Excelente custo-benefício', 'Fila moderada sem orientação'], text: 'Açougue muito limpo e preço justo, só precisa abrir mais caixas no sábado.' }
         ]
       },
       {
@@ -1486,9 +1517,9 @@
         address: 'Rua Dona Maria Carneiro, 112 - Centro • Itajubá',
         lat: -22.4251,
         lng: -45.4514,
-        reviewCount: 53,
-        coloredStars: { accessibility: false, quality: true, hygiene: true, service: true, price: true },
-        reportedProblems: ['Acesso ao segundo andar apenas por escada (sem Estrela Azul de Acessibilidade ainda)'],
+        reviewCount: 60,
+        fiveStarCounts: { quality: 54, accessibility: 21, hygiene: 57, service: 51, price: 48 },
+        reportedProblems: ['Acesso ao segundo andar apenas por escada (Selo Acessibilidade em 35% — desligado)'],
         regulator: 'Vigilância Sanitária & CRO-MG',
         sealStatus: 'Selo Biossegurança & Esterilização Ativo',
         lastAudit: 'Autoclave & Sala de Esterilização verificadas há 6 dias',
@@ -1496,7 +1527,7 @@
         extraPublicInfo: 'Odontologia geral, ortodontia e urgência • Convênios e particular.',
         ifoodUrl: null,
         reviews: [
-          { user: 'Amanda Ribeiro', earnedKeys: ['quality', 'hygiene', 'service', 'price'], text: 'Tratamento sem dor, tudo esterilizado e aberto na frente do paciente.' }
+          { user: 'Amanda Ribeiro', verifiedQr: true, summaryStars: { quality: 5, accessibility: 2, hygiene: 5, service: 5, price: 5 }, tags: ['Materiais esterilizados abertos na hora', 'Escada sem alternativa acessível'], text: 'Tratamento sem dor e tudo esterilizado, mas precisa de plataforma de acessibilidade.' }
         ]
       },
       {
@@ -1510,8 +1541,8 @@
         address: 'Av. Jerson Dias, 290 - Estiva • Itajubá',
         lat: -22.4308,
         lng: -45.4562,
-        reviewCount: 41,
-        coloredStars: { accessibility: true, quality: true, hygiene: true, service: true, price: true },
+        reviewCount: 44,
+        fiveStarCounts: { quality: 39, accessibility: 35, hygiene: 36, service: 40, price: 38 },
         reportedProblems: ['Nenhum problema grave relatado nos últimos 90 dias'],
         regulator: 'Sec. Meio Ambiente, Posturas & PROCON',
         sealStatus: 'Selo Ambiental & Oficina Regular Ativo',
@@ -1520,7 +1551,7 @@
         extraPublicInfo: 'Injeção eletrônica, freios, suspensão e alinhamento • Orçamento digital.',
         ifoodUrl: null,
         reviews: [
-          { user: 'Pedro Augusto', earnedKeys: ['accessibility', 'quality', 'hygiene', 'service', 'price'], text: 'Mostram as peças trocadas e cumprem o orçamento combinado.' }
+          { user: 'Pedro Augusto', verifiedQr: true, summaryStars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Orçamento detalhado antes do serviço', 'Execução impecável'], text: 'Mostram as peças trocadas e cumprem o orçamento combinado.' }
         ]
       },
       {
@@ -1534,9 +1565,9 @@
         address: 'Av. BPS, 840 - Pinheirinho • Itajubá',
         lat: -22.4168,
         lng: -45.4481,
-        reviewCount: 62,
-        coloredStars: { accessibility: true, quality: true, hygiene: true, service: true, price: false },
-        reportedProblems: ['Valor acima da média do bairro nos fins de semana (sem Estrela Laranja)'],
+        reviewCount: 64,
+        fiveStarCounts: { quality: 56, accessibility: 51, hygiene: 59, service: 54, price: 34 },
+        reportedProblems: ['Valor acima da média do bairro nos fins de semana (Selo Preço Justo em 53% — desligado)'],
         regulator: 'Vigilância Sanitária Municipal',
         sealStatus: 'Selo Higiene & Descartáveis Ativo',
         lastAudit: 'Checklist de esterilização enviado há 10 dias',
@@ -1544,7 +1575,7 @@
         extraPublicInfo: 'Cortes, barba e estética • Atendimento por hora marcada ou ordem de chegada.',
         ifoodUrl: null,
         reviews: [
-          { user: 'Lucas Gabriel', earnedKeys: ['accessibility', 'quality', 'hygiene', 'service'], text: 'Excelente corte, ambiente limpo e lâminas descartadas na hora.' }
+          { user: 'Lucas Gabriel', verifiedQr: true, summaryStars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 3 }, tags: ['Materiais descartáveis abertos na hora', 'Valor um pouco acima do esperado'], text: 'Excelente corte e higiene, mas o preço no sábado subiu bastante.' }
         ]
       }
     ];
@@ -1617,20 +1648,39 @@
     let savedOpportunities = new Set(['OPP-01']);
     let currentOppTypeFilter = 'all';
     let currentEstablishment = null;
-    let selectedCriteriaSet = new Set(['accessibility', 'quality', 'hygiene', 'service', 'price']);
     let isDarkMode = false;
 
-    // HELPER PARA RENDERIZAR AS 5 ESTRELAS COLORIDAS POR CRITÉRIO
-    function renderColoredStarsRow(coloredStarsObj, sizeClass = 'text-lg') {
+    // ESTADO DO MODO PRESENCIAL (QR CODE / TAG NFC) E AVALIAÇÃO EM ABAS POR SELO
+    let qrVerifiedEstId = null;
+    let activeReviewSealStep = 0;
+    let qrDraftRatings = {
+      quality: { stars: 5, selectedReqs: new Set(['Comida bem temperada / Execução impecável', 'Boa temperatura ao servir / Funciona perfeitamente']) },
+      accessibility: { stars: 5, selectedReqs: new Set(['Rampa com inclinação adequada']) },
+      hygiene: { stars: 5, selectedReqs: new Set(['Ambiente e mesas impecavelmente limpos']) },
+      service: { stars: 5, selectedReqs: new Set(['Atendimento cordial e acolhedor']) },
+      price: { stars: 5, selectedReqs: new Set(['Excelente custo-benefício pelo que entrega']) }
+    };
+
+    // CALCULA PERCENTUAL DE 5 ESTRELAS POR SELO E VERIFICA SE ESTÁ LIGADO (>= 75%)
+    function getSealStats(est, key) {
+      const total = Math.max(1, est.reviewCount || 1);
+      const count5 = (est.fiveStarCounts && est.fiveStarCounts[key]) || 0;
+      const pct = Math.min(100, Math.round((count5 / total) * 100));
+      return {
+        pct,
+        isOn: pct >= 75
+      };
+    }
+
+    function renderColoredStarsRow(est, sizeClass = 'text-lg') {
       return starCriteriaConfig.map(crit => {
-        const earned = coloredStarsObj && coloredStarsObj[crit.key];
-        return `<span title="${crit.label}: ${earned ? 'Conquistada' : 'Pendente'}" class="${sizeClass} leading-none ${earned ? crit.textClass : 'text-slate-200'}">★</span>`;
+        const stats = getSealStats(est, crit.key);
+        return `<span title="${crit.label}: ${stats.pct}% notas 5★ (${stats.isOn ? 'LIGADO ≥75%' : 'DESLIGADO <75%'})" class="${sizeClass} leading-none ${stats.isOn ? crit.textClass : 'text-slate-300 opacity-50'}">★</span>`;
       }).join('');
     }
 
-    function countEarnedStars(coloredStarsObj) {
-      if (!coloredStarsObj) return 0;
-      return starCriteriaConfig.filter(c => coloredStarsObj[c.key]).length;
+    function countEarnedStars(est) {
+      return starCriteriaConfig.filter(c => getSealStats(est, c.key).isOn).length;
     }
 
     // INICIALIZAÇÃO DO MAPA LEAFLET
@@ -1810,7 +1860,7 @@
       const filtered = establishments.filter(est => {
         const matchSearch = !q || est.name.toLowerCase().includes(q) || est.sector.toLowerCase().includes(q) || est.address.toLowerCase().includes(q);
         const matchSector = sector === 'all' || est.sector === sector;
-        const matchStar = starFilter === 'all' || (est.coloredStars && est.coloredStars[starFilter]);
+        const matchStar = starFilter === 'all' || getSealStats(est, starFilter).isOn;
         return matchSearch && matchSector && matchStar;
       });
 
@@ -1820,7 +1870,7 @@
       }
 
       grid.innerHTML = filtered.map(est => {
-        const earnedCount = countEarnedStars(est.coloredStars);
+        const earnedCount = countEarnedStars(est);
         return `
           <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:border-purple-300 transition-all flex flex-col justify-between space-y-4">
             <div class="space-y-3">
@@ -1834,16 +1884,16 @@
                   </div>
                 </div>
                 <div class="text-right shrink-0">
-                  <div class="flex items-center gap-0.5 justify-end">${renderColoredStarsRow(est.coloredStars, 'text-lg')}</div>
-                  <span class="text-[11px] font-bold text-slate-700 block mt-0.5">${earnedCount}/5 Estrelas (${est.reviewCount} aval.)</span>
+                  <div class="flex items-center gap-0.5 justify-end">${renderColoredStarsRow(est, 'text-lg')}</div>
+                  <span class="text-[11px] font-bold text-slate-700 block mt-0.5">${earnedCount}/5 Selos Ligados (${est.reviewCount} aval.)</span>
                 </div>
               </div>
 
-              <!-- Selos de Critérios Conquistados -->
+              <!-- Status de Cada Selo (Ligado >=75% vs Desligado <75%) -->
               <div class="flex flex-wrap gap-1.5">
                 ${starCriteriaConfig.map(c => {
-                  const has = est.coloredStars && est.coloredStars[c.key];
-                  return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${has ? c.badgeClass : 'bg-slate-50 text-slate-400 border-slate-200 line-through'}">★ ${c.label}</span>`;
+                  const st = getSealStats(est, c.key);
+                  return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${st.isOn ? c.badgeClass : 'bg-slate-100 text-slate-400 border-slate-200'}">★ ${c.label}: ${st.pct}% ${st.isOn ? '• Ligado' : '• Desligado'}</span>`;
                 }).join('')}
               </div>
 
@@ -1861,17 +1911,23 @@
               </div>
             </div>
 
-            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-              <button onclick="focusEstablishmentOnMap('${est.id}')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-semibold text-xs transition-colors">
+            <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+              <button onclick="focusEstablishmentOnMap('${est.id}')" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-purple-100 text-slate-700 hover:text-purple-900 font-semibold text-xs transition-colors">
                 Ver no Mapa
               </button>
-              <button onclick="openEstablishmentModal('${est.id}')" class="px-4 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm">
-                Avaliar Estrelas Coloridas / Detalhes
-              </button>
+              <div class="flex items-center gap-2">
+                <button onclick="openEstablishmentModal('${est.id}', false)" class="px-3 py-2 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs">
+                  Ver Avaliações
+                </button>
+                <button onclick="openEstablishmentModal('${est.id}', true)" class="px-3.5 py-2 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shadow-sm flex items-center gap-1.5">
+                  <i data-lucide="qr-code" class="w-3.5 h-3.5"></i> Simular QR Code
+                </button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
+      lucide.createIcons();
     }
 
     function focusEstablishmentOnMap(id) {
@@ -1880,7 +1936,7 @@
       switchMainView('dashboard');
       if (selectedNeighborhood !== 'all' && selectedNeighborhood !== est.neighborhood) selectNeighborhood('all');
       map.flyTo([est.lat, est.lng], 17, { duration: 0.8 });
-      setTimeout(() => openEstablishmentModal(est.id), 450);
+      setTimeout(() => openEstablishmentModal(est.id, false), 450);
     }
 
     // CAMADA DEFESA CIVIL: ABRIGOS TEMPORÁRIOS (SEM FAIXA POLIGONAL NO MAPA)
@@ -1946,8 +2002,8 @@
             iconAnchor: [15, 15]
           });
           const marker = L.marker([est.lat, est.lng], { icon });
-          marker.on('click', () => openEstablishmentModal(est.id));
-          marker.bindTooltip(`${est.emoji} ${est.name} • ${countEarnedStars(est.coloredStars)}/5 Estrelas`, { direction: 'top' });
+          marker.on('click', () => openEstablishmentModal(est.id, false));
+          marker.bindTooltip(`${est.emoji} ${est.name} • ${countEarnedStars(est)}/5 Selos Ligados`, { direction: 'top' });
           marker.addTo(poisLayer);
         });
     }
@@ -1959,14 +2015,22 @@
       renderPoisOnMap();
     }
 
-    // MODAL UNIVERSAL DE ESTABELECIMENTO (SELO OFICIAL + 5 ESTRELAS COLORIDAS + DENÚNCIA PRESENCIAL)
-    function openEstablishmentModal(id) {
+    // MODAL UNIVERSAL DE ESTABELECIMENTO (CONSULTA PÚBLICA VS MODO PRESENCIAL QR CODE / TAG NFC)
+    function openEstablishmentModal(id, viaQrScan = false) {
       const est = establishments.find(e => e.id === id);
       if (!est) return;
       currentEstablishment = est;
-      selectedCriteriaSet = new Set(
-        starCriteriaConfig.filter(c => est.coloredStars && est.coloredStars[c.key]).map(c => c.key)
-      );
+      qrVerifiedEstId = viaQrScan ? est.id : null;
+      activeReviewSealStep = 0;
+
+      // Reinicia o rascunho de avaliação para quando o QR Code for lido
+      qrDraftRatings = {
+        quality: { stars: 5, selectedReqs: new Set([starCriteriaConfig[0].starRequirements[5][0]]) },
+        accessibility: { stars: 5, selectedReqs: new Set([starCriteriaConfig[1].starRequirements[5][0]]) },
+        hygiene: { stars: 5, selectedReqs: new Set([starCriteriaConfig[2].starRequirements[5][0]]) },
+        service: { stars: 5, selectedReqs: new Set([starCriteriaConfig[3].starRequirements[5][0]]) },
+        price: { stars: 5, selectedReqs: new Set([starCriteriaConfig[4].starRequirements[5][0]]) }
+      };
 
       document.getElementById('estSectorBadge').textContent = `${est.emoji} ${est.sector}`;
       document.getElementById('estModalName').textContent = est.name;
@@ -1977,9 +2041,37 @@
       lucide.createIcons();
     }
 
-    function toggleCriteriaStar(key) {
-      if (selectedCriteriaSet.has(key)) selectedCriteriaSet.delete(key);
-      else selectedCriteriaSet.add(key);
+    function simulateQrScanInModal() {
+      if (!currentEstablishment) return;
+      qrVerifiedEstId = currentEstablishment.id;
+      activeReviewSealStep = 0;
+      renderEstablishmentModalBody();
+      lucide.createIcons();
+      showToast('Tag NFC / QR Code da plaquinha validado! Abas de avaliação liberadas.');
+    }
+
+    function setActiveSealStep(index) {
+      activeReviewSealStep = index;
+      renderEstablishmentModalBody();
+      lucide.createIcons();
+    }
+
+    function setSealStarLevel(sealKey, stars) {
+      const crit = starCriteriaConfig.find(c => c.key === sealKey);
+      if (!crit) return;
+      qrDraftRatings[sealKey].stars = stars;
+      qrDraftRatings[sealKey].selectedReqs = new Set([crit.starRequirements[stars][0]]);
+      renderEstablishmentModalBody();
+      lucide.createIcons();
+    }
+
+    function toggleSealRequirement(sealKey, reqText) {
+      const set = qrDraftRatings[sealKey].selectedReqs;
+      if (set.has(reqText)) {
+        if (set.size > 1) set.delete(reqText);
+      } else {
+        set.add(reqText);
+      }
       renderEstablishmentModalBody();
       lucide.createIcons();
     }
@@ -1988,7 +2080,12 @@
       const est = currentEstablishment;
       if (!est) return;
       const body = document.getElementById('estModalBody');
-      const earnedCount = countEarnedStars(est.coloredStars);
+      const earnedCount = countEarnedStars(est);
+      const isQrMode = qrVerifiedEstId === est.id;
+
+      const currentCrit = starCriteriaConfig[activeReviewSealStep];
+      const currentDraft = qrDraftRatings[currentCrit.key];
+      const availableReqs = currentCrit.starRequirements[currentDraft.stars] || [];
 
       body.innerHTML = `
         <!-- BLOCO 1: SELO REGULATÓRIO OFICIAL -->
@@ -2007,11 +2104,11 @@
           </div>
           <p class="text-xs text-slate-700 leading-relaxed">${est.auditSummary}</p>
           <div class="text-[11px] text-slate-500 bg-white/80 px-3 py-1.5 rounded-lg border border-emerald-100">
-            🔒 <strong>Privacidade Operacional:</strong> As fotos e vídeos internos de áreas técnicas (cozinha, esterilização ou descarte) são transmitidos exclusivamente aos fiscais do órgão competente, exibindo ao público apenas a certificação de regularidade.
+            🔒 <strong>Privacidade Operacional:</strong> Fotos e vídeos internos das áreas críticas são enviados exclusivamente aos fiscais do órgão competente.
           </div>
         </div>
 
-        <!-- INFORMAÇÕES DE ATENDIMENTO + LINK EXTERNO IFOOD (SE RESTAURANTE) -->
+        <!-- INFORMAÇÕES + LINK EXTERNO IFOOD -->
         <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
           <span class="text-slate-700 font-medium">${est.extraPublicInfo}</span>
           ${est.ifoodUrl ? `
@@ -2021,57 +2118,167 @@
           ` : ''}
         </div>
 
-        <!-- PROBLEMAS RELATADOS PELA POPULAÇÃO -->
-        <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 text-xs space-y-1">
-          <p class="font-bold text-amber-950">⚠️ Problemas / Pontos de Atenção Relatados:</p>
-          <ul class="list-disc pl-4 text-slate-700 space-y-0.5">
-            ${(est.reportedProblems || []).map(p => `<li>${p}</li>`).join('')}
-          </ul>
-        </div>
-
-        <!-- BLOCO 2: AVALIAÇÃO POR 5 ESTRELAS COLORIDAS POR CRITÉRIO -->
+        <!-- BLOCO 2: QUADRO DE SELOS COLORIDOS (REGRA DOS 75% DE NOTAS 5 ESTRELAS) -->
         <div class="space-y-3 pt-1">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h4 class="font-bold text-slate-900 text-sm">Quadro de 5 Estrelas Coloridas por Critério</h4>
-              <p class="text-[11px] text-slate-500">Cada cor representa um pilar conquistado pelo estabelecimento</p>
+              <h4 class="font-bold text-slate-900 text-sm">Painel de Selos Coloridos (Meta ≥ 75% de 5★)</h4>
+              <p class="text-[11px] text-slate-500">Se menos de 75% das avaliações forem 5 estrelas, o selo permanece desligado</p>
             </div>
             <div class="text-right">
-              <div class="flex items-center gap-0.5 justify-end">${renderColoredStarsRow(est.coloredStars, 'text-xl')}</div>
-              <span class="block text-[11px] font-bold text-slate-600">${earnedCount}/5 Estrelas • ${est.reviewCount} avaliações</span>
+              <div class="flex items-center gap-0.5 justify-end">${renderColoredStarsRow(est, 'text-xl')}</div>
+              <span class="block text-[11px] font-bold text-slate-600">${earnedCount}/5 Selos Ligados • ${est.reviewCount} avaliações</span>
             </div>
           </div>
 
-          <form onsubmit="submitEstablishmentReview(event)" class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200/70 space-y-3">
-            <div>
-              <span class="text-xs font-bold text-purple-950 block mb-2">Selecione quais estrelas coloridas este local merece:</span>
+          <!-- Barras de Progresso de Cada Selo (Ligado vs Desligado) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${starCriteriaConfig.map(c => {
+              const st = getSealStats(est, c.key);
+              return `
+                <div class="p-2.5 rounded-xl border ${st.isOn ? c.badgeClass : 'bg-slate-50 text-slate-500 border-slate-200'} text-xs space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold flex items-center gap-1">
+                      <span class="${st.isOn ? c.textClass : 'text-slate-300'} text-sm">★</span> ${c.label}
+                    </span>
+                    <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${st.isOn ? 'bg-white/90 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
+                      ${st.pct}% • ${st.isOn ? 'LIGADO' : 'DESLIGADO'}
+                    </span>
+                  </div>
+                  <div class="w-full h-1.5 bg-black/10 rounded-full overflow-hidden">
+                    <div class="h-full transition-all duration-300" style="width:${st.pct}%; background:${st.isOn ? c.colorHex : '#94A3B8'}"></div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- ÁREA DE AVALIAÇÃO: BLOQUEADA SEM QR CODE / LIBERADA AO LER A PLAQUINHA -->
+          ${!isQrMode ? `
+            <div class="p-4 rounded-2xl bg-purple-50/80 border border-purple-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 text-purple-950 font-bold text-xs sm:text-sm">
+                  <i data-lucide="qr-code" class="w-4 h-4 text-purple-700"></i>
+                  <span>Avaliação Exclusiva via Plaquinha QR Code / Tag NFC no Local</span>
+                </div>
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  Pelo site você visualiza apenas os selos ativos e os relatos de quem esteve no estabelecimento. Para avaliar, aproxime o celular da Tag NFC ou leia o QR Code na mesa/balcão.
+                </p>
+              </div>
+              <button type="button" onclick="simulateQrScanInModal()" class="px-3.5 py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0 shadow-sm flex items-center gap-1.5">
+                <i data-lucide="scan-line" class="w-4 h-4"></i> Simular Leitura QR Code
+              </button>
+            </div>
+          ` : `
+            <!-- FLUXO DE AVALIAÇÃO EM ABAS POR SELO (LIBERADO VIA QR CODE) -->
+            <form onsubmit="submitEstablishmentReview(event)" class="p-4 rounded-2xl bg-purple-50/90 border-2 border-purple-400 space-y-4 shadow-sm">
+              <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-purple-200">
+                <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-purple-950">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Plaquinha QR Code Validada • Avalie cada selo abaixo:
+                </span>
+                <span class="text-[11px] font-bold text-purple-700">Aba ${activeReviewSealStep + 1} de ${starCriteriaConfig.length}</span>
+              </div>
+
+              <!-- Abas dos 5 Selos -->
               <div class="flex flex-wrap gap-1.5">
-                ${starCriteriaConfig.map(c => {
-                  const active = selectedCriteriaSet.has(c.key);
+                ${starCriteriaConfig.map((c, idx) => {
+                  const active = idx === activeReviewSealStep;
+                  const draftStars = qrDraftRatings[c.key].stars;
                   return `
-                    <button type="button" onclick="toggleCriteriaStar('${c.key}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-all flex items-center gap-1.5 ${active ? `${c.badgeClass} shadow-sm scale-[1.02]` : 'bg-white text-slate-400 border-slate-200'}">
-                      <span class="${active ? c.textClass : 'text-slate-300'} text-sm">★</span>
+                    <button type="button" onclick="setActiveSealStep(${idx})" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${active ? 'bg-[#581C87] text-white border-[#581C87] shadow-sm' : 'bg-white text-slate-700 border-purple-200 hover:bg-purple-100'}">
+                      <span class="${c.textClass}">★</span>
                       <span>${c.label}</span>
+                      <span class="text-[10px] px-1.5 py-0.2 rounded ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}">${draftStars}★</span>
                     </button>
                   `;
                 }).join('')}
               </div>
-            </div>
-            <div class="flex gap-2">
-              <input id="estReviewComment" type="text" required placeholder="Descreva os pontos positivos ou algum problema encontrado..." class="flex-1 px-3 py-2 text-xs rounded-lg border border-purple-200 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
-              <button type="submit" class="px-3.5 py-2 rounded-lg bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0">Publicar</button>
-            </div>
-          </form>
 
-          <div class="space-y-2 max-h-36 overflow-y-auto">
-            ${est.reviews.map(rev => `
-              <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 text-xs">
-                <div class="flex items-center justify-between mb-1">
-                  <span class="font-bold text-slate-800">${rev.user}</span>
-                  <div class="flex items-center gap-0.5">
-                    ${starCriteriaConfig.map(c => `<span class="${(rev.earnedKeys || []).includes(c.key) ? c.textClass : 'text-slate-200'} text-sm" title="${c.label}">★</span>`).join('')}
+              <!-- Conteúdo da Aba do Selo Atual -->
+              <div class="p-3.5 rounded-xl bg-white border border-purple-200 space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h5 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                      <span class="${currentCrit.textClass} text-base">★</span>
+                      Selo de ${currentCrit.label}
+                    </h5>
+                    <p class="text-[11px] text-slate-500">${currentCrit.desc}</p>
+                  </div>
+
+                  <!-- Seletor de 1 a 5 Estrelas para este Selo -->
+                  <div class="flex items-center gap-1 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200">
+                    ${[1, 2, 3, 4, 5].map(num => `
+                      <button type="button" onclick="setSealStarLevel('${currentCrit.key}', ${num})" class="text-xl leading-none transition-transform hover:scale-110 ${num <= currentDraft.stars ? currentCrit.textClass : 'text-slate-300'}" title="${num} estrela(s)">★</button>
+                    `).join('')}
+                    <span class="ml-1.5 text-xs font-extrabold text-slate-800">${currentDraft.stars}★</span>
                   </div>
                 </div>
+
+                <!-- Requisitos Dinâmicos conforme a Quantidade de Estrelas Marcadas -->
+                <div class="space-y-1.5">
+                  <span class="text-[11px] font-bold uppercase text-slate-600 block">
+                    Selecione os requisitos observados para ${currentDraft.stars} estrela(s):
+                  </span>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    ${availableReqs.map(req => {
+                      const checked = currentDraft.selectedReqs.has(req);
+                      return `
+                        <button type="button" onclick="toggleSealRequirement('${currentCrit.key}', '${req.replace(/'/g, "\\'")}')" class="text-left px-3 py-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-2 ${checked ? 'bg-purple-100 border-purple-500 text-purple-950 font-semibold' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}">
+                          <span>${checked ? '☑️' : '⬜'}</span>
+                          <span>${req}</span>
+                        </button>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+
+                <!-- Navegação Rápida entre Abas de Selos -->
+                <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                  <button type="button" ${activeReviewSealStep === 0 ? 'disabled' : ''} onclick="setActiveSealStep(${Math.max(0, activeReviewSealStep - 1)})" class="px-3 py-1.5 rounded-lg border border-slate-200 font-semibold text-slate-600 disabled:opacity-40">
+                    ← Selo Anterior
+                  </button>
+                  ${activeReviewSealStep < starCriteriaConfig.length - 1 ? `
+                    <button type="button" onclick="setActiveSealStep(${activeReviewSealStep + 1})" class="px-3.5 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-900 font-bold">
+                      Próximo Selo (${starCriteriaConfig[activeReviewSealStep + 1].label}) →
+                    </button>
+                  ` : `
+                    <span class="text-[11px] font-bold text-emerald-700">✓ Todos os 5 selos revisados</span>
+                  `}
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input id="estReviewComment" type="text" required placeholder="Comentário final sobre sua experiência presencial no local..." class="flex-1 px-3 py-2 text-xs rounded-xl border border-purple-200 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-bold text-xs shrink-0 shadow-sm">
+                  Enviar Avaliação Verificada
+                </button>
+              </div>
+            </form>
+          `}
+
+          <!-- LISTA DE AVALIAÇÕES DOS OUTROS CLIENTES (VISÍVEL PARA TODOS) -->
+          <div class="space-y-2 max-h-44 overflow-y-auto pt-1">
+            <h5 class="text-xs font-bold uppercase text-slate-500">Relatos de Clientes Presenciais (${est.reviews.length})</h5>
+            ${est.reviews.map(rev => `
+              <div class="p-3 rounded-xl bg-white border border-slate-200/80 text-xs space-y-1.5">
+                <div class="flex flex-wrap items-center justify-between gap-1">
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-slate-800">${rev.user}</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ QR Code Verificado</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[11px] font-bold">
+                    ${starCriteriaConfig.map(c => {
+                      const val = (rev.summaryStars && rev.summaryStars[c.key]) || 5;
+                      return `<span class="${c.textClass}" title="${c.label}: ${val}★">${val}★</span>`;
+                    }).join('')}
+                  </div>
+                </div>
+                ${rev.tags && rev.tags.length ? `
+                  <div class="flex flex-wrap gap-1">
+                    ${rev.tags.map(t => `<span class="text-[10px] px-2 py-0.5 rounded-md bg-purple-50 text-purple-800 border border-purple-100 font-medium">${t}</span>`).join('')}
+                  </div>
+                ` : ''}
                 <p class="text-slate-600">${rev.text}</p>
               </div>
             `).join('')}
@@ -2090,7 +2297,7 @@
             </summary>
             <form onsubmit="submitEstablishmentGraveReport(event)" class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
               <p class="text-[11px] text-slate-600">
-                📍 <strong>Validação Presencial (GPS Ativo):</strong> Este canal é exclusivo para irregularidades estruturais, sanitárias ou ambientais graves observadas no local (falhas simples de entrega devem ser registradas na avaliação acima).
+                📍 <strong>Validação Presencial (GPS Ativo):</strong> Este canal é exclusivo para irregularidades estruturais, sanitárias ou ambientais graves observadas no local.
               </p>
               <textarea id="estGraveDesc" rows="2" required placeholder="Descreva a irregularidade grave observada presencialmente..." class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white"></textarea>
               <button type="submit" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs">
@@ -2104,27 +2311,40 @@
 
     function submitEstablishmentReview(e) {
       e.preventDefault();
-      if (!currentEstablishment) return;
+      if (!currentEstablishment || qrVerifiedEstId !== currentEstablishment.id) return;
       const input = document.getElementById('estReviewComment');
       const text = input.value.trim();
       if (!text) return;
 
-      const earnedKeys = Array.from(selectedCriteriaSet);
       currentEstablishment.reviewCount += 1;
+      const summaryStars = {};
+      const collectedTags = [];
+
       starCriteriaConfig.forEach(c => {
-        currentEstablishment.coloredStars[c.key] = earnedKeys.includes(c.key);
+        const draft = qrDraftRatings[c.key];
+        summaryStars[c.key] = draft.stars;
+        if (draft.stars === 5) {
+          currentEstablishment.fiveStarCounts[c.key] = (currentEstablishment.fiveStarCounts[c.key] || 0) + 1;
+        }
+        draft.selectedReqs.forEach(r => collectedTags.push(r));
       });
+
       currentEstablishment.reviews.unshift({
-        user: 'Cidadão Verificado (Você)',
-        earnedKeys,
+        user: 'Cliente Presencial (QR Code)',
+        verifiedQr: true,
+        summaryStars,
+        tags: collectedTags.slice(0, 6),
         text
       });
+
+      // Encerra sessão do QR Code após envio para voltar ao modo consulta
+      qrVerifiedEstId = null;
 
       renderPoisOnMap();
       renderReviewsDirectory();
       renderEstablishmentModalBody();
       lucide.createIcons();
-      showToast(`Avaliação por estrelas coloridas publicada em ${currentEstablishment.name}!`);
+      showToast(`Avaliação via QR Code registrada! Percentuais dos selos recalculados (meta ≥75%).`);
     }
 
     function submitEstablishmentGraveReport(e) {
