@@ -361,7 +361,7 @@
                   <button type="button" id="btnStreetLayer" onclick="setMapTileLayer('street')" class="px-3 py-1.5 rounded-xl bg-purple-600 text-white text-xs font-bold">🗺️ Ruas & Lotes</button>
                   <button type="button" id="btnSatLayer" onclick="setMapTileLayer('satellite')" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">🛰️ Satélite HD</button>
                   <button type="button" onclick="locateUserGPS()" class="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">📍 Meu GPS</button>
-                  <button type="button" onclick="resetMapCenter()" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Limite Itajubá</button>
+                  <button type="button" onclick="resetMapCenter()" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Centralizar Itajubá</button>
                 </div>
               </div>
 
@@ -427,17 +427,11 @@
 
               <!-- Container do Mapa Leaflet -->
               <div class="relative rounded-2xl overflow-hidden border border-slate-200 h-[500px] bg-slate-100">
-                <div class="absolute top-3 left-14 right-3 z-[450] pointer-events-none flex justify-center">
-                  <div class="px-3.5 py-1.5 rounded-full bg-[#3B0764]/95 text-white text-[11px] font-bold shadow-lg backdrop-blur-sm text-center">
-                    🔒 Mapa bloqueado no perímetro de Itajubá - MG • Clique em qualquer pino para horários de ônibus ou selos 5★
-                  </div>
-                </div>
-
                 <div id="itajubaMap" class="w-full h-full z-10"></div>
 
                 <!-- Legenda Compacta -->
                 <div class="absolute bottom-3 left-3 z-[450] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl p-3 shadow-lg text-[11px] space-y-1 surface-card">
-                  <p class="font-black text-[10px] uppercase tracking-wider text-slate-500">Legenda Perímetro Itajubá</p>
+                  <p class="font-black text-[10px] uppercase tracking-wider text-slate-500">Legenda Mapa Itajubá</p>
                   <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span> Abrigos & Apoio</div>
                   <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Ponto de Ônibus Valônia</div>
                   <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Hospital / UBS / Farmácia</div>
@@ -2147,49 +2141,49 @@
     }
 
     // 9. MAPA LEAFLET SEM BLOQUEIO 403 E LIMITADO EXCLUSIVAMENTE A ITAJUBÁ - MG
+    // 9. MAPA LEAFLET LIVRE FOCADO EM ITAJUBÁ - MG (SEM BLOQUEIO DE PERÍMETRO E SEM API KEY REQUIRED)
     function initMap() {
       const mapEl = document.getElementById('itajubaMap');
       if (!mapEl || typeof L === 'undefined') return;
 
-      // Limites geográficos estritos do município de Itajubá - MG
-      const itajubaBounds = L.latLngBounds(
-        L.latLng(-22.5150, -45.5450), // Sudoeste (Santa Rosa / Rural)
-        L.latLng(-22.3450, -45.3550)  // Nordeste (Ponte Alta / Anhumas)
-      );
-
       map = L.map('itajubaMap', {
         zoomControl: true,
-        minZoom: 12,
-        maxZoom: 19,
-        maxBounds: itajubaBounds,
-        maxBoundsViscosity: 1.0
+        minZoom: 10,
+        maxZoom: 19
       }).setView([-22.4256, -45.4528], 14);
 
-      // Camada de Ruas CartoDB Voyager (rápida, nítida e sem erro 403)
-      streetTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
+      // Camada de Ruas & Lotes: Esri World Street Map (público e estável no GitHub Pages) com fallback automático para Wikimedia Maps
+      const esriStreet = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 19,
-        attribution: '&copy; OpenStreetMap &copy; CARTO • Perímetro Itajubá - MG'
-      }).addTo(map);
+        attribution: '&copy; Esri &copy; OpenStreetMap • Itajubá - MG'
+      });
 
-      // Camada de Satélite HD Esri World Imagery + Rótulos de Ruas
+      const wikimediaFallback = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; Wikimedia Maps &copy; OpenStreetMap • Itajubá - MG'
+      });
+
+      let fallbackActivated = false;
+      esriStreet.on('tileerror', () => {
+        if (!fallbackActivated && map && map.hasLayer(esriStreet)) {
+          fallbackActivated = true;
+          map.removeLayer(esriStreet);
+          wikimediaFallback.addTo(map);
+          streetTileLayer = wikimediaFallback;
+        }
+      });
+
+      streetTileLayer = esriStreet.addTo(map);
+
+      // Camada de Satélite HD Esri World Imagery + Rótulos de Ruas e Bairros da Esri
       const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 19,
         attribution: '&copy; Esri Satélite HD • Itajubá - MG'
       });
-      const satLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
+      const satLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 19
       });
       satelliteTileLayer = L.layerGroup([esriSat, satLabels]);
-
-      // Contorno visual do perímetro municipal de Itajubá
-      L.rectangle(itajubaBounds, {
-        color: '#6D28D9',
-        weight: 2,
-        dashArray: '6, 6',
-        fill: false
-      }).addTo(map);
 
       selectedStreetHighlightLayer = L.layerGroup().addTo(map);
       poisLayer = L.layerGroup().addTo(map);
