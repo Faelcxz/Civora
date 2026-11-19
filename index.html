@@ -14,9 +14,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <!-- Leaflet Maps -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <!-- Leaflet Maps (CSS + JS sem crossorigin restritivo para evitar bloqueio) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
     * { font-family: 'Inter', sans-serif; }
@@ -25,6 +25,15 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.35); border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(124, 58, 237, 0.65); }
+
+    /* Garantia de altura e exibição correta para o container Leaflet */
+    #itajubaMap {
+      width: 100%;
+      height: 510px;
+      min-height: 440px;
+      background-color: #e2e8f0;
+      z-index: 10;
+    }
 
     .custom-pin {
       display: flex;
@@ -179,7 +188,7 @@
             oninput="handlePlaceAutocomplete(this.value, 'topPlaceSuggestions', 'topGlobalSearchInput')"
             onfocus="handlePlaceAutocomplete(this.value, 'topPlaceSuggestions', 'topGlobalSearchInput')"
             onkeydown="if(event.key==='Enter'){ event.preventDefault(); searchItajubaLocation('topGlobalSearchInput'); }"
-            onblur="setTimeout(() => document.getElementById('topPlaceSuggestions')?.classList.add('hidden'), 200)"
+            onblur="setTimeout(() => document.getElementById('topPlaceSuggestions')?.classList.add('hidden'), 220)"
             class="w-full pl-9 pr-4 py-2 rounded-2xl border border-purple-200 bg-slate-50 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <span class="absolute left-3 top-2 text-xs">🔍</span>
@@ -347,7 +356,7 @@
             </div>
           </div>
 
-          <!-- MAPA INTERATIVO LIMITADO A ITAJUBÁ + PAINEL LATERAL -->
+          <!-- MAPA INTERATIVO FOCADO EM ITAJUBÁ + PAINEL LATERAL -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
 
             <!-- Coluna do Mapa (8 cols) -->
@@ -377,7 +386,7 @@
                       oninput="handlePlaceAutocomplete(this.value, 'mapPlaceSuggestions', 'itajubaPlaceInput')"
                       onfocus="handlePlaceAutocomplete(this.value, 'mapPlaceSuggestions', 'itajubaPlaceInput')"
                       onkeydown="if(event.key==='Enter'){ event.preventDefault(); searchItajubaLocation(); }"
-                      onblur="setTimeout(() => document.getElementById('mapPlaceSuggestions')?.classList.add('hidden'), 200)"
+                      onblur="setTimeout(() => document.getElementById('mapPlaceSuggestions')?.classList.add('hidden'), 220)"
                       class="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium focus:outline-none focus:border-purple-500"
                     />
                     <div id="mapPlaceSuggestions" class="hidden absolute left-0 right-0 mt-1.5 bg-white border border-purple-200 rounded-2xl shadow-2xl overflow-hidden divide-y divide-slate-100 z-[900] max-h-72 overflow-y-auto"></div>
@@ -409,7 +418,7 @@
                 </label>
                 <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-[11px] font-bold cursor-pointer select-none">
                   <input type="checkbox" checked onchange="toggleMapLayer('bus', this.checked)" class="accent-purple-600" />
-                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Pontos Ônibus
+                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Pontos Ônibus (40)
                 </label>
                 <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-[11px] font-bold cursor-pointer select-none">
                   <input type="checkbox" checked onchange="toggleMapLayer('health', this.checked)" class="accent-purple-600" />
@@ -426,8 +435,8 @@
               </div>
 
               <!-- Container do Mapa Leaflet -->
-              <div class="relative rounded-2xl overflow-hidden border border-slate-200 h-[500px] bg-slate-100">
-                <div id="itajubaMap" class="w-full h-full z-10"></div>
+              <div id="mapWrapperBox" class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+                <div id="itajubaMap"></div>
 
                 <!-- Legenda Compacta -->
                 <div class="absolute bottom-3 left-3 z-[450] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl p-3 shadow-lg text-[11px] space-y-1 surface-card">
@@ -454,7 +463,7 @@
 
               <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm space-y-3.5 surface-card">
                 <div class="flex items-center justify-between gap-2">
-                  <h3 class="text-sm font-extrabold text-slate-900">Ocorrências & Zeladoria (<span id="reportsTotalCounter">6</span>)</h3>
+                  <h3 class="text-sm font-extrabold text-slate-900">Ocorrências & Zeladoria (<span id="reportsTotalCounter">4</span>)</h3>
                   <select id="reportStatusFilter" onchange="renderReportsList()" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-[11px] font-bold">
                     <option value="all">Todos os status</option>
                     <option value="Em análise">Em análise</option>
@@ -1031,7 +1040,7 @@
         <button type="button" onclick="closeModal('howToUseModal')" class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center font-bold">✕</button>
       </div>
       <div class="p-5 space-y-3 text-xs leading-relaxed">
-        <p><strong>1. Mapa Restrito a Itajubá & 37 Bairros:</strong> Escolha qualquer bairro (como <em>Santa Rosa</em>, <em>Centro</em>, <em>Pinheirinho</em>, <em>Rebourgeon</em>) para focar o mapa e abrir os botões do Raio-X (Criminalidade %, Enchente, Obras, UBSs, Escolas e 21 Linhas Valônia).</p>
+        <p><strong>1. Mapa de Itajubá & 37 Bairros:</strong> Escolha qualquer bairro (como <em>Santa Rosa</em>, <em>Centro</em>, <em>Pinheirinho</em>, <em>Rebourgeon</em>) para focar o mapa e abrir os botões do Raio-X (Criminalidade %, Enchente, Obras, UBSs, Escolas e 21 Linhas Valônia).</p>
         <p><strong>2. Avaliações via QR Code & Regra dos 75%:</strong> Valide o QR Code do estabelecimento para pontuar os 5 selos coloridos; cada selo acende ao atingir <strong>≥ 75% de notas 5★</strong>.</p>
         <p><strong>3. Cultura, Obras de Arte & Apoio a Artistas:</strong> Compre/reserve quadros e artesanato de Itajubá, apoie artistas independentes via PIX e inscreva-se em projetos culturais.</p>
         <p><strong>4. Unidades Carentes & Vagas:</strong> Doe diretamente para abrigos e entidades assistenciais de Itajubá ou candidate-se às vagas de emprego, estágios e cursos gratuitos.</p>
@@ -1069,7 +1078,7 @@
   <!-- JAVASCRIPT COMPLETO E FUNCIONAL DA PLATAFORMA CIVORA      -->
   <!-- ========================================================= -->
   <script>
-    // 1. TODOS OS 37 BAIRROS OFICIAIS DE ITAJUBÁ - MG (COM CRIMINALIDADE %, HISTÓRICO, PROBLEMAS ESTRUTURAIS E NOTÍCIAS DATADAS)
+    // 1. TODOS OS 37 BAIRROS OFICIAIS DE ITAJUBÁ - MG
     const neighborhoodsData = {
       all: {
         name: 'Toda a Cidade de Itajubá (37 Bairros)',
@@ -1300,521 +1309,407 @@
         center: [-22.4362, -45.4608],
         zoom: 16,
         safety: '1,16% • Corredor Av. Jerson Dias',
-        safetySub: 'Ronda ostensiva na ligação Centro – Sul',
-        floodRisk: 'Alto • Prox. Rio Sapucaí',
-        floodSub: 'Monitoramento contínuo da ponte e comportas',
-        invest: 'Corredor Comercial Av. Jerson Dias',
-        investSub: '26 logradouros • Oficinas e Comércio',
-        health: 'Linhas 09, 11B, 11C Valônia',
-        healthSub: 'Ligação rápida ao Terminal e Rodoviária',
+        safetySub: 'Proximidade ao Centro Administrativo Municipal',
+        floodRisk: 'Moderado • Margem Esquerda',
+        floodSub: 'Monitoramento Ponte Av. Jerson Dias',
+        invest: 'Centro Administrativo Municipal',
+        investSub: 'Av. Dr. Jerson Dias, 500 • Prefeitura',
+        health: 'Linhas 09 & 11B Valônia',
+        healthSub: 'Ligação rápida Estiva – Centro – Novo Horizonte',
         crimeHistory: [
-          { year: '2021', pct: 1.54 }, { year: '2022', pct: 1.45 }, { year: '2023', pct: 1.36 },
-          { year: '2024', pct: 1.28 }, { year: '2025', pct: 1.21 }, { year: '2026', pct: 1.16 }
+          { year: '2021', pct: 1.50 }, { year: '2022', pct: 1.42 }, { year: '2023', pct: 1.33 },
+          { year: '2024', pct: 1.26 }, { year: '2025', pct: 1.20 }, { year: '2026', pct: 1.16 }
         ],
-        crimeNote: 'Estabilidade nos indicadores com reforço de câmeras.',
+        crimeNote: 'Policiamento reforçado no eixo institucional.',
         structuralIssues: [
-          { loc: 'Av. Jerson Dias próximo à ponte', desc: 'Manutenção de luminárias e drenagem pluvial.', lat: -22.4365, lng: -45.4615 }
+          { loc: 'Av. Jerson Dias, 410 (próximo à ponte)', desc: 'Revisão de luminárias LED em manutenção.', lat: -22.4365, lng: -45.4615 }
         ],
         news: [
-          { date: '10/11/2026', title: 'Equipe de iluminação pública programa troca de luminárias na Av. Jerson Dias', source: 'Zeladoria Itajubá' }
+          { date: '10/11/2026', title: 'Balcão Digital do Centro Administrativo reduz tempo de emissão de CND', source: 'PMI' }
         ]
       },
       rebourgeon: {
         name: 'Rebourgeon (CEP 37503-175)',
-        center: [-22.4265, -45.4365],
+        center: [-22.4265, -45.4362],
         zoom: 16,
-        safety: '1,04% • Monitoramento Encostas',
-        safetySub: 'Ronda preventiva e Defesa Civil comunitária',
-        floodRisk: 'Baixo Enchente / Atenção Encostas',
+        safety: '1,05% • Ronda Comunitária',
+        safetySub: 'Rede de Vizinhos Protegidos ativa',
+        floodRisk: 'Baixo • Atenção Encostas',
         floodSub: 'Estação Pluviométrica Rebourgeon ativa',
-        invest: 'PSF Rebourgeon (CNES 2212684)',
-        investSub: '79 logradouros • Saúde e Infraestrutura',
+        invest: 'PSF Rebourgeon (CNES 2212706)',
+        investSub: '52 logradouros • Saúde e Escolas',
         health: 'Linhas 03A, 03B, 04A, 04B, 08, 17',
-        healthSub: 'Ampla cobertura de ônibus para Centro e Santa Rosa',
+        healthSub: 'Ampla cobertura de transporte coletivo',
         crimeHistory: [
-          { year: '2021', pct: 1.41 }, { year: '2022', pct: 1.32 }, { year: '2023', pct: 1.25 },
-          { year: '2024', pct: 1.17 }, { year: '2025', pct: 1.10 }, { year: '2026', pct: 1.04 }
+          { year: '2021', pct: 1.40 }, { year: '2022', pct: 1.32 }, { year: '2023', pct: 1.24 },
+          { year: '2024', pct: 1.17 }, { year: '2025', pct: 1.10 }, { year: '2026', pct: 1.05 }
         ],
-        crimeNote: 'Queda consistente nas ocorrências.',
+        crimeNote: 'Forte engajamento comunitário e redução contínua.',
         structuralIssues: [
-          { loc: 'Rua Padre Marçal Ribeiro e trechos altos do Rebourgeon', desc: 'Limpeza preventiva de bueiros.', lat: -22.4272, lng: -45.4358 }
+          { loc: 'Rua Padre Marçal Ribeiro (parte alta)', desc: 'Monitoramento preventivo de drenagem de encosta.', lat: -22.4272, lng: -45.4358 }
         ],
         news: [
-          { date: '16/11/2026', title: 'Pluviômetro Rebourgeon registra 0,0 mm hoje; encostas seguras', source: 'Defesa Civil' }
+          { date: '13/11/2026', title: 'Pluviômetro Rebourgeon registra normalidade sem alertas de encosta', source: 'Defesa Civil' }
         ]
       }
     };
 
-    // Demais bairros oficiais para completar os 37
-    const extraNeighborhoodsList = [
-      ['porto_velho', 'Porto Velho (CEP 37501-000)', -22.4355, -45.4515, '1,09% • Residencial'],
-      ['sao_vicente', 'São Vicente (CEP 37502-000)', -22.4185, -45.4525, '1,11% • Área Mista'],
-      ['santo_antonio', 'Santo Antônio (CEP 37503-130)', -22.4235, -45.4548, '1,05% • Monitorada'],
-      ['vila_poddis', 'Vila Poddis (CEP 37503-000)', -22.4242, -45.4595, '1,07% • Comportas'],
-      ['oriente', 'Oriente & Jardim das Colinas (CEP 37500-240)', -22.4182, -45.4592, '0,94% • Baixa Incidência'],
-      ['cruzeiro', 'Cruzeiro (CEP 37500-204)', -22.4295, -45.4410, '1,02% • Ronda Escolar'],
-      ['santa_luzia', 'Santa Luzia (CEP 37503-163)', -22.4280, -45.4385, '0,99% • Baixa Criminalidade'],
-      ['santos_dumont', 'Santos Dumont (CEP 37504-092)', -22.4342, -45.4472, '1,13% • Telemetria'],
-      ['sao_sebastiao', 'São Sebastião (CEP 37502-450)', -22.4328, -45.4445, '1,06% • Residencial'],
-      ['imbel', 'IMBEL (CEP 37501-338)', -22.4415, -45.4550, '0,85% • Polo Industrial'],
-      ['vila_isabel', 'Vila Isabel (CEP 37505-177)', -22.4445, -45.4565, '1,15% • Zona Sul'],
-      ['nossa_senhora_fatima', 'Nossa Senhora de Fátima (CEP 37502-500)', -22.4375, -45.4510, '1,10% • Residencial'],
-      ['nossa_senhora_agonia', 'Nossa Senhora da Agonia (CEP 37500-187)', -22.4268, -45.4480, '1,03% • Leste'],
-      ['santa_rita', 'Santa Rita de Cássia (CEP 37502-476)', -22.4395, -45.4480, '1,08% • Residencial'],
-      ['sao_judas', 'São Judas Tadeu (CEP 37504-068)', -22.4335, -45.4525, '1,12% • Monitorada'],
-      ['novo_horizonte', 'Novo Horizonte (CEP 37505-175)', -22.4485, -45.4650, '1,18% • Expansão Sul'],
-      ['acude', 'Açude (CEP 37504-131)', -22.4160, -45.4415, '1,01% • Residencial'],
-      ['piedade', 'Piedade (CEP 37504-588)', -22.4410, -45.4420, '1,05% • Cór. Piranguçu'],
-      ['nacoes', 'Nações (CEP 37504-358)', -22.4290, -45.4655, '0,97% • Residencial'],
-      ['vila_rubens', 'Vila Rubens (CEP 37505-154)', -22.4345, -45.4655, '1,09% • Residencial'],
-      ['vila_betel', 'Vila Betel (CEP 37505-500)', -22.4465, -45.4610, '1,12% • Zona Sul'],
-      ['jardim_bernadete', 'Jardim Bernadete (CEP 37503-167)', -22.4225, -45.4395, '0,95% • Residencial'],
-      ['distrito_industrial', 'Distrito Industrial (CEP 37504-085)', -22.4495, -45.4685, '0,88% • Industrial'],
-      ['morro_grande', 'Morro Grande (CEP 37502-700)', -22.4110, -45.4350, '0,91% • Área Verde'],
-      ['ponte_alta', 'Ponte Alta (CEP 37506-150)', -22.4035, -45.4480, '0,93% • Norte'],
-      ['anhumas', 'Anhumas (CEP 37502-149)', -22.4165, -45.4260, '0,90% • Linha 13'],
-      ['zona_rural', 'Área Rural / Capetinga / Toledos / Ano Bom', -22.4620, -45.4450, '0,82% • Patrulha Rural']
+    // Completa os 37 bairros oficiais de Itajubá
+    const extraNeighborhoodSpecs = [
+      ['porto_velho', 'Porto Velho (CEP 37501-000)', -22.4352, -45.4510, '1,13%', 'Moderado • Prox. Rio Sapucaí'],
+      ['sao_vicente', 'São Vicente (CEP 37502-000)', -22.4185, -45.4525, '1,04%', 'Baixo • Cota Segura'],
+      ['santo_antonio', 'Santo Antônio (CEP 37503-130)', -22.4235, -45.4548, '1,09%', 'Moderado • Drenagem Urbana'],
+      ['vila_poddis', 'Vila Poddis (CEP 37503-000)', -22.4242, -45.4595, '1,15%', 'Monitorado • Comportas'],
+      ['oriente', 'Oriente & Jardim das Colinas (CEP 37500-240)', -22.4182, -45.4592, '0,94%', 'Baixo • Topografia Alta'],
+      ['cruzeiro', 'Cruzeiro (CEP 37500-204)', -22.4295, -45.4410, '1,07%', 'Baixo • Atenção Encostas'],
+      ['santa_luzia', 'Santa Luzia (CEP 37503-163)', -22.4280, -45.4385, '1,02%', 'Baixo • Cota Elevada'],
+      ['santos_dumont', 'Santos Dumont (CEP 37504-092)', -22.4342, -45.4472, '1,06%', 'Baixo • Cota Segura'],
+      ['sao_sebastiao', 'São Sebastião (CEP 37502-450)', -22.4328, -45.4445, '1,05%', 'Baixo • Cota Segura'],
+      ['imbel', 'IMBEL (CEP 37501-338)', -22.4410, -45.4550, '0,88%', 'Moderado • Área Industrial'],
+      ['vila_isabel', 'Vila Isabel (CEP 37505-177)', -22.4445, -45.4565, '1,01%', 'Baixo • Encosta Monitorada'],
+      ['nossa_senhora_fatima', 'Nossa Senhora de Fátima (CEP 37502-500)', -22.4375, -45.4510, '1,03%', 'Baixo • Cota Segura'],
+      ['nossa_senhora_agonia', 'Nossa Senhora da Agonia (CEP 37500-187)', -22.4268, -45.4480, '0,99%', 'Baixo • Região Central'],
+      ['santa_rita', 'Santa Rita de Cássia (CEP 37502-476)', -22.4395, -45.4480, '1,04%', 'Baixo • Residencial'],
+      ['sao_judas', 'São Judas Tadeu (CEP 37504-068)', -22.4335, -45.4525, '1,11%', 'Moderado • Corredor Sul'],
+      ['novo_horizonte', 'Novo Horizonte (CEP 37505-175)', -22.4485, -45.4650, '1,18%', 'Baixo • Ponto Final Linha 11'],
+      ['acude', 'Açude (CEP 37504-131)', -22.4160, -45.4415, '0,95%', 'Baixo • Cota Alta'],
+      ['piedade', 'Piedade (CEP 37504-588)', -22.4410, -45.4420, '0,98%', 'Baixo • PSF Piedade'],
+      ['nacoes', 'Nações (CEP 37504-358)', -22.4290, -45.4655, '0,97%', 'Baixo • Linha 06 Valônia'],
+      ['vila_rubens', 'Vila Rubens (CEP 37505-154)', -22.4345, -45.4655, '1,02%', 'Baixo • Residencial'],
+      ['vila_betel', 'Vila Betel (CEP 37505-500)', -22.4465, -45.4610, '1,06%', 'Moderado • Zona Sul'],
+      ['jardim_bernadete', 'Jardim Bernadete (CEP 37503-167)', -22.4225, -45.4395, '0,93%', 'Baixo • Cota Alta'],
+      ['distrito_industrial', 'Distrito Industrial (CEP 37504-085)', -22.4495, -45.4685, '0,91%', 'Baixo • Helibras / Balteau'],
+      ['morro_grande', 'Morro Grande (CEP 37502-700)', -22.4450, -45.4380, '0,87%', 'Baixo • Área Verde'],
+      ['ponte_alta', 'Ponte Alta (CEP 37506-150)', -22.4050, -45.4460, '0,96%', 'Moderado • Zona Norte'],
+      ['anhumas', 'Anhumas (CEP 37502-149)', -22.4165, -45.4260, '0,86%', 'Baixo • Linha 13 Valônia'],
+      ['zona_rural', 'Área Rural / Capetinga / Toledos / Ano Bom (CEP 37506-899)', -22.4620, -45.4820, '0,84%', 'Baixo • Patrulha Rural']
     ];
-    extraNeighborhoodsList.forEach(([key, label, lat, lng, safety]) => {
+
+    extraNeighborhoodSpecs.forEach(([key, label, lat, lng, rate, flood]) => {
+      const num = parseFloat(rate.replace(',', '.'));
       neighborhoodsData[key] = {
         name: label,
         center: [lat, lng],
-        zoom: key === 'zona_rural' ? 13 : 16,
-        safety,
-        safetySub: 'Boletim SEJUSP-MG Out/2026 • Ronda Preventiva',
-        floodRisk: 'Monitorado • Defesa Civil',
-        floodSub: 'Rede Telemétrica & Pluviômetros Itajubá',
-        invest: 'Infraestrutura & LED Municipal',
+        zoom: 16,
+        safety: `${rate} • Queda Anual`,
+        safetySub: 'Boletim SEJUSP-MG & 56º BPM Itajubá',
+        floodRisk: flood,
+        floodSub: 'Monitoramento Defesa Civil & CEMADEN',
+        invest: 'Rede SUS & Iluminação LED',
         investSub: 'Prefeitura Municipal de Itajubá',
-        health: 'Cobertura UBS/PSF & Expresso Valônia',
-        healthSub: 'Clique para consultar unidades e linhas',
+        health: 'Cobertura Expresso Valônia',
+        healthSub: 'Clique para consultar linhas e UBSs',
         crimeHistory: [
-          { year: '2021', pct: 1.42 }, { year: '2022', pct: 1.34 }, { year: '2023', pct: 1.26 },
-          { year: '2024', pct: 1.19 }, { year: '2025', pct: 1.12 }, { year: '2026', pct: 1.05 }
+          { year: '2021', pct: +(num + 0.35).toFixed(2) },
+          { year: '2022', pct: +(num + 0.28).toFixed(2) },
+          { year: '2023', pct: +(num + 0.21).toFixed(2) },
+          { year: '2024', pct: +(num + 0.14).toFixed(2) },
+          { year: '2025', pct: +(num + 0.07).toFixed(2) },
+          { year: '2026', pct: num }
         ],
-        crimeNote: 'Tendência consistente de queda nos índices percentuais desde 2021.',
+        crimeNote: `Índice de ocorrências em ${label.split('(')[0].trim()} acompanha a tendência municipal de redução da SEJUSP-MG.`,
         structuralIssues: [
-          { loc: `Vias principais de ${label.split('(')[0].trim()}`, desc: 'Manutenção preventiva de drenagem pluvial, sinalização e iluminação LED.', lat, lng }
+          { loc: `Vias principais • ${label.split('(')[0].trim()}`, desc: 'Manutenção preventiva de drenagem pluvial e sinalização viária.', lat, lng }
         ],
         news: [
-          { date: '16/11/2026', title: `Monitoramento preventivo ativo na região de ${label.split('(')[0].trim()}`, source: 'Defesa Civil Itajubá' },
-          { date: '04/10/2026', title: 'Boletim SEJUSP-MG confirma queda na criminalidade em Itajubá', source: 'SEJUSP-MG' }
+          { date: '13/11/2026', title: `Boletim Defesa Civil confirma estabilidade hídrica na região de ${label.split('(')[0].trim()}`, source: 'Defesa Civil Itajubá' }
         ]
       };
     });
 
-    // 2. DADOS COMPLETOS DE SAÚDE, EDUCAÇÃO, LINHAS VALÔNIA E ESTAÇÕES TELEMÉTRICAS
-    const fullHealthUnits = [
-      { name: 'Hospital de Clínicas de Itajubá (HCI)', type: 'Hospital Geral • Alta Complexidade', addr: 'Rua Miguel Viana, 420 - Morro Chic / Medicina', phone: '(35) 3629-7600' },
-      { name: 'Santa Casa de Misericórdia de Itajubá', type: 'Hospital & Pronto Atendimento', addr: 'Rua Dr. Pereira Cabral, 355 - Centro', phone: '(35) 3629-7000' },
-      { name: 'Policlínica Municipal de Itajubá', type: 'Especialidades SUS • CNES 2212617', addr: 'Praça Amélia Braga, 1 - Centro', phone: '(35) 3692-1750' },
-      { name: 'Farmácia de Todos / Farmácia Central SUS', type: 'Dispensação Gratuita de Medicamentos', addr: 'Av. Cel. Carneiro Júnior - Centro', phone: '(35) 3692-1755' },
-      { name: 'Centro de Especialidades Odontológicas (CEO)', type: 'Odontologia SUS • CNES 9543562', addr: 'Rua Dona Maria Carneiro, 190 - Centro', phone: '(35) 3692-1760' },
-      { name: 'PSF Santa Rosa', type: 'Atenção Primária • CNES 2212714', addr: 'Rua Principal Santa Rosa - Santa Rosa', phone: '(35) 3622-4110' },
-      { name: 'UBS Medicina I / Anhumas', type: 'Atenção Básica • CNES 3038483', addr: 'Bairro Medicina / Anhumas', phone: '(35) 3622-5120' },
-      { name: 'PSF Rebourgeon', type: 'Saúde da Família • CNES 2212684', addr: 'Rua Padre Marçal Ribeiro - Rebourgeon', phone: '(35) 3622-3890' },
-      { name: 'PSF Boa Vista', type: 'Saúde da Família • CNES 5285550', addr: 'Bairro Boa Vista', phone: '(35) 3623-2210' },
-      { name: 'UBS São Vicente', type: 'Atenção Básica • CNES 7459335', addr: 'Bairro São Vicente', phone: '(35) 3622-6140' },
-      { name: 'PSF Santo Antônio', type: 'Saúde da Família • CNES 5285569', addr: 'Bairro Santo Antônio', phone: '(35) 3622-4490' },
-      { name: 'PSF Jardim das Colinas / Oriente', type: 'Saúde da Família • CNES 3038521', addr: 'Bairro Jardim das Colinas', phone: '(35) 3622-7100' },
-      { name: 'PSF Cruzeiro', type: 'Saúde da Família • CNES 2212706', addr: 'Bairro Cruzeiro', phone: '(35) 3622-4810' },
-      { name: 'PSF Santa Luzia', type: 'Saúde da Família • CNES 3038548', addr: 'Bairro Santa Luzia', phone: '(35) 3622-4920' },
-      { name: 'PSF Vila Isabel', type: 'Saúde da Família • CNES 5285666', addr: 'Bairro Vila Isabel', phone: '(35) 3623-1980' },
-      { name: 'PSF Nossa Senhora de Fátima', type: 'Saúde da Família • CNES 7908261', addr: 'Bairro N. Sra. de Fátima', phone: '(35) 3622-5310' },
-      { name: 'UBS Santa Rita de Cássia', type: 'Atenção Básica • CNES 2212773', addr: 'Bairro Santa Rita de Cássia', phone: '(35) 3622-5620' },
-      { name: 'PSF Avenida / São Judas Tadeu', type: 'Saúde da Família • CNES 5285518', addr: 'Bairro Avenida / São Judas', phone: '(35) 3622-3340' },
-      { name: 'PSF Piedade', type: 'Saúde da Família • CNES 6245781', addr: 'Bairro Piedade', phone: '(35) 3623-4420' },
-      { name: 'UBS Vila Rubens', type: 'Atenção Básica • CNES 2776316', addr: 'Bairro Vila Rubens', phone: '(35) 3623-5110' },
-      { name: 'CAPS II & CAPS AD Itajubá', type: 'Saúde Mental Municipal', addr: 'Centro / Vila Poddis', phone: '(35) 3692-1770' }
-    ];
-
-    const fullEducationUnits = [
-      { name: 'UNIFEI • Universidade Federal de Itajubá', level: 'Ensino Superior Federal & Pós-Graduação', addr: 'Av. BPS, 1303 - Pinheirinho', vagas: 'Vestibular / SISU' },
-      { name: 'FEPI • Centro Universitário de Itajubá', level: 'Ensino Superior', addr: 'Av. Dr. Antônio Braga Filho, 687 - Varginha', vagas: 'Vestibular Aberto' },
-      { name: 'FMIT • Faculdade de Medicina de Itajubá', level: 'Ensino Superior em Saúde', addr: 'Av. Renó Júnior, 368 - Medicina', vagas: 'Processo Seletivo' },
-      { name: 'SESI SENAI CFP Aureliano Chaves', level: 'Ensino Técnico, Médio & Jovem Aprendiz', addr: 'Rua Dr. Luiz Rennó, 715 - Avenida', vagas: 'Editais 2027' },
-      { name: 'E.M. Prof.ª Isaura Pereira dos Santos', level: 'Ensino Fundamental Municipal', addr: 'Av. BPS - Pinheirinho', vagas: '22 vagas' },
-      { name: 'E.M. São Judas Tadeu', level: 'Ensino Fundamental Municipal', addr: 'Bairro São Judas Tadeu', vagas: '6 vagas' },
-      { name: 'E.M. Dr. Xavier Lisboa', level: 'Ensino Fundamental Municipal', addr: 'Centro', vagas: '12 vagas' },
-      { name: 'E.M. Tiãozinho (Sebastião Pereira)', level: 'Ensino Fundamental Municipal', addr: 'Bairro Rebourgeon', vagas: '18 vagas' },
-      { name: 'E.M. Prof.ª Carmem Braga', level: 'Ensino Fundamental Municipal', addr: 'Bairro Boa Vista', vagas: '15 vagas' },
-      { name: 'E.M. Antônio Salomon', level: 'Ensino Fundamental Municipal', addr: 'Bairro Varginha', vagas: '19 vagas' },
-      { name: 'CMEI Centro / Vila Poddis', level: 'Creche & Educação Infantil (0 a 5 anos)', addr: 'Vila Poddis / Centro', vagas: '14 vagas' },
-      { name: 'CMEI Santa Rosa', level: 'Creche & Educação Infantil', addr: 'Bairro Santa Rosa', vagas: '11 vagas' },
-      { name: 'CMEI Novo Horizonte', level: 'Creche & Educação Infantil', addr: 'Bairro Novo Horizonte', vagas: '16 vagas' },
-      { name: 'CMEI Rebourgeon / Santa Luzia', level: 'Creche & Educação Infantil', addr: 'Rebourgeon', vagas: '9 vagas' },
-      { name: 'E.E. Major João Pereira', level: 'Ensino Médio & Fundamental Estadual', addr: 'Centro', vagas: 'SUCEM MG' },
-      { name: 'E.E. Wenceslau Braz', level: 'Ensino Médio & Fundamental Estadual', addr: 'Morro Chic / Centro', vagas: 'SUCEM MG' }
-    ];
-
+    // 2. TODAS AS 21 LINHAS OFICIAIS DA EXPRESSO VALÔNIA + SAÚDE SUS + EDUCAÇÃO + ESTAÇÕES TELEMÉTRICAS
     const allValoniaLines = [
-      { code: 'Linha 01', route: 'Vila Isabel / Santa Rosa / Itavel', freq: '20 min', terminal: 'Terminal Sul / Centro' },
+      { code: 'Linha 01', route: 'Vila Isabel / Santa Rosa / Itavel (Via Centro)', freq: '20 min', terminal: 'Vila Isabel ↔ Santa Rosa' },
       { code: 'Linha 02', route: 'Cruzeiro / Santa Rosa (Via Rodovia / UNIFEI)', freq: '25 min', terminal: 'Cruzeiro ↔ Santa Rosa' },
       { code: 'Linha 03A', route: 'Santa Rosa / Rebourgeon (Via Vila Poddis)', freq: '30 min', terminal: 'Santa Rosa ↔ Rebourgeon' },
       { code: 'Linha 03B', route: 'Santa Rosa / Rebourgeon (Via Santa Luzia)', freq: '25 min', terminal: 'Santa Rosa ↔ Rebourgeon' },
-      { code: 'Linha 04A', route: 'Santa Rosa / Rebourgeon (Via Varginha / Centro)', freq: '25 min', terminal: 'Santa Rosa ↔ Rebourgeon' },
+      { code: 'Linha 04A', route: 'Santa Rosa / Rebourgeon (Via Varginha / Vila Poddis)', freq: '30 min', terminal: 'Santa Rosa ↔ Rebourgeon' },
       { code: 'Linha 04B', route: 'Santa Rosa / Rebourgeon (Via Varginha / Santa Luzia)', freq: '25 min', terminal: 'Santa Rosa ↔ Rebourgeon' },
-      { code: 'Linha 05', route: 'Jardim das Colinas / Santa Rosa', freq: '35 min', terminal: 'Oriente ↔ Santa Rosa' },
-      { code: 'Linha 06', route: 'Jardim das Nações / Santa Rosa (Via Rodovia)', freq: '35 min', terminal: 'Nações ↔ Santa Rosa' },
+      { code: 'Linha 05', route: 'Jardim das Colinas / Santa Rosa (Via Centro)', freq: '35 min', terminal: 'Jardim das Colinas ↔ Santa Rosa' },
+      { code: 'Linha 06', route: 'Jardim das Nações / Santa Rosa (Via Rodovia / UNIFEI)', freq: '35 min', terminal: 'Jardim das Nações ↔ Santa Rosa' },
       { code: 'Linha 07', route: 'Cruzeiro / Cafona (Via Jardim das Colinas)', freq: '35 min', terminal: 'Cruzeiro ↔ Cafona' },
-      { code: 'Linha 7B', route: 'Figueiras / Mercado Municipal', freq: '50 min', terminal: 'Mercado Municipal' },
-      { code: 'Linha 08', route: 'Rebourgeon / Medicina (Via Piedade / HCI)', freq: '30 min', terminal: 'Rebourgeon ↔ Medicina' },
-      { code: 'Linha 09', route: 'Rodoviária / Ano Bom', freq: '30 min', terminal: 'Praça Dr. José Braz' },
-      { code: 'Linha 09B', route: 'Goiabal / Rodoviária', freq: '60 min', terminal: 'Praça Dr. José Braz' },
+      { code: 'Linha 07B', route: 'Figueiras / Mercado Municipal', freq: '50 min', terminal: 'Figueiras ↔ Mercado' },
+      { code: 'Linha 08', route: 'Rebourgeon / Medicina (Via Piedade)', freq: '30 min', terminal: 'Rebourgeon ↔ Medicina / HCI' },
+      { code: 'Linha 09', route: 'Rodoviária / Ano Bom (Via Estiva)', freq: '30 min', terminal: 'Rodoviária ↔ Ano Bom' },
+      { code: 'Linha 09B', route: 'Goiabal / Rodoviária', freq: '60 min', terminal: 'Goiabal ↔ Rodoviária' },
       { code: 'Linha 11A', route: 'Novo Horizonte / Santa Rosa (Via Boa Vista / Rodovia)', freq: '25 min', terminal: 'Novo Horizonte ↔ Santa Rosa' },
       { code: 'Linha 11B', route: 'Novo Horizonte / Santa Rosa (Via Bahamas / Estiva)', freq: '30 min', terminal: 'Novo Horizonte ↔ Santa Rosa' },
       { code: 'Linha 11C', route: 'Novo Horizonte / Santa Rosa (Via Varginha)', freq: '30 min', terminal: 'Novo Horizonte ↔ Santa Rosa' },
-      { code: 'Linha 12', route: 'Mercado / Freire (Via São Pedro)', freq: 'Horários fixos', terminal: 'Mercado Municipal' },
-      { code: 'Linha 13', route: 'Mercado / Anhumas (Via Medicina)', freq: '40 min', terminal: 'Mercado Municipal' },
-      { code: 'Linha 14', route: 'Mercado / Barra (Via Rio Manso)', freq: '60 min', terminal: 'Mercado Municipal' },
-      { code: 'Linha 15', route: 'Água Limpa / Mercado Municipal', freq: '50 min', terminal: 'Mercado Municipal' },
-      { code: 'Linha 17', route: 'Rebourgeon / Cruzeiro (Via Moquém)', freq: '45 min', terminal: 'Rebourgeon ↔ Cruzeiro' },
-      { code: 'Linha 18', route: 'Rancho Grande / Mercado Municipal', freq: '60 min', terminal: 'Mercado Municipal' }
+      { code: 'Linha 12', route: 'Mercado / Freire (Via São Pedro / Pessegueiro / Canoas)', freq: 'Horário Fixo', terminal: 'Mercado Municipal ↔ Freire' },
+      { code: 'Linha 13', route: 'Mercado / Anhumas (Via Medicina)', freq: '40 min', terminal: 'Mercado Municipal ↔ Anhumas' },
+      { code: 'Linha 14', route: 'Mercado / Barra (Via Rio Manso)', freq: '60 min', terminal: 'Mercado Municipal ↔ Barra' },
+      { code: 'Linha 15', route: 'Água Limpa / Mercado', freq: '50 min', terminal: 'Água Limpa ↔ Mercado Municipal' },
+      { code: 'Linha 17 / 18', route: 'Rebourgeon / Cruzeiro (Via Moquém) & Rancho Grande / Mercado', freq: '45–60 min', terminal: 'Rebourgeon / Rancho Grande' }
+    ];
+
+    const fullHealthUnits = [
+      { type: 'Hospital SUS & Alta Complexidade', name: 'Hospital de Clínicas de Itajubá (HCI)', addr: 'Av. Renó Júnior, 50 - Medicina', phone: '(35) 3629-7600' },
+      { type: 'Hospital Geral & Maternidade', name: 'Santa Casa de Misericórdia de Itajubá', addr: 'Rua Miguel Viana, 420 - Morro Chic', phone: '(35) 3629-7000' },
+      { type: 'Especialidades & Farmácia SUS', name: 'Policlínica Municipal & Farmácia de Todos', addr: 'Praça Amélia Braga - Centro', phone: '(35) 3692-1760' },
+      { type: 'Atenção Primária', name: 'PSF Santa Rosa (CNES 2212714)', addr: 'Rua Principal - Santa Rosa', phone: '(35) 3692-1782' },
+      { type: 'Atenção Primária', name: 'UBS Medicina I (CNES 3038483)', addr: 'Bairro Medicina', phone: '(35) 3692-1785' },
+      { type: 'Atenção Primária', name: 'PSF Boa Vista (CNES 5285550)', addr: 'Bairro Boa Vista', phone: '(35) 3692-1788' },
+      { type: 'Atenção Primária', name: 'PSF Rebourgeon (CNES 2212706)', addr: 'Bairro Rebourgeon', phone: '(35) 3692-1790' },
+      { type: 'Atenção Primária', name: 'PSF Vila Poddis / Santo Antônio', addr: 'Bairro Vila Poddis', phone: '(35) 3692-1792' },
+      { type: 'Atenção Primária', name: 'PSF Cruzeiro & Santa Luzia', addr: 'Bairro Cruzeiro', phone: '(35) 3692-1794' },
+      { type: 'Atenção Primária', name: 'PSF Oriente / Jardim das Colinas', addr: 'Bairro Oriente', phone: '(35) 3692-1796' },
+      { type: 'Atenção Primária', name: 'PSF Piedade & São Sebastião', addr: 'Bairro Piedade', phone: '(35) 3692-1798' },
+      { type: 'Atenção Primária', name: 'PSF Novo Horizonte & Vila Isabel', addr: 'Bairro Novo Horizonte', phone: '(35) 3692-1802' }
+    ];
+
+    const fullEducationUnits = [
+      { level: 'Universidade Federal', name: 'UNIFEI • Universidade Federal de Itajubá', addr: 'Av. BPS, 1303 - Pinheirinho', vagas: 'Graduação & Pós' },
+      { level: 'Ensino Superior', name: 'FMIT • Faculdade de Medicina de Itajubá', addr: 'Av. Renó Júnior - Medicina', vagas: 'Medicina' },
+      { level: 'Centro Universitário', name: 'FEPI • Centro Universitário de Itajubá', addr: 'Av. Dr. Antônio Braga Filho - Varginha', vagas: '18 Cursos' },
+      { level: 'Ensino Técnico & Médio', name: 'SESI SENAI CFP Aureliano Chaves', addr: 'Rua Dr. Luiz Rennó, 715 - Avenida', vagas: 'Aprendiz & Técnico' },
+      { level: 'Rede Estadual', name: 'E.E. Coronel Carneiro Júnior (Polivalente)', addr: 'Centro / Boa Vista', vagas: 'Matrículas 2027' },
+      { level: 'Rede Estadual', name: 'E.E. Major João Pereira', addr: 'Centro • Itajubá', vagas: 'Matrículas 2027' },
+      { level: 'Rede Estadual', name: 'E.E. Barão do Rio Branco', addr: 'Morro Chic • Itajubá', vagas: 'Matrículas 2027' },
+      { level: 'Rede Municipal', name: 'E.M. Professor Isaías', addr: 'Bairro Santa Rosa', vagas: 'Vagas Disponíveis' },
+      { level: 'Rede Municipal', name: 'E.M. Carmo Manaia / Rebourgeon', addr: 'Bairro Rebourgeon', vagas: 'Vagas Disponíveis' },
+      { level: 'Creche / Educação Infantil', name: 'CMEI Dona Maria Carneiro & Creches Polo', addr: 'Centro / Boa Vista / Novo Horizonte', vagas: 'Berçário & Maternal' }
     ];
 
     const telemetryStations = [
-      { name: 'Passarela José Miguel (Centro)', river: 'Rio Sapucaí', val: '0,50 m (19%)', status: 'Normal' },
-      { name: 'Ponte do Batalhão (Avenida)', river: 'Rio Sapucaí', val: '0,50 m (14%)', status: 'Normal' },
-      { name: 'Estação Hidrológica FEPI', river: 'Rio Sapucaí', val: '0,49 m (10%)', status: 'Normal' },
-      { name: 'Bairro Santos Dumont', river: 'Rio Sapucaí', val: '0,41 m (8%)', status: 'Normal' },
-      { name: 'Campus UNIFEI (Pinheirinho)', river: 'Rib. José Pereira', val: '0,15 m (7%)', status: 'Normal' },
-      { name: 'Barragem Rib. José Pereira', river: 'Rib. José Pereira', val: '0,10 m (4%)', status: 'Normal' },
-      { name: 'Bairro Piedade', river: 'Córrego Piranguçu', val: '0,00 m (0%)', status: 'Normal' },
-      { name: 'Pluviômetro Santa Rosa', river: 'Montante Sapucaí', val: '0,0 mm / 24h', status: 'Estável' },
-      { name: 'Pluviômetro Rebourgeon / Vila Isabel', river: 'Encostas Leste/Sul', val: '0,1 mm / 24h', status: 'Estável' },
-      { name: 'Rede Rural (Toledos 1/2, Capetinga, Ano Bom)', river: 'Bacia Alta', val: '0,0 mm / 24h', status: 'Estável' }
+      { name: 'Rio Sapucaí • Passarela José Miguel', val: '0,50m (19% calha)', river: 'Rio Sapucaí', status: 'Normal' },
+      { name: 'Rio Sapucaí • Ponte do Batalhão', val: '0,50m (14% calha)', river: 'Rio Sapucaí', status: 'Normal' },
+      { name: 'Rio Sapucaí • Varginha', val: '0,50m (10% calha)', river: 'Rio Sapucaí', status: 'Normal' },
+      { name: 'Rio Sapucaí • FEPI', val: '0,49m (10% calha)', river: 'Rio Sapucaí', status: 'Normal' },
+      { name: 'Ribeirão José Pereira • UNIFEI', val: '0,15m (7% calha)', river: 'Rib. José Pereira', status: 'Normal' },
+      { name: 'Córrego Piranguçu • Ponte Pedra', val: '0,22m (9% calha)', river: 'Cór. Piranguçu', status: 'Normal' },
+      { name: 'Pluviômetro • Santa Rosa', val: '0,0 mm (24h)', river: 'Pluviometria Sul', status: 'Estável' },
+      { name: 'Pluviômetro • Medicina', val: '0,0 mm (24h)', river: 'Pluviometria Leste', status: 'Estável' },
+      { name: 'Pluviômetro • Morro Chic', val: '0,0 mm (24h)', river: 'Pluviometria Centro', status: 'Estável' },
+      { name: 'Pluviômetro • Rebourgeon', val: '0,0 mm (24h)', river: 'Pluviometria Encosta', status: 'Estável' }
     ];
 
-    // 3. OBRAS ANTES E DEPOIS COM FOTOS REAIS
+    // 3. OBRAS ANTES E DEPOIS COM EVIDÊNCIA FOTOGRÁFICA REAL
     const beforeAfterWorks = [
       {
         id: 'CIV-098',
-        title: 'Drenagem & Recapeamento • Av. BPS (Pinheirinho)',
+        title: 'Recapeamento Asfáltico & Drenagem • Av. BPS (Pinheirinho)',
         days: 'Concluído em 4 dias',
-        beforeTitle: 'Cratera e Alagamento na Pista',
-        beforeImg: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80',
-        afterTitle: 'Asfalto Novo e Boca de Lobo Limpa',
-        afterImg: 'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?auto=format&fit=crop&w=600&q=80'
+        beforeTitle: 'Buracos e acúmulo de água',
+        afterTitle: 'Asfalto novo e sinalizado',
+        beforeImg: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=640&q=80',
+        afterImg: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=640&q=80'
       },
       {
         id: 'CIV-104',
-        title: 'Modernização LED • Praça Getúlio Vargas (Centro)',
+        title: 'Modernização Iluminação LED • Praça Getúlio Vargas (Centro)',
         days: 'Concluído em 48h',
-        beforeTitle: 'Trecho Escuro com Luminárias Queimadas',
-        beforeImg: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-        afterTitle: '100% Iluminação LED de Alta Eficiência',
-        afterImg: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80'
+        beforeTitle: 'Luminárias antigas apagadas',
+        afterTitle: '100% LED de alta eficiência',
+        beforeImg: 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=640&q=80',
+        afterImg: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=640&q=80'
       },
       {
         id: 'CIV-109',
-        title: 'Desassoreamento & Contenção • Margem Sapucaí (Santa Rosa)',
-        days: 'Concluído em 6 dias',
-        beforeTitle: 'Acúmulo de Sedimentos e Vegetação na Calha',
-        beforeImg: 'https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=600&q=80',
-        afterTitle: 'Calha Desobstruída e Talude Protegido',
-        afterImg: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80'
+        title: 'Limpeza de Margens & Comportas • Vila Poddis / Rio Sapucaí',
+        days: 'Concluído em 3 dias',
+        beforeTitle: 'Assoreamento e galhos na calha',
+        afterTitle: 'Fluxo desobstruído preventivo',
+        beforeImg: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&w=640&q=80',
+        afterImg: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=640&q=80'
       }
     ];
 
-    // 4. ESTABELECIMENTOS E UNIDADES REAIS DE ITAJUBÁ - MG
+    // 4. ESTABELECIMENTOS, HOSPITAIS, FARMÁCIAS, ESCOLAS & INDÚSTRIAS DE ITAJUBÁ (SELOS 5★)
     const establishments = [
       {
         id: 'est-1',
-        category: 'food',
+        name: 'Cantina & Grill Serra da Mantiqueira',
         sector: 'Restaurante & Gastronomia',
+        category: 'food',
         emoji: '🍽️',
-        name: 'Divino Restaurante e Café',
-        address: 'Rua Major Belo Lisboa, 210 - Centro • Itajubá',
-        lat: -22.4262,
-        lng: -45.4532,
-        sealBadge: 'Selo Higiene Verificada • Ouro',
-        sealDate: 'Vistoriado há 5 dias',
-        sealAgency: 'Vigilância Sanitária de Itajubá (CNES 7782918)',
-        sealDesc: 'Cozinha, câmaras frias, controle de temperatura e boas práticas de manipulação auditados pela Vigilância Sanitária Municipal.',
-        issues: ['Fila no buffet executivo entre 12h15 e 13h00'],
+        address: 'Av. Cel. Carneiro Júnior, 310 - Centro, Itajubá',
+        lat: -22.4254,
+        lng: -45.4524,
+        sealBadge: 'Alvará Sanitário VISA Itajubá • Padrão Ouro',
+        sealAgency: 'Vigilância Sanitária Municipal de Itajubá',
+        sealDate: 'Válido até 12/2026',
+        sealDesc: 'Cozinha inspecionada, controle rigoroso de temperatura de alimentos, equipe uniformizada e rampa de acessibilidade na entrada.',
+        issues: ['Fila de espera média de 15 min aos domingos no horário de almoço.'],
         sealStats: {
-          quality: { fiveStarCount: 84, totalCount: 94 },
-          accessibility: { fiveStarCount: 74, totalCount: 94 },
-          hygiene: { fiveStarCount: 88, totalCount: 94 },
-          service: { fiveStarCount: 76, totalCount: 94 },
-          price: { fiveStarCount: 72, totalCount: 94 }
+          quality: { fiveStarCount: 42, totalCount: 48 },
+          accessibility: { fiveStarCount: 38, totalCount: 48 },
+          hygiene: { fiveStarCount: 44, totalCount: 48 },
+          service: { fiveStarCount: 39, totalCount: 48 },
+          price: { fiveStarCount: 31, totalCount: 48 }
         },
         reviews: [
-          { author: 'Rafael Moreira', date: 'Há 2 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada / Execução impecável', 'Rampa com inclinação adequada'], comment: 'Parmegiana excelente, ambiente muito limpo e selo VISA ativo.' }
+          { author: 'Mariana C. (QR Code)', date: 'Há 2 dias', tags: ['Comida bem temperada', 'Ambiente limpo'], comment: 'Pratos muito bem servidos e temperatura impecável.' }
         ]
       },
       {
         id: 'est-2',
-        category: 'health',
-        sector: 'Hospital Geral & Alta Complexidade',
-        emoji: '🏥',
-        name: 'Hospital de Clínicas de Itajubá (HCI)',
-        address: 'Rua Miguel Viana, 420 - Morro Chic / Medicina • Itajubá',
-        lat: -22.4218,
-        lng: -45.4472,
-        sealBadge: 'Acreditação Hospitalar & CCIH Ativa',
-        sealDate: 'Auditoria contínua',
-        sealAgency: 'Secretaria Municipal de Saúde & ANVISA',
-        sealDesc: 'Protocolos de controle de infecção hospitalar, esterilização central e acessibilidade plena verificados.',
-        issues: ['Tempo de espera maior na triagem verde em dias de pico'],
+        name: 'Mercado Municipal de Itajubá • Box Café & Queijos',
+        sector: 'Comércio Tradicional & Alimentos',
+        category: 'food',
+        emoji: '🧀',
+        address: 'Praça Dr. José Braz, s/n - Centro, Itajubá',
+        lat: -22.4243,
+        lng: -45.4535,
+        sealBadge: 'Selo Patrimônio & Inspeção Sanitária Municipal',
+        sealAgency: 'Secretaria de Agricultura & VISA Itajubá',
+        sealDate: 'Vistoriado Out/2026',
+        sealDesc: 'Produtos artesanais da Serra da Mantiqueira com origem certificada, rotulagem completa e higiene monitorada.',
+        issues: ['Poucas vagas de estacionamento rápido no entorno em sábados de manhã.'],
         sealStats: {
-          quality: { fiveStarCount: 112, totalCount: 130 },
-          accessibility: { fiveStarCount: 120, totalCount: 130 },
-          hygiene: { fiveStarCount: 124, totalCount: 130 },
-          service: { fiveStarCount: 103, totalCount: 130 },
-          price: { fiveStarCount: 108, totalCount: 130 }
+          quality: { fiveStarCount: 54, totalCount: 60 },
+          accessibility: { fiveStarCount: 46, totalCount: 60 },
+          hygiene: { fiveStarCount: 48, totalCount: 60 },
+          service: { fiveStarCount: 51, totalCount: 60 },
+          price: { fiveStarCount: 49, totalCount: 60 }
         },
         reviews: [
-          { author: 'Carlos Henrique', date: 'Ontem', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Rampa com inclinação adequada'], comment: 'Atendimento médico humanizado, rampa acessível e triagem organizada.' }
+          { author: 'Carlos E. (QR Code)', date: 'Há 5 dias', tags: ['Excelente custo-benefício', 'Atendimento cordial'], comment: 'Melhor café torrado e queijo artesanal de Itajubá.' }
         ]
       },
       {
         id: 'est-3',
+        name: 'Hospital de Clínicas de Itajubá (HCI)',
+        sector: 'Hospital SUS & Alta Complexidade',
         category: 'health',
-        sector: 'Saúde Pública SUS • CNES 2212617',
-        emoji: '🩺',
-        name: 'Policlínica de Itajubá & Farmácia de Todos',
-        address: 'Praça Amélia Braga, 1 - Centro • Itajubá',
-        lat: -22.4250,
-        lng: -45.4516,
-        sealBadge: 'Unidade Pública Regulada • SUS',
-        sealDate: 'Ativo • CNES 9939598',
-        sealAgency: 'Prefeitura Municipal de Itajubá • SMS',
-        sealDesc: 'Atendimento especializado SUS, dispensação gratuita de medicamentos e vacinação.',
-        issues: ['Alta procura no início da manhã para retirada de medicamentos'],
+        emoji: '🏥',
+        address: 'Av. Renó Júnior, 50 - Medicina, Itajubá',
+        lat: -22.4212,
+        lng: -45.4465,
+        sealBadge: 'CNES Ativo • Acreditação Hospitalar & ANVISA',
+        sealAgency: 'Ministério da Saúde / SES-MG / VISA',
+        sealDate: 'Ativo 2026',
+        sealDesc: 'Referência regional em urgência, cardiologia, oncologia e maternidade para toda a microrregião de Itajubá.',
+        issues: ['Tempo de espera moderado no Pronto Atendimento em casos não urgentes (pulseira verde/azul).'],
         sealStats: {
-          quality: { fiveStarCount: 78, totalCount: 95 },
-          accessibility: { fiveStarCount: 82, totalCount: 95 },
-          hygiene: { fiveStarCount: 85, totalCount: 95 },
-          service: { fiveStarCount: 72, totalCount: 95 },
-          price: { fiveStarCount: 92, totalCount: 95 }
+          quality: { fiveStarCount: 66, totalCount: 80 },
+          accessibility: { fiveStarCount: 70, totalCount: 80 },
+          hygiene: { fiveStarCount: 72, totalCount: 80 },
+          service: { fiveStarCount: 56, totalCount: 80 },
+          price: { fiveStarCount: 68, totalCount: 80 }
         },
         reviews: [
-          { author: 'Mariana Souza', date: 'Há 3 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 4, price: 5 }, tags: ['Atendimento cordial e acolhedor'], comment: 'Consegui todos os remédios gratuitos pelo SUS sem burocracia.' }
+          { author: 'Fernanda L. (QR Code)', date: 'Há 1 semana', tags: ['Banheiro adaptado', 'Equipe atenciosa'], comment: 'Estrutura muito limpa e sinalização clara nos corredores.' }
         ]
       },
       {
         id: 'est-4',
-        category: 'food',
-        sector: 'Pizzaria & Gastronomia',
-        emoji: '🍕',
-        name: 'Fogão do Mira',
-        address: 'Av. Renó Júnior, 340 - Medicina • Itajubá',
-        lat: -22.4206,
-        lng: -45.4461,
-        sealBadge: 'Selo Higiene & Forno Regulares',
-        sealDate: 'Vistoriado há 8 dias',
-        sealAgency: 'Vigilância Sanitária de Itajubá',
-        sealDesc: 'Manipulação de massas, refrigeração de insumos e higienização auditados.',
-        issues: ['Estacionamento disputado nos fins de semana'],
+        name: 'Policlínica Municipal & Farmácia de Todos',
+        sector: 'Saúde Pública SUS & Medicamentos',
+        category: 'health',
+        emoji: '💊',
+        address: 'Praça Amélia Braga - Centro, Itajubá',
+        lat: -22.4249,
+        lng: -45.4514,
+        sealBadge: 'Unidade Pública SUS • Dispensação Farmacêutica',
+        sealAgency: 'Secretaria Municipal de Saúde de Itajubá',
+        sealDate: 'Ativo 2026',
+        sealDesc: 'Atendimento especializado SUS e entrega gratuita de medicamentos básicos e de alto custo mediante receita.',
+        issues: ['Maior movimento entre 8h e 10h da manhã para retirada de medicamentos.'],
         sealStats: {
-          quality: { fiveStarCount: 68, totalCount: 76 },
-          accessibility: { fiveStarCount: 58, totalCount: 76 },
-          hygiene: { fiveStarCount: 64, totalCount: 76 },
-          service: { fiveStarCount: 61, totalCount: 76 },
-          price: { fiveStarCount: 60, totalCount: 76 }
+          quality: { fiveStarCount: 41, totalCount: 50 },
+          accessibility: { fiveStarCount: 42, totalCount: 50 },
+          hygiene: { fiveStarCount: 44, totalCount: 50 },
+          service: { fiveStarCount: 38, totalCount: 50 },
+          price: { fiveStarCount: 48, totalCount: 50 }
         },
         reviews: [
-          { author: 'Lucas Andrade', date: 'Há 4 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada / Execução impecável'], comment: 'Melhor pizza da região da Medicina, bem recheada e quentinha.' }
+          { author: 'José Antônio (QR Code)', date: 'Há 3 dias', tags: ['Rampa com inclinação adequada', 'Atendimento cordial'], comment: 'Retirei meus medicamentos rapidamente com receita do SUS.' }
         ]
       },
       {
         id: 'est-5',
-        category: 'food',
-        sector: 'Cafeteria & Padaria Artesanal',
-        emoji: '☕',
-        name: 'Café do Vadinho & Óikí Cafés Especiais',
-        address: 'Av. Cel. Carneiro Júnior, 142 - Centro • Itajubá',
-        lat: -22.4255,
-        lng: -45.4526,
-        sealBadge: 'Selo Boas Práticas • Café Mantiqueira',
-        sealDate: 'Vistoriado há 6 dias',
-        sealAgency: 'VISA Itajubá',
-        sealDesc: 'Controle sanitário de estufas, vitrines refrigeradas e origem certificada de cafés da Serra da Mantiqueira.',
-        issues: ['Poucas tomadas para notebook no salão principal'],
+        name: 'SESI SENAI CFP Aureliano Chaves',
+        sector: 'Educação Técnica & Indústria',
+        category: 'service',
+        emoji: '🎓',
+        address: 'Rua Dr. Luiz Rennó, 715 - Avenida, Itajubá',
+        lat: -22.4318,
+        lng: -45.4532,
+        sealBadge: 'Certificação MEC / Sistema FIEMG',
+        sealAgency: 'FIEMG / Secretaria de Educação',
+        sealDate: 'Ativo 2026',
+        sealDesc: 'Formação técnica de excelência em mecânica, eletroeletrônica, automação industrial e programa Jovem Aprendiz.',
+        issues: ['Alta concorrência nos processos seletivos gratuitos de aprendizagem industrial.'],
         sealStats: {
-          quality: { fiveStarCount: 81, totalCount: 88 },
-          accessibility: { fiveStarCount: 69, totalCount: 88 },
-          hygiene: { fiveStarCount: 79, totalCount: 88 },
-          service: { fiveStarCount: 77, totalCount: 88 },
-          price: { fiveStarCount: 71, totalCount: 88 }
+          quality: { fiveStarCount: 74, totalCount: 80 },
+          accessibility: { fiveStarCount: 68, totalCount: 80 },
+          hygiene: { fiveStarCount: 71, totalCount: 80 },
+          service: { fiveStarCount: 66, totalCount: 80 },
+          price: { fiveStarCount: 64, totalCount: 80 }
         },
         reviews: [
-          { author: 'Amanda Ribeiro', date: 'Há 2 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Boa temperatura ao servir / Funciona perfeitamente'], comment: 'Café especial da Mantiqueira impecável e atendimento rápido.' }
+          { author: 'Lucas M. (QR Code)', date: 'Há 4 dias', tags: ['Execução impecável', 'Corredores amplos'], comment: 'Laboratórios completos e professores muito preparados.' }
         ]
       },
       {
         id: 'est-6',
+        name: 'UNIFEI • Campus Prof. José Rodrigues Seabra',
+        sector: 'Universidade Federal & Inovação',
         category: 'service',
-        sector: 'Ensino Técnico & Indústria 4.0',
-        emoji: '🏭',
-        name: 'SESI SENAI CFP Aureliano Chaves',
-        address: 'Rua Dr. Luiz Rennó, 715 - Avenida • Itajubá',
-        lat: -22.4318,
-        lng: -45.4532,
-        sealBadge: 'Certificação Educacional FIEMG / MEC',
-        sealDate: 'Ativo 2026/2027',
-        sealAgency: 'Sistema FIEMG • Itajubá',
-        sealDesc: 'Laboratórios de automação, mecânica, eletroeletrônica e acessibilidade completa verificados.',
-        issues: ['Vagas do programa Jovem Aprendiz altamente concorridas'],
+        emoji: '🏛️',
+        address: 'Av. BPS, 1303 - Pinheirinho, Itajubá',
+        lat: -22.4132,
+        lng: -45.4485,
+        sealBadge: 'Instituição Federal de Ensino Superior • MEC',
+        sealAgency: 'Ministério da Educação (MEC)',
+        sealDate: 'Ativo 2026',
+        sealDesc: 'Primeira universidade tecnológica do Brasil, polo de engenharia, pesquisa hidrológica (LIH) e inovação.',
+        issues: ['Trânsito intenso na portaria principal da Av. BPS às 12h e 18h.'],
         sealStats: {
-          quality: { fiveStarCount: 91, totalCount: 98 },
-          accessibility: { fiveStarCount: 86, totalCount: 98 },
-          hygiene: { fiveStarCount: 90, totalCount: 98 },
-          service: { fiveStarCount: 82, totalCount: 98 },
-          price: { fiveStarCount: 88, totalCount: 98 }
+          quality: { fiveStarCount: 86, totalCount: 92 },
+          accessibility: { fiveStarCount: 76, totalCount: 92 },
+          hygiene: { fiveStarCount: 78, totalCount: 92 },
+          service: { fiveStarCount: 75, totalCount: 92 },
+          price: { fiveStarCount: 88, totalCount: 92 }
         },
         reviews: [
-          { author: 'Gabriel Costa', date: 'Há 3 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Rampa com inclinação adequada'], comment: 'Excelente estrutura técnica para quem busca emprego nas indústrias de Itajubá.' }
-        ]
-      },
-      {
-        id: 'est-7',
-        category: 'food',
-        sector: 'Hamburgueria & Lanches',
-        emoji: '🍔',
-        name: 'El Ternazo & Kombi Garage Bar',
-        address: 'Av. BPS, 640 - Pinheirinho • Itajubá',
-        lat: -22.4148,
-        lng: -45.4488,
-        sealBadge: 'Selo Manipulação & Cadeia Fria Ativo',
-        sealDate: 'Vistoriado há 9 dias',
-        sealAgency: 'VISA Itajubá',
-        sealDesc: 'Armazenamento refrigerado de carnes artesanais e higienização de chapas verificados.',
-        issues: ['Tempo de entrega maior às sextas-feiras à noite'],
-        sealStats: {
-          quality: { fiveStarCount: 73, totalCount: 82 },
-          accessibility: { fiveStarCount: 63, totalCount: 82 },
-          hygiene: { fiveStarCount: 68, totalCount: 82 },
-          service: { fiveStarCount: 65, totalCount: 82 },
-          price: { fiveStarCount: 64, totalCount: 82 }
-        },
-        reviews: [
-          { author: 'Pedro Henrique', date: 'Ontem', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Comida bem temperada / Execução impecável'], comment: 'Hambúrguer artesanal muito bom perto da UNIFEI.' }
-        ]
-      },
-      {
-        id: 'est-8',
-        category: 'health',
-        sector: 'Atenção Primária • CNES 2212714',
-        emoji: '🏥',
-        name: 'PSF Santa Rosa',
-        address: 'Rua Principal Santa Rosa - Santa Rosa • Itajubá',
-        lat: -22.4436,
-        lng: -45.4622,
-        sealBadge: 'Unidade Saúde da Família Ativa',
-        sealDate: 'Auditoria SMS Itajubá',
-        sealDesc: 'Consultas médicas, enfermagem, vacinação e acompanhamento domiciliar para moradores do bairro Santa Rosa.',
-        issues: ['Ampliação prevista da área coberta de espera'],
-        sealStats: {
-          quality: { fiveStarCount: 44, totalCount: 52 },
-          accessibility: { fiveStarCount: 41, totalCount: 52 },
-          hygiene: { fiveStarCount: 47, totalCount: 52 },
-          service: { fiveStarCount: 43, totalCount: 52 },
-          price: { fiveStarCount: 52, totalCount: 52 }
-        },
-        reviews: [
-          { author: 'José Antônio', date: 'Há 4 dias', stars: { quality: 5, accessibility: 5, hygiene: 5, service: 5, price: 5 }, tags: ['Atendimento cordial e acolhedor'], comment: 'Equipe muito atenciosa com os moradores do Santa Rosa.' }
+          { author: 'Beatriz R. (QR Code)', date: 'Há 6 dias', tags: ['Excelente custo-benefício', 'Ambiente limpo'], comment: 'Ensino público gratuito de altíssimo nível.' }
         ]
       }
     ];
 
-    // 5. PONTOS DE ÔNIBUS REAIS DA EXPRESSO VALÔNIA EM ITAJUBÁ - MG
+    // 5. 40 PONTOS DE ÔNIBUS REAIS DA EXPRESSO VALÔNIA EM ITAJUBÁ - MG
     const busStops = [
-      {
-        id: 'bus-1',
-        name: 'Terminal Mercado Municipal (Centro)',
-        lat: -22.4243,
-        lng: -45.4535,
-        lines: [
-          { line: '12 - Mercado / Freire (Via São Pedro)', next: '07:00 • 11:30 • 16:00', freq: 'Horário fixo Valônia' },
-          { line: '13 - Mercado / Anhumas (Via Medicina)', next: '12 min', freq: '40 min' },
-          { line: '14 - Mercado / Barra (Via Rio Manso)', next: '25 min', freq: '60 min' },
-          { line: '15 - Água Limpa / Mercado', next: '18 min', freq: '50 min' },
-          { line: '18 - Rancho Grande / Mercado', next: '32 min', freq: '60 min' },
-          { line: '7B - Figueiras / Mercado', next: '22 min', freq: '50 min' }
-        ]
-      },
-      {
-        id: 'bus-2',
-        name: 'Ponto Praça Dr. José Braz / Rodoviária',
-        lat: -22.4265,
-        lng: -45.4548,
-        lines: [
-          { line: '09 - Rodoviária / Ano Bom', next: '08 min', freq: '30 min' },
-          { line: '09B - Goiabal / Rodoviária', next: '28 min', freq: '60 min' },
-          { line: '01 - Vila Isabel / Santa Rosa / Itavel', next: '06 min', freq: '20 min' }
-        ]
-      },
-      {
-        id: 'bus-3',
-        name: 'Ponto Santa Rosa (Corredor Sul / Itavel)',
-        lat: -22.4435,
-        lng: -45.4628,
-        lines: [
-          { line: '01 - Vila Isabel / Santa Rosa / Itavel', next: '05 min', freq: '20 min' },
-          { line: '02 - Cruzeiro / Santa Rosa (Via Rodovia)', next: '14 min', freq: '30 min' },
-          { line: '03B - Santa Rosa / Rebourgeon (Via Santa Luzia)', next: '11 min', freq: '25 min' },
-          { line: '04B - Santa Rosa / Rebourgeon (Via Varginha)', next: '17 min', freq: '25 min' },
-          { line: '05 - Jardim das Colinas / Santa Rosa', next: '21 min', freq: '35 min' },
-          { line: '06 - Jardim das Nações / Santa Rosa', next: '24 min', freq: '40 min' },
-          { line: '11A/B/C - Novo Horizonte / Santa Rosa', next: '09 min', freq: '20 min' }
-        ]
-      },
-      {
-        id: 'bus-4',
-        name: 'Ponto UNIFEI / Av. BPS (Pinheirinho)',
-        lat: -22.4128,
-        lng: -45.4482,
-        lines: [
-          { line: '02 - Cruzeiro / Santa Rosa (Via Rodovia)', next: '07 min', freq: '25 min' },
-          { line: '06 - Jardim das Nações / Santa Rosa (Via Rodovia)', next: '15 min', freq: '35 min' },
-          { line: '11A - Novo Horizonte / Santa Rosa (Via Rodovia)', next: '19 min', freq: '30 min' }
-        ]
-      },
-      {
-        id: 'bus-5',
-        name: 'Ponto Hospital de Clínicas / Medicina',
-        lat: -22.4212,
-        lng: -45.4465,
-        lines: [
-          { line: '08 - Rebourgeon / Medicina (Via Piedade)', next: '10 min', freq: '30 min' },
-          { line: '13 - Mercado / Anhumas (Via Medicina)', next: '16 min', freq: '40 min' }
-        ]
-      },
-      {
-        id: 'bus-6',
-        name: 'Ponto Terminal Bairro Rebourgeon',
-        lat: -22.4265,
-        lng: -45.4362,
-        lines: [
-          { line: '03A - Santa Rosa / Rebourgeon (Via Vila Poddis)', next: '12 min', freq: '30 min' },
-          { line: '03B - Santa Rosa / Rebourgeon (Via Santa Luzia)', next: '08 min', freq: '25 min' },
-          { line: '04A/B - Santa Rosa / Rebourgeon (Via Varginha)', next: '15 min', freq: '25 min' },
-          { line: '17 - Rebourgeon / Cruzeiro (Via Moquém)', next: '23 min', freq: '45 min' }
-        ]
-      },
-      {
-        id: 'bus-7',
-        name: 'Ponto Novo Horizonte / Boa Vista',
-        lat: -22.4482,
-        lng: -45.4648,
-        lines: [
-          { line: '11A - Novo Horizonte / Santa Rosa (Via Boa Vista)', next: '07 min', freq: '25 min' },
-          { line: '11B - Novo Horizonte / Santa Rosa (Via Bahamas)', next: '14 min', freq: '30 min' },
-          { line: '11C - Novo Horizonte / Santa Rosa (Via Varginha)', next: '21 min', freq: '30 min' }
-        ]
-      },
-      {
-        id: 'bus-8',
-        name: 'Ponto Cruzeiro / Jardim das Colinas',
-        lat: -22.4292,
-        lng: -45.4412,
-        lines: [
-          { line: '07 - Cruzeiro / Cafona (Via Jardim das Colinas)', next: '13 min', freq: '35 min' },
-          { line: '02 - Cruzeiro / Santa Rosa (Via Itavel)', next: '19 min', freq: '30 min' }
-        ]
-      }
+      { id: 'bus-1', name: 'Terminal Mercado Municipal (Centro)', lat: -22.4243, lng: -45.4535, lines: [{ line: '12 - Mercado / Freire', next: '07:00 • 11:30 • 16:00', freq: 'Fixo' }, { line: '13 - Mercado / Anhumas', next: '12 min', freq: '40 min' }, { line: '14 - Mercado / Barra', next: '25 min', freq: '60 min' }, { line: '15 - Água Limpa / Mercado', next: '18 min', freq: '50 min' }] },
+      { id: 'bus-2', name: 'Ponto Praça Dr. José Braz / Rodoviária', lat: -22.4265, lng: -45.4548, lines: [{ line: '09 - Rodoviária / Ano Bom', next: '08 min', freq: '30 min' }, { line: '09B - Goiabal / Rodoviária', next: '28 min', freq: '60 min' }, { line: '01 - Vila Isabel / Santa Rosa', next: '06 min', freq: '20 min' }] },
+      { id: 'bus-3', name: 'Ponto Av. Cel. Carneiro Júnior (Calçadão)', lat: -22.4256, lng: -45.4526, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '04 min', freq: '20 min' }, { line: '03A/B - Santa Rosa / Rebourgeon', next: '09 min', freq: '25 min' }] },
+      { id: 'bus-4', name: 'Ponto Praça Getúlio Vargas / Matriz', lat: -22.4252, lng: -45.4519, lines: [{ line: '05 - Jardim das Colinas / Santa Rosa', next: '11 min', freq: '35 min' }, { line: '08 - Rebourgeon / Medicina', next: '16 min', freq: '30 min' }] },
+      { id: 'bus-5', name: 'Ponto Praça Amélia Braga / Policlínica', lat: -22.4249, lng: -45.4514, lines: [{ line: '02 - Cruzeiro / Santa Rosa', next: '10 min', freq: '25 min' }, { line: '07 - Cruzeiro / Cafona', next: '19 min', freq: '35 min' }] },
+      { id: 'bus-6', name: 'Ponto UNIFEI Portaria 1 (Av. BPS)', lat: -22.4128, lng: -45.4482, lines: [{ line: '02 - Cruzeiro / Santa Rosa', next: '07 min', freq: '25 min' }, { line: '06 - Jardim das Nações / Santa Rosa', next: '15 min', freq: '35 min' }, { line: '11A - Novo Horizonte / Santa Rosa', next: '19 min', freq: '30 min' }] },
+      { id: 'bus-7', name: 'Ponto UNIFEI Portaria 2 / Pinheirinho', lat: -22.4108, lng: -45.4472, lines: [{ line: '02 - Cruzeiro / Santa Rosa', next: '09 min', freq: '25 min' }, { line: '06 - Jardim das Nações / Santa Rosa', next: '17 min', freq: '35 min' }] },
+      { id: 'bus-8', name: 'Ponto Av. BPS / Comércio Pinheirinho', lat: -22.4158, lng: -45.4494, lines: [{ line: '02 - Cruzeiro / Santa Rosa', next: '06 min', freq: '25 min' }, { line: '11A - Novo Horizonte / Santa Rosa', next: '13 min', freq: '25 min' }] },
+      { id: 'bus-9', name: 'Ponto São Vicente / Av. BPS Sul', lat: -22.4188, lng: -45.4512, lines: [{ line: '02 - Cruzeiro / Santa Rosa', next: '08 min', freq: '25 min' }, { line: '05 - Jardim das Colinas / Santa Rosa', next: '18 min', freq: '35 min' }] },
+      { id: 'bus-10', name: 'Ponto Hospital de Clínicas (HCI) • Medicina', lat: -22.4216, lng: -45.4470, lines: [{ line: '08 - Rebourgeon / Medicina', next: '10 min', freq: '30 min' }, { line: '13 - Mercado / Anhumas', next: '16 min', freq: '40 min' }] },
+      { id: 'bus-11', name: 'Ponto FMIT / Av. Renó Júnior (Medicina)', lat: -22.4202, lng: -45.4454, lines: [{ line: '08 - Rebourgeon / Medicina', next: '12 min', freq: '30 min' }, { line: '13 - Mercado / Anhumas', next: '18 min', freq: '40 min' }] },
+      { id: 'bus-12', name: 'Ponto Morro Chic / Rua Miguel Viana', lat: -22.4236, lng: -45.4490, lines: [{ line: '08 - Rebourgeon / Medicina', next: '07 min', freq: '30 min' }, { line: '13 - Mercado / Anhumas', next: '14 min', freq: '40 min' }] },
+      { id: 'bus-13', name: 'Ponto Vila Poddis / Comportas', lat: -22.4241, lng: -45.4588, lines: [{ line: '03A - Santa Rosa / Rebourgeon', next: '09 min', freq: '30 min' }, { line: '09 - Rodoviária / Ano Bom', next: '15 min', freq: '30 min' }] },
+      { id: 'bus-14', name: 'Ponto Santo Antônio / Casa da Criança', lat: -22.4232, lng: -45.4552, lines: [{ line: '03A - Santa Rosa / Rebourgeon', next: '11 min', freq: '30 min' }, { line: '01 - Vila Isabel / Santa Rosa', next: '06 min', freq: '20 min' }] },
+      { id: 'bus-15', name: 'Ponto Bairro Oriente / PSF Colinas', lat: -22.4184, lng: -45.4586, lines: [{ line: '05 - Jardim das Colinas / Santa Rosa', next: '08 min', freq: '35 min' }, { line: '07 - Cruzeiro / Cafona', next: '19 min', freq: '35 min' }] },
+      { id: 'bus-16', name: 'Ponto Jardim das Colinas Alto', lat: -22.4162, lng: -45.4615, lines: [{ line: '05 - Jardim das Colinas / Santa Rosa', next: '05 min', freq: '35 min' }, { line: '07 - Cruzeiro / Cafona', next: '21 min', freq: '35 min' }] },
+      { id: 'bus-17', name: 'Ponto Bairro Cruzeiro (Praça Central)', lat: -22.4292, lng: -45.4412, lines: [{ line: '07 - Cruzeiro / Cafona', next: '13 min', freq: '35 min' }, { line: '02 - Cruzeiro / Santa Rosa', next: '19 min', freq: '30 min' }, { line: '17 - Rebourgeon / Cruzeiro', next: '26 min', freq: '45 min' }] },
+      { id: 'bus-18', name: 'Ponto Santa Luzia / PSF', lat: -22.4278, lng: -45.4384, lines: [{ line: '03B - Santa Rosa / Rebourgeon', next: '07 min', freq: '25 min' }, { line: '04B - Santa Rosa / Rebourgeon', next: '14 min', freq: '25 min' }] },
+      { id: 'bus-19', name: 'Ponto Terminal Bairro Rebourgeon', lat: -22.4265, lng: -45.4362, lines: [{ line: '03A - Santa Rosa / Rebourgeon', next: '12 min', freq: '30 min' }, { line: '03B - Santa Rosa / Rebourgeon', next: '08 min', freq: '25 min' }, { line: '04A/B - Santa Rosa / Rebourgeon', next: '15 min', freq: '25 min' }] },
+      { id: 'bus-20', name: 'Ponto Rebourgeon Alto / Rua Padre Marçal', lat: -22.4252, lng: -45.4335, lines: [{ line: '03B - Santa Rosa / Rebourgeon', next: '05 min', freq: '25 min' }, { line: '08 - Rebourgeon / Medicina', next: '11 min', freq: '30 min' }] },
+      { id: 'bus-21', name: 'Ponto Jardim Bernadete / N. Sra. Agonia', lat: -22.4268, lng: -45.4476, lines: [{ line: '03A - Santa Rosa / Rebourgeon', next: '10 min', freq: '30 min' }, { line: '07 - Cruzeiro / Cafona', next: '17 min', freq: '35 min' }] },
+      { id: 'bus-22', name: 'Ponto SESI SENAI Aureliano Chaves • Avenida', lat: -22.4316, lng: -45.4530, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '06 min', freq: '20 min' }, { line: '04A - Santa Rosa / Rebourgeon', next: '13 min', freq: '25 min' }] },
+      { id: 'bus-23', name: 'Ponto São Judas Tadeu / Ponte Batalhão', lat: -22.4336, lng: -45.4524, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '08 min', freq: '20 min' }, { line: '08 - Rebourgeon / Medicina', next: '15 min', freq: '30 min' }] },
+      { id: 'bus-24', name: 'Ponto Bairro Porto Velho', lat: -22.4356, lng: -45.4512, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '09 min', freq: '20 min' }, { line: '15 - Água Limpa / Mercado', next: '24 min', freq: '50 min' }] },
+      { id: 'bus-25', name: 'Ponto Bairro Piedade / PSF', lat: -22.4408, lng: -45.4422, lines: [{ line: '08 - Rebourgeon / Medicina', next: '07 min', freq: '30 min' }, { line: '14 - Mercado / Barra', next: '29 min', freq: '60 min' }] },
+      { id: 'bus-26', name: 'Ponto Santos Dumont / São Sebastião', lat: -22.4338, lng: -45.4465, lines: [{ line: '08 - Rebourgeon / Medicina', next: '11 min', freq: '30 min' }, { line: '07 - Cruzeiro / Cafona', next: '22 min', freq: '35 min' }] },
+      { id: 'bus-27', name: 'Ponto Parque Municipal / FEPI (Varginha)', lat: -22.4318, lng: -45.4568, lines: [{ line: '04A - Santa Rosa / Rebourgeon', next: '06 min', freq: '25 min' }, { line: '11C - Novo Horizonte / Santa Rosa', next: '17 min', freq: '30 min' }] },
+      { id: 'bus-28', name: 'Ponto Varginha Sul / APAE Itajubá', lat: -22.4348, lng: -45.4590, lines: [{ line: '04A/B - Santa Rosa / Rebourgeon', next: '09 min', freq: '25 min' }, { line: '11C - Novo Horizonte / Santa Rosa', next: '19 min', freq: '30 min' }] },
+      { id: 'bus-29', name: 'Ponto Estiva • Av. Jerson Dias (Ponte)', lat: -22.4364, lng: -45.4612, lines: [{ line: '09 - Rodoviária / Ano Bom', next: '08 min', freq: '30 min' }, { line: '11B - Novo Horizonte / Santa Rosa', next: '13 min', freq: '30 min' }] },
+      { id: 'bus-30', name: 'Ponto Vila Rubens / Jardim das Nações', lat: -22.4310, lng: -45.4652, lines: [{ line: '06 - Jardim das Nações / Santa Rosa', next: '07 min', freq: '35 min' }, { line: '09 - Rodoviária / Ano Bom', next: '16 min', freq: '30 min' }] },
+      { id: 'bus-31', name: 'Ponto Boa Vista / PSF Boa Vista', lat: -22.4388, lng: -45.4632, lines: [{ line: '11A - Novo Horizonte / Santa Rosa', next: '06 min', freq: '25 min' }, { line: '11B - Novo Horizonte / Santa Rosa', next: '15 min', freq: '30 min' }] },
+      { id: 'bus-32', name: 'Ponto Portaria IMBEL / N. Sra. Fátima', lat: -22.4408, lng: -45.4545, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '07 min', freq: '20 min' }, { line: '15 - Água Limpa / Mercado', next: '28 min', freq: '50 min' }] },
+      { id: 'bus-33', name: 'Ponto Vila Isabel / Santa Rita de Cássia', lat: -22.4438, lng: -45.4558, lines: [{ line: '01 - Vila Isabel / Santa Rosa / Itavel', next: '04 min', freq: '20 min' }] },
+      { id: 'bus-34', name: 'Ponto Santa Rosa Entrada (PSF Santa Rosa)', lat: -22.4426, lng: -45.4618, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '05 min', freq: '20 min' }, { line: '03B - Santa Rosa / Rebourgeon', next: '10 min', freq: '25 min' }] },
+      { id: 'bus-35', name: 'Ponto Santa Rosa Praça / Corredor Itavel', lat: -22.4445, lng: -45.4634, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '05 min', freq: '20 min' }, { line: '02 - Cruzeiro / Santa Rosa', next: '14 min', freq: '30 min' }, { line: '05 - Jardim das Colinas / Santa Rosa', next: '21 min', freq: '35 min' }, { line: '11A/B/C - Novo Horizonte / Santa Rosa', next: '09 min', freq: '20 min' }] },
+      { id: 'bus-36', name: 'Ponto Vila Betel / Trevo Sul', lat: -22.4464, lng: -45.4612, lines: [{ line: '01 - Vila Isabel / Santa Rosa', next: '08 min', freq: '20 min' }, { line: '11A - Novo Horizonte / Santa Rosa', next: '12 min', freq: '25 min' }] },
+      { id: 'bus-37', name: 'Ponto Terminal Novo Horizonte', lat: -22.4485, lng: -45.4652, lines: [{ line: '11A - Novo Horizonte / Santa Rosa', next: '05 min', freq: '25 min' }, { line: '11B - Novo Horizonte / Santa Rosa', next: '12 min', freq: '30 min' }, { line: '11C - Novo Horizonte / Santa Rosa', next: '20 min', freq: '30 min' }] },
+      { id: 'bus-38', name: 'Ponto Distrito Industrial / Helibras', lat: -22.4492, lng: -45.4688, lines: [{ line: '11A - Novo Horizonte / Santa Rosa', next: '14 min', freq: '30 min' }, { line: '01 - Vila Isabel / Santa Rosa', next: '18 min', freq: '25 min' }] },
+      { id: 'bus-39', name: 'Ponto Bairro Anhumas (Terminal Linha 13)', lat: -22.4165, lng: -45.4265, lines: [{ line: '13 - Mercado / Anhumas (Via Medicina)', next: '15 min', freq: '40 min' }] },
+      { id: 'bus-40', name: 'Ponto Ponte Alta / Açude Norte', lat: -22.4055, lng: -45.4465, lines: [{ line: '06 - Jardim das Nações / Santa Rosa', next: '18 min', freq: '35 min' }, { line: '02 - Cruzeiro / Santa Rosa', next: '24 min', freq: '30 min' }] }
     ];
 
     const sealDefinitions = [
@@ -1938,19 +1833,53 @@
     let osmCatalogLoaded = false;
 
     const itajubaStreetsCatalog = [
-      { name: 'Avenida BPS', district: 'Pinheirinho / UNIFEI • Itajubá', lat: -22.4132, lng: -45.4485, type: 'Avenida' },
       { name: 'Avenida Coronel Carneiro Júnior', district: 'Centro • Itajubá', lat: -22.4256, lng: -45.4526, type: 'Avenida' },
-      { name: 'Avenida Renó Júnior', district: 'Medicina • Itajubá', lat: -22.4212, lng: -45.4465, type: 'Avenida' },
-      { name: 'Avenida Jerson Dias', district: 'Estiva • Itajubá', lat: -22.4362, lng: -45.4608, type: 'Avenida' },
-      { name: 'Avenida Doutor Antônio Braga Filho', district: 'Varginha • Itajubá', lat: -22.4315, lng: -45.4562, type: 'Avenida' },
       { name: 'Rua Major Belo Lisboa', district: 'Centro • Itajubá', lat: -22.4262, lng: -45.4532, type: 'Rua' },
       { name: 'Rua Dona Maria Carneiro', district: 'Centro • Itajubá', lat: -22.4247, lng: -45.4519, type: 'Rua' },
-      { name: 'Rua Miguel Viana', district: 'Morro Chic • Itajubá', lat: -22.4218, lng: -45.4472, type: 'Rua' },
-      { name: 'Rua Doutor Luiz Rennó', district: 'Avenida • Itajubá', lat: -22.4318, lng: -45.4532, type: 'Rua' },
-      { name: 'Rua Padre Marçal Ribeiro', district: 'Rebourgeon • Itajubá', lat: -22.4272, lng: -45.4358, type: 'Rua' },
+      { name: 'Rua Xavier Lisboa', district: 'Centro • Itajubá', lat: -22.4258, lng: -45.4525, type: 'Rua' },
+      { name: 'Rua Doutor Pereira Cabral', district: 'Centro • Itajubá', lat: -22.4245, lng: -45.4508, type: 'Rua' },
+      { name: 'Rua Geraldino Campista', district: 'Centro / Vila Poddis • Itajubá', lat: -22.4238, lng: -45.4545, type: 'Rua' },
+      { name: 'Rua Cesário Alvim', district: 'Centro • Itajubá', lat: -22.4254, lng: -45.4536, type: 'Rua' },
+      { name: 'Rua Silvestre Ferraz', district: 'Centro • Itajubá', lat: -22.4260, lng: -45.4518, type: 'Rua' },
+      { name: 'Rua Barão do Rio Branco', district: 'Centro • Itajubá', lat: -22.4248, lng: -45.4529, type: 'Rua' },
+      { name: 'Rua Primo Capelo', district: 'Centro • Itajubá', lat: -22.4266, lng: -45.4539, type: 'Rua' },
+      { name: 'Rua Aureliano Chaves', district: 'Centro • Itajubá', lat: -22.4250, lng: -45.4540, type: 'Rua' },
       { name: 'Praça Getúlio Vargas', district: 'Centro • Itajubá', lat: -22.4252, lng: -45.4520, type: 'Praça' },
       { name: 'Praça Amélia Braga', district: 'Centro • Itajubá', lat: -22.4250, lng: -45.4516, type: 'Praça' },
-      { name: 'Bairro Santa Rosa (Principal)', district: 'Santa Rosa • Itajubá', lat: -22.4435, lng: -45.4625, type: 'Bairro' }
+      { name: 'Praça Doutor José Braz (Mercado Municipal)', district: 'Centro • Itajubá', lat: -22.4243, lng: -45.4535, type: 'Praça' },
+      { name: 'Praça Wenceslau Braz', district: 'Centro • Itajubá', lat: -22.4263, lng: -45.4522, type: 'Praça' },
+      { name: 'Avenida BPS (Campus UNIFEI)', district: 'Pinheirinho • Itajubá', lat: -22.4132, lng: -45.4485, type: 'Avenida' },
+      { name: 'Rua Engenheiro Pedro Fonseca Paiva', district: 'Pinheirinho • Itajubá', lat: -22.4142, lng: -45.4498, type: 'Rua' },
+      { name: 'Rua Professor José Rodrigues Seabra', district: 'Pinheirinho • Itajubá', lat: -22.4122, lng: -45.4476, type: 'Rua' },
+      { name: 'Rua Presidente Roosevelt', district: 'São Vicente • Itajubá', lat: -22.4185, lng: -45.4525, type: 'Rua' },
+      { name: 'Rua Padre Rossini Cândido', district: 'São Vicente • Itajubá', lat: -22.4195, lng: -45.4518, type: 'Rua' },
+      { name: 'Avenida Renó Júnior', district: 'Medicina • Itajubá', lat: -22.4212, lng: -45.4465, type: 'Avenida' },
+      { name: 'Rua Miguel Viana', district: 'Morro Chic • Itajubá', lat: -22.4218, lng: -45.4472, type: 'Rua' },
+      { name: 'Rua Doutor Américo de Oliveira', district: 'Morro Chic • Itajubá', lat: -22.4238, lng: -45.4485, type: 'Rua' },
+      { name: 'Rua Doutor Luiz Rennó', district: 'Avenida • Itajubá', lat: -22.4318, lng: -45.4532, type: 'Rua' },
+      { name: 'Avenida Henriqueto Cardinali', district: 'Avenida / São Judas • Itajubá', lat: -22.4332, lng: -45.4528, type: 'Avenida' },
+      { name: 'Rua José Joaquim', district: 'Porto Velho • Itajubá', lat: -22.4355, lng: -45.4515, type: 'Rua' },
+      { name: 'Rua Santos Dumont', district: 'Santos Dumont • Itajubá', lat: -22.4342, lng: -45.4472, type: 'Rua' },
+      { name: 'Rua São Sebastião', district: 'São Sebastião • Itajubá', lat: -22.4328, lng: -45.4445, type: 'Rua' },
+      { name: 'Rua Capitão João Renó', district: 'Piedade • Itajubá', lat: -22.4410, lng: -45.4420, type: 'Rua' },
+      { name: 'Rua Padre Marçal Ribeiro', district: 'Rebourgeon • Itajubá', lat: -22.4272, lng: -45.4358, type: 'Rua' },
+      { name: 'Rua Olímpio José Rodrigues', district: 'Rebourgeon • Itajubá', lat: -22.4262, lng: -45.4368, type: 'Rua' },
+      { name: 'Rua Santa Luzia', district: 'Santa Luzia • Itajubá', lat: -22.4280, lng: -45.4385, type: 'Rua' },
+      { name: 'Rua Capitão Gomes', district: 'Cruzeiro • Itajubá', lat: -22.4295, lng: -45.4410, type: 'Rua' },
+      { name: 'Avenida Doutor Antônio Braga Filho', district: 'Varginha • Itajubá', lat: -22.4315, lng: -45.4562, type: 'Avenida' },
+      { name: 'Rua Francisco Masseli', district: 'Varginha • Itajubá', lat: -22.4335, lng: -45.4585, type: 'Rua' },
+      { name: 'Avenida Jerson Dias', district: 'Estiva • Itajubá', lat: -22.4362, lng: -45.4608, type: 'Avenida' },
+      { name: 'Rua João Poddis', district: 'Vila Poddis • Itajubá', lat: -22.4242, lng: -45.4595, type: 'Rua' },
+      { name: 'Rua das Acácias', district: 'Oriente / Jardim das Colinas • Itajubá', lat: -22.4182, lng: -45.4592, type: 'Rua' },
+      { name: 'Avenida das Nações', district: 'Nações • Itajubá', lat: -22.4290, lng: -45.4655, type: 'Avenida' },
+      { name: 'Rua Principal Santa Rosa', district: 'Santa Rosa • Itajubá', lat: -22.4435, lng: -45.4625, type: 'Rua' },
+      { name: 'Rua José de Alencar', district: 'Santa Rosa • Itajubá', lat: -22.4442, lng: -45.4632, type: 'Rua' },
+      { name: 'Avenida Presidente Tancredo Neves', district: 'Santa Rosa / Boa Vista • Itajubá', lat: -22.4415, lng: -45.4615, type: 'Avenida' },
+      { name: 'Rua Boa Vista', district: 'Boa Vista • Itajubá', lat: -22.4385, lng: -45.4630, type: 'Rua' },
+      { name: 'Rua Novo Horizonte', district: 'Novo Horizonte • Itajubá', lat: -22.4485, lng: -45.4650, type: 'Rua' },
+      { name: 'Rua Vila Isabel', district: 'Vila Isabel • Itajubá', lat: -22.4445, lng: -45.4565, type: 'Rua' },
+      { name: 'Avenida Poços de Caldas (BR-459)', district: 'Distrito Industrial / Vila Betel • Itajubá', lat: -22.4475, lng: -45.4665, type: 'Avenida' },
+      { name: 'Rua Wilbur Wright (Helibras)', district: 'Distrito Industrial • Itajubá', lat: -22.4495, lng: -45.4685, type: 'Rua' }
     ];
 
     const layerVisibility = {
@@ -2009,7 +1938,11 @@
           : 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all';
       });
 
-      if (viewName === 'dashboard' && map) setTimeout(() => map.invalidateSize(), 150);
+      if (viewName === 'dashboard' && map) {
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 120);
+      }
       if (viewName === 'risks') renderRisksDashboard();
       if (viewName === 'reviews') renderReviewsDirectory();
       if (viewName === 'egov') renderEgovServices();
@@ -2125,65 +2058,80 @@
         badge.textContent = 'Engenharia Urbana & Zeladoria Municipal';
         title.textContent = `Obras, Iluminação LED & Diagnóstico • ${nb.name}`;
         content.innerHTML = (nb.structuralIssues || []).map(st => `
-          <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 surface-card">
-            <span class="text-[10px] font-extrabold text-rose-700">PONTO MAPEADO</span>
+          <div onclick="if(map){ map.flyTo([${st.lat}, ${st.lng}], 17); }" class="p-3 rounded-xl bg-white border border-slate-200 hover:border-purple-500 cursor-pointer space-y-1 surface-card">
+            <span class="text-[10px] font-extrabold text-rose-700">Ponto Mapeado</span>
             <p class="font-black text-slate-900">${st.loc}</p>
             <p class="text-[11px] text-slate-600">${st.desc}</p>
           </div>
-        `).join('') + `
-          <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 surface-card">
-            <span class="text-[10px] font-extrabold text-emerald-700">EFICIÊNCIA ENERGÉTICA</span>
-            <p class="font-black text-slate-900">Parque de Iluminação 100% LED</p>
-            <p class="text-[11px] text-slate-600">Manutenção corretiva em até 48h mediante protocolo no Civora.</p>
-          </div>
-        `;
+        `).join('');
       }
     }
 
-    // 9. MAPA LEAFLET SEM BLOQUEIO 403 E LIMITADO EXCLUSIVAMENTE A ITAJUBÁ - MG
-    // 9. MAPA LEAFLET LIVRE FOCADO EM ITAJUBÁ - MG (SEM BLOQUEIO DE PERÍMETRO E SEM API KEY REQUIRED)
+    // 9. MAPA LEAFLET COM SERVIDORES PÚBLICOS ESTÁVEIS (OPENSTREETMAP.DE + ARCGIS FALLBACK + SATÉLITE HD)
     function initMap() {
       const mapEl = document.getElementById('itajubaMap');
-      if (!mapEl || typeof L === 'undefined') return;
+      if (!mapEl) return;
+
+      if (typeof L === 'undefined') {
+        mapEl.innerHTML = '<div class="p-6 text-center text-xs font-bold text-rose-700">Biblioteca de mapas indisponível. Verifique sua conexão com a internet e recarregue a página.</div>';
+        return;
+      }
+
+      // Limites suaves focados em Itajubá - MG (sem desenhar nenhum quadrado no mapa)
+      const itajubaBounds = L.latLngBounds(
+        [-22.5350, -45.5650],
+        [-22.3300, -45.3300]
+      );
 
       map = L.map('itajubaMap', {
         zoomControl: true,
-        minZoom: 10,
-        maxZoom: 19
+        minZoom: 12,
+        maxZoom: 19,
+        maxBounds: itajubaBounds,
+        maxBoundsViscosity: 0.8
       }).setView([-22.4256, -45.4528], 14);
 
-      // Camada de Ruas & Lotes: Esri World Street Map (público e estável no GitHub Pages) com fallback automático para Wikimedia Maps
-      const esriStreet = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      // Provedor Principal de Ruas (OpenStreetMap.de - público, sem 403 e com todas as ruas de Itajubá)
+      const osmDeStreets = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+        maxNativeZoom: 18,
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors • Itajubá - MG'
+      });
+
+      // Fallback automático para ArcGIS World Street Map caso o servidor principal falhe
+      const arcgisStreetsFallback = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        maxNativeZoom: 18,
         maxZoom: 19,
         attribution: '&copy; Esri &copy; OpenStreetMap • Itajubá - MG'
       });
 
-      const wikimediaFallback = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; Wikimedia Maps &copy; OpenStreetMap • Itajubá - MG'
-      });
-
-      let fallbackActivated = false;
-      esriStreet.on('tileerror', () => {
-        if (!fallbackActivated && map && map.hasLayer(esriStreet)) {
-          fallbackActivated = true;
-          map.removeLayer(esriStreet);
-          wikimediaFallback.addTo(map);
-          streetTileLayer = wikimediaFallback;
+      let switchedToFallback = false;
+      osmDeStreets.on('tileerror', () => {
+        if (!switchedToFallback && map && map.hasLayer(osmDeStreets)) {
+          switchedToFallback = true;
+          map.removeLayer(osmDeStreets);
+          arcgisStreetsFallback.addTo(map);
+          streetTileLayer = arcgisStreetsFallback;
         }
       });
 
-      streetTileLayer = esriStreet.addTo(map);
+      streetTileLayer = osmDeStreets.addTo(map);
 
-      // Camada de Satélite HD Esri World Imagery + Rótulos de Ruas e Bairros da Esri
+      // Camada Satélite HD: maxNativeZoom: 17 evita 100% blocos cinzas ao dar zoom máximo
       const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxNativeZoom: 17,
         maxZoom: 19,
         attribution: '&copy; Esri Satélite HD • Itajubá - MG'
       });
-      const satLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+      const satLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
+        maxNativeZoom: 17,
         maxZoom: 19
       });
-      satelliteTileLayer = L.layerGroup([esriSat, satLabels]);
+      const satPlaces = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        maxNativeZoom: 17,
+        maxZoom: 19
+      });
+      satelliteTileLayer = L.layerGroup([esriSat, satLabels, satPlaces]);
 
       selectedStreetHighlightLayer = L.layerGroup().addTo(map);
       poisLayer = L.layerGroup().addTo(map);
@@ -2192,6 +2140,16 @@
       renderPoisOnMap();
       renderReportsOnMap();
       loadFullItajubaStreetIndex();
+
+      // Garante recálculo imediato e contínuo das dimensões do mapa
+      setTimeout(() => { if (map) map.invalidateSize(); }, 100);
+      setTimeout(() => { if (map) map.invalidateSize(); }, 500);
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(() => {
+          if (map) map.invalidateSize();
+        });
+        ro.observe(mapEl);
+      }
 
       map.on('click', (e) => {
         if (tempClickMarker) map.removeLayer(tempClickMarker);
@@ -2228,6 +2186,7 @@
         document.getElementById('btnStreetLayer').className = 'px-3 py-1.5 rounded-xl bg-purple-600 text-white text-xs font-bold';
         document.getElementById('btnSatLayer').className = 'px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold';
       }
+      setTimeout(() => map.invalidateSize(), 80);
     }
 
     function toggleMapLayer(layerKey, visible) {
@@ -2260,9 +2219,9 @@
           const marker = L.marker([stop.lat, stop.lng], {
             icon: L.divIcon({
               className: '',
-              html: `<div class="custom-pin" style="background:#6366F1;width:32px;height:32px;font-size:14px;">🚌</div>`,
-              iconSize: [32, 32],
-              iconAnchor: [16, 16]
+              html: `<div class="custom-pin" style="background:#6366F1;width:30px;height:30px;font-size:13px;">🚌</div>`,
+              iconSize: [30, 30],
+              iconAnchor: [15, 15]
             })
           });
           marker.on('click', () => openBusStopModal(stop.id));
@@ -2343,21 +2302,37 @@
       const combined = [
         ...itajubaStreetsCatalog,
         ...dynamicOsmStreetsCache,
+        ...Object.values(neighborhoodsData).filter(n => n.zoom >= 16).map(n => ({
+          name: `Bairro ${n.name.split('(')[0].trim()}`,
+          district: `${n.name} • Itajubá - MG`,
+          lat: n.center[0],
+          lng: n.center[1],
+          type: 'Bairro'
+        })),
         ...establishments.map(e => ({ name: e.name, district: e.address, lat: e.lat, lng: e.lng, type: 'Local' })),
-        ...busStops.map(b => ({ name: b.name, district: 'Ponto Expresso Valônia', lat: b.lat, lng: b.lng, type: 'Ônibus' }))
+        ...busStops.map(b => ({ name: b.name, district: 'Ponto Expresso Valônia • Itajubá', lat: b.lat, lng: b.lng, type: 'Ônibus' }))
       ];
 
       const seen = new Set();
-      const matches = [];
+      const startsWithMatches = [];
+      const includesMatches = [];
+
       for (const item of combined) {
         const key = normalizeText(item.name);
         if (seen.has(key)) continue;
-        if (key.includes(normQ) || normalizeText(item.district).includes(normQ)) {
+        const normDist = normalizeText(item.district);
+        const streetCore = key.replace(/^(rua|avenida|av\.?|praca|travessa|estrada|bairro)\s+/, '');
+
+        if (key.startsWith(normQ) || streetCore.startsWith(normQ)) {
           seen.add(key);
-          matches.push(item);
-          if (matches.length >= 8) break;
+          startsWithMatches.push(item);
+        } else if (key.includes(normQ) || normDist.includes(normQ)) {
+          seen.add(key);
+          includesMatches.push(item);
         }
       }
+
+      const matches = [...startsWithMatches, ...includesMatches].slice(0, 10);
 
       if (!matches.length) {
         box.classList.add('hidden');
@@ -2980,35 +2955,51 @@
 
       const list = document.getElementById('govProtocolsList');
       if (list) {
-        if (list.querySelector('p')) list.innerHTML = '';
-        const item = document.createElement('div');
-        item.className = 'p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-wrap items-center justify-between gap-2 text-xs surface-subcard';
-        item.innerHTML = `
-          <div>
-            <p class="font-extrabold text-emerald-900">${serviceTitle}</p>
-            <p class="text-[11px] text-slate-600">Requerente: <strong>${name}</strong> (${doc}) • Protocolo: <strong>${code}</strong></p>
+        if (list.innerHTML.includes('Nenhum documento emitido ainda')) list.innerHTML = '';
+        list.innerHTML = `
+          <div class="p-3.5 rounded-2xl bg-purple-50 border border-purple-200 flex flex-wrap items-center justify-between gap-2 surface-subcard">
+            <div>
+              <p class="font-extrabold text-purple-900">${serviceTitle} • Protocolo #${code}</p>
+              <p class="text-[11px] text-slate-600">Requerente: ${name} (${doc})</p>
+            </div>
+            <button type="button" onclick="downloadOfficialDocument('${serviceTitle} - ${code}', 'PREFEITURA MUNICIPAL DE ITAJUBÁ - MG\\nPROTOCOLO DIGITAL: ${code}\\nSERVIÇO: ${serviceTitle}\\nREQUERENTE: ${name}\\nDADOS: ${doc}\\nAUTENTICAÇÃO: VALIDADO VIA PORTAL CIVORA')" class="px-3 py-1.5 rounded-xl bg-purple-600 text-white font-bold text-[11px]">
+              Baixar Comprovante
+            </button>
           </div>
-          <button type="button" onclick="copyTextWithToast('${code}', 'Protocolo')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[11px]">Copiar Protocolo</button>
-        `;
-        list.prepend(item);
+        ` + list.innerHTML;
       }
 
       document.getElementById('actionModalBody').innerHTML = `
-        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2 text-center surface-subcard">
-          <p class="text-2xl">✅</p>
-          <p class="font-black text-emerald-900 text-sm">Protocolo Gerado com Sucesso!</p>
-          <p class="text-xs text-slate-700">Número de Autenticação: <strong>${code}</strong></p>
-          <p class="text-[11px] text-slate-500">Requerente: ${name} • Ref: ${doc}</p>
-        </div>
-        <div class="flex gap-2">
-          <button type="button" onclick="copyTextWithToast('${pixCode}', 'Código PIX Guia Municipal')" class="flex-1 py-2.5 rounded-xl bg-purple-600 text-white font-extrabold">Copiar PIX (Se aplicável)</button>
-          <button type="button" onclick="closeModal('actionInteractionModal')" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-800 font-bold">Fechar</button>
+        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2 surface-subcard">
+          <p class="text-sm font-black text-emerald-800">✅ Documento & Protocolo Emitidos!</p>
+          <p><strong>Protocolo:</strong> #${code}</p>
+          <p><strong>Requerente:</strong> ${name} • ${doc}</p>
+          <div class="p-2.5 rounded-xl bg-white border border-slate-200 text-[10px] font-mono break-all">
+            Código PIX / Autenticação: ${pixCode}
+          </div>
+          <div class="flex gap-2 pt-1">
+            <button type="button" onclick="copyTextWithToast('${pixCode}', 'Código PIX / Autenticação')" class="flex-1 py-2 rounded-xl bg-purple-600 text-white font-extrabold">Copiar Código</button>
+            <button type="button" onclick="downloadOfficialDocument('${serviceTitle} - ${code}', 'PREFEITURA MUNICIPAL DE ITAJUBÁ - MG\\nPROTOCOLO: ${code}\\nSERVIÇO: ${serviceTitle}\\nREQUERENTE: ${name}\\nDADOS: ${doc}')" class="flex-1 py-2 rounded-xl bg-emerald-600 text-white font-extrabold">Baixar .TXT Oficial</button>
+          </div>
         </div>
       `;
-      showToast(`Protocolo ${code} emitido!`);
+      showToast(`Protocolo #${code} gerado com sucesso!`);
     }
 
-    // 13. SAÚDE, EDUCAÇÃO, ÔNIBUS E ZONA AZUL
+    function downloadOfficialDocument(filename, content) {
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${filename.replace(/[^a-zA-Z0-9_-]/g, '_')}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast(`Documento "${filename}" baixado!`);
+    }
+
+    // 13. SAÚDE & EDUCAÇÃO COMPLETOS
     function renderFullHealthAndEducation() {
       const hList = document.getElementById('allHealthUnitsList');
       const eList = document.getElementById('allEducationUnitsList');
@@ -3022,10 +3013,10 @@
             <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 surface-subcard">
               <div>
                 <span class="text-[10px] font-extrabold text-emerald-700">${u.type}</span>
-                <p class="font-black text-slate-900">${u.name}</p>
+                <p class="font-extrabold text-slate-900">${u.name}</p>
                 <p class="text-[11px] text-slate-500">📍 ${u.addr} • 📞 ${u.phone}</p>
               </div>
-              <button type="button" onclick="openGovServiceForm('Agendamento • ${u.name.replace(/'/g, "\\'")}', 'Informe Cartão SUS / CPF e Especialidade')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[11px] shrink-0">Agendar</button>
+              <button type="button" onclick="openGovServiceForm('Agendamento • ${u.name.replace(/'/g, "\\'")}', 'Informe CPF e Cartão SUS')" class="px-2.5 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[11px] shrink-0">Agendar</button>
             </div>
           `).join('');
       }
@@ -3036,350 +3027,266 @@
           .map(ed => `
             <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 surface-subcard">
               <div>
-                <span class="text-[10px] font-extrabold text-indigo-700">${ed.level}</span>
-                <p class="font-black text-slate-900">${ed.name}</p>
-                <p class="text-[11px] text-slate-500">📍 ${ed.addr} • <strong>${ed.vagas}</strong></p>
+                <span class="text-[10px] font-extrabold text-purple-700">${ed.level}</span>
+                <p class="font-extrabold text-slate-900">${ed.name}</p>
+                <p class="text-[11px] text-slate-500">📍 ${ed.addr}</p>
               </div>
-              <button type="button" onclick="openGovServiceForm('Pré-Matrícula • ${ed.name.replace(/'/g, "\\'")}', 'Informe Nome do Aluno e Série/Turma')" class="px-3 py-1.5 rounded-xl bg-purple-600 text-white font-bold text-[11px] shrink-0">Matrícula</button>
+              <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 shrink-0">${ed.vagas}</span>
             </div>
           `).join('');
       }
     }
 
+    // 14. MOBILIDADE: TODAS AS 21 LINHAS VALÔNIA & ZONA AZUL
     function renderAllBusLinesMobility() {
       const container = document.getElementById('allBusLinesListContainer');
       if (!container) return;
       const q = normalizeText(document.getElementById('busLineSearchInput')?.value || '');
-      container.innerHTML = allValoniaLines
-        .filter(l => !q || normalizeText(l.code).includes(q) || normalizeText(l.route).includes(q) || normalizeText(l.terminal).includes(q))
-        .map(l => `
-          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 surface-subcard">
-            <div class="flex items-center justify-between">
-              <span class="font-black text-purple-700">${l.code}</span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Freq.: ${l.freq}</span>
-            </div>
-            <p class="font-bold text-slate-900">${l.route}</p>
-            <p class="text-[11px] text-slate-500">🚏 Terminal/Saída: ${l.terminal}</p>
+      const filtered = allValoniaLines.filter(ln => !q || normalizeText(ln.code).includes(q) || normalizeText(ln.route).includes(q) || normalizeText(ln.terminal).includes(q));
+      container.innerHTML = filtered.map(ln => `
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 surface-subcard">
+          <div class="flex items-center justify-between">
+            <span class="font-black text-purple-700">${ln.code}</span>
+            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Intervalo: ${ln.freq}</span>
           </div>
-        `).join('');
+          <p class="font-extrabold text-slate-900">${ln.route}</p>
+          <p class="text-[11px] text-slate-500">🚏 ${ln.terminal}</p>
+        </div>
+      `).join('');
     }
 
     function activateZonaAzul() {
-      const plate = document.getElementById('zonaAzulPlate')?.value.trim().toUpperCase();
-      const sector = document.getElementById('zonaAzulSector')?.value;
-      const dur = document.getElementById('zonaAzulDuration')?.value;
+      const plate = document.getElementById('zonaAzulPlate').value.trim().toUpperCase();
+      const sector = document.getElementById('zonaAzulSector').value;
+      const duration = document.getElementById('zonaAzulDuration').value;
       if (!plate) {
-        showToast('Digite a placa do veículo primeiro.', 'error');
+        showToast('Digite a placa do veículo antes de ativar.', 'error');
         return;
       }
-      const list = document.getElementById('activeZonaAzulTickets');
-      if (list) {
-        const card = document.createElement('div');
-        card.className = 'p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs space-y-0.5 surface-subcard';
-        card.innerHTML = `
-          <div class="flex justify-between font-extrabold text-emerald-900">
-            <span>✅ TÍQUETE ATIVO • ${plate}</span>
-            <span>${dur}</span>
-          </div>
-          <p class="text-[11px] text-slate-600">${sector}</p>
-        `;
-        list.prepend(card);
-      }
-      showToast(`Zona Azul ativada para ${plate} (${dur})!`);
+      const box = document.getElementById('activeZonaAzulTickets');
+      box.innerHTML = `
+        <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs space-y-0.5 surface-subcard">
+          <p class="font-black text-emerald-800">✅ Tíquete Ativo • Placa ${plate}</p>
+          <p class="text-[11px] text-slate-700">${sector}</p>
+          <p class="text-[11px] font-bold text-emerald-700">${duration}</p>
+        </div>
+      ` + box.innerHTML;
+      showToast(`Zona Azul ativada para a placa ${plate}!`);
     }
 
-    // 14. CULTURA: OBRAS DE ARTE À VENDA, ARTISTAS INDEPENDENTES (PIX) & PROJETOS SOCIAIS ARTÍSTICOS
-    const itajubaArtworksForSale = [
-      {
-        id: 'art-1',
-        title: 'Amanhecer no Pico dos Marins & Serra da Mantiqueira',
-        artist: 'Clara Mendes • Ateliê Mantiqueira (Morro Chic)',
-        technique: 'Óleo sobre tela • 80x60 cm • Obra Original',
-        price: 'R$ 680,00',
-        img: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=700&q=80'
-      },
-      {
-        id: 'art-2',
-        title: 'Casario Histórico & Estação Ferroviária de Itajubá',
-        artist: 'Henrique Vasconcelos • Coletivo Traço Sul (Centro)',
-        technique: 'Aquarela sobre papel algodão 300g • 50x40 cm',
-        price: 'R$ 340,00',
-        img: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=700&q=80'
-      },
-      {
-        id: 'art-3',
-        title: 'Cerâmica Artesanal Queima de Alta Temperatura (Jogo Café)',
-        artist: 'Oficina Barro Vivo • Bairro Rebourgeon',
-        technique: 'Cerâmica utilitária esmaltada à mão • 6 peças',
-        price: 'R$ 220,00',
-        img: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=700&q=80'
-      }
-    ];
+    function openBusStopModal(stopId) {
+      const stop = busStops.find(b => b.id === stopId);
+      if (!stop) return;
+      document.getElementById('busStopTitle').textContent = stop.name;
+      document.getElementById('busStopLinesContainer').innerHTML = stop.lines.map(l => `
+        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between surface-subcard">
+          <div>
+            <p class="font-extrabold text-slate-900">${l.line}</p>
+            <p class="text-[11px] text-slate-500">Frequência: ${l.freq}</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-800 font-extrabold text-[11px]">Próximo: ${l.next}</span>
+        </div>
+      `).join('');
+      document.getElementById('busModal').classList.remove('hidden');
+    }
 
-    const independentArtistsItajuba = [
+    // 15. CULTURA, OBRAS DE ARTE À VENDA & APOIO A ARTISTAS DE ITAJUBÁ
+    const cultureItems = [
       {
-        name: 'Marina Duarte • Cantora & Compositora MPB/Folk',
-        bio: 'Produção independente gravada em Itajubá; arrecadando apoio para gravação do álbum autoral "Águas do Sapucaí".',
-        pix: 'marina.duarte.arte@pixitajuba.org.br',
-        img: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=700&q=80'
+        type: 'artworks',
+        badge: 'Obra Original à Venda',
+        title: 'Tela Óleo: "Amanhecer na Serra da Mantiqueira"',
+        author: 'Ateliê Clara Rennó • Morro Chic, Itajubá',
+        price: 'R$ 480,00',
+        img: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=640&q=80',
+        desc: 'Pintura acrílica e óleo sobre tela (60x80cm) retratando as montanhas e o vale do Rio Sapucaí em Itajubá.',
+        pix: 'clara.arte.itajuba@pix.com.br'
       },
       {
-        name: 'Coletivo Muralista Cores do Sul de Minas',
-        bio: 'Artistas urbanos que revitalizam muros de escolas públicas e praças nos bairros Boa Vista, Santa Rosa e Pinheirinho.',
-        pix: 'coresdosuldeminas@pixitajuba.org.br',
-        img: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=700&q=80'
-      }
-    ];
-
-    const socialArtProjectsItajuba = [
-      {
-        title: 'Projeto Tocando o Futuro • Orquestra Jovem de Itajubá',
-        org: 'Aulas gratuitas de violino, violoncelo e sopros para 140 crianças e adolescentes da rede pública.',
-        location: 'Centro Cultural / Teatro Municipal Christiane Riêra',
-        img: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=700&q=80'
+        type: 'artworks',
+        badge: 'Cerâmica & Artesanato Local',
+        title: 'Conjunto Cerâmica Queima Alta • Mantiqueira',
+        author: 'Coletivo Barro & Serra • Mercado Municipal',
+        price: 'R$ 165,00',
+        img: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=640&q=80',
+        desc: 'Peças utilitárias modeladas manualmente por artesãos credenciados na Feira Cultural de Itajubá.',
+        pix: 'barroeserra.itj@pix.com.br'
       },
       {
-        title: 'Oficina Comunitária de Teatro & Circo Social',
-        org: 'Formação artística gratuita no contraturno escolar para jovens dos bairros Santa Rosa, Novo Horizonte e Estiva.',
-        location: 'Espaço Cultural Zona Sul • Itajubá',
-        img: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=700&q=80'
+        type: 'artworks',
+        badge: 'Gravura & Ilustração Digital',
+        title: 'Série Patrimônio: Estação Ferroviária & Teatro Christiane Riêra',
+        author: 'Rafael Mendes Ilustra • Centro, Itajubá',
+        price: 'R$ 120,00',
+        img: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=640&q=80',
+        desc: 'Impressão fine art numerada e assinada em papel algodão 300g com moldura em madeira reflorestada.',
+        pix: 'rafael.ilustra.itj@pix.com.br'
+      },
+      {
+        type: 'artists',
+        badge: 'Apoio Direto ao Artista',
+        title: 'Banda & Coletivo Musical Raízes do Sapucaí',
+        author: 'Música Autoral & Choro • Itajubá - MG',
+        price: 'Apoio Livre via PIX',
+        img: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=640&q=80',
+        desc: 'Grupo de músicos independentes de Itajubá que realiza rodas gratuitas nas praças e grava álbum autoral.',
+        pix: 'raizesdosapucai@pix.com.br'
+      },
+      {
+        type: 'artists',
+        badge: 'Apoio Direto ao Artista',
+        title: 'Cia. Teatral Mantiqueira em Cena',
+        author: 'Artes Cênicas & Teatro Infantil • Itajubá',
+        price: 'Apoio Livre via PIX',
+        img: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=640&q=80',
+        desc: 'Produção de espetáculos teatrais itinerantes nas escolas municipais e bairros periféricos de Itajubá.',
+        pix: 'ciamantiqueira.itj@pix.com.br'
+      },
+      {
+        type: 'social_projects',
+        badge: 'Projeto Social Artístico',
+        title: 'Projeto Música & Cordas nos Bairros (Santa Rosa & Novo Horizonte)',
+        author: 'Instituto Cultural Itajubá • Gratuito para Jovens',
+        price: 'Inscrições & Apadrinhamento',
+        img: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=640&q=80',
+        desc: 'Oficinas gratuitas de violão, percussão, grafite e leitura para 180 crianças e adolescentes da rede pública.',
+        pix: 'musicacordas.itj@pix.com.br'
+      },
+      {
+        type: 'events',
+        badge: 'Agenda Cultural Oficial',
+        title: 'Feira de Artesanato, Gastronomia & Show na Praça Getúlio Vargas',
+        author: 'Secretaria Municipal de Cultura e Turismo (SECULT)',
+        price: 'Entrada Gratuita',
+        img: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=640&q=80',
+        desc: 'Todo sábado das 09h às 16h no Centro de Itajubá com expositores locais e apresentações ao vivo.',
+        pix: ''
       }
     ];
 
     function setCultureTab(tab) {
-      const grid = document.getElementById('cultureContentGrid');
-      if (!grid) return;
       ['all', 'artworks', 'artists', 'social_projects', 'events'].forEach(t => {
-        const cap = t.charAt(0).toUpperCase() + t.slice(1);
-        const btn = document.getElementById(`cultTab${cap}`);
-        if (btn) btn.className = t === tab
+        const btn = document.getElementById(`cultTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (!btn) return;
+        btn.className = t === tab
           ? 'px-4 py-2 rounded-2xl bg-purple-600 text-white text-xs font-extrabold'
           : 'px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold';
       });
 
-      let html = '';
-
-      if (tab === 'all' || tab === 'artworks') {
-        html += itajubaArtworksForSale.map(art => `
-          <div class="bg-white rounded-3xl border border-purple-100 overflow-hidden shadow-sm flex flex-col justify-between surface-card">
-            <div>
-              <div class="h-44 relative bg-slate-900">
-                <img src="${art.img}" alt="${art.title}" class="w-full h-full object-cover" />
-                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-purple-700/95 text-white text-[10px] font-extrabold">🖼️ Obra à Venda • ${art.price}</span>
-              </div>
-              <div class="p-4 space-y-1.5">
-                <h3 class="text-sm font-black text-slate-900">${art.title}</h3>
-                <p class="text-[11px] font-bold text-purple-700">${art.artist}</p>
-                <p class="text-[11px] text-slate-500">${art.technique}</p>
-              </div>
-            </div>
-            <div class="p-4 pt-0">
-              <button type="button" onclick="openArtworkPurchaseModal('${art.title.replace(/'/g, "\\'")}', '${art.artist.replace(/'/g, "\\'")}', '${art.price}')" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
-                Comprar / Reservar Obra (${art.price})
-              </button>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      if (tab === 'all' || tab === 'artists') {
-        html += independentArtistsItajuba.map(ar => `
-          <div class="bg-white rounded-3xl border border-purple-100 overflow-hidden shadow-sm flex flex-col justify-between surface-card">
-            <div>
-              <div class="h-44 relative bg-slate-900">
-                <img src="${ar.img}" alt="${ar.name}" class="w-full h-full object-cover" />
-                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-pink-600/95 text-white text-[10px] font-extrabold">🎨 Artista Independente • Itajubá</span>
-              </div>
-              <div class="p-4 space-y-1.5">
-                <h3 class="text-sm font-black text-slate-900">${ar.name}</h3>
-                <p class="text-[11px] text-slate-600 leading-relaxed">${ar.bio}</p>
-              </div>
-            </div>
-            <div class="p-4 pt-0 space-y-1.5">
-              <button type="button" onclick="copyTextWithToast('${ar.pix}', 'Chave PIX do Artista')" class="w-full py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-xs font-extrabold">
-                💜 Apoiar Artista via PIX (Copiar Chave)
-              </button>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      if (tab === 'all' || tab === 'social_projects') {
-        html += socialArtProjectsItajuba.map(sp => `
-          <div class="bg-white rounded-3xl border border-purple-100 overflow-hidden shadow-sm flex flex-col justify-between surface-card">
-            <div>
-              <div class="h-44 relative bg-slate-900">
-                <img src="${sp.img}" alt="${sp.title}" class="w-full h-full object-cover" />
-                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-emerald-600/95 text-white text-[10px] font-extrabold">🤝 Projeto Social Artístico</span>
-              </div>
-              <div class="p-4 space-y-1.5">
-                <h3 class="text-sm font-black text-slate-900">${sp.title}</h3>
-                <p class="text-[11px] text-slate-600 leading-relaxed">${sp.org}</p>
-                <p class="text-[11px] font-bold text-indigo-700">📍 ${sp.location}</p>
-              </div>
-            </div>
-            <div class="p-4 pt-0">
-              <button type="button" onclick="openGovServiceForm('Inscrição / Apoio • ${sp.title.replace(/'/g, "\\'")}', 'Informe Nome, Idade e Telefone de Contato')" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold">
-                Inscrever Aluno / Apoiar Projeto
-              </button>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      if (tab === 'all' || tab === 'events') {
-        html += `
-          <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-3 surface-card">
-            <div class="space-y-1.5">
-              <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">📅 Agenda Cultural • Teatro Municipal</span>
-              <h3 class="text-sm font-black">Teatro Municipal Christiane Riêra & Parque da Cidade</h3>
-              <p class="text-[11px] text-slate-600">Mostra de Música da Mantiqueira, Feira de Artesanato na Praça Getúlio Vargas e trilhas ecológicas no Parque Natural Municipal.</p>
-            </div>
-            <button type="button" onclick="openGovServiceForm('Reserva de Ingresso Cultural Gratuito', 'Informe Nome Completo e CPF')" class="w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-extrabold">
-              Garantir Ingresso Gratuito
-            </button>
-          </div>
-        `;
-      }
-
-      grid.innerHTML = html;
-    }
-
-    function openArtworkPurchaseModal(artTitle, artistName, price) {
-      document.getElementById('actionModalBadge').textContent = 'GALERIA CULTURAL ITAJUBÁ • COMPRA DIRETA DO ARTISTA';
-      document.getElementById('actionModalTitle').textContent = artTitle;
-      document.getElementById('actionModalBody').innerHTML = `
-        <div class="p-3.5 rounded-2xl bg-purple-50 border border-purple-200 space-y-1 surface-subcard">
-          <p class="font-extrabold text-purple-900">${artistName}</p>
-          <p class="text-sm font-black text-slate-900">Valor da Obra: ${price}</p>
-        </div>
-        <form onsubmit="submitArtworkPurchase(event, '${artTitle.replace(/'/g, "\\'")}', '${price}')" class="space-y-3">
-          <div>
-            <label class="font-extrabold block mb-1">Seu Nome Completo</label>
-            <input id="buyerNameInput" required type="text" placeholder="Nome para certificado de autenticidade" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
-          </div>
-          <div>
-            <label class="font-extrabold block mb-1">WhatsApp / E-mail para Retirada ou Entrega em Itajubá</label>
-            <input id="buyerContactInput" required type="text" placeholder="(35) 99999-0000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
-          </div>
-          <button type="submit" class="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold">
-            Confirmar Reserva & Gerar PIX Direto ao Artista
-          </button>
-        </form>
-      `;
-      document.getElementById('actionInteractionModal').classList.remove('hidden');
-    }
-
-    function submitArtworkPurchase(e, artTitle, price) {
-      e.preventDefault();
-      const buyer = document.getElementById('buyerNameInput').value.trim();
-      const pixArtist = 'galeria.secult.itajuba@pixitajuba.org.br';
-      document.getElementById('actionModalBody').innerHTML = `
-        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2 text-center surface-subcard">
-          <p class="text-2xl">🎨</p>
-          <p class="font-black text-emerald-900 text-sm">Obra Reservada para ${buyer}!</p>
-          <p class="text-xs text-slate-700"><strong>${artTitle}</strong> • ${price}</p>
-          <p class="text-[11px] text-slate-500">Chave PIX do Artista: <strong>${pixArtist}</strong></p>
-        </div>
-        <button type="button" onclick="copyTextWithToast('${pixArtist}', 'Chave PIX do Artista')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold">Copiar Chave PIX</button>
-      `;
-      showToast('Reserva de obra confirmada!');
-    }
-
-    // 15. UNIDADES CARENTES, ABRIGOS & DOAÇÕES EM ITAJUBÁ
-    const socialUnitsItajuba = [
-      {
-        name: 'Asilo São Vicente de Paulo de Itajubá',
-        addr: 'Rua Dona Maria Carneiro, 390 - Centro / Boa Vista • Itajubá',
-        needs: 'Fraldas geriátricas (G e EG), leite integral, suplementos alimentares e produtos de higiene.',
-        pix: '18.025.940/0001-10',
-        urgency: 'Urgente'
-      },
-      {
-        name: 'Casa da Criança de Itajubá',
-        addr: 'Bairro Santo Antônio / Centro • Itajubá',
-        needs: 'Leite em pó, biscoitos, frutas, material escolar, fraldas infantis e roupas de 0 a 12 anos.',
-        pix: 'casadacrianca.itajuba@pixsolidario.org.br',
-        urgency: 'Alta Prioridade'
-      },
-      {
-        name: 'APAE Itajubá • Associação de Pais e Amigos dos Excepcionais',
-        addr: 'Av. Dr. Antônio Braga Filho - Varginha • Itajubá',
-        needs: 'Materiais pedagógicos adaptados, cestas básicas para famílias assistidas e itens de limpeza.',
-        pix: 'apae.itajuba@pixsolidario.org.br',
-        urgency: 'Contínuo'
-      },
-      {
-        name: 'Abrigo Municipal & Casa de Passagem (SEMAS Itajubá)',
-        addr: 'Rua Geraldino Campista - Centro / Vila Poddis • Itajubá',
-        needs: 'Cobertores, agasalhos masculinos e femininos, calçados, toalhas de banho e kits de higiene.',
-        pix: 'fundosocial.itajuba@itajuba.mg.gov.br',
-        urgency: 'Urgente'
-      },
-      {
-        name: 'CRAS Zona Sul • Atendimento Santa Rosa & Novo Horizonte',
-        addr: 'Região Santa Rosa / Boa Vista • Itajubá',
-        needs: 'Cestas básicas completas, óleo, arroz, feijão e leite para famílias em vulnerabilidade.',
-        pix: 'cras.zonasul@itajuba.mg.gov.br',
-        urgency: 'Alta Prioridade'
-      },
-      {
-        name: 'CRAS Rebourgeon & Oriente',
-        addr: 'Bairro Rebourgeon • Itajubá',
-        needs: 'Alimentos não perecíveis, enxoval para gestantes e agasalhos infantis.',
-        pix: 'cras.rebourgeon@itajuba.mg.gov.br',
-        urgency: 'Ativo'
-      }
-    ];
-
-    function renderSocialUnits() {
-      const grid = document.getElementById('socialUnitsGrid');
+      const grid = document.getElementById('cultureContentGrid');
       if (!grid) return;
-      grid.innerHTML = socialUnitsItajuba.map(u => `
-        <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-3.5 surface-card">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">✔ Instituição Verificada</span>
-              <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800">${u.urgency}</span>
+      const list = tab === 'all' ? cultureItems : cultureItems.filter(i => i.type === tab);
+
+      grid.innerHTML = list.map(item => `
+        <div class="bg-white rounded-3xl border border-purple-100 overflow-hidden shadow-sm flex flex-col justify-between surface-card">
+          <div>
+            <div class="relative h-44 bg-slate-900">
+              <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover" />
+              <span class="absolute top-3 left-3 text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-700 text-white shadow">${item.badge}</span>
+              <span class="absolute bottom-3 right-3 text-xs font-black px-3 py-1 rounded-xl bg-amber-400 text-slate-950 shadow">${item.price}</span>
             </div>
-            <h3 class="text-base font-black text-slate-900">${u.name}</h3>
-            <p class="text-xs text-slate-500">📍 ${u.addr}</p>
-            <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950 surface-subcard">
-              <strong>📦 Itens Mais Necessários:</strong> ${u.needs}
+            <div class="p-4 space-y-1.5">
+              <p class="text-[11px] font-bold text-purple-700">${item.author}</p>
+              <h3 class="text-base font-black text-slate-900">${item.title}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">${item.desc}</p>
             </div>
           </div>
-          <div class="space-y-2 pt-1">
-            <button type="button" onclick="copyTextWithToast('${u.pix}', 'Chave PIX ${u.name}')" class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-extrabold">
-              Copiar Chave PIX Oficial
-            </button>
-            <button type="button" onclick="openDonationScheduleModal('${u.name.replace(/'/g, "\\'")}', '${u.addr.replace(/'/g, "\\'")}')" class="w-full py-2 rounded-xl bg-purple-50 text-purple-900 border border-purple-200 text-xs font-extrabold">
-              Agendar Entrega Física de Doação
+          <div class="p-4 pt-0 flex gap-2">
+            ${item.pix ? `<button type="button" onclick="copyTextWithToast('${item.pix}', 'Chave PIX Artista/Projeto')" class="flex-1 py-2.5 rounded-xl bg-purple-100 text-purple-900 text-xs font-extrabold">Copiar PIX</button>` : ''}
+            <button type="button" onclick="openCultureActionModal('${item.title.replace(/'/g, "\\'")}', '${item.author.replace(/'/g, "\\'")}', '${item.price}', '${item.pix}')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
+              ${item.type === 'artworks' ? 'Adquirir / Reservar Obra' : 'Apoiar / Participar'}
             </button>
           </div>
         </div>
       `).join('');
     }
 
-    function openDonationScheduleModal(unitName, unitAddr) {
-      document.getElementById('actionModalBadge').textContent = 'REDE SOLIDÁRIA ITAJUBÁ • AGENDAMENTO DE DOAÇÃO';
-      document.getElementById('actionModalTitle').textContent = unitName;
+    function openCultureActionModal(title, author, price, pix) {
+      document.getElementById('actionModalBadge').textContent = 'ECONOMIA CRIATIVA & CULTURA • ITAJUBÁ';
+      document.getElementById('actionModalTitle').textContent = title;
       document.getElementById('actionModalBody').innerHTML = `
-        <p class="text-xs text-slate-500">📍 Endereço de entrega: <strong>${unitAddr}</strong></p>
-        <form onsubmit="submitDonationSchedule(event, '${unitName.replace(/'/g, "\\'")}')" class="space-y-3">
+        <form onsubmit="submitCultureOrder(event, '${title.replace(/'/g, "\\'")}')" class="space-y-3">
+          <p class="text-slate-600"><strong>Artista / Coletivo:</strong> ${author} • <strong>Valor:</strong> ${price}</p>
+          ${pix ? `<div class="p-3 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between gap-2">
+            <span class="font-mono text-[11px] font-bold text-purple-900">${pix}</span>
+            <button type="button" onclick="copyTextWithToast('${pix}', 'Chave PIX')" class="px-2.5 py-1 rounded-lg bg-purple-600 text-white font-bold text-[11px]">Copiar PIX</button>
+          </div>` : ''}
           <div>
-            <label class="font-extrabold block mb-1">Seu Nome / Grupo Solidário</label>
-            <input id="donorNameInput" required type="text" placeholder="Digite seu nome" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+            <label class="font-extrabold block mb-1">Seu Nome Completo</label>
+            <input id="cultBuyerName" required type="text" placeholder="Digite seu nome" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+          </div>
+          <div>
+            <label class="font-extrabold block mb-1">WhatsApp / E-mail para Retirada ou Contato</label>
+            <input id="cultBuyerContact" required type="text" placeholder="(35) 99999-0000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+          </div>
+          <button type="submit" class="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold">
+            Confirmar Reserva / Apoio Cultural
+          </button>
+        </form>
+      `;
+      document.getElementById('actionInteractionModal').classList.remove('hidden');
+    }
+
+    function submitCultureOrder(e, title) {
+      e.preventDefault();
+      closeModal('actionInteractionModal');
+      showToast(`Solicitação registrada para "${title}"! O artista entrará em contato.`);
+    }
+
+    // 16. UNIDADES CARENTES, ABRIGOS & DOAÇÕES EM ITAJUBÁ
+    function renderSocialUnits() {
+      const grid = document.getElementById('socialUnitsGrid');
+      if (!grid) return;
+      const units = [
+        { name: 'Vila Vicentina de Itajubá (Lar de Idosos)', addr: 'Bairro Boa Vista / Centro • Itajubá', needs: 'Fraldas geriátricas G/EG, leite integral, café e produtos de higiene', pix: 'vilavicentina.itajuba@pix.com.br', goal: 78 },
+        { name: 'Casa da Criança e do Adolescente de Itajubá', addr: 'Bairro Santo Antônio • Itajubá', needs: 'Cestas básicas, leite em pó, material escolar e roupas infantis', pix: 'casadacrianca.itj@pix.com.br', goal: 64 },
+        { name: 'APAE Itajubá • Assistência Especializada', addr: 'Bairro Varginha • Itajubá', needs: 'Alimentos não perecíveis, materiais pedagógicos e apoio mensal', pix: 'apae.itajuba@pix.com.br', goal: 82 },
+        { name: 'Albergue Noturno & Casa de Passagem Municipal', addr: 'Região Central • Itajubá', needs: 'Cobertores, agasalhos masculinos/femininos, sabonete e kits higiene', pix: 'casapassagem.itj@pix.com.br', goal: 55 },
+        { name: 'CRAS Polo Santa Rosa & Novo Horizonte', addr: 'Bairro Santa Rosa • Itajubá', needs: 'Cestas básicas emergenciais para famílias em vulnerabilidade', pix: 'fundosocial.itajuba@pix.com.br', goal: 71 },
+        { name: 'Abrigo Animal & Proteção Pet Itajubá', addr: 'Zona Sul • Itajubá', needs: 'Ração para cães e gatos, vermífugos e cobertores usados', pix: 'protecaopet.itj@pix.com.br', goal: 69 }
+      ];
+      grid.innerHTML = units.map(u => `
+        <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
+          <div class="space-y-2.5">
+            <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800">Entidade Verificada • Itajubá</span>
+            <h3 class="text-base font-black">${u.name}</h3>
+            <p class="text-xs text-slate-500">📍 ${u.addr}</p>
+            <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950 surface-subcard">
+              <strong>🚨 Precisa com urgência:</strong> ${u.needs}
+            </div>
+            <div>
+              <div class="flex justify-between text-[11px] font-bold mb-1"><span>Meta Mensal de Doações</span><span>${u.goal}%</span></div>
+              <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden"><div class="h-full bg-teal-600" style="width:${u.goal}%"></div></div>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" onclick="copyTextWithToast('${u.pix}', 'PIX ${u.name}')" class="flex-1 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-extrabold">Copiar Chave PIX</button>
+            <button type="button" onclick="openDonationScheduleModal('${u.name.replace(/'/g, "\\'")}', '${u.addr.replace(/'/g, "\\'")}')" class="flex-1 py-2.5 rounded-xl bg-purple-100 text-purple-900 text-xs font-extrabold">Agendar Entrega</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openDonationScheduleModal(unitName, unitAddr) {
+      document.getElementById('actionModalBadge').textContent = 'REDE SOLIDÁRIA • ITAJUBÁ';
+      document.getElementById('actionModalTitle').textContent = `Agendar Doação • ${unitName}`;
+      document.getElementById('actionModalBody').innerHTML = `
+        <form onsubmit="submitDonationSchedule(event, '${unitName.replace(/'/g, "\\'")}')" class="space-y-3">
+          <p class="text-slate-600">📍 <strong>Local de entrega:</strong> ${unitAddr}</p>
+          <div>
+            <label class="font-extrabold block mb-1">Seu Nome</label>
+            <input required type="text" placeholder="Digite seu nome" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
           </div>
           <div>
             <label class="font-extrabold block mb-1">Itens que deseja doar</label>
-            <input id="donorItemsInput" required type="text" placeholder="Ex: 2 cestas básicas e 3 pacotes de fraldas" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+            <input required type="text" placeholder="Ex: 2 cestas básicas e 1 pacote de fraldas" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
           </div>
           <div>
-            <label class="font-extrabold block mb-1">Melhor Dia e Turno para Entrega</label>
-            <input id="donorDateInput" required type="text" placeholder="Ex: Amanhã às 14h" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+            <label class="font-extrabold block mb-1">Dia / Turno para entrega</label>
+            <input required type="text" placeholder="Ex: Amanhã às 14h" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
           </div>
           <button type="submit" class="w-full py-3 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-extrabold">
-            Confirmar Agendamento Solidário
+            Confirmar Agendamento de Doação
           </button>
         </form>
       `;
@@ -3388,169 +3295,130 @@
 
     function submitDonationSchedule(e, unitName) {
       e.preventDefault();
-      const donor = document.getElementById('donorNameInput').value.trim();
-      const items = document.getElementById('donorItemsInput').value.trim();
-      const when = document.getElementById('donorDateInput').value.trim();
-      document.getElementById('actionModalBody').innerHTML = `
-        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2 text-center surface-subcard">
-          <p class="text-2xl">🤝</p>
-          <p class="font-black text-emerald-900 text-sm">Entrega Agendada com Sucesso!</p>
-          <p class="text-xs text-slate-700">Instituição: <strong>${unitName}</strong></p>
-          <p class="text-[11px] text-slate-600">Doador: ${donor} • Itens: ${items} • Horário: ${when}</p>
-        </div>
-        <button type="button" onclick="closeModal('actionInteractionModal')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold">Concluir</button>
-      `;
-      showToast('Agendamento de doação confirmado!');
+      closeModal('actionInteractionModal');
+      showToast(`Entrega agendada com sucesso para ${unitName}!`);
     }
 
-    // 16. EMPREGOS, ESTÁGIOS & CURSOS GRATUITOS EM ITAJUBÁ
-    const allOpportunitiesItajuba = [
-      { type: 'emprego', title: 'Técnico em Mecânica / Montagem Aeronáutica', company: 'Helibras • Distrito Industrial Itajubá', pay: 'R$ 3.850,00 + Benefícios', req: 'Curso Técnico em Mecânica, Mecatrônica ou Aeronáutica.' },
-      { type: 'emprego', title: 'Operador de Produção & Usinagem CNC', company: 'IMBEL • Fábrica de Itajubá', pay: 'R$ 2.680,00 + Plano Saúde', req: 'Ensino Médio completo + Leitura e Interpretação de Desenho.' },
-      { type: 'emprego', title: 'Técnico em Enfermagem (UTI / Pronto Atendimento)', company: 'Hospital de Clínicas de Itajubá (HCI)', pay: 'R$ 2.540,00 + Insalubridade', req: 'COREN-MG ativo.' },
-      { type: 'emprego', title: 'Auxiliar de Logística & Expedição', company: 'Balteau Produtos Elétricos • Itajubá', pay: 'R$ 2.190,00 + Vale Alimentação', req: 'Ensino Médio completo; desejável curso de empilhadeira.' },
-      { type: 'estagio', title: 'Estágio em Engenharia Elétrica, Produção ou Computação', company: 'Parque Científico e Tecnológico (PCTI / UNIFEI)', pay: 'Bolsa R$ 1.500,00 + Auxílio Transporte', req: 'Cursando a partir do 5º período na UNIFEI ou FEPI.' },
-      { type: 'estagio', title: 'Jovem Aprendiz Industrial 2027 (Mecânica & Eletroeletrônica)', company: 'SESI SENAI CFP Aureliano Chaves • Avenida', pay: 'Bolsa Aprendizagem + Curso Gratuito SENAI', req: 'Jovens de 14 a 22 anos residentes em Itajubá.' },
-      { type: 'estagio', title: 'Estágio em Enfermagem, Fisioterapia e Farmácia', company: 'Secretaria Municipal de Saúde / Policlínica Itajubá', pay: 'Bolsa R$ 1.150,00', req: 'Graduandos da FMIT ou FEPI.' },
-      { type: 'curso', title: 'Curso Gratuito: Eletricista Industrial & Automação CLP (160h)', company: 'SENAI Itajubá / Programa Trilhas de Futuro MG', pay: '100% Gratuito + Certificado', req: 'Idade mínima 16 anos • Turno Noturno.' },
-      { type: 'curso', title: 'Curso Gratuito: Programação Web Full-Stack & Inteligência Artificial', company: 'Projeto Extensão UNIFEI & Secretaria de Ciência e Tecnologia', pay: '100% Gratuito • 60 Vagas', req: 'Ensino Médio cursando ou concluído.' },
-      { type: 'curso', title: 'Curso Gratuito: Gestão Financeira para MEI, Panificação & Atendimento', company: 'Sala Mineira do Empreendedor / SEBRAE Itajubá', pay: '100% Gratuito + Consultoria', req: 'Aberto a todos os moradores e empreendedores de Itajubá.' }
+    // 17. EMPREGOS, CURSOS & ESTÁGIOS EM ITAJUBÁ
+    const allOpportunities = [
+      { category: 'emprego', type: 'Emprego CLT • Polo Industrial', title: 'Operador(a) de Produção & Montagem Aeronáutica', org: 'Indústria Aeroespacial • Distrito Industrial', pay: 'R$ 2.680,00 + Benefícios' },
+      { category: 'emprego', type: 'Emprego CLT • Saúde', title: 'Técnico(a) de Enfermagem • UTI e Pronto Atendimento', org: 'Hospital de Clínicas de Itajubá (HCI) • Medicina', pay: 'R$ 2.950,00 + Insalubridade' },
+      { category: 'emprego', type: 'Emprego CLT • Indústria Elétrica', title: 'Montador(a) Eletromecânico de Transformadores', org: 'Polo Industrial • Distrito Industrial', pay: 'R$ 2.490,00 + VA + Plano Saúde' },
+      { category: 'emprego', type: 'Emprego CLT • Comércio Centro', title: 'Consultor(a) de Vendas & Atendimento ao Cliente', org: 'Rede Comercial • Av. Cel. Carneiro Júnior (Centro)', pay: 'R$ 1.890,00 + Comissões' },
+      { category: 'estagio', type: 'Estágio Universitário • Engenharia', title: 'Estágio em Engenharia Mecânica, Produção ou Elétrica', org: 'Empresas Parceiras Parque Científico / UNIFEI', pay: 'Bolsa R$ 1.550,00 + Auxílio Transporte' },
+      { category: 'estagio', type: 'Estágio • Tecnologia & Software', title: 'Estágio em Desenvolvimento Web & Dados', org: 'Startup Incubada • INCIT / UNIFEI Pinheirinho', pay: 'Bolsa R$ 1.400,00 • Híbrido' },
+      { category: 'estagio', type: 'Jovem Aprendiz 2027', title: 'Aprendiz em Manutenção Industrial e Administração', org: 'SESI SENAI CFP Aureliano Chaves • Avenida', pay: 'Bolsa Aprendiz + Curso Técnico' },
+      { category: 'curso', type: 'Curso Gratuito • Qualificação', title: 'Eletricista Instalador Predial e Industrial (160h)', org: 'SENAI Itajubá / Prefeitura Municipal', pay: '100% Gratuito • Certificado' },
+      { category: 'curso', type: 'Curso Gratuito • Tecnologia', title: 'Programação Front-End, Excel Avançado & IA Aplicada', org: 'Secretaria de Ciência e Tecnologia • Centro', pay: '100% Gratuito • Turno Noturno' },
+      { category: 'curso', type: 'Curso Gratuito • Gastronomia & MEI', title: 'Boas Práticas na Manipulação de Alimentos & Gestão MEI', org: 'Sala do Empreendedor / SEBRAE Itajubá', pay: '100% Gratuito • Selo VISA' }
     ];
 
-    function filterOpportunities(typeFilter) {
-      const grid = document.getElementById('opportunitiesGrid');
-      if (!grid) return;
-      ['all', 'emprego', 'estagio', 'curso'].forEach(t => {
-        const btn = document.getElementById(`jobFilter-${t}`);
-        if (btn) btn.className = t === typeFilter
+    function filterOpportunities(cat) {
+      ['all', 'emprego', 'estagio', 'curso'].forEach(c => {
+        const btn = document.getElementById(`jobFilter-${c}`);
+        if (!btn) return;
+        btn.className = c === cat
           ? 'px-3.5 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold'
           : 'px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold';
       });
 
-      const list = allOpportunitiesItajuba.filter(o => typeFilter === 'all' || o.type === typeFilter);
-      grid.innerHTML = list.map(o => {
-        const badgeLabel = o.type === 'emprego' ? '💼 Emprego CLT' : (o.type === 'estagio' ? '🎓 Estágio / Aprendiz' : '📚 Curso Gratuito');
-        const badgeColor = o.type === 'emprego' ? 'bg-indigo-100 text-indigo-800' : (o.type === 'estagio' ? 'bg-purple-100 text-purple-800' : 'bg-emerald-100 text-emerald-800');
-        return `
-          <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-3 surface-card">
-            <div class="space-y-1.5">
-              <div class="flex flex-wrap items-center justify-between gap-1">
-                <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${badgeColor}">${badgeLabel}</span>
-                <span class="text-xs font-black text-emerald-700">${o.pay}</span>
-              </div>
-              <h3 class="text-base font-black text-slate-900">${o.title}</h3>
-              <p class="text-xs font-bold text-purple-700">🏢 ${o.company}</p>
-              <p class="text-xs text-slate-500">📋 Requisitos: ${o.req}</p>
-            </div>
-            <button type="button" onclick="openJobApplicationModal('${o.title.replace(/'/g, "\\'")}', '${o.company.replace(/'/g, "\\'")}')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
-              Candidatar-se / Inscrever-se Agora
-            </button>
+      const grid = document.getElementById('opportunitiesGrid');
+      if (!grid) return;
+      const list = cat === 'all' ? allOpportunities : allOpportunities.filter(o => o.category === cat);
+      grid.innerHTML = list.map(o => `
+        <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-3 surface-card">
+          <div class="space-y-1.5">
+            <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800">${o.type}</span>
+            <h3 class="text-base font-black">${o.title}</h3>
+            <p class="text-xs text-slate-500">${o.org}</p>
+            <p class="text-xs font-extrabold text-emerald-700">${o.pay}</p>
           </div>
-        `;
-      }).join('');
+          <button type="button" onclick="openJobApplicationModal('${o.title.replace(/'/g, "\\'")}', '${o.org.replace(/'/g, "\\'")}')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
+            Candidatar / Inscrever-se Agora
+          </button>
+        </div>
+      `).join('');
     }
 
-    function openJobApplicationModal(jobTitle, companyName) {
-      document.getElementById('actionModalBadge').textContent = 'BALCÃO DE OPORTUNIDADES • ITAJUBÁ - MG';
+    function openJobApplicationModal(jobTitle, jobOrg) {
+      document.getElementById('actionModalBadge').textContent = 'BALCÃO DE OPORTUNIDADES • ITAJUBÁ';
       document.getElementById('actionModalTitle').textContent = jobTitle;
       document.getElementById('actionModalBody').innerHTML = `
-        <p class="text-xs font-bold text-purple-700">🏢 ${companyName}</p>
-        <form onsubmit="submitJobApplication(event, '${jobTitle.replace(/'/g, "\\'")}', '${companyName.replace(/'/g, "\\'")}')" class="space-y-3">
+        <form onsubmit="submitJobApplication(event, '${jobTitle.replace(/'/g, "\\'")}')" class="space-y-3">
+          <p class="text-slate-600"><strong>Instituição / Empresa:</strong> ${jobOrg}</p>
           <div>
             <label class="font-extrabold block mb-1">Nome Completo do Candidato</label>
-            <input id="candNameInput" required type="text" placeholder="Seu nome completo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+            <input required type="text" placeholder="Digite seu nome completo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div>
-              <label class="font-extrabold block mb-1">CPF</label>
-              <input id="candCpfInput" required type="text" placeholder="000.000.000-00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
-            </div>
-            <div>
-              <label class="font-extrabold block mb-1">Telefone / WhatsApp</label>
-              <input id="candPhoneInput" required type="text" placeholder="(35) 99999-0000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
-            </div>
+          <div>
+            <label class="font-extrabold block mb-1">Telefone / WhatsApp</label>
+            <input required type="text" placeholder="(35) 99999-0000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
           </div>
           <div>
             <label class="font-extrabold block mb-1">Formação / Experiência Resumida</label>
-            <textarea id="candBioInput" required rows="2" placeholder="Ex: Ensino Médio completo, curso técnico SENAI..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200"></textarea>
+            <input required type="text" placeholder="Ex: Ensino Médio Completo / Cursando Engenharia UNIFEI" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
           </div>
           <button type="submit" class="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold">
-            Enviar Candidatura Oficial
+            Enviar Candidatura / Inscrição
           </button>
         </form>
       `;
       document.getElementById('actionInteractionModal').classList.remove('hidden');
     }
 
-    function submitJobApplication(e, jobTitle, companyName) {
+    function submitJobApplication(e, jobTitle) {
       e.preventDefault();
-      const cand = document.getElementById('candNameInput').value.trim();
-      const prot = `EMP-ITJ-${Math.floor(10000 + Math.random() * 89999)}`;
-      document.getElementById('actionModalBody').innerHTML = `
-        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2 text-center surface-subcard">
-          <p class="text-2xl">🎉</p>
-          <p class="font-black text-emerald-900 text-sm">Inscrição Enviada com Sucesso!</p>
-          <p class="text-xs text-slate-700">Candidato(a): <strong>${cand}</strong></p>
-          <p class="text-xs text-slate-700">${jobTitle} • ${companyName}</p>
-          <p class="text-[11px] font-bold text-purple-700">Protocolo SINE/CIVORA: ${prot}</p>
-        </div>
-        <button type="button" onclick="closeModal('actionInteractionModal')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold">Fechar</button>
-      `;
-      showToast(`Candidatura ${prot} enviada!`);
+      closeModal('actionInteractionModal');
+      showToast(`Inscrição confirmada para "${jobTitle}"!`);
     }
 
-    // 17. ENQUETE, ZELADORIA, ÔNIBUS, DOWNLOAD DOCUMENTOS E ASSISTENTE
-    function renderPoll() {
+    // 18. ENQUETE & LISTA DE OCORRÊNCIAS
+    function renderPollOptions() {
       const container = document.getElementById('pollOptionsContainer');
       if (!container) return;
-      const total = pollData.reduce((acc, p) => acc + p.votes, 0);
+      const total = pollData.reduce((acc, o) => acc + o.votes, 0);
       document.getElementById('pollTotalVotes').textContent = `${total} votos`;
-
       container.innerHTML = pollData.map(opt => {
-        const pct = total ? Math.round((opt.votes / total) * 100) : 0;
+        const pct = Math.round((opt.votes / total) * 100);
         return `
-          <button type="button" onclick="castPollVote(${opt.id})" class="w-full text-left p-3 rounded-2xl border ${opt.voted ? 'border-purple-600 bg-purple-50' : 'border-slate-200 hover:border-purple-400'} space-y-1.5 transition-all surface-subcard">
+          <button type="button" onclick="votePoll(${opt.id})" class="w-full text-left p-3 rounded-2xl border ${opt.voted ? 'border-purple-600 bg-purple-50' : 'border-slate-200 bg-slate-50 hover:border-purple-400'} transition-all space-y-1.5 surface-subcard">
             <div class="flex items-center justify-between gap-2 text-xs font-bold">
               <span>${opt.label}</span>
-              <span class="text-purple-700 font-black">${pct}%</span>
+              <span class="font-black text-purple-700">${pct}%</span>
             </div>
-            <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
-              <div class="h-full bg-purple-600 rounded-full transition-all" style="width:${pct}%"></div>
-            </div>
+            <div class="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden"><div class="h-full bg-purple-600" style="width:${pct}%"></div></div>
           </button>
         `;
       }).join('');
     }
 
-    function castPollVote(id) {
-      const item = pollData.find(p => p.id === id);
-      if (!item) return;
-      if (!item.voted) {
-        item.votes += 1;
-        item.voted = true;
-        showToast('Seu voto no Orçamento Participativo de Itajubá foi computado!');
-      }
-      renderPoll();
+    function votePoll(id) {
+      pollData.forEach(o => {
+        if (o.id === id && !o.voted) {
+          o.votes += 1;
+          o.voted = true;
+        }
+      });
+      renderPollOptions();
+      showToast('Seu voto no Orçamento Participativo de Itajubá foi registrado!');
     }
 
     function renderReportsList() {
       const container = document.getElementById('reportsListContainer');
-      const counter = document.getElementById('reportsTotalCounter');
       if (!container) return;
-      const statusFilter = document.getElementById('reportStatusFilter')?.value || 'all';
-      const filtered = urbanReports.filter(r => statusFilter === 'all' || r.status === statusFilter);
-      if (counter) counter.textContent = urbanReports.length;
-
+      const filter = document.getElementById('reportStatusFilter')?.value || 'all';
+      const filtered = urbanReports.filter(r => filter === 'all' || r.status === filter);
+      document.getElementById('reportsTotalCounter').textContent = urbanReports.length;
       container.innerHTML = filtered.map(r => {
         const meta = categoryMeta[r.category] || categoryMeta.light;
-        const statusCls = r.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : (r.status === 'Pendente' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800');
+        const badgeCls = r.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : (r.status === 'Pendente' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800');
         return `
           <div onclick="if(map){ map.flyTo([${r.lat}, ${r.lng}], 17); }" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 hover:border-purple-400 cursor-pointer space-y-1 transition-all surface-subcard">
-            <div class="flex items-center justify-between text-[10px] font-extrabold">
-              <span class="text-purple-700">${meta.emoji} ${r.id} • ${meta.label}</span>
-              <span class="px-2 py-0.5 rounded-full ${statusCls}">${r.status}</span>
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-extrabold text-purple-700">${meta.emoji} ${r.id}</span>
+              <span class="font-extrabold px-2 py-0.5 rounded-full ${badgeCls}">${r.status}</span>
             </div>
-            <p class="text-xs font-extrabold">${r.title}</p>
+            <p class="text-xs font-bold">${r.title}</p>
             <p class="text-[11px] text-slate-500">${r.address}</p>
           </div>
         `;
@@ -3562,80 +3430,64 @@
       const category = document.getElementById('repCategory').value;
       const title = document.getElementById('repTitle').value.trim();
       const address = document.getElementById('repAddress').value.trim();
-      const photoFile = document.getElementById('repPhotoInput')?.files?.[0];
-      const newId = `CIV-${Math.floor(130 + Math.random() * 850)}`;
-      const lat = -22.4256 + (Math.random() - 0.5) * 0.014;
-      const lng = -45.4528 + (Math.random() - 0.5) * 0.014;
+      const fileInput = document.getElementById('repPhotoInput');
+      const id = `CIV-${122 + urbanReports.length}`;
+      const center = map ? map.getCenter() : { lat: -22.4256, lng: -45.4528 };
 
       urbanReports.unshift({
-        id: newId,
+        id,
         category,
-        title: photoFile ? `${title} [📷 Foto Anexada]` : title,
+        title,
         address,
         status: 'Em análise',
-        lat,
-        lng
+        lat: center.lat,
+        lng: center.lng
       });
+
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          beforeAfterWorks.unshift({
+            id,
+            title: `${title} • ${address}`,
+            days: 'Em atendimento (Hoje)',
+            beforeTitle: 'Foto enviada pelo cidadão',
+            afterTitle: 'Equipe técnica acionada',
+            beforeImg: ev.target.result,
+            afterImg: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=640&q=80'
+          });
+          renderBeforeAfterWorks();
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+
       renderReportsList();
       renderReportsOnMap();
-      closeModal('reportModal');
       e.target.reset();
-      showToast(`Protocolo ${newId} publicado no mapa de Itajubá!`);
+      closeModal('reportModal');
+      showToast(`Protocolo #${id} publicado no mapa de Itajubá!`);
     }
 
-    function openBusStopModal(stopId) {
-      const stop = busStops.find(s => s.id === stopId);
-      if (!stop) return;
-      document.getElementById('busStopTitle').textContent = stop.name;
-      document.getElementById('busStopLinesContainer').innerHTML = stop.lines.map(l => `
-        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 surface-subcard">
-          <div>
-            <p class="font-extrabold text-indigo-800">${l.line}</p>
-            <p class="text-[11px] text-slate-500">Intervalo: ${l.freq}</p>
-          </div>
-          <span class="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 font-black">Chega em ${l.next}</span>
-        </div>
-      `).join('');
-      document.getElementById('busModal').classList.remove('hidden');
+    function toggleAssistantChat() {
+      document.getElementById('assistantChatBox')?.classList.toggle('hidden');
     }
-
-    function downloadOfficialDocument(title, bodyText) {
-      const blob = new Blob([`${title}\nPREFEITURA MUNICIPAL DE ITAJUBÁ - MG\nData: 19/11/2026\n\n${bodyText}`], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      showToast(`Download iniciado: ${title}`);
-    }
-
-    function toggleAssistantChat() { document.getElementById('assistantChatBox')?.classList.toggle('hidden'); }
 
     function askAssistant(question) {
       const box = document.getElementById('assistantMessages');
       if (!box) return;
-      let answer = 'Utilize o menu lateral para navegar entre Mapa, Defesa Civil, Avaliações QR Code, Vagas, Doações e Cultura de Itajubá.';
-      if (question.includes('Rio Sapucaí')) {
-        answer = floodAlertActive
-          ? '⚠️ Simulação ativa: Rio Sapucaí em 3,18m (Alerta Laranja). Comportas da Vila Poddis acionadas.'
-          : '✅ Rio Sapucaí está em 1,45m (Normal). Passarela José Miguel e Ponte do Batalhão em 0,50m.';
-      } else if (question.includes('doar')) {
-        answer = '🤝 Acesse a aba "Unidades Carentes & Abrigos" para copiar o PIX ou agendar entrega para o Asilo São Vicente de Paulo, Casa da Criança, APAE ou CRAS.';
-      } else if (question.includes('Santa Rosa')) {
-        answer = '🚌 Pelo bairro Santa Rosa passam as linhas Expresso Valônia: 01, 02, 03A, 03B, 04A, 04B, 05, 06 e 11A/B/C.';
-      }
+      let reply = 'Use o seletor de bairros no topo para ver os 37 bairros de Itajubá ou navegue pelo menu lateral.';
+      if (question.includes('Rio')) reply = 'O Rio Sapucaí está em 1,45m (Normal). Todas as 10 estações telemétricas estão ativas na aba Riscos & Defesa Civil.';
+      if (question.includes('doar')) reply = 'Na aba "Unidades Carentes & Abrigos" você encontra a Vila Vicentina, Casa da Criança, APAE e Albergue Noturno com chave PIX e agendamento.';
+      if (question.includes('Santa Rosa')) reply = 'No bairro Santa Rosa operam as linhas 01, 02, 03A, 03B, 04A, 04B, 05, 06 e 11A/B/C da Expresso Valônia, além do PSF Santa Rosa.';
       box.innerHTML += `
-        <div class="p-2.5 rounded-2xl bg-slate-100 text-slate-800 font-bold surface-subcard">${question}</div>
-        <div class="p-2.5 rounded-2xl bg-purple-50 text-purple-950 surface-subcard">${answer}</div>
+        <div class="p-2 rounded-2xl bg-slate-100 font-bold text-right surface-subcard">${question}</div>
+        <div class="p-2.5 rounded-2xl bg-purple-50 text-purple-950 surface-subcard">${reply}</div>
       `;
       box.scrollTop = box.scrollHeight;
     }
 
-    // 18. INICIALIZAÇÃO DO SISTEMA
-    window.addEventListener('DOMContentLoaded', () => {
+    // 19. INICIALIZAÇÃO SEGURA
+    document.addEventListener('DOMContentLoaded', () => {
       try {
         if (localStorage.getItem('civora_dark_mode') === '1') {
           document.body.classList.add('dark-mode');
@@ -3646,20 +3498,20 @@
         }
       } catch (e) {}
 
-      initMap();
       renderNeighborhoodDossier(neighborhoodsData.all);
       openRaioxDrawer('services', 'health');
-      renderBeforeAfterWorks();
-      renderPoll();
+      renderPollOptions();
       renderReportsList();
-      renderReviewsDirectory();
+      renderBeforeAfterWorks();
       renderRisksDashboard();
+      renderReviewsDirectory();
       renderEgovServices();
       renderFullHealthAndEducation();
       renderAllBusLinesMobility();
       setCultureTab('all');
       renderSocialUnits();
       filterOpportunities('all');
+      initMap();
     });
   </script>
 </body>
