@@ -21,7 +21,6 @@
   <style>
     * { font-family: 'Inter', sans-serif; }
     html { scroll-behavior: smooth; }
-
     ::-webkit-scrollbar { width: 7px; height: 7px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.35); border-radius: 9999px; }
@@ -54,13 +53,6 @@
     body.dark-mode .border-slate-200,
     body.dark-mode .border-slate-100,
     body.dark-mode .border-purple-100 { border-color: #2d244b !important; }
-    body.dark-mode input,
-    body.dark-mode select,
-    body.dark-mode textarea {
-      background-color: #1d1734 !important;
-      color: #f8fafc !important;
-      border-color: #3b3063 !important;
-    }
   </style>
 </head>
 <body class="bg-[#F6F4FB] text-slate-900 antialiased selection:bg-purple-600 selection:text-white">
@@ -747,14 +739,19 @@
     let map = null;
     let poisLayer = null;
     let reportsLayer = null;
-    let selectedStreetHighlightLayer = null;
 
     function initMap() {
       const mapEl = document.getElementById('itajubaMap');
       if (!mapEl || typeof L === 'undefined') return;
       map = L.map('itajubaMap').setView([-22.4256, -45.4528], 14);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-      selectedStreetHighlightLayer = L.layerGroup().addTo(map);
+      
+      // Using CartoDB Positron tiles (reliable, fast, and free of 403 tile usage block policies)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        subdomains: 'abcd',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      }).addTo(map);
+
       poisLayer = L.layerGroup().addTo(map);
       reportsLayer = L.layerGroup().addTo(map);
       renderPoisOnMap();
@@ -811,7 +808,6 @@
 
     function toggleDarkMode() {
       const isDark = document.body.classList.toggle('dark-mode');
-      try { localStorage.setItem('civora_dark_mode', isDark ? '1' : '0'); } catch (e) {}
       showToast(isDark ? 'Modo Escuro ativado!' : 'Modo Claro ativado!');
     }
 
@@ -990,6 +986,7 @@
     }
 
     function setMapTileLayer(type) {
+      if (!map) return;
       showToast(`Camada alterada para ${type === 'satellite' ? 'Satélite' : 'Ruas'}.`);
     }
 
