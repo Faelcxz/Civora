@@ -181,6 +181,7 @@
           </button>
           <button type="button" data-nav="transparency" onclick="switchMainView('transparency')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
             <span>📊 Transparência & Diário</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-400/25 text-sky-200">Dados</span>
           </button>
         </nav>
 
@@ -597,7 +598,16 @@
               </button>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-2">
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="setReviewCategoryFilterBtn('all')" class="px-3 py-1 rounded-xl bg-white/20 text-white text-xs font-extrabold">Todos (76)</button>
+              <button type="button" onclick="setReviewCategoryFilterBtn('health')" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">🏥 Saúde</button>
+              <button type="button" onclick="setReviewCategoryFilterBtn('food')" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">🍽️ Alimentação</button>
+              <button type="button" onclick="setReviewCategoryFilterBtn('education')" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">🎓 Ensino</button>
+              <button type="button" onclick="setReviewCategoryFilterBtn('industry')" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">🏭 Indústrias</button>
+              <button type="button" onclick="setReviewCategoryFilterBtn('service')" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold">🏢 Serviços</button>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
               <div class="p-3 rounded-2xl bg-white/10 border border-white/15">
                 <p class="text-xs font-black text-emerald-300">★ Estrela Verde</p>
                 <p class="text-[11px] text-purple-100">Qualidade (Comida / Serviço)</p>
@@ -627,7 +637,9 @@
               <option value="all">Todos os Setores (76 Locais)</option>
               <option value="food">Restaurantes, Padarias & Mercados</option>
               <option value="health">Hospitais, UBSs, Clínicas & Farmácias</option>
-              <option value="service">Indústrias, Escolas, Bancos & Empresas</option>
+              <option value="education">Escolas, Faculdades & Universidades</option>
+              <option value="industry">Indústrias & Polo Tecnológico</option>
+              <option value="service">Bancos, Hotéis, Cultura & Serviços</option>
             </select>
             <select id="reviewSealFilter" onchange="renderReviewsDirectory()" class="px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold">
               <option value="all">Todas as Estrelas Ativas</option>
@@ -676,7 +688,7 @@
             <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm space-y-3.5 surface-card">
               <div class="flex items-center justify-between gap-2">
                 <h3 class="text-base font-extrabold">🏥 Rede Completa de Saúde SUS & Hospitais</h3>
-                <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">21 Unidades</span>
+                <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">Unidades SUS</span>
               </div>
               <input id="healthSearchInput" type="text" oninput="renderFullHealthAndEducation()" placeholder="Filtrar UBS, PSF, hospital ou bairro..." class="w-full px-3.5 py-2 rounded-2xl border border-slate-200 bg-slate-50 text-xs" />
               <div id="allHealthUnitsList" class="space-y-2 text-xs max-h-[460px] overflow-y-auto pr-1"></div>
@@ -688,7 +700,7 @@
             <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm space-y-3.5 surface-card">
               <div class="flex items-center justify-between gap-2">
                 <h3 class="text-base font-extrabold">🎓 Rede Completa de Educação & Creches (CMEIs)</h3>
-                <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">24 Instituições</span>
+                <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">Rede Ensino</span>
               </div>
               <input id="eduSearchInput" type="text" oninput="renderFullHealthAndEducation()" placeholder="Filtrar escola, CMEI, universidade ou bairro..." class="w-full px-3.5 py-2 rounded-2xl border border-slate-200 bg-slate-50 text-xs" />
               <div id="allEducationUnitsList" class="space-y-2 text-xs max-h-[460px] overflow-y-auto pr-1"></div>
@@ -700,13 +712,50 @@
         </section>
 
         <!-- ========================================================= -->
-        <!-- ABA 6: MOBILIDADE, TODAS AS 22 LINHAS VALÔNIA & ZONA AZUL -->
+        <!-- ABA 6: MOBILIDADE, MAPA 56 PONTOS VALÔNIA & ZONA AZUL     -->
         <!-- ========================================================= -->
         <section id="view-mobility" class="hidden space-y-6">
           <div class="rounded-3xl bg-gradient-to-r from-[#312E81] to-[#6D28D9] text-white p-6 shadow-xl">
             <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Mobilidade Urbana & Trânsito • Expresso Valônia Itajubá</span>
-            <h1 class="text-2xl sm:text-3xl font-black mt-2">Todas as 22 Linhas de Ônibus, Zona Azul & Passe Fácil</h1>
-            <p class="text-xs sm:text-sm text-purple-100 mt-1">Ative seu tíquete de Zona Azul em tempo real, solicite credenciais e consulte os itinerários e horários de todas as 22 linhas urbanas e rurais.</p>
+            <h1 class="text-2xl sm:text-3xl font-black mt-2">Mapa de 56 Pontos Reais, 22 Linhas Expresso Valônia & Zona Azul</h1>
+            <p class="text-xs sm:text-sm text-purple-100 mt-1">Clique em qualquer um dos 56 pontos de parada reais espalhados pelos bairros de Itajubá para ver previsões em tempo real e horários completos do dia, ou ative seu cartão Zona Azul.</p>
+          </div>
+
+          <!-- Mapa Exclusivo dos 56 Pontos de Ônibus em Itajubá -->
+          <div class="bg-white rounded-3xl border border-purple-100 p-4 sm:p-5 shadow-sm space-y-3.5 surface-card">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                <h2 class="text-sm sm:text-base font-extrabold text-slate-900">Mapa Interativo de Pontos de Ônibus • Exclusivo Itajubá - MG (56 Paradas Reais)</h2>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" id="btnBusStreetLayer" onclick="setBusMapTileLayer('street')" class="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold">🗺️ Ruas Itajubá</button>
+                <button type="button" id="btnBusSatLayer" onclick="setBusMapTileLayer('satellite')" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">🛰️ Satélite HD</button>
+                <button type="button" onclick="resetBusMapCenter()" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Centralizar Pontos</button>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input
+                id="busStopFilterInput"
+                type="text"
+                oninput="filterBusStopsOnMap(this.value)"
+                placeholder="Filtrar ponto de ônibus por rua, praça, bairro ou linha (ex: Mercado, UNIFEI, HCI, Santa Rosa, Rebourgeon, Helibras, Linha 03B)..."
+                class="flex-1 px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium focus:outline-none focus:border-indigo-500"
+              />
+              <span id="busStopsVisibleCounter" class="px-3.5 py-2.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs font-extrabold shrink-0 text-center">
+                56 paradas mapeadas
+              </span>
+            </div>
+
+            <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+              <div id="busItajubaMap"></div>
+              <div class="absolute bottom-3 left-3 z-[450] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl p-3 shadow-lg text-[11px] space-y-1 surface-card">
+                <p class="font-black text-[10px] uppercase tracking-wider text-indigo-700">Expresso Valônia • Itajubá</p>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-indigo-600 inline-block"></span> Clique no ícone 🚌 para ver horários do ponto</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Terminais & Integrações Principais</div>
+              </div>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -792,87 +841,49 @@
               <p class="text-xs sm:text-sm text-purple-100 mt-1">Candidate-se diretamente às vagas reais das indústrias, hospitais, universidades e comércio de Itajubá.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button" onclick="setReviewCategoryFilterBtn('all')" class="px-3 py-1 rounded-xl bg-white/20 text-white text-xs font-extrabold">Todos (76)</button>
-              <button type="button" onclick="setReviewCategoryFilterBtn('health')" class="px-3 py-1 rounded-xl bg-white/10 text-white text-xs font-bold">🏥 Saúde</button>
-              <button type="button" onclick="setReviewCategoryFilterBtn('food')" class="px-3 py-1 rounded-xl bg-white/10 text-white text-xs font-bold">🍽️ Alimentação</button>
-              <button type="button" onclick="setReviewCategoryFilterBtn('education')" class="px-3 py-1 rounded-xl bg-white/10 text-white text-xs font-bold">🎓 Ensino</button>
-              <button type="button" onclick="setReviewCategoryFilterBtn('industry')" class="px-3 py-1 rounded-xl bg-white/10 text-white text-xs font-bold">🏭 Indústrias</button>
-              <button type="button" onclick="setReviewCategoryFilterBtn('service')" class="px-3 py-1 rounded-xl bg-white/10 text-white text-xs font-bold">🏢 Serviços</button>
+              <button type="button" id="jobFilter-all" onclick="filterOpportunities('all')" class="px-3.5 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold">Todas as Oportunidades</button>
+              <button type="button" id="jobFilter-emprego" onclick="filterOpportunities('emprego')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">💼 Empregos CLT</button>
+              <button type="button" id="jobFilter-estagio" onclick="filterOpportunities('estagio')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">🎓 Estágios & Trainees</button>
+              <button type="button" id="jobFilter-curso" onclick="filterOpportunities('curso')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">📚 Cursos Gratuitos SENAI/SINE</button>
             </div>
-          </div>
-
-          <div class="bg-white rounded-3xl border border-purple-100 p-4 shadow-sm flex flex-col sm:flex-row gap-3 surface-card">
-            <input id="reviewSearchInput" type="text" oninput="renderReviewsDirectory()" placeholder="Pesquisar empresa (ex: Helibras, IMBEL, Balteau, HCI, UNIFEI, padaria, farmácia, banco)..." class="flex-1 px-4 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium focus:outline-none focus:border-purple-500" />
-            <select id="reviewCategoryFilter" onchange="renderReviewsDirectory()" class="px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold">
-              <option value="all">Todos os Setores (76 Locais)</option>
-              <option value="food">Restaurantes, Padarias & Mercados</option>
-              <option value="health">Hospitais, UBSs, Clínicas & Farmácias</option>
-              <option value="education">Escolas, Faculdades & Universidades</option>
-              <option value="industry">Indústrias & Polo Tecnológico</option>
-              <option value="service">Bancos, Hotéis, Cultura & Serviços</option>
-            </select>
-            <select id="reviewSealFilter" onchange="renderReviewsDirectory()" class="px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold">
-              <option value="all">Todas as Estrelas Ativas</option>
-              <option value="quality">★ Verde (Qualidade ≥ 75%)</option>
-              <option value="accessibility">★ Azul (Acessibilidade ≥ 75%)</option>
-              <option value="hygiene">★ Amarela (Higiene ≥ 75%)</option>
-              <option value="service">★ Roxa (Atendimento ≥ 75%)</option>
-              <option value="price">★ Laranja (Preço Justo ≥ 75%)</option>
-            </select>
-          </div>
           </div>
           <div id="opportunitiesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
         </section>
 
         <!-- ========================================================= -->
-        <!-- ABA 6: MOBILIDADE, MAPA 56 PONTOS VALÔNIA & ZONA AZUL     -->
+        <!-- ABA 10: TRANSPARÊNCIA MUNICIPAL & DIÁRIO OFICIAL          -->
         <!-- ========================================================= -->
-        <section id="view-mobility" class="hidden space-y-6">
-          <div class="rounded-3xl bg-gradient-to-r from-[#312E81] to-[#6D28D9] text-white p-6 shadow-xl">
-            <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Mobilidade Urbana & Trânsito • Expresso Valônia Itajubá</span>
-            <h1 class="text-2xl sm:text-3xl font-black mt-2">Mapa de 56 Pontos Reais, 22 Linhas Expresso Valônia & Zona Azul</h1>
-            <p class="text-xs sm:text-sm text-purple-100 mt-1">Clique em qualquer um dos 56 pontos de parada reais espalhados pelos bairros de Itajubá para ver previsões em tempo real e horários completos do dia, ou ative seu cartão Zona Azul.</p>
+        <section id="view-transparency" class="hidden space-y-6">
+          <div class="rounded-3xl bg-gradient-to-r from-[#1E1B4B] via-[#3B0764] to-[#6D28D9] text-white p-6 shadow-xl">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Controladoria Geral & Portal da Transparência • Itajubá - MG</span>
+            <h1 class="text-2xl sm:text-3xl font-black mt-2">Execução Orçamentária, Licitações & Diário Oficial Eletrônico</h1>
+            <p class="text-xs sm:text-sm text-purple-100 mt-1">Acompanhe investimentos públicos por secretaria, contratos vigentes e edições recentes do Diário Oficial do Município de Itajubá.</p>
           </div>
 
-          <!-- Mapa Exclusivo dos 56 Pontos de Ônibus em Itajubá -->
-          <div class="bg-white rounded-3xl border border-purple-100 p-4 sm:p-5 shadow-sm space-y-3.5 surface-card">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
-                <h2 class="text-sm sm:text-base font-extrabold text-slate-900">Mapa Interativo de Pontos de Ônibus • Exclusivo Itajubá - MG (56 Paradas Reais)</h2>
-              </div>
-              <div class="flex flex-wrap items-center gap-1.5">
-                <button type="button" id="btnBusStreetLayer" onclick="setBusMapTileLayer('street')" class="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold">🗺️ Ruas Itajubá</button>
-                <button type="button" id="btnBusSatLayer" onclick="setBusMapTileLayer('satellite')" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">🛰️ Satélite HD</button>
-                <button type="button" onclick="resetBusMapCenter()" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Centralizar Pontos</button>
-              </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm surface-card">
+              <p class="text-[10px] font-extrabold uppercase text-purple-700">Saúde Pública (SUS)</p>
+              <p class="text-2xl font-black text-slate-900 mt-1">28,4%</p>
+              <p class="text-xs text-emerald-700 font-semibold mt-0.5">Acima do mínimo constitucional (15%)</p>
             </div>
-
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input
-                id="busStopFilterInput"
-                type="text"
-                oninput="filterBusStopsOnMap(this.value)"
-                placeholder="Filtrar ponto de ônibus por rua, praça, bairro ou linha (ex: Mercado, UNIFEI, HCI, Santa Rosa, Rebourgeon, Helibras, Linha 03B)..."
-                class="flex-1 px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-medium focus:outline-none focus:border-indigo-500"
-              />
-              <span id="busStopsVisibleCounter" class="px-3.5 py-2.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs font-extrabold shrink-0 text-center">
-                56 paradas mapeadas
-              </span>
+            <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm surface-card">
+              <p class="text-[10px] font-extrabold uppercase text-indigo-700">Educação Municipal</p>
+              <p class="text-2xl font-black text-slate-900 mt-1">26,9%</p>
+              <p class="text-xs text-emerald-700 font-semibold mt-0.5">Escolas, CMEIs e transporte escolar</p>
             </div>
-
-            <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
-              <div id="busItajubaMap"></div>
-              <div class="absolute bottom-3 left-3 z-[450] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl p-3 shadow-lg text-[11px] space-y-1 surface-card">
-                <p class="font-black text-[10px] uppercase tracking-wider text-indigo-700">Expresso Valônia • Itajubá</p>
-                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-indigo-600 inline-block"></span> Clique no ícone 🚌 para ver horários do ponto</div>
-                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Terminais & Integrações Principais</div>
-              </div>
+            <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm surface-card">
+              <p class="text-[10px] font-extrabold uppercase text-cyan-700">Infraestrutura & Drenagem</p>
+              <p class="text-2xl font-black text-slate-900 mt-1">R$ 34,8 Mi</p>
+              <p class="text-xs text-slate-500 font-semibold mt-0.5">Pavimentação, LED e comportas</p>
+            </div>
+            <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm surface-card">
+              <p class="text-[10px] font-extrabold uppercase text-amber-700">Índice Transparência MG</p>
+              <p class="text-2xl font-black text-slate-900 mt-1">9,6 / 10</p>
+              <p class="text-xs text-emerald-700 font-semibold mt-0.5">Selo Diamante Dados Abertos</p>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          </div>
+          <div id="transparencyDocsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </section>
 
       </main>
@@ -1050,7 +1061,7 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- MODAL 4: MODAL INTERATIVO UNIVERSAL (VAGAS, DOAÇÃO, ARTE, e-Gov) -->
+  <!-- MODAL 4: MODAL INTERATIVO UNIVERSAL (VAGAS, DOAÇÃO, e-Gov) -->
   <!-- ========================================================= -->
   <div id="actionInteractionModal" class="hidden fixed inset-0 z-[3100] bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-purple-200 surface-card">
@@ -1111,7 +1122,7 @@
       <div class="p-5 space-y-3 text-xs leading-relaxed">
         <p><strong>1. Mapa de Itajubá & 37 Bairros:</strong> Escolha qualquer bairro (como <em>Santa Rosa</em>, <em>Centro</em>, <em>Pinheirinho</em>, <em>Rebourgeon</em>) para focar o mapa e abrir os botões do Raio-X (Criminalidade %, Enchente, Obras, UBSs, Escolas e 22 Linhas Valônia).</p>
         <p><strong>2. 76 Empresas & Avaliações via QR Code (Regra dos 75%):</strong> Clique em qualquer empresa ou estabelecimento no mapa ou na aba Avaliações para ler as mais de 50 avaliações reais de cada local e validar o QR Code para pontuar os 5 selos coloridos.</p>
-        <p><strong>3. Cultura, Obras de Arte & Apoio a Artistas:</strong> Compre/reserve quadros e artesanato de Itajubá, apoie artistas independentes via PIX e inscreva-se em projetos culturais.</p>
+        <p><strong>3. Ônibus Valônia & 56 Pontos Reais:</strong> Na aba Mobilidade, clique em qualquer parada no mapa de Itajubá para consultar previsões em tempo real e todos os horários do dia.</p>
         <p><strong>4. Unidades Carentes & Vagas:</strong> Doe diretamente para abrigos e entidades assistenciais de Itajubá ou candidate-se às vagas de emprego, estágios e cursos gratuitos.</p>
       </div>
     </div>
@@ -1144,7 +1155,7 @@
   <div id="toastContainer" class="fixed bottom-4 left-4 z-[3500] space-y-2 pointer-events-none"></div>
 
   <!-- ========================================================= -->
-  <!-- JAVASCRIPT COMPLETO E ÍNTEGRO DA PLATAFORMA CIVORA        -->
+  <!-- JAVASCRIPT COMPLETO, ÍNTEGRO E GARANTIDO                  -->
   <!-- ========================================================= -->
   <script>
     // 1. TODOS OS 37 BAIRROS OFICIAIS DE ITAJUBÁ - MG
@@ -1363,94 +1374,141 @@
         healthSub: 'Via Boa Vista / Rodovia',
         crimeHistory: [
           { year: '2021', pct: 1.64 }, { year: '2022', pct: 1.52 }, { year: '2023', pct: 1.43 },
-      ['Centro & Entorno', 'Cantina & Grill Serra da Mantiqueira', 'Restaurante & Gastronomia', 'food', '🍽️', 'Av. Cel. Carneiro Júnior, 310 - Centro, Itajubá', -22.4254, -45.4524, 'Alvará Sanitário VISA Itajubá • Padrão Ouro', 'Vigilância Sanitária Municipal', 'Fila de espera média de 15 min aos domingos no almoço.'],
-      ['Centro & Entorno', 'Mercado Municipal de Itajubá • Box Café & Queijos', 'Comércio Tradicional & Alimentos', 'food', '🧀', 'Praça Dr. José Braz, s/n - Centro, Itajubá', -22.4243, -45.4535, 'Selo Patrimônio & Inspeção Sanitária Municipal', 'Secretaria de Agricultura & VISA', 'Poucas vagas rápidas no entorno aos sábados pela manhã.'],
-      ['Centro & Entorno', 'Padaria & Confeitaria Estrela do Sul', 'Panificação & Cafeteria', 'food', '🥐', 'Rua Major Belo Lisboa, 145 - Centro, Itajubá', -22.4261, -45.4531, 'Alvará Sanitário Ativo • Boas Práticas', 'VISA Itajubá', 'Movimento intenso entre 7h e 8h30 para café da manhã.'],
-      ['Centro & Entorno', 'Supermercado Central Carneiro Júnior', 'Supermercado & Hortifrúti', 'food', '🛒', 'Av. Cel. Carneiro Júnior, 480 - Centro, Itajubá', -22.4267, -45.4529, 'Selo Higiene & Cadeia Fria Certificada', 'VISA Itajubá / PROCON', 'Estacionamento subsolo lotado às sextas-feiras à tarde.'],
-      ['Centro & Entorno', 'Restaurante & Pizzaria Forno da Serra', 'Pizzaria & Massas', 'food', '🍕', 'Rua Dona Maria Carneiro, 210 - Centro, Itajubá', -22.4247, -45.4519, 'Selo Qualidade Gastronômica Mantiqueira', 'VISA Itajubá', 'Tempo de entrega delivery pode chegar a 45 min na sexta.'],
-      ['Centro & Entorno', 'Café Cultural Theodomiro', 'Cafeteria & Doceria', 'food', '☕', 'Praça Getúlio Vargas, 88 - Centro, Itajubá', -22.4252, -45.4520, 'Selo Patrimônio Cultural & Higiene', 'SECULT / VISA Itajubá', 'Espaço interno aconchegante, porém com mesas limitadas.'],
-      ['Centro & Entorno', 'Churrascaria Gaúcha do Vale', 'Churrascaria & Rodízio', 'food', '🥩', 'Rua Cesário Alvim, 190 - Centro, Itajubá', -22.4255, -45.4537, 'Alvará Sanitário & Controle de Temperatura', 'VISA Itajubá', 'Acesso por rampa lateral precisa de sinalização mais visível.'],
-      ['Centro & Entorno', 'Policlínica Municipal & Farmácia de Todos', 'Saúde Pública SUS & Medicamentos', 'health', '💊', 'Praça Amélia Braga - Centro, Itajubá', -22.4249, -45.4514, 'Unidade Pública SUS • Dispensação Farmacêutica', 'Secretaria Municipal de Saúde', 'Maior fluxo entre 8h e 10h para retirada de medicamentos.'],
-      ['Centro & Entorno', 'Drogaria Central Mantiqueira 24h', 'Farmácia & Manipulação', 'health', '🩺', 'Av. Cel. Carneiro Júnior, 195 - Centro, Itajubá', -22.4251, -45.4522, 'Autorização ANVISA & CRF-MG Ativo', 'ANVISA / VISA Itajubá', 'Sem estacionamento próprio na porta do calçadão.'],
-      ['Centro & Entorno', 'Laboratório Clínico Itajubá Diagnósticos', 'Análises Clínicas & Exames', 'health', '🔬', 'Rua Barão do Rio Branco, 130 - Centro, Itajubá', -22.4248, -45.4529, 'Certificação PNCQ & Controle de Qualidade', 'Vigilância Sanitária', 'Jejum matinal gera fila rápida entre 7h e 8h.'],
-      ['Centro & Entorno', 'Clínica Odontológica Sorriso da Serra', 'Odontologia & Ortodontia', 'health', '🦷', 'Rua Silvestre Ferraz, 215 - Centro, Itajubá', -22.4260, -45.4518, 'Selo Esterilização & Biossegurança', 'CRO-MG / VISA', 'Agendamento de retorno exige antecedência de 10 dias.'],
-      ['Centro & Entorno', 'Banco do Brasil • Agência Centro Itajubá', 'Instituição Financeira', 'service', '🏦', 'Praça Getúlio Vargas, 42 - Centro, Itajubá', -22.4253, -45.4517, 'Acessibilidade Bancária & Autoatendimento', 'BACEN / PROCON Itajubá', 'Filas nos caixas internos em dias de pagamento.'],
-      ['Centro & Entorno', 'Caixa Econômica Federal • Agência Itajubá', 'Instituição Financeira & FGTS', 'service', '🏛️', 'Rua Major Belo Lisboa, 90 - Centro, Itajubá', -22.4259, -45.4530, 'Atendimento Prioritário Lei Federal', 'BACEN / PROCON', 'Espera média de 25 min nos horários de pico.'],
-      ['Centro & Entorno', 'Sicoob Mantiqueira • Cooperativa Centro', 'Cooperativa de Crédito', 'service', '💳', 'Rua Dona Maria Carneiro, 112 - Centro, Itajubá', -22.4246, -45.4523, 'Selo Atendimento Cooperativo 5★', 'Sistema Sicoob / BACEN', 'Nenhum ponto crítico relatado recentemente.'],
-      ['Centro & Entorno', 'Hotel & Executivo Palace Itajubá', 'Hotelaria & Eventos', 'service', '🏨', 'Rua Primo Capelo, 75 - Centro, Itajubá', -22.4266, -45.4539, 'Cadastur Ativo & Alvará Corpo de Bombeiros', 'Ministério do Turismo / CBMMG', 'Garagem rotativa exige reserva prévia em congressos.'],
-      ['Centro & Entorno', 'Livraria & Papelaria Acadêmica Central', 'Comércio & Material Escolar', 'service', '📚', 'Av. Cel. Carneiro Júnior, 260 - Centro, Itajubá', -22.4255, -45.4525, 'Selo Comércio Legal & Nota Fiscal', 'ACIEI / PROCON', 'Movimento intenso na primeira semana de fevereiro.'],
-      ['Centro & Entorno', 'Academia Corpo & Energia Centro', 'Esporte & Saúde Física', 'service', '🏋️', 'Rua Aureliano Chaves, 140 - Centro, Itajubá', -22.4250, -45.4540, 'Registro CREF6-MG & AVCB Bombeiros', 'CREF6-MG / CBMMG', 'Aparelhos de musculação disputados entre 18h e 20h.'],
-      ['Centro & Entorno', 'E.E. Major João Pereira', 'Educação Estadual', 'education', '🎓', 'Praça Wenceslau Braz - Centro, Itajubá', -22.4263, -45.4522, 'Rede Estadual de Ensino • SEE-MG', 'Secretaria de Educação MG', 'Trânsito lento na saída dos alunos às 11h30.'],
-      ['Centro & Entorno', 'Teatro Municipal Christiane Riêra', 'Cultura & Artes Cênicas', 'service', '🎭', 'Av. Dr. Jerson Dias, 501 - Centro/Estiva, Itajubá', -22.4352, -45.4602, 'Espaço Cultural Certificado & Acessível', 'SECULT Itajubá / CBMMG', 'Ingressos gratuitos esgotam rápido em festivais.'],
-      ['Centro & Entorno', 'Correios • Agência Central Itajubá', 'Serviços Postais & Logística', 'service', '📦', 'Rua Dr. Pereira Cabral, 64 - Centro, Itajubá', -22.4245, -45.4508, 'Serviço Postal Oficial', 'Empresa Brasileira de Correios', 'Fila moderada no balcão de encomendas após 15h.'],
+          { year: '2024', pct: 1.35 }, { year: '2025', pct: 1.28 }, { year: '2026', pct: 1.21 }
+        ],
+        crimeNote: 'Ações preventivas e iluminação LED melhoraram indicadores noturnos.',
+        structuralIssues: [
+          { loc: 'Av. Presidente Tancredo Neves / Boa Vista', desc: 'Sinalização de travessia escolar.', lat: -22.4392, lng: -45.4622 }
+        ],
+        news: [
+          { date: '08/09/2026', title: 'PSF Boa Vista recebe novos equipamentos de atenção primária', source: 'Saúde Itajubá' }
+        ]
+      },
+      estiva: {
+        name: 'Estiva (CEP 37500-274)',
+        center: [-22.4362, -45.4608],
+        zoom: 16,
+        safety: '1,10% • Sede Administrativa',
+        safetySub: 'Entorno do Centro Administrativo Municipal',
+        floodRisk: 'Moderado • Corredor Jerson Dias',
+        floodSub: 'Drenagem pluvial monitorada',
+        invest: 'Prefeitura & Teatro Municipal',
+        investSub: 'Av. Dr. Jerson Dias, 500',
+        health: 'Linhas 09, 11B, 11C Valônia',
+        healthSub: 'Integração direta Estiva – Rodoviária – Centro',
+        crimeHistory: [
+          { year: '2021', pct: 1.44 }, { year: '2022', pct: 1.36 }, { year: '2023', pct: 1.28 },
+          { year: '2024', pct: 1.21 }, { year: '2025', pct: 1.15 }, { year: '2026', pct: 1.10 }
+        ],
+        crimeNote: 'Região institucional com policiamento regular.',
+        structuralIssues: [
+          { loc: 'Av. Dr. Jerson Dias (entorno Prefeitura)', desc: 'Melhoria na iluminação de travessias de pedestres.', lat: -22.4365, lng: -45.4615 }
+        ],
+        news: [
+          { date: '15/10/2026', title: 'Teatro Municipal Christiane Riêra recebe mostra cultural gratuita', source: 'SECULT Itajubá' }
+        ]
+      },
+      rebourgeon: {
+        name: 'Rebourgeon (CEP 37503-175)',
+        center: [-22.4265, -45.4362],
+        zoom: 16,
+        safety: '1,15% • Ronda Zona Leste',
+        safetySub: 'Monitoramento preventivo encosta leste',
+        floodRisk: 'Baixo Fluvial • Atenção Encosta',
+        floodSub: 'Estação Pluviométrica Rebourgeon ativa',
+        invest: 'PSF Rebourgeon & E.M. Carmo Manaia',
+        investSub: '60 logradouros • Infraestrutura comunitária',
+        health: 'Linhas 03A, 03B, 04A, 04B, 08, 17',
+        healthSub: 'Conexão direta Rebourgeon – Centro – Santa Rosa – Medicina',
+        crimeHistory: [
+          { year: '2021', pct: 1.54 }, { year: '2022', pct: 1.45 }, { year: '2023', pct: 1.37 },
+          { year: '2024', pct: 1.29 }, { year: '2025', pct: 1.22 }, { year: '2026', pct: 1.15 }
+        ],
+        crimeNote: 'Queda contínua impulsionada pelo policiamento comunitário.',
+        structuralIssues: [
+          { loc: 'Encostas superiores do Rebourgeon', desc: 'Monitoramento geotécnico pela Defesa Civil.', lat: -22.4272, lng: -45.4355 }
+        ],
+        news: [
+          { date: '16/11/2026', title: 'Pluviômetro Rebourgeon registra índice zero nas últimas 24h', source: 'Defesa Civil' }
+        ]
+      },
+      porto_velho: {
+        name: 'Porto Velho (CEP 37501-000)',
+        center: [-22.4355, -45.4515],
+        zoom: 16,
+        safety: '1,18% • Monitoramento Regular',
+        safetySub: 'Ronda preventiva Zona Sul / Leste',
+        floodRisk: 'Baixo • Cota Intermediária',
+        floodSub: 'Escoamento pluvial regular',
+        invest: 'Comércio Local & Equipamentos Públicos',
+        investSub: '45 logradouros pavimentados',
+        health: 'Linhas 01, 11C Valônia',
+        healthSub: 'Acesso direto ao Centro e Santa Rosa',
+        crimeHistory: [
+          { year: '2021', pct: 1.58 }, { year: '2022', pct: 1.49 }, { year: '2023', pct: 1.40 },
+          { year: '2024', pct: 1.32 }, { year: '2025', pct: 1.25 }, { year: '2026', pct: 1.18 }
+        ],
+        crimeNote: 'Redução de ocorrências patrimoniais nos últimos 3 anos.',
+        structuralIssues: [
+          { loc: 'Vias de ligação Porto Velho – Piedade', desc: 'Manutenção periódica de drenagem.', lat: -22.4360, lng: -45.4510 }
+        ],
+        news: [
+          { date: '10/08/2026', title: 'Mutirão de limpeza urbana atende ruas do Porto Velho', source: 'Zeladoria PMI' }
+        ]
+      },
+      sao_vicente: {
+        name: 'São Vicente (CEP 37502-000)',
+        center: [-22.4185, -45.4525],
+        zoom: 16,
+        safety: '1,04% • Bairro Residencial',
+        safetySub: 'Próximo ao corredor BPS / Centro',
+        floodRisk: 'Moderado • Prox. Rib. José Pereira',
+        floodSub: 'Monitoramento hidrológico contínuo',
+        invest: 'Praças & Iluminação LED',
+        investSub: 'Acesso rápido UNIFEI e Centro',
+        health: 'Linhas 02, 06, 11A Valônia',
+        healthSub: 'Atendimento frequente no corredor BPS',
+        crimeHistory: [
+          { year: '2021', pct: 1.39 }, { year: '2022', pct: 1.31 }, { year: '2023', pct: 1.23 },
+          { year: '2024', pct: 1.16 }, { year: '2025', pct: 1.10 }, { year: '2026', pct: 1.04 }
+        ],
+        crimeNote: 'Bairro tradicional com boa sensação de segurança.',
+        structuralIssues: [
+          { loc: 'Margem do Ribeirão José Pereira • São Vicente', desc: 'Limpeza preventiva de margens antes do período chuvoso.', lat: -22.4192, lng: -45.4518 }
+        ],
+        news: [
+          { date: '12/09/2026', title: 'Defesa Civil realiza vistoria preventiva nas pontes do Ribeirão José Pereira', source: 'Defesa Civil' }
+        ]
+      }
+    };
 
-      // Pinheirinho / BPS / UNIFEI / São Vicente (11 locais)
-      ['Pinheirinho & UNIFEI', 'UNIFEI • Campus Prof. José Rodrigues Seabra', 'Universidade Federal & Inovação', 'education', '🏛️', 'Av. BPS, 1303 - Pinheirinho, Itajubá', -22.4132, -45.4485, 'Instituição Federal de Ensino Superior • MEC', 'Ministério da Educação (MEC)', 'Trânsito intenso na portaria principal da Av. BPS às 12h e 18h.'],
-      ['Pinheirinho & UNIFEI', 'INCIT • Incubadora de Empresas de Base Tecnológica', 'Tecnologia & Startups', 'industry', '🚀', 'Av. BPS, 1303 - Parque Científico, Pinheirinho', -22.4122, -45.4476, 'Polo de Inovação & Tecnologia • ANPROTEC', 'SECTI-MG / UNIFEI', 'Vagas de visitantes próximas ao prédio ficam cheias em eventos.'],
-      ['Pinheirinho & UNIFEI', 'Restaurante Universitário & Cantina BPS', 'Alimentação & Refeições', 'food', '🍛', 'Av. BPS, 1180 - Pinheirinho, Itajubá', -22.4142, -45.4490, 'Alvará Sanitário & Nutrição Balanceada', 'VISA Itajubá', 'Pico de atendimento entre 11h45 e 13h00.'],
-      ['Pinheirinho & UNIFEI', 'Hamburgueria Artesanal Federal Burger', 'Lanchonete & Hamburgueria', 'food', '🍔', 'Rua Eng. Pedro Fonseca Paiva, 220 - Pinheirinho', -22.4145, -45.4498, 'Selo Higiene & Produção Artesanal', 'VISA Itajubá', 'Ambiente animado com música aos finais de semana.'],
-      ['Pinheirinho & UNIFEI', 'Supermercado Express Pinheirinho', 'Minimercado & Padaria', 'food', '🛍️', 'Av. BPS, 950 - Pinheirinho, Itajubá', -22.4158, -45.4494, 'Inspeção Sanitária Regular', 'VISA Itajubá', 'Corredores compactos no horário de saída das aulas.'],
-      ['Pinheirinho & UNIFEI', 'Farmácia Universitária & Drogaria BPS', 'Farmácia & Perfumaria', 'health', '💊', 'Av. BPS, 890 - Pinheirinho, Itajubá', -22.4163, -45.4497, 'Certificado ANVISA & Farmacêutico Integral', 'CRF-MG / VISA', 'Atendimento ágil e convênio com estudantes.'],
-      ['Pinheirinho & UNIFEI', 'Academia Arena Campus Fitness', 'Academia & Cross Training', 'service', '💪', 'Rua Prof. José Rodrigues Seabra, 115 - Pinheirinho', -22.4128, -45.4480, 'Alvará Sanitário & CREF Ativo', 'CREF6-MG / VISA', 'Necessita ampliar bicicletário coberto na entrada.'],
-      ['Pinheirinho & UNIFEI', 'Gráfica Rápida & Engenharia CopyBPS', 'Serviços Gráficos & Plotagem', 'service', '🖨️', 'Av. BPS, 1240 - Pinheirinho, Itajubá', -22.4136, -45.4487, 'Nota Fiscal Eletrônica & Atendimento Ágil', 'PMI / PROCON', 'Alta demanda em semanas de entrega de TCC.'],
-      ['São Vicente', 'Posto de Combustíveis & Conveniência BPS', 'Posto & Loja 24h', 'service', '⛽', 'Av. BPS, 720 - São Vicente / Pinheirinho, Itajubá', -22.4178, -45.4508, 'Selo ANP Qualidade do Combustível', 'ANP / INMETRO', 'Acesso bem sinalizado nos dois sentidos da avenida.'],
-      ['São Vicente', 'Padaria & Lanchonete São Vicente', 'Padaria de Bairro', 'food', '🥖', 'Rua Presidente Roosevelt, 310 - São Vicente, Itajubá', -22.4185, -45.4525, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Pão francês quente a cada 30 minutos pela manhã.'],
-      ['São Vicente', 'Clínica Veterinária PetCampus', 'Saúde Animal & Banho/Tosa', 'service', '🐾', 'Rua Padre Rossini Cândido, 180 - São Vicente, Itajubá', -22.4195, -45.4518, 'Registro CRMV-MG & Centro Cirúrgico', 'CRMV-MG / VISA', 'Atendimento emergencial com agendamento rápido.'],
-
-      // Medicina & Morro Chic (9 locais)
-      ['Medicina & Morro Chic', 'Hospital de Clínicas de Itajubá (HCI)', 'Hospital SUS & Alta Complexidade', 'health', '🏥', 'Av. Renó Júnior, 50 - Medicina, Itajubá', -22.4212, -45.4465, 'CNES Ativo • Acreditação Hospitalar & ANVISA', 'Ministério da Saúde / SES-MG', 'Tempo de espera moderado no Pronto Atendimento para casos não urgentes.'],
-      ['Medicina & Morro Chic', 'FMIT • Faculdade de Medicina de Itajubá', 'Ensino Superior em Saúde', 'education', '🩺', 'Av. Renó Júnior, 368 - Medicina, Itajubá', -22.4202, -45.4454, 'Conceito Máximo MEC • Ambulatórios Escola', 'Ministério da Educação (MEC)', 'Estacionamento externo disputado em dias de simpósio.'],
-      ['Medicina & Morro Chic', 'Santa Casa de Misericórdia de Itajubá', 'Hospital Geral & Maternidade', 'health', '🏥', 'Rua Miguel Viana, 420 - Morro Chic, Itajubá', -22.4228, -45.4480, 'Hospital Filantrópico Certificado • SUS & Convênios', 'SES-MG / VISA Itajubá', 'Obras de modernização na ala de maternidade em andamento.'],
-      ['Medicina & Morro Chic', 'UBS Medicina I (CNES 3038483)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Av. Renó Júnior, 210 - Medicina, Itajubá', -22.4216, -45.4470, 'Atenção Primária SUS & Sala de Vacinas', 'Secretaria Municipal de Saúde', 'Agendamento de consultas de rotina recomendado cedo.'],
-      ['Medicina & Morro Chic', 'Bistrô & Almoço Executivo Renó Júnior', 'Restaurante & Marmitaria', 'food', '🥗', 'Av. Renó Júnior, 140 - Medicina, Itajubá', -22.4218, -45.4472, 'Alvará Sanitário & Nutrição Hospitalar', 'VISA Itajubá', 'Muito procurado por médicos, enfermeiros e estudantes.'],
-      ['Medicina & Morro Chic', 'Drogaria Saúde & Vida Medicina', 'Farmácia & Produtos Hospitalares', 'health', '💊', 'Av. Renó Júnior, 85 - Medicina, Itajubá', -22.4215, -45.4468, 'Certificação ANVISA & Plantão Noturno', 'ANVISA / CRF-MG', 'Atendimento humanizado e entrega rápida no bairro.'],
-      ['Medicina & Morro Chic', 'E.E. Barão do Rio Branco', 'Educação Estadual', 'education', '🏫', 'Rua Dr. Américo de Oliveira, 190 - Morro Chic, Itajubá', -22.4238, -45.4485, 'Rede Estadual de Ensino • SEE-MG', 'Secretaria de Educação MG', 'Escola tradicional com excelente estrutura esportiva.'],
-      ['Medicina & Morro Chic', 'Empório & Padaria Morro Chic', 'Padaria & Mercearia Fina', 'food', '🥐', 'Rua Miguel Viana, 280 - Morro Chic, Itajubá', -22.4236, -45.4490, 'Selo Higiene & Produtos Artesanais', 'VISA Itajubá', 'Vagas limitadas na rua inclinada em frente à loja.'],
-      ['Medicina & Morro Chic', 'Centro Médico & Diagnóstico por Imagem', 'Clínica de Exames & Ressonância', 'health', '🩻', 'Rua Miguel Viana, 350 - Morro Chic, Itajubá', -22.4231, -45.4484, 'Certificação CBR & Vigilância Sanitária', 'VISA Itajubá', 'Laudos digitais entregues no mesmo dia.'],
-
-      // Avenida, São Judas, Porto Velho, Santos Dumont, Piedade (9 locais)
-      ['Avenida & Zona Sul', 'SESI SENAI CFP Aureliano Chaves', 'Educação Técnica & Indústria', 'education', '🎓', 'Rua Dr. Luiz Rennó, 715 - Avenida, Itajubá', -22.4318, -45.4532, 'Certificação MEC / Sistema FIEMG', 'FIEMG / Secretaria de Educação', 'Alta concorrência nos processos seletivos de Aprendizagem.'],
-      ['Avenida & Zona Sul', 'Supermercado Avenida & Açougue Nobre', 'Supermercado & Açougue', 'food', '🛒', 'Av. Henriqueto Cardinali, 310 - Avenida, Itajubá', -22.4328, -45.4528, 'Selo Inspeção de Carnes & Higiene', 'VISA Itajubá', 'Promoções de hortifrúti às quartas-feiras atraem grande público.'],
-      ['Avenida & Zona Sul', 'PSF Avenida / São Judas Tadeu', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Av. Henriqueto Cardinali, 490 - São Judas, Itajubá', -22.4336, -45.4524, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Atendimento acolhedor com equipe completa de enfermagem.'],
-      ['Avenida & Zona Sul', 'Auto Center & Oficina Mecânica Batalhão', 'Serviços Automotivos & Alinhamento', 'service', '🔧', 'Rua Dr. Luiz Rennó, 520 - Avenida, Itajubá', -22.4305, -45.4533, 'Certificação Ambiental & Nota Fiscal', 'SEMMA / PROCON', 'Recomenda-se agendar revisão preventiva antes de feriados.'],
-      ['Porto Velho & Piedade', 'Restaurante Caseiro Fogão de Lenha', 'Comida Mineira & Marmitex', 'food', '🍲', 'Rua José Joaquim, 240 - Porto Velho, Itajubá', -22.4355, -45.4515, 'Alvará Sanitário Municipal Ativo', 'VISA Itajubá', 'Comida mineira muito elogiada pelos trabalhadores da região.'],
-      ['Porto Velho & Piedade', 'Drogaria Popular Porto Velho', 'Farmácia & Perfumaria', 'health', '💊', 'Rua José Joaquim, 390 - Porto Velho, Itajubá', -22.4364, -45.4512, 'Autorização ANVISA & Farmácia Popular', 'ANVISA / CRF-MG', 'Preços acessíveis e aferição gratuita de pressão.'],
-      ['Santos Dumont', 'Mercado & Padaria Santos Dumont', 'Comércio de Bairro', 'food', '🥖', 'Rua Santos Dumont, 185 - Santos Dumont, Itajubá', -22.4342, -45.4472, 'Alvará Sanitário Regular', 'VISA Itajubá', 'Atendimento familiar e variedade de itens diários.'],
-      ['Porto Velho & Piedade', 'PSF Piedade & São Sebastião', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Capitão João Renó, 320 - Piedade, Itajubá', -22.4410, -45.4420, 'Atenção Básica SUS & Saúde da Mulher', 'Secretaria Municipal de Saúde', 'Equipe atenciosa e sala de vacinação organizada.'],
-      ['São Sebastião', 'Material de Construção Serra Sul', 'Construção & Elétrica', 'service', '🏗️', 'Rua São Sebastião, 410 - São Sebastião, Itajubá', -22.4328, -45.4445, 'Alvará de Funcionamento & Entrega Própria', 'PMI / PROCON', 'Entrega rápida de materiais básicos nos bairros vizinhos.'],
-
-      // Rebourgeon, Santa Luzia, Cruzeiro & Oriente (8 locais)
-      ['Rebourgeon & Cruzeiro', 'PSF Rebourgeon (CNES 2212706)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Padre Marçal Ribeiro, 410 - Rebourgeon, Itajubá', -22.4265, -45.4362, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Atendimento bem avaliado pelos moradores da região leste.'],
-      ['Rebourgeon & Cruzeiro', 'Supermercado Rebourgeon & Padaria', 'Supermercado de Bairro', 'food', '🛒', 'Rua Olímpio José Rodrigues, 280 - Rebourgeon, Itajubá', -22.4262, -45.4368, 'Alvará Sanitário & Hortifrúti Fresco', 'VISA Itajubá', 'Principal ponto de compras do bairro Rebourgeon e Santa Luzia.'],
-      ['Rebourgeon & Cruzeiro', 'E.M. Carmo Manaia • Rebourgeon', 'Educação Municipal', 'education', '🏫', 'Rua Padre Marçal Ribeiro, 290 - Rebourgeon, Itajubá', -22.4269, -45.4365, 'Rede Municipal de Ensino • SEMED', 'Secretaria de Educação Itajubá', 'Infraestrutura limpa e projetos culturais ativos.'],
-      ['Rebourgeon & Cruzeiro', 'PSF Cruzeiro & Santa Luzia', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Capitão Gomes, 340 - Cruzeiro, Itajubá', -22.4295, -45.4410, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Acesso em rua inclinada requer atenção para cadeirantes.'],
-      ['Rebourgeon & Cruzeiro', 'Mercearia & Açougue Alto do Cruzeiro', 'Comércio & Carnes', 'food', '🥩', 'Rua Capitão Gomes, 490 - Cruzeiro, Itajubá', -22.4302, -45.4402, 'Inspeção Sanitária Municipal', 'VISA Itajubá', 'Bom atendimento e cortes selecionados aos sábados.'],
-      ['Santa Luzia', 'Drogaria Santa Luzia Bem-Estar', 'Farmácia & Conveniência', 'health', '💊', 'Rua Santa Luzia, 215 - Santa Luzia, Itajubá', -22.4280, -45.4385, 'Certificado ANVISA & CRF-MG', 'VISA Itajubá', 'Entrega domiciliar rápida no Rebourgeon e Cruzeiro.'],
-      ['Oriente & Colinas', 'PSF Oriente / Jardim das Colinas', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua das Acácias, 190 - Oriente, Itajubá', -22.4182, -45.4592, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Unidade organizada e com baixa fila de espera.'],
-      ['Oriente & Colinas', 'Padaria & Empório Jardim das Colinas', 'Panificação & Cafeteria', 'food', '🥐', 'Rua das Acácias, 340 - Jardim das Colinas, Itajubá', -22.4170, -45.4605, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Ótima opção de café colonial e pães artesanais.'],
-
-      // Varginha, Estiva, Vila Poddis, Boa Vista, Santa Rosa & Novo Horizonte (11 locais)
-      ['Varginha & Estiva', 'FEPI • Centro Universitário de Itajubá', 'Ensino Superior & Clínicas Escola', 'education', '🎓', 'Av. Dr. Antônio Braga Filho, 687 - Varginha, Itajubá', -22.4318, -45.4568, 'Instituição Credenciada MEC • 18 Cursos', 'Ministério da Educação (MEC)', 'Campus amplo, arborizado e com clínica escola aberta à comunidade.'],
-      ['Varginha & Estiva', 'Parque Municipal de Itajubá • Lazer & Esporte', 'Parque Público & Área Verde', 'service', '🌳', 'Av. Dr. Antônio Braga Filho - Varginha, Itajubá', -22.4308, -45.4562, 'Patrimônio Ambiental & Lazer Municipal', 'SEMMA / SECULT Itajubá', 'Excelente pista de caminhada, quadras e área infantil.'],
-      ['Varginha & Estiva', 'Supermercado Bahamas Mix • Estiva / Varginha', 'Atacarejo & Supermercado', 'food', '🛒', 'Av. Dr. Jerson Dias, 780 - Estiva, Itajubá', -22.4368, -45.4612, 'Selo Higiene & Cadeia Logística', 'VISA Itajubá / PROCON', 'Caixas mais cheios no primeiro sábado de cada mês.'],
-      ['Varginha & Estiva', 'Centro Administrativo Municipal (Prefeitura)', 'Serviços Públicos & Atendimento', 'service', '🏛️', 'Av. Dr. Jerson Dias, 500 - Estiva, Itajubá', -22.4362, -45.4608, 'Sede Administrativa • Prefeitura de Itajubá', 'Controladoria Geral do Município', 'Balcão único com acessibilidade total e senha eletrônica.'],
-      ['Vila Poddis', 'PSF Vila Poddis / Santo Antônio', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua João Poddis, 220 - Vila Poddis, Itajubá', -22.4242, -45.4595, 'Atenção Básica SUS', 'Secretaria Municipal de Saúde', 'Equipe dedicada e acompanhamento domiciliar ativo.'],
-      ['Boa Vista', 'PSF Boa Vista (CNES 5285550)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Boa Vista, 310 - Boa Vista, Itajubá', -22.4385, -45.4630, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Referência em atendimento preventivo para a zona sul.'],
-      ['Boa Vista', 'Supermercado & Padaria Boa Vista', 'Supermercado de Bairro', 'food', '🛒', 'Av. Pres. Tancredo Neves, 420 - Boa Vista, Itajubá', -22.4402, -45.4622, 'Alvará Sanitário Ativo', 'VISA Itajubá', 'Preços competitivos e açougue bem avaliado.'],
-      ['Santa Rosa', 'PSF Santa Rosa (CNES 2212714)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Principal Santa Rosa, 380 - Santa Rosa, Itajubá', -22.4435, -45.4625, 'Atenção Primária SUS & Vacinação', 'Secretaria Municipal de Saúde', 'Unidade essencial para os moradores da região sul.'],
-      ['Santa Rosa', 'E.M. Professor Isaías • Santa Rosa', 'Educação Municipal', 'education', '🏫', 'Rua José de Alencar, 210 - Santa Rosa, Itajubá', -22.4442, -45.4632, 'Rede Municipal de Ensino • SEMED', 'Secretaria de Educação Itajubá', 'Escola bem conservada e ativa nos projetos comunitários.'],
-      ['Santa Rosa', 'Comercial & Padaria Santa Rosa', 'Supermercado & Padaria', 'food', '🥖', 'Rua Principal Santa Rosa, 510 - Santa Rosa, Itajubá', -22.4445, -45.4634, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Atendimento cordial e variedade de produtos frescos.'],
-      ['Novo Horizonte', 'PSF Novo Horizonte & Vila Isabel', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Novo Horizonte, 290 - Novo Horizonte, Itajubá', -22.4485, -45.4650, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Atendimento humanizado e campanhas frequentes de saúde.'],
-
-      // Polo Industrial & Grandes Empresas de Itajubá (8 locais)
-      ['Distrito Industrial', 'Helibras • Airbus Helicopters Brasil', 'Indústria Aeronáutica & Alta Tecnologia', 'industry', '🚁', 'Rua Wilbur Wright, 2000 - Distrito Industrial, Itajubá', -22.4495, -45.4685, 'Certificação ANAC / ISO 9001 & AS9100', 'ANAC / FIEMG / SEMMA', 'Referência nacional na fabricação e manutenção de helicópteros.'],
-      ['IMBEL', 'IMBEL • Fábrica de Itajubá', 'Indústria de Defesa & Engenharia', 'industry', '🏭', 'Av. Cel. Aventino Ribeiro, s/n - IMBEL, Itajubá', -22.4410, -45.4550, 'Certificação ISO 9001 & Controle Ambiental', 'Ministério da Defesa / SEMMA', 'Indústria histórica de Itajubá com programas técnicos e estágios.'],
-      ['Distrito Industrial', 'Balteau Produtos Elétricos Ltda.', 'Indústria Eletroeletrônica & Transformadores', 'industry', '⚡', 'Av. Poços de Caldas, 1450 - Distrito Industrial, Itajubá', -22.4480, -45.4670, 'Certificação ISO 9001 / ISO 14001', 'INMETRO / FIEMG', 'Grande empregadora de técnicos e engenheiros eletricistas da cidade.'],
-      ['Distrito Industrial', 'Cabelauto Brasil Condutores Elétricos', 'Indústria Automotiva & Chicotes', 'industry', '🔌', 'Distrito Industrial • Av. Poços de Caldas, 1890, Itajubá', -22.4505, -45.4695, 'Certificação Automotiva IATF 16949', 'FIEMG / SEMMA', 'Forte programa de capacitação e inclusão profissional em Itajubá.'],
-      ['Distrito Industrial', 'Stahl Talhas & Equipamentos de Movimentação', 'Indústria Metalmecânica & Pontes Rolantes', 'industry', '🏗️', 'Distrito Industrial • Rua das Indústrias, 320, Itajubá', -22.4488, -45.4678, 'Certificação ISO 9001 & Segurança NR-12', 'FIEMG / MTE', 'Excelência em engenharia mecânica e segurança do trabalho.'],
-      ['Distrito Industrial', 'GE Grid Solutions / Alstom Energia Itajubá', 'Indústria de Alta Tensão & Subestações', 'industry', '🔋', 'Av. Poços de Caldas, 2100 - Distrito Industrial, Itajubá', -22.4515, -45.4705, 'Certificação Internacional IEC / ISO 14001', 'ANEEL / FIEMG', 'Tecnologia de ponta para o setor elétrico brasileiro e exportação.'],
-      ['Distrito Industrial', 'Becton Dickinson (BD) • Unidade Sul de Minas', 'Indústria Médico-Hospitalar', 'health', '💉', 'Corredor Industrial BR-459 • Itajubá', -22.4465, -45.4658, 'Boas Práticas de Fabricação ANVISA / FDA', 'ANVISA / VISA', 'Padrão rigoroso de sala limpa, higiene e segurança operacional.'],
-      ['Distrito Industrial', 'Restaurante Industrial & Refeitório Polo Sul', 'Alimentação Corporativa', 'food', '🍽️', 'Av. Poços de Caldas, 1600 - Distrito Industrial, Itajubá', -22.4490, -45.4682, 'Alvará Sanitário & Nutrição Ocupacional PAT', 'VISA Itajubá / MTE', 'Atende colaboradores do Distrito Industrial com cardápio balanceado.']
+    // Completa os demais bairros até os 37 bairros oficiais de Itajubá
+    const extraNeighborhoodSpecs = [
+      ['santo_antonio', 'Santo Antônio (CEP 37503-130)', -22.4235, -45.4548, '1,09%', 'Moderado • Prox. Rio Sapucaí'],
+      ['vila_poddis', 'Vila Poddis (CEP 37503-000)', -22.4242, -45.4595, '1,11%', 'Alto em Cheias • Comportas Ativas'],
+      ['oriente', 'Oriente & Jardim das Colinas (CEP 37500-240)', -22.4182, -45.4592, '0,94%', 'Baixo • Topografia Elevada'],
+      ['cruzeiro', 'Cruzeiro (CEP 37500-204)', -22.4295, -45.4410, '1,16%', 'Baixo Fluvial • Atenção Encosta'],
+      ['santa_luzia', 'Santa Luzia (CEP 37503-163)', -22.4280, -45.4385, '1,13%', 'Baixo • Encosta Leste'],
+      ['santos_dumont', 'Santos Dumont (CEP 37504-092)', -22.4342, -45.4472, '1,07%', 'Baixo • Drenagem Regular'],
+      ['sao_sebastiao', 'São Sebastião (CEP 37502-450)', -22.4328, -45.4445, '1,05%', 'Baixo • Cota Elevada'],
+      ['imbel', 'IMBEL (CEP 37501-338)', -22.4410, -45.4550, '0,88%', 'Baixo • Área Industrial Monitorada'],
+      ['vila_isabel', 'Vila Isabel (CEP 37505-177)', -22.4445, -45.4565, '1,14%', 'Moderado • Córrego Local'],
+      ['nossa_senhora_fatima', 'Nossa Senhora de Fátima (CEP 37502-500)', -22.4375, -45.4510, '1,12%', 'Baixo • Drenagem Regular'],
+      ['nossa_senhora_agonia', 'Nossa Senhora da Agonia (CEP 37500-187)', -22.4268, -45.4480, '1,02%', 'Baixo • Região Central Leste'],
+      ['santa_rita', 'Santa Rita de Cássia (CEP 37502-476)', -22.4390, -45.4495, '1,10%', 'Baixo • Topografia Alta'],
+      ['sao_judas', 'São Judas Tadeu (CEP 37504-068)', -22.4336, -45.4524, '1,11%', 'Moderado • Corredor Avenida'],
+      ['novo_horizonte', 'Novo Horizonte (CEP 37505-175)', -22.4485, -45.4650, '1,23%', 'Baixo • Zona Sul'],
+      ['acude', 'Açude (CEP 37504-131)', -22.4160, -45.4418, '0,98%', 'Baixo • Entorno UNIFEI'],
+      ['piedade', 'Piedade (CEP 37504-588)', -22.4410, -45.4420, '1,06%', 'Baixo • Encosta Sul'],
+      ['nacoes', 'Nações (CEP 37504-358)', -22.4290, -45.4655, '0,95%', 'Baixo • Zona Oeste'],
+      ['vila_rubens', 'Vila Rubens (CEP 37505-154)', -22.4345, -45.4655, '1,08%', 'Moderado • Acesso Oeste'],
+      ['vila_betel', 'Vila Betel (CEP 37505-500)', -22.4465, -45.4610, '1,15%', 'Moderado • Zona Sul'],
+      ['jardim_bernadete', 'Jardim Bernadete (CEP 37503-167)', -22.4225, -45.4395, '0,97%', 'Baixo • Região Leste'],
+      ['distrito_industrial', 'Distrito Industrial (CEP 37504-085)', -22.4495, -45.4685, '0,85%', 'Baixo • Polo Helibras / Balteau'],
+      ['morro_grande', 'Morro Grande (CEP 37502-700)', -22.4310, -45.4320, '0,91%', 'Baixo • Área Alta'],
+      ['ponte_alta', 'Ponte Alta (CEP 37506-150)', -22.4052, -45.4460, '0,93%', 'Moderado • Saída Norte'],
+      ['anhumas', 'Anhumas (CEP 37502-149)', -22.4165, -45.4260, '0,86%', 'Baixo • Linha 13 Valônia'],
+      ['zona_rural', 'Área Rural / Capetinga / Toledos / Ano Bom (CEP 37506-899)', -22.4650, -45.4350, '0,74%', 'Monitoramento Rural • Patrulha Rural']
     ];
 
     extraNeighborhoodSpecs.forEach(([key, label, lat, lng, rate, flood]) => {
@@ -1586,97 +1644,96 @@
     // 4. 76 ESTABELECIMENTOS E EMPRESAS EM TODOS OS BAIRROS DE ITAJUBÁ (COM 50+ AVALIAÇÕES CADA)
     const rawEstablishmentsCatalog = [
       // Centro & Entorno (20 locais)
-      ['Cantina & Grill Serra da Mantiqueira', 'Restaurante & Gastronomia', 'food', '🍽️', 'Av. Cel. Carneiro Júnior, 310 - Centro, Itajubá', -22.4254, -45.4524, 'Alvará Sanitário VISA Itajubá • Padrão Ouro', 'Vigilância Sanitária Municipal', 'Fila de espera média de 15 min aos domingos no almoço.'],
-      ['Mercado Municipal de Itajubá • Box Café & Queijos', 'Comércio Tradicional & Alimentos', 'food', '🧀', 'Praça Dr. José Braz, s/n - Centro, Itajubá', -22.4243, -45.4535, 'Selo Patrimônio & Inspeção Sanitária Municipal', 'Secretaria de Agricultura & VISA', 'Poucas vagas rápidas no entorno aos sábados pela manhã.'],
-      ['Padaria & Confeitaria Estrela do Sul', 'Panificação & Cafeteria', 'food', '🥐', 'Rua Major Belo Lisboa, 145 - Centro, Itajubá', -22.4261, -45.4531, 'Alvará Sanitário Ativo • Boas Práticas', 'VISA Itajubá', 'Movimento intenso entre 7h e 8h30 para café da manhã.'],
-      ['Supermercado Central Carneiro Júnior', 'Supermercado & Hortifrúti', 'food', '🛒', 'Av. Cel. Carneiro Júnior, 480 - Centro, Itajubá', -22.4267, -45.4529, 'Selo Higiene & Cadeia Fria Certificada', 'VISA Itajubá / PROCON', 'Estacionamento subsolo lotado às sextas-feiras à tarde.'],
-      ['Restaurante & Pizzaria Forno da Serra', 'Pizzaria & Massas', 'food', '🍕', 'Rua Dona Maria Carneiro, 210 - Centro, Itajubá', -22.4247, -45.4519, 'Selo Qualidade Gastronômica Mantiqueira', 'VISA Itajubá', 'Tempo de entrega delivery pode chegar a 45 min na sexta.'],
-      ['Café Cultural Theodomiro', 'Cafeteria & Doceria', 'food', '☕', 'Praça Getúlio Vargas, 88 - Centro, Itajubá', -22.4252, -45.4520, 'Selo Patrimônio Cultural & Higiene', 'SECULT / VISA Itajubá', 'Espaço interno aconchegante, porém com mesas limitadas.'],
-      ['Churrascaria Gaúcha do Vale', 'Churrascaria & Rodízio', 'food', '🥩', 'Rua Cesário Alvim, 190 - Centro, Itajubá', -22.4255, -45.4537, 'Alvará Sanitário & Controle de Temperatura', 'VISA Itajubá', 'Acesso por rampa lateral precisa de sinalização mais visível.'],
-      ['Policlínica Municipal & Farmácia de Todos', 'Saúde Pública SUS & Medicamentos', 'health', '💊', 'Praça Amélia Braga - Centro, Itajubá', -22.4249, -45.4514, 'Unidade Pública SUS • Dispensação Farmacêutica', 'Secretaria Municipal de Saúde', 'Maior fluxo entre 8h e 10h para retirada de medicamentos.'],
-      ['Drogaria Central Mantiqueira 24h', 'Farmácia & Manipulação', 'health', '🩺', 'Av. Cel. Carneiro Júnior, 195 - Centro, Itajubá', -22.4251, -45.4522, 'Autorização ANVISA & CRF-MG Ativo', 'ANVISA / VISA Itajubá', 'Sem estacionamento próprio na porta do calçadão.'],
-      ['Laboratório Clínico Itajubá Diagnósticos', 'Análises Clínicas & Exames', 'health', '🔬', 'Rua Barão do Rio Branco, 130 - Centro, Itajubá', -22.4248, -45.4529, 'Certificação PNCQ & Controle de Qualidade', 'Vigilância Sanitária', 'Jejum matinal gera fila rápida entre 7h e 8h.'],
-      ['Clínica Odontológica Sorriso da Serra', 'Odontologia & Ortodontia', 'health', '🦷', 'Rua Silvestre Ferraz, 215 - Centro, Itajubá', -22.4260, -45.4518, 'Selo Esterilização & Biossegurança', 'CRO-MG / VISA', 'Agendamento de retorno exige antecedência de 10 dias.'],
-      ['Banco do Brasil • Agência Centro Itajubá', 'Instituição Financeira', 'service', '🏦', 'Praça Getúlio Vargas, 42 - Centro, Itajubá', -22.4253, -45.4517, 'Acessibilidade Bancária & Autoatendimento', 'BACEN / PROCON Itajubá', 'Filas nos caixas internos em dias de pagamento.'],
-      ['Caixa Econômica Federal • Agência Itajubá', 'Instituição Financeira & FGTS', 'service', '🏛️', 'Rua Major Belo Lisboa, 90 - Centro, Itajubá', -22.4259, -45.4530, 'Atendimento Prioritário Lei Federal', 'BACEN / PROCON', 'Espera média de 25 min nos horários de pico.'],
-      ['Sicoob Mantiqueira • Cooperativa Centro', 'Cooperativa de Crédito', 'service', '💳', 'Rua Dona Maria Carneiro, 112 - Centro, Itajubá', -22.4246, -45.4523, 'Selo Atendimento Cooperativo 5★', 'Sistema Sicoob / BACEN', 'Nenhum ponto crítico relatado recentemente.'],
-      ['Hotel & Executivo Palace Itajubá', 'Hotelaria & Eventos', 'service', '🏨', 'Rua Primo Capelo, 75 - Centro, Itajubá', -22.4266, -45.4539, 'Cadastur Ativo & Alvará Corpo de Bombeiros', 'Ministério do Turismo / CBMMG', 'Garagem rotativa exige reserva prévia em congressos.'],
-      ['Livraria & Papelaria Acadêmica Central', 'Comércio & Material Escolar', 'service', '📚', 'Av. Cel. Carneiro Júnior, 260 - Centro, Itajubá', -22.4255, -45.4525, 'Selo Comércio Legal & Nota Fiscal', 'ACIEI / PROCON', 'Movimento intenso na primeira semana de fevereiro.'],
-      ['Academia Corpo & Energia Centro', 'Esporte & Saúde Física', 'service', '🏋️', 'Rua Aureliano Chaves, 140 - Centro, Itajubá', -22.4250, -45.4540, 'Registro CREF6-MG & AVCB Bombeiros', 'CREF6-MG / CBMMG', 'Aparelhos de musculação disputados entre 18h e 20h.'],
-      ['E.E. Major João Pereira', 'Educação Estadual', 'service', '🎓', 'Praça Wenceslau Braz - Centro, Itajubá', -22.4263, -45.4522, 'Rede Estadual de Ensino • SEE-MG', 'Secretaria de Educação MG', 'Trânsito lento na saída dos alunos às 11h30.'],
-      ['Teatro Municipal Christiane Riêra', 'Cultura & Artes Cênicas', 'service', '🎭', 'Av. Dr. Jerson Dias, 501 - Centro/Estiva, Itajubá', -22.4352, -45.4602, 'Espaço Cultural Certificado & Acessível', 'SECULT Itajubá / CBMMG', 'Ingressos gratuitos esgotam rápido em festivais.'],
-      ['Correios • Agência Central Itajubá', 'Serviços Postais & Logística', 'service', '📦', 'Rua Dr. Pereira Cabral, 64 - Centro, Itajubá', -22.4245, -45.4508, 'Serviço Postal Oficial', 'Empresa Brasileira de Correios', 'Fila moderada no balcão de encomendas após 15h.'],
+      ['Centro & Entorno', 'Cantina & Grill Serra da Mantiqueira', 'Restaurante & Gastronomia', 'food', '🍽️', 'Av. Cel. Carneiro Júnior, 310 - Centro, Itajubá', -22.4254, -45.4524, 'Alvará Sanitário VISA Itajubá • Padrão Ouro', 'Vigilância Sanitária Municipal', 'Fila de espera média de 15 min aos domingos no almoço.'],
+      ['Centro & Entorno', 'Mercado Municipal de Itajubá • Box Café & Queijos', 'Comércio Tradicional & Alimentos', 'food', '🧀', 'Praça Dr. José Braz, s/n - Centro, Itajubá', -22.4243, -45.4535, 'Selo Patrimônio & Inspeção Sanitária Municipal', 'Secretaria de Agricultura & VISA', 'Poucas vagas rápidas no entorno aos sábados pela manhã.'],
+      ['Centro & Entorno', 'Padaria & Confeitaria Estrela do Sul', 'Panificação & Cafeteria', 'food', '🥐', 'Rua Major Belo Lisboa, 145 - Centro, Itajubá', -22.4261, -45.4531, 'Alvará Sanitário Ativo • Boas Práticas', 'VISA Itajubá', 'Movimento intenso entre 7h e 8h30 para café da manhã.'],
+      ['Centro & Entorno', 'Supermercado Central Carneiro Júnior', 'Supermercado & Hortifrúti', 'food', '🛒', 'Av. Cel. Carneiro Júnior, 480 - Centro, Itajubá', -22.4267, -45.4529, 'Selo Higiene & Cadeia Fria Certificada', 'VISA Itajubá / PROCON', 'Estacionamento subsolo lotado às sextas-feiras à tarde.'],
+      ['Centro & Entorno', 'Restaurante & Pizzaria Forno da Serra', 'Pizzaria & Massas', 'food', '🍕', 'Rua Dona Maria Carneiro, 210 - Centro, Itajubá', -22.4247, -45.4519, 'Selo Qualidade Gastronômica Mantiqueira', 'VISA Itajubá', 'Tempo de entrega delivery pode chegar a 45 min na sexta.'],
+      ['Centro & Entorno', 'Café Cultural Theodomiro', 'Cafeteria & Doceria', 'food', '☕', 'Praça Getúlio Vargas, 88 - Centro, Itajubá', -22.4252, -45.4520, 'Selo Patrimônio Cultural & Higiene', 'SECULT / VISA Itajubá', 'Espaço interno aconchegante, porém com mesas limitadas.'],
+      ['Centro & Entorno', 'Churrascaria Gaúcha do Vale', 'Churrascaria & Rodízio', 'food', '🥩', 'Rua Cesário Alvim, 190 - Centro, Itajubá', -22.4255, -45.4537, 'Alvará Sanitário & Controle de Temperatura', 'VISA Itajubá', 'Acesso por rampa lateral precisa de sinalização mais visível.'],
+      ['Centro & Entorno', 'Policlínica Municipal & Farmácia de Todos', 'Saúde Pública SUS & Medicamentos', 'health', '💊', 'Praça Amélia Braga - Centro, Itajubá', -22.4249, -45.4514, 'Unidade Pública SUS • Dispensação Farmacêutica', 'Secretaria Municipal de Saúde', 'Maior fluxo entre 8h e 10h para retirada de medicamentos.'],
+      ['Centro & Entorno', 'Drogaria Central Mantiqueira 24h', 'Farmácia & Manipulação', 'health', '🩺', 'Av. Cel. Carneiro Júnior, 195 - Centro, Itajubá', -22.4251, -45.4522, 'Autorização ANVISA & CRF-MG Ativo', 'ANVISA / VISA Itajubá', 'Sem estacionamento próprio na porta do calçadão.'],
+      ['Centro & Entorno', 'Laboratório Clínico Itajubá Diagnósticos', 'Análises Clínicas & Exames', 'health', '🔬', 'Rua Barão do Rio Branco, 130 - Centro, Itajubá', -22.4248, -45.4529, 'Certificação PNCQ & Controle de Qualidade', 'Vigilância Sanitária', 'Jejum matinal gera fila rápida entre 7h e 8h.'],
+      ['Centro & Entorno', 'Clínica Odontológica Sorriso da Serra', 'Odontologia & Ortodontia', 'health', '🦷', 'Rua Silvestre Ferraz, 215 - Centro, Itajubá', -22.4260, -45.4518, 'Selo Esterilização & Biossegurança', 'CRO-MG / VISA', 'Agendamento de retorno exige antecedência de 10 dias.'],
+      ['Centro & Entorno', 'Banco do Brasil • Agência Centro Itajubá', 'Instituição Financeira', 'service', '🏦', 'Praça Getúlio Vargas, 42 - Centro, Itajubá', -22.4253, -45.4517, 'Acessibilidade Bancária & Autoatendimento', 'BACEN / PROCON Itajubá', 'Filas nos caixas internos em dias de pagamento.'],
+      ['Centro & Entorno', 'Caixa Econômica Federal • Agência Itajubá', 'Instituição Financeira & FGTS', 'service', '🏛️', 'Rua Major Belo Lisboa, 90 - Centro, Itajubá', -22.4259, -45.4530, 'Atendimento Prioritário Lei Federal', 'BACEN / PROCON', 'Espera média de 25 min nos horários de pico.'],
+      ['Centro & Entorno', 'Sicoob Mantiqueira • Cooperativa Centro', 'Cooperativa de Crédito', 'service', '💳', 'Rua Dona Maria Carneiro, 112 - Centro, Itajubá', -22.4246, -45.4523, 'Selo Atendimento Cooperativo 5★', 'Sistema Sicoob / BACEN', 'Nenhum ponto crítico relatado recentemente.'],
+      ['Centro & Entorno', 'Hotel & Executivo Palace Itajubá', 'Hotelaria & Eventos', 'service', '🏨', 'Rua Primo Capelo, 75 - Centro, Itajubá', -22.4266, -45.4539, 'Cadastur Ativo & Alvará Corpo de Bombeiros', 'Ministério do Turismo / CBMMG', 'Garagem rotativa exige reserva prévia em congressos.'],
+      ['Centro & Entorno', 'Livraria & Papelaria Acadêmica Central', 'Comércio & Material Escolar', 'service', '📚', 'Av. Cel. Carneiro Júnior, 260 - Centro, Itajubá', -22.4255, -45.4525, 'Selo Comércio Legal & Nota Fiscal', 'ACIEI / PROCON', 'Movimento intenso na primeira semana de fevereiro.'],
+      ['Centro & Entorno', 'Academia Corpo & Energia Centro', 'Esporte & Saúde Física', 'service', '🏋️', 'Rua Aureliano Chaves, 140 - Centro, Itajubá', -22.4250, -45.4540, 'Registro CREF6-MG & AVCB Bombeiros', 'CREF6-MG / CBMMG', 'Aparelhos de musculação disputados entre 18h e 20h.'],
+      ['Centro & Entorno', 'E.E. Major João Pereira', 'Educação Estadual', 'education', '🎓', 'Praça Wenceslau Braz - Centro, Itajubá', -22.4263, -45.4522, 'Rede Estadual de Ensino • SEE-MG', 'Secretaria de Educação MG', 'Trânsito lento na saída dos alunos às 11h30.'],
+      ['Centro & Entorno', 'Teatro Municipal Christiane Riêra', 'Cultura & Artes Cênicas', 'service', '🎭', 'Av. Dr. Jerson Dias, 501 - Centro/Estiva, Itajubá', -22.4352, -45.4602, 'Espaço Cultural Certificado & Acessível', 'SECULT Itajubá / CBMMG', 'Ingressos gratuitos esgotam rápido em festivais.'],
+      ['Centro & Entorno', 'Correios • Agência Central Itajubá', 'Serviços Postais & Logística', 'service', '📦', 'Rua Dr. Pereira Cabral, 64 - Centro, Itajubá', -22.4245, -45.4508, 'Serviço Postal Oficial', 'Empresa Brasileira de Correios', 'Fila moderada no balcão de encomendas após 15h.'],
 
       // Pinheirinho / BPS / UNIFEI / São Vicente (11 locais)
-      ['UNIFEI • Campus Prof. José Rodrigues Seabra', 'Universidade Federal & Inovação', 'service', '🏛️', 'Av. BPS, 1303 - Pinheirinho, Itajubá', -22.4132, -45.4485, 'Instituição Federal de Ensino Superior • MEC', 'Ministério da Educação (MEC)', 'Trânsito intenso na portaria principal da Av. BPS às 12h e 18h.'],
-      ['INCIT • Incubadora de Empresas de Base Tecnológica', 'Tecnologia & Startups', 'service', '🚀', 'Av. BPS, 1303 - Parque Científico, Pinheirinho', -22.4122, -45.4476, 'Polo de Inovação & Tecnologia • ANPROTEC', 'SECTI-MG / UNIFEI', 'Vagas de visitantes próximas ao prédio ficam cheias em eventos.'],
-      ['Restaurante Universitário & Cantina BPS', 'Alimentação & Refeições', 'food', '🍛', 'Av. BPS, 1180 - Pinheirinho, Itajubá', -22.4142, -45.4490, 'Alvará Sanitário & Nutrição Balanceada', 'VISA Itajubá', 'Pico de atendimento entre 11h45 e 13h00.'],
-      ['Hamburgueria Artesanal Federal Burger', 'Lanchonete & Hamburgueria', 'food', '🍔', 'Rua Eng. Pedro Fonseca Paiva, 220 - Pinheirinho', -22.4145, -45.4498, 'Selo Higiene & Produção Artesanal', 'VISA Itajubá', 'Ambiente animado com música aos finais de semana.'],
-      ['Supermercado Express Pinheirinho', 'Minimercado & Padaria', 'food', '🛍️', 'Av. BPS, 950 - Pinheirinho, Itajubá', -22.4158, -45.4494, 'Inspeção Sanitária Regular', 'VISA Itajubá', 'Corredores compactos no horário de saída das aulas.'],
-      ['Farmácia Universitária & Drogaria BPS', 'Farmácia & Perfumaria', 'health', '💊', 'Av. BPS, 890 - Pinheirinho, Itajubá', -22.4163, -45.4497, 'Certificado ANVISA & Farmacêutico Integral', 'CRF-MG / VISA', 'Atendimento ágil e convênio com estudantes.'],
-      ['Academia Arena Campus Fitness', 'Academia & Cross Training', 'service', '💪', 'Rua Prof. José Rodrigues Seabra, 115 - Pinheirinho', -22.4128, -45.4480, 'Alvará Sanitário & CREF Ativo', 'CREF6-MG / VISA', 'Necessita ampliar bicicletário coberto na entrada.'],
-      ['Gráfica Rápida & Engenharia CopyBPS', 'Serviços Gráficos & Plotagem', 'service', '🖨️', 'Av. BPS, 1240 - Pinheirinho, Itajubá', -22.4136, -45.4487, 'Nota Fiscal Eletrônica & Atendimento Ágil', 'PMI / PROCON', 'Alta demanda em semanas de entrega de TCC.'],
-      ['Posto de Combustíveis & Conveniência BPS', 'Posto & Loja 24h', 'service', '⛽', 'Av. BPS, 720 - São Vicente / Pinheirinho, Itajubá', -22.4178, -45.4508, 'Selo ANP Qualidade do Combustível', 'ANP / INMETRO', 'Acesso bem sinalizado nos dois sentidos da avenida.'],
-      ['Padaria & Lanchonete São Vicente', 'Padaria de Bairro', 'food', '🥖', 'Rua Presidente Roosevelt, 310 - São Vicente, Itajubá', -22.4185, -45.4525, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Pão francês quente a cada 30 minutos pela manhã.'],
-      ['Clínica Veterinária PetCampus', 'Saúde Animal & Banho/Tosa', 'service', '🐾', 'Rua Padre Rossini Cândido, 180 - São Vicente, Itajubá', -22.4195, -45.4518, 'Registro CRMV-MG & Centro Cirúrgico', 'CRMV-MG / VISA', 'Atendimento emergencial com agendamento rápido.'],
+      ['Pinheirinho & UNIFEI', 'UNIFEI • Campus Prof. José Rodrigues Seabra', 'Universidade Federal & Inovação', 'education', '🏛️', 'Av. BPS, 1303 - Pinheirinho, Itajubá', -22.4132, -45.4485, 'Instituição Federal de Ensino Superior • MEC', 'Ministério da Educação (MEC)', 'Trânsito intenso na portaria principal da Av. BPS às 12h e 18h.'],
+      ['Pinheirinho & UNIFEI', 'INCIT • Incubadora de Empresas de Base Tecnológica', 'Tecnologia & Startups', 'industry', '🚀', 'Av. BPS, 1303 - Parque Científico, Pinheirinho', -22.4122, -45.4476, 'Polo de Inovação & Tecnologia • ANPROTEC', 'SECTI-MG / UNIFEI', 'Vagas de visitantes próximas ao prédio ficam cheias em eventos.'],
+      ['Pinheirinho & UNIFEI', 'Restaurante Universitário & Cantina BPS', 'Alimentação & Refeições', 'food', '🍛', 'Av. BPS, 1180 - Pinheirinho, Itajubá', -22.4142, -45.4490, 'Alvará Sanitário & Nutrição Balanceada', 'VISA Itajubá', 'Pico de atendimento entre 11h45 e 13h00.'],
+      ['Pinheirinho & UNIFEI', 'Hamburgueria Artesanal Federal Burger', 'Lanchonete & Hamburgueria', 'food', '🍔', 'Rua Eng. Pedro Fonseca Paiva, 220 - Pinheirinho', -22.4145, -45.4498, 'Selo Higiene & Produção Artesanal', 'VISA Itajubá', 'Ambiente animado com música aos finais de semana.'],
+      ['Pinheirinho & UNIFEI', 'Supermercado Express Pinheirinho', 'Minimercado & Padaria', 'food', '🛍️', 'Av. BPS, 950 - Pinheirinho, Itajubá', -22.4158, -45.4494, 'Inspeção Sanitária Regular', 'VISA Itajubá', 'Corredores compactos no horário de saída das aulas.'],
+      ['Pinheirinho & UNIFEI', 'Farmácia Universitária & Drogaria BPS', 'Farmácia & Perfumaria', 'health', '💊', 'Av. BPS, 890 - Pinheirinho, Itajubá', -22.4163, -45.4497, 'Certificado ANVISA & Farmacêutico Integral', 'CRF-MG / VISA', 'Atendimento ágil e convênio com estudantes.'],
+      ['Pinheirinho & UNIFEI', 'Academia Arena Campus Fitness', 'Academia & Cross Training', 'service', '💪', 'Rua Prof. José Rodrigues Seabra, 115 - Pinheirinho', -22.4128, -45.4480, 'Alvará Sanitário & CREF Ativo', 'CREF6-MG / VISA', 'Necessita ampliar bicicletário coberto na entrada.'],
+      ['Pinheirinho & UNIFEI', 'Gráfica Rápida & Engenharia CopyBPS', 'Serviços Gráficos & Plotagem', 'service', '🖨️', 'Av. BPS, 1240 - Pinheirinho, Itajubá', -22.4136, -45.4487, 'Nota Fiscal Eletrônica & Atendimento Ágil', 'PMI / PROCON', 'Alta demanda em semanas de entrega de TCC.'],
+      ['São Vicente', 'Posto de Combustíveis & Conveniência BPS', 'Posto & Loja 24h', 'service', '⛽', 'Av. BPS, 720 - São Vicente / Pinheirinho, Itajubá', -22.4178, -45.4508, 'Selo ANP Qualidade do Combustível', 'ANP / INMETRO', 'Acesso bem sinalizado nos dois sentidos da avenida.'],
+      ['São Vicente', 'Padaria & Lanchonete São Vicente', 'Padaria de Bairro', 'food', '🥖', 'Rua Presidente Roosevelt, 310 - São Vicente, Itajubá', -22.4185, -45.4525, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Pão francês quente a cada 30 minutos pela manhã.'],
+      ['São Vicente', 'Clínica Veterinária PetCampus', 'Saúde Animal & Banho/Tosa', 'service', '🐾', 'Rua Padre Rossini Cândido, 180 - São Vicente, Itajubá', -22.4195, -45.4518, 'Registro CRMV-MG & Centro Cirúrgico', 'CRMV-MG / VISA', 'Atendimento emergencial com agendamento rápido.'],
 
       // Medicina & Morro Chic (9 locais)
-      ['Hospital de Clínicas de Itajubá (HCI)', 'Hospital SUS & Alta Complexidade', 'health', '🏥', 'Av. Renó Júnior, 50 - Medicina, Itajubá', -22.4212, -45.4465, 'CNES Ativo • Acreditação Hospitalar & ANVISA', 'Ministério da Saúde / SES-MG', 'Tempo de espera moderado no Pronto Atendimento para casos não urgentes.'],
-      ['FMIT • Faculdade de Medicina de Itajubá', 'Ensino Superior em Saúde', 'service', '🩺', 'Av. Renó Júnior, 368 - Medicina, Itajubá', -22.4202, -45.4454, 'Conceito Máximo MEC • Ambulatórios Escola', 'Ministério da Educação (MEC)', 'Estacionamento externo disputado em dias de simpósio.'],
-      ['Santa Casa de Misericórdia de Itajubá', 'Hospital Geral & Maternidade', 'health', '🏥', 'Rua Miguel Viana, 420 - Morro Chic, Itajubá', -22.4228, -45.4480, 'Hospital Filantrópico Certificado • SUS & Convênios', 'SES-MG / VISA Itajubá', 'Obras de modernização na ala de maternidade em andamento.'],
-      ['UBS Medicina I (CNES 3038483)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Av. Renó Júnior, 210 - Medicina, Itajubá', -22.4216, -45.4470, 'Atenção Primária SUS & Sala de Vacinas', 'Secretaria Municipal de Saúde', 'Agendamento de consultas de rotina recomendado cedo.'],
-      ['Bistrô & Almoço Executivo Renó Júnior', 'Restaurante & Marmitaria', 'food', '🥗', 'Av. Renó Júnior, 140 - Medicina, Itajubá', -22.4218, -45.4472, 'Alvará Sanitário & Nutrição Hospitalar', 'VISA Itajubá', 'Muito procurado por médicos, enfermeiros e estudantes.'],
-      ['Drogaria Saúde & Vida Medicina', 'Farmácia & Produtos Hospitalares', 'health', '💊', 'Av. Renó Júnior, 85 - Medicina, Itajubá', -22.4215, -45.4468, 'Certificação ANVISA & Plantão Noturno', 'ANVISA / CRF-MG', 'Atendimento humanizado e entrega rápida no bairro.'],
-      ['E.E. Barão do Rio Branco', 'Educação Estadual', 'service', '🏫', 'Rua Dr. Américo de Oliveira, 190 - Morro Chic, Itajubá', -22.4238, -45.4485, 'Rede Estadual de Ensino • SEE-MG', 'Secretaria de Educação MG', 'Escola tradicional com excelente estrutura esportiva.'],
-      ['Empório & Padaria Morro Chic', 'Padaria & Mercearia Fina', 'food', '🥐', 'Rua Miguel Viana, 280 - Morro Chic, Itajubá', -22.4236, -45.4490, 'Selo Higiene & Produtos Artesanais', 'VISA Itajubá', 'Vagas limitadas na rua inclinada em frente à loja.'],
-      ['Centro Médico & Diagnóstico por Imagem', 'Clínica de Exames & Ressonância', 'health', '🩻', 'Rua Miguel Viana, 350 - Morro Chic, Itajubá', -22.4231, -45.4484, 'Certificação CBR & Vigilância Sanitária', 'VISA Itajubá', 'Laudos digitais entregues no mesmo dia.'],
+      ['Medicina & Morro Chic', 'Hospital de Clínicas de Itajubá (HCI)', 'Hospital SUS & Alta Complexidade', 'health', '🏥', 'Av. Renó Júnior, 50 - Medicina, Itajubá', -22.4212, -45.4465, 'CNES Ativo • Acreditação Hospitalar & ANVISA', 'Ministério da Saúde / SES-MG', 'Tempo de espera moderado no Pronto Atendimento para casos não urgentes.'],
+      ['Medicina & Morro Chic', 'FMIT • Faculdade de Medicina de Itajubá', 'Ensino Superior em Saúde', 'education', '🩺', 'Av. Renó Júnior, 368 - Medicina, Itajubá', -22.4202, -45.4454, 'Conceito Máximo MEC • Ambulatórios Escola', 'Ministério da Educação (MEC)', 'Estacionamento externo disputado em dias de simpósio.'],
+      ['Medicina & Morro Chic', 'Santa Casa de Misericórdia de Itajubá', 'Hospital Geral & Maternidade', 'health', '🏥', 'Rua Miguel Viana, 420 - Morro Chic, Itajubá', -22.4228, -45.4480, 'Hospital Filantrópico Certificado • SUS & Convênios', 'SES-MG / VISA Itajubá', 'Obras de modernização na ala de maternidade em andamento.'],
+      ['Medicina & Morro Chic', 'UBS Medicina I (CNES 3038483)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Av. Renó Júnior, 210 - Medicina, Itajubá', -22.4216, -45.4470, 'Atenção Primária SUS & Sala de Vacinas', 'Secretaria Municipal de Saúde', 'Agendamento de consultas de rotina recomendado cedo.'],
+      ['Medicina & Morro Chic', 'Bistrô & Almoço Executivo Renó Júnior', 'Restaurante & Marmitaria', 'food', '🥗', 'Av. Renó Júnior, 140 - Medicina, Itajubá', -22.4218, -45.4472, 'Alvará Sanitário & Nutrição Hospitalar', 'VISA Itajubá', 'Muito procurado por médicos, enfermeiros e estudantes.'],
+      ['Medicina & Morro Chic', 'Drogaria Saúde & Vida Medicina', 'Farmácia & Produtos Hospitalares', 'health', '💊', 'Av. Renó Júnior, 85 - Medicina, Itajubá', -22.4215, -45.4468, 'Certificação ANVISA & Plantão Noturno', 'ANVISA / CRF-MG', 'Atendimento humanizado e entrega rápida no bairro.'],
+      ['Medicina & Morro Chic', 'E.E. Barão do Rio Branco', 'Educação Estadual', 'education', '🏫', 'Rua Dr. Américo de Oliveira, 190 - Morro Chic, Itajubá', -22.4238, -45.4485, 'Rede Estadual de Ensino • SEE-MG', 'Secretaria de Educação MG', 'Escola tradicional com excelente estrutura esportiva.'],
+      ['Medicina & Morro Chic', 'Empório & Padaria Morro Chic', 'Padaria & Mercearia Fina', 'food', '🥐', 'Rua Miguel Viana, 280 - Morro Chic, Itajubá', -22.4236, -45.4490, 'Selo Higiene & Produtos Artesanais', 'VISA Itajubá', 'Vagas limitadas na rua inclinada em frente à loja.'],
+      ['Medicina & Morro Chic', 'Centro Médico & Diagnóstico por Imagem', 'Clínica de Exames & Ressonância', 'health', '🩻', 'Rua Miguel Viana, 350 - Morro Chic, Itajubá', -22.4231, -45.4484, 'Certificação CBR & Vigilância Sanitária', 'VISA Itajubá', 'Laudos digitais entregues no mesmo dia.'],
 
       // Avenida, São Judas, Porto Velho, Santos Dumont, Piedade (9 locais)
-      ['SESI SENAI CFP Aureliano Chaves', 'Educação Técnica & Indústria', 'service', '🎓', 'Rua Dr. Luiz Rennó, 715 - Avenida, Itajubá', -22.4318, -45.4532, 'Certificação MEC / Sistema FIEMG', 'FIEMG / Secretaria de Educação', 'Alta concorrência nos processos seletivos de Aprendizagem.'],
-      ['Supermercado Avenida & Açougue Nobre', 'Supermercado & Açougue', 'food', '🛒', 'Av. Henriqueto Cardinali, 310 - Avenida, Itajubá', -22.4328, -45.4528, 'Selo Inspeção de Carnes & Higiene', 'VISA Itajubá', 'Promoções de hortifrúti às quartas-feiras atraem grande público.'],
-      ['PSF Avenida / São Judas Tadeu', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Av. Henriqueto Cardinali, 490 - São Judas, Itajubá', -22.4336, -45.4524, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Atendimento acolhedor com equipe completa de enfermagem.'],
-      ['Auto Center & Oficina Mecânica Batalhão', 'Serviços Automotivos & Alinhamento', 'service', '🔧', 'Rua Dr. Luiz Rennó, 520 - Avenida, Itajubá', -22.4305, -45.4533, 'Certificação Ambiental & Nota Fiscal', 'SEMMA / PROCON', 'Recomenda-se agendar revisão preventiva antes de feriados.'],
-      ['Restaurante Caseiro Fogão de Lenha', 'Comida Mineira & Marmitex', 'food', '🍲', 'Rua José Joaquim, 240 - Porto Velho, Itajubá', -22.4355, -45.4515, 'Alvará Sanitário Municipal Ativo', 'VISA Itajubá', 'Comida mineira muito elogiada pelos trabalhadores da região.'],
-      ['Drogaria Popular Porto Velho', 'Farmácia & Perfumaria', 'health', '💊', 'Rua José Joaquim, 390 - Porto Velho, Itajubá', -22.4364, -45.4512, 'Autorização ANVISA & Farmácia Popular', 'ANVISA / CRF-MG', 'Preços acessíveis e aferição gratuita de pressão.'],
-      ['Mercado & Padaria Santos Dumont', 'Comércio de Bairro', 'food', '🥖', 'Rua Santos Dumont, 185 - Santos Dumont, Itajubá', -22.4342, -45.4472, 'Alvará Sanitário Regular', 'VISA Itajubá', 'Atendimento familiar e variedade de itens diários.'],
-      ['PSF Piedade & São Sebastião', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Capitão João Renó, 320 - Piedade, Itajubá', -22.4410, -45.4420, 'Atenção Básica SUS & Saúde da Mulher', 'Secretaria Municipal de Saúde', 'Equipe atenciosa e sala de vacinação organizada.'],
-      ['Material de Construção Serra Sul', 'Construção & Elétrica', 'service', '🏗️', 'Rua São Sebastião, 410 - São Sebastião, Itajubá', -22.4328, -45.4445, 'Alvará de Funcionamento & Entrega Própria', 'PMI / PROCON', 'Entrega rápida de materiais básicos nos bairros vizinhos.'],
+      ['Avenida & Zona Sul', 'SESI SENAI CFP Aureliano Chaves', 'Educação Técnica & Indústria', 'education', '🎓', 'Rua Dr. Luiz Rennó, 715 - Avenida, Itajubá', -22.4318, -45.4532, 'Certificação MEC / Sistema FIEMG', 'FIEMG / Secretaria de Educação', 'Alta concorrência nos processos seletivos de Aprendizagem.'],
+      ['Avenida & Zona Sul', 'Supermercado Avenida & Açougue Nobre', 'Supermercado & Açougue', 'food', '🛒', 'Av. Henriqueto Cardinali, 310 - Avenida, Itajubá', -22.4328, -45.4528, 'Selo Inspeção de Carnes & Higiene', 'VISA Itajubá', 'Promoções de hortifrúti às quartas-feiras atraem grande público.'],
+      ['Avenida & Zona Sul', 'PSF Avenida / São Judas Tadeu', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Av. Henriqueto Cardinali, 490 - São Judas, Itajubá', -22.4336, -45.4524, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Atendimento acolhedor com equipe completa de enfermagem.'],
+      ['Avenida & Zona Sul', 'Auto Center & Oficina Mecânica Batalhão', 'Serviços Automotivos & Alinhamento', 'service', '🔧', 'Rua Dr. Luiz Rennó, 520 - Avenida, Itajubá', -22.4305, -45.4533, 'Certificação Ambiental & Nota Fiscal', 'SEMMA / PROCON', 'Recomenda-se agendar revisão preventiva antes de feriados.'],
+      ['Porto Velho & Piedade', 'Restaurante Caseiro Fogão de Lenha', 'Comida Mineira & Marmitex', 'food', '🍲', 'Rua José Joaquim, 240 - Porto Velho, Itajubá', -22.4355, -45.4515, 'Alvará Sanitário Municipal Ativo', 'VISA Itajubá', 'Comida mineira muito elogiada pelos trabalhadores da região.'],
+      ['Porto Velho & Piedade', 'Drogaria Popular Porto Velho', 'Farmácia & Perfumaria', 'health', '💊', 'Rua José Joaquim, 390 - Porto Velho, Itajubá', -22.4364, -45.4512, 'Autorização ANVISA & Farmácia Popular', 'ANVISA / CRF-MG', 'Preços acessíveis e aferição gratuita de pressão.'],
+      ['Santos Dumont', 'Mercado & Padaria Santos Dumont', 'Comércio de Bairro', 'food', '🥖', 'Rua Santos Dumont, 185 - Santos Dumont, Itajubá', -22.4342, -45.4472, 'Alvará Sanitário Regular', 'VISA Itajubá', 'Atendimento familiar e variedade de itens diários.'],
+      ['Porto Velho & Piedade', 'PSF Piedade & São Sebastião', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Capitão João Renó, 320 - Piedade, Itajubá', -22.4410, -45.4420, 'Atenção Básica SUS & Saúde da Mulher', 'Secretaria Municipal de Saúde', 'Equipe atenciosa e sala de vacinação organizada.'],
+      ['São Sebastião', 'Material de Construção Serra Sul', 'Construção & Elétrica', 'service', '🏗️', 'Rua São Sebastião, 410 - São Sebastião, Itajubá', -22.4328, -45.4445, 'Alvará de Funcionamento & Entrega Própria', 'PMI / PROCON', 'Entrega rápida de materiais básicos nos bairros vizinhos.'],
 
       // Rebourgeon, Santa Luzia, Cruzeiro & Oriente (8 locais)
-      ['PSF Rebourgeon (CNES 2212706)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Padre Marçal Ribeiro, 410 - Rebourgeon, Itajubá', -22.4265, -45.4362, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Atendimento bem avaliado pelos moradores da região leste.'],
-      ['Supermercado Rebourgeon & Padaria', 'Supermercado de Bairro', 'food', '🛒', 'Rua Olímpio José Rodrigues, 280 - Rebourgeon, Itajubá', -22.4262, -45.4368, 'Alvará Sanitário & Hortifrúti Fresco', 'VISA Itajubá', 'Principal ponto de compras do bairro Rebourgeon e Santa Luzia.'],
-      ['E.M. Carmo Manaia • Rebourgeon', 'Educação Municipal', 'service', '🏫', 'Rua Padre Marçal Ribeiro, 290 - Rebourgeon, Itajubá', -22.4269, -45.4365, 'Rede Municipal de Ensino • SEMED', 'Secretaria de Educação Itajubá', 'Infraestrutura limpa e projetos culturais ativos.'],
-      ['PSF Cruzeiro & Santa Luzia', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Capitão Gomes, 340 - Cruzeiro, Itajubá', -22.4295, -45.4410, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Acesso em rua inclinada requer atenção para cadeirantes.'],
-      ['Mercearia & Açougue Alto do Cruzeiro', 'Comércio & Carnes', 'food', '🥩', 'Rua Capitão Gomes, 490 - Cruzeiro, Itajubá', -22.4302, -45.4402, 'Inspeção Sanitária Municipal', 'VISA Itajubá', 'Bom atendimento e cortes selecionados aos sábados.'],
-      ['Drogaria Santa Luzia Bem-Estar', 'Farmácia & Conveniência', 'health', '💊', 'Rua Santa Luzia, 215 - Santa Luzia, Itajubá', -22.4280, -45.4385, 'Certificado ANVISA & CRF-MG', 'VISA Itajubá', 'Entrega domiciliar rápida no Rebourgeon e Cruzeiro.'],
-      ['PSF Oriente / Jardim das Colinas', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua das Acácias, 190 - Oriente, Itajubá', -22.4182, -45.4592, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Unidade organizada e com baixa fila de espera.'],
-      ['Padaria & Empório Jardim das Colinas', 'Panificação & Cafeteria', 'food', '🥐', 'Rua das Acácias, 340 - Jardim das Colinas, Itajubá', -22.4170, -45.4605, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Ótima opção de café colonial e pães artesanais.'],
+      ['Rebourgeon & Cruzeiro', 'PSF Rebourgeon (CNES 2212706)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Padre Marçal Ribeiro, 410 - Rebourgeon, Itajubá', -22.4265, -45.4362, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Atendimento bem avaliado pelos moradores da região leste.'],
+      ['Rebourgeon & Cruzeiro', 'Supermercado Rebourgeon & Padaria', 'Supermercado de Bairro', 'food', '🛒', 'Rua Olímpio José Rodrigues, 280 - Rebourgeon, Itajubá', -22.4262, -45.4368, 'Alvará Sanitário & Hortifrúti Fresco', 'VISA Itajubá', 'Principal ponto de compras do bairro Rebourgeon e Santa Luzia.'],
+      ['Rebourgeon & Cruzeiro', 'E.M. Carmo Manaia • Rebourgeon', 'Educação Municipal', 'education', '🏫', 'Rua Padre Marçal Ribeiro, 290 - Rebourgeon, Itajubá', -22.4269, -45.4365, 'Rede Municipal de Ensino • SEMED', 'Secretaria de Educação Itajubá', 'Infraestrutura limpa e projetos culturais ativos.'],
+      ['Rebourgeon & Cruzeiro', 'PSF Cruzeiro & Santa Luzia', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Capitão Gomes, 340 - Cruzeiro, Itajubá', -22.4295, -45.4410, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Acesso em rua inclinada requer atenção para cadeirantes.'],
+      ['Rebourgeon & Cruzeiro', 'Mercearia & Açougue Alto do Cruzeiro', 'Comércio & Carnes', 'food', '🥩', 'Rua Capitão Gomes, 490 - Cruzeiro, Itajubá', -22.4302, -45.4402, 'Inspeção Sanitária Municipal', 'VISA Itajubá', 'Bom atendimento e cortes selecionados aos sábados.'],
+      ['Santa Luzia', 'Drogaria Santa Luzia Bem-Estar', 'Farmácia & Conveniência', 'health', '💊', 'Rua Santa Luzia, 215 - Santa Luzia, Itajubá', -22.4280, -45.4385, 'Certificado ANVISA & CRF-MG', 'VISA Itajubá', 'Entrega domiciliar rápida no Rebourgeon e Cruzeiro.'],
+      ['Oriente & Colinas', 'PSF Oriente / Jardim das Colinas', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua das Acácias, 190 - Oriente, Itajubá', -22.4182, -45.4592, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Unidade organizada e com baixa fila de espera.'],
+      ['Oriente & Colinas', 'Padaria & Empório Jardim das Colinas', 'Panificação & Cafeteria', 'food', '🥐', 'Rua das Acácias, 340 - Jardim das Colinas, Itajubá', -22.4170, -45.4605, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Ótima opção de café colonial e pães artesanais.'],
 
       // Varginha, Estiva, Vila Poddis, Boa Vista, Santa Rosa & Novo Horizonte (11 locais)
-      ['FEPI • Centro Universitário de Itajubá', 'Ensino Superior & Clínicas Escola', 'service', '🎓', 'Av. Dr. Antônio Braga Filho, 687 - Varginha, Itajubá', -22.4318, -45.4568, 'Instituição Credenciada MEC • 18 Cursos', 'Ministério da Educação (MEC)', 'Campus amplo, arborizado e com clínica escola aberta à comunidade.'],
-      ['Parque Municipal de Itajubá • Lazer & Esporte', 'Parque Público & Área Verde', 'service', '🌳', 'Av. Dr. Antônio Braga Filho - Varginha, Itajubá', -22.4308, -45.4562, 'Patrimônio Ambiental & Lazer Municipal', 'SEMMA / SECULT Itajubá', 'Excelente pista de caminhada, quadras e área infantil.'],
-      ['Supermercado Bahamas Mix • Estiva / Varginha', 'Atacarejo & Supermercado', 'food', '🛒', 'Av. Dr. Jerson Dias, 780 - Estiva, Itajubá', -22.4368, -45.4612, 'Selo Higiene & Cadeia Logística', 'VISA Itajubá / PROCON', 'Caixas mais cheios no primeiro sábado de cada mês.'],
-      ['Centro Administrativo Municipal (Prefeitura)', 'Serviços Públicos & Atendimento', 'service', '🏛️', 'Av. Dr. Jerson Dias, 500 - Estiva, Itajubá', -22.4362, -45.4608, 'Sede Administrativa • Prefeitura de Itajubá', 'Controladoria Geral do Município', 'Balcão único com acessibilidade total e senha eletrônica.'],
-      ['PSF Vila Poddis / Santo Antônio', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua João Poddis, 220 - Vila Poddis, Itajubá', -22.4242, -45.4595, 'Atenção Básica SUS', 'Secretaria Municipal de Saúde', 'Equipe dedicada e acompanhamento domiciliar ativo.'],
-      ['PSF Boa Vista (CNES 5285550)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Boa Vista, 310 - Boa Vista, Itajubá', -22.4385, -45.4630, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Referência em atendimento preventivo para a zona sul.'],
-      ['Supermercado & Padaria Boa Vista', 'Supermercado de Bairro', 'food', '🛒', 'Av. Pres. Tancredo Neves, 420 - Boa Vista, Itajubá', -22.4402, -45.4622, 'Alvará Sanitário Ativo', 'VISA Itajubá', 'Preços competitivos e açougue bem avaliado.'],
-      ['PSF Santa Rosa (CNES 2212714)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Principal Santa Rosa, 380 - Santa Rosa, Itajubá', -22.4435, -45.4625, 'Atenção Primária SUS & Vacinação', 'Secretaria Municipal de Saúde', 'Unidade essencial para os moradores da região sul.'],
-      ['E.M. Professor Isaías • Santa Rosa', 'Educação Municipal', 'service', '🏫', 'Rua José de Alencar, 210 - Santa Rosa, Itajubá', -22.4442, -45.4632, 'Rede Municipal de Ensino • SEMED', 'Secretaria de Educação Itajubá', 'Escola bem conservada e ativa nos projetos comunitários.'],
-      ['Comercial & Padaria Santa Rosa', 'Supermercado & Padaria', 'food', '🥖', 'Rua Principal Santa Rosa, 510 - Santa Rosa, Itajubá', -22.4445, -45.4634, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Atendimento cordial e variedade de produtos frescos.'],
-      ['PSF Novo Horizonte & Vila Isabel', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Novo Horizonte, 290 - Novo Horizonte, Itajubá', -22.4485, -45.4650, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Atendimento humanizado e campanhas frequentes de saúde.'],
+      ['Varginha & Estiva', 'FEPI • Centro Universitário de Itajubá', 'Ensino Superior & Clínicas Escola', 'education', '🎓', 'Av. Dr. Antônio Braga Filho, 687 - Varginha, Itajubá', -22.4318, -45.4568, 'Instituição Credenciada MEC • 18 Cursos', 'Ministério da Educação (MEC)', 'Campus amplo, arborizado e com clínica escola aberta à comunidade.'],
+      ['Varginha & Estiva', 'Parque Municipal de Itajubá • Lazer & Esporte', 'Parque Público & Área Verde', 'service', '🌳', 'Av. Dr. Antônio Braga Filho - Varginha, Itajubá', -22.4308, -45.4562, 'Patrimônio Ambiental & Lazer Municipal', 'SEMMA / SECULT Itajubá', 'Excelente pista de caminhada, quadras e área infantil.'],
+      ['Varginha & Estiva', 'Supermercado Bahamas Mix • Estiva / Varginha', 'Atacarejo & Supermercado', 'food', '🛒', 'Av. Dr. Jerson Dias, 780 - Estiva, Itajubá', -22.4368, -45.4612, 'Selo Higiene & Cadeia Logística', 'VISA Itajubá / PROCON', 'Caixas mais cheios no primeiro sábado de cada mês.'],
+      ['Varginha & Estiva', 'Centro Administrativo Municipal (Prefeitura)', 'Serviços Públicos & Atendimento', 'service', '🏛️', 'Av. Dr. Jerson Dias, 500 - Estiva, Itajubá', -22.4362, -45.4608, 'Sede Administrativa • Prefeitura de Itajubá', 'Controladoria Geral do Município', 'Balcão único com acessibilidade total e senha eletrônica.'],
+      ['Vila Poddis', 'PSF Vila Poddis / Santo Antônio', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua João Poddis, 220 - Vila Poddis, Itajubá', -22.4242, -45.4595, 'Atenção Básica SUS', 'Secretaria Municipal de Saúde', 'Equipe dedicada e acompanhamento domiciliar ativo.'],
+      ['Boa Vista', 'PSF Boa Vista (CNES 5285550)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Boa Vista, 310 - Boa Vista, Itajubá', -22.4385, -45.4630, 'Unidade Saúde da Família SUS', 'Secretaria Municipal de Saúde', 'Referência em atendimento preventivo para a zona sul.'],
+      ['Boa Vista', 'Supermercado & Padaria Boa Vista', 'Supermercado de Bairro', 'food', '🛒', 'Av. Pres. Tancredo Neves, 420 - Boa Vista, Itajubá', -22.4402, -45.4622, 'Alvará Sanitário Ativo', 'VISA Itajubá', 'Preços competitivos e açougue bem avaliado.'],
+      ['Santa Rosa', 'PSF Santa Rosa (CNES 2212714)', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Principal Santa Rosa, 380 - Santa Rosa, Itajubá', -22.4435, -45.4625, 'Atenção Primária SUS & Vacinação', 'Secretaria Municipal de Saúde', 'Unidade essencial para os moradores da região sul.'],
+      ['Santa Rosa', 'E.M. Professor Isaías • Santa Rosa', 'Educação Municipal', 'education', '🏫', 'Rua José de Alencar, 210 - Santa Rosa, Itajubá', -22.4442, -45.4632, 'Rede Municipal de Ensino • SEMED', 'Secretaria de Educação Itajubá', 'Escola bem conservada e ativa nos projetos comunitários.'],
+      ['Santa Rosa', 'Comercial & Padaria Santa Rosa', 'Supermercado & Padaria', 'food', '🥖', 'Rua Principal Santa Rosa, 510 - Santa Rosa, Itajubá', -22.4445, -45.4634, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Atendimento cordial e variedade de produtos frescos.'],
+      ['Novo Horizonte', 'PSF Novo Horizonte & Vila Isabel', 'Unidade Básica de Saúde SUS', 'health', '🩺', 'Rua Novo Horizonte, 290 - Novo Horizonte, Itajubá', -22.4485, -45.4650, 'Atenção Primária SUS', 'Secretaria Municipal de Saúde', 'Atendimento humanizado e campanhas frequentes de saúde.'],
 
       // Polo Industrial & Grandes Empresas de Itajubá (8 locais)
-      ['Helibras • Airbus Helicopters Brasil', 'Indústria Aeronáutica & Alta Tecnologia', 'service', '🚁', 'Rua Wilbur Wright, 2000 - Distrito Industrial, Itajubá', -22.4495, -45.4685, 'Certificação ANAC / ISO 9001 & AS9100', 'ANAC / FIEMG / SEMMA', 'Referência nacional na fabricação e manutenção de helicópteros.'],
-      ['IMBEL • Fábrica de Itajubá', 'Indústria de Defesa & Engenharia', 'service', '🏭', 'Av. Cel. Aventino Ribeiro, s/n - IMBEL, Itajubá', -22.4410, -45.4550, 'Certificação ISO 9001 & Controle Ambiental', 'Ministério da Defesa / SEMMA', 'Indústria histórica de Itajubá com programas técnicos e estágios.'],
-      ['Balteau Produtos Elétricos Ltda.', 'Indústria Eletroeletrônica & Transformadores', 'service', '⚡', 'Av. Poços de Caldas, 1450 - Distrito Industrial, Itajubá', -22.4480, -45.4670, 'Certificação ISO 9001 / ISO 14001', 'INMETRO / FIEMG', 'Grande empregadora de técnicos e engenheiros eletricistas da cidade.'],
-      ['Cabelauto Brasil Condutores Elétricos', 'Indústria Automotiva & Chicotes', 'service', '🔌', 'Distrito Industrial • Av. Poços de Caldas, 1890, Itajubá', -22.4505, -45.4695, 'Certificação Automotiva IATF 16949', 'FIEMG / SEMMA', 'Forte programa de capacitação e inclusão profissional em Itajubá.'],
-      ['Stahl Talhas & Equipamentos de Movimentação', 'Indústria Metalmecânica & Pontes Rolantes', 'service', '🏗️', 'Distrito Industrial • Rua das Indústrias, 320, Itajubá', -22.4488, -45.4678, 'Certificação ISO 9001 & Segurança NR-12', 'FIEMG / MTE', 'Excelência em engenharia mecânica e segurança do trabalho.'],
-      ['GE Grid Solutions / Alstom Energia Itajubá', 'Indústria de Alta Tensão & Subestações', 'service', '🔋', 'Av. Poços de Caldas, 2100 - Distrito Industrial, Itajubá', -22.4515, -45.4705, 'Certificação Internacional IEC / ISO 14001', 'ANEEL / FIEMG', 'Tecnologia de ponta para o setor elétrico brasileiro e exportação.'],
-      ['Becton Dickinson (BD) • Unidade Sul de Minas', 'Indústria Médico-Hospitalar', 'health', '💉', 'Corredor Industrial BR-459 • Itajubá', -22.4465, -45.4658, 'Boas Práticas de Fabricação ANVISA / FDA', 'ANVISA / VISA', 'Padrão rigoroso de sala limpa, higiene e segurança operacional.'],
-      ['Restaurante Industrial & Refeitório Polo Sul', 'Alimentação Corporativa', 'food', '🍽️', 'Av. Poços de Caldas, 1600 - Distrito Industrial, Itajubá', -22.4490, -45.4682, 'Alvará Sanitário & Nutrição Ocupacional PAT', 'VISA Itajubá / MTE', 'Atende colaboradores do Distrito Industrial com cardápio balanceado.']
+      ['Distrito Industrial', 'Helibras • Airbus Helicopters Brasil', 'Indústria Aeronáutica & Alta Tecnologia', 'industry', '🚁', 'Rua Wilbur Wright, 2000 - Distrito Industrial, Itajubá', -22.4495, -45.4685, 'Certificação ANAC / ISO 9001 & AS9100', 'ANAC / FIEMG / SEMMA', 'Referência nacional na fabricação e manutenção de helicópteros.'],
+      ['IMBEL', 'IMBEL • Fábrica de Itajubá', 'Indústria de Defesa & Engenharia', 'industry', '🏭', 'Av. Cel. Aventino Ribeiro, s/n - IMBEL, Itajubá', -22.4410, -45.4550, 'Certificação ISO 9001 & Controle Ambiental', 'Ministério da Defesa / SEMMA', 'Indústria histórica de Itajubá com programas técnicos e estágios.'],
+      ['Distrito Industrial', 'Balteau Produtos Elétricos Ltda.', 'Indústria Eletroeletrônica & Transformadores', 'industry', '⚡', 'Av. Poços de Caldas, 1450 - Distrito Industrial, Itajubá', -22.4480, -45.4670, 'Certificação ISO 9001 / ISO 14001', 'INMETRO / FIEMG', 'Grande empregadora de técnicos e engenheiros eletricistas da cidade.'],
+      ['Distrito Industrial', 'Cabelauto Brasil Condutores Elétricos', 'Indústria Automotiva & Chicotes', 'industry', '🔌', 'Distrito Industrial • Av. Poços de Caldas, 1890, Itajubá', -22.4505, -45.4695, 'Certificação Automotiva IATF 16949', 'FIEMG / SEMMA', 'Forte programa de capacitação e inclusão profissional em Itajubá.'],
+      ['Distrito Industrial', 'Stahl Talhas & Equipamentos de Movimentação', 'Indústria Metalmecânica & Pontes Rolantes', 'industry', '🏗️', 'Distrito Industrial • Rua das Indústrias, 320, Itajubá', -22.4488, -45.4678, 'Certificação ISO 9001 & Segurança NR-12', 'FIEMG / MTE', 'Excelência em engenharia mecânica e segurança do trabalho.'],
+      ['Distrito Industrial', 'GE Grid Solutions / Alstom Energia Itajubá', 'Indústria de Alta Tensão & Subestações', 'industry', '🔋', 'Av. Poços de Caldas, 2100 - Distrito Industrial, Itajubá', -22.4515, -45.4705, 'Certificação Internacional IEC / ISO 14001', 'ANEEL / FIEMG', 'Tecnologia de ponta para o setor elétrico brasileiro e exportação.'],
+      ['Distrito Industrial', 'Becton Dickinson (BD) • Unidade Sul de Minas', 'Indústria Médico-Hospitalar', 'health', '💉', 'Corredor Industrial BR-459 • Itajubá', -22.4465, -45.4658, 'Boas Práticas de Fabricação ANVISA / FDA', 'ANVISA / VISA', 'Padrão rigoroso de sala limpa, higiene e segurança operacional.'],
+      ['Distrito Industrial', 'Restaurante Industrial & Refeitório Polo Sul', 'Alimentação Corporativa', 'food', '🍽️', 'Av. Poços de Caldas, 1600 - Distrito Industrial, Itajubá', -22.4490, -45.4682, 'Alvará Sanitário & Nutrição Ocupacional PAT', 'VISA Itajubá / MTE', 'Atende colaboradores do Distrito Industrial com cardápio balanceado.']
     ];
 
-    // Gera 52 a 68 avaliações únicas e variadas (detalhadas + curtas) para cada um dos 76 locais
     function buildRichReviewsForEstablishment(name, category, idx) {
       const reviewers = [
         'Mariana C.', 'Carlos Eduardo S.', 'Fernanda Lima', 'José Antônio R.', 'Lucas Mendes',
@@ -1726,13 +1783,13 @@
         'Referência no bairro pela seriedade e qualidade.'
       ];
 
-      const totalReviews = 52 + (idx % 17); // Entre 52 e 68 avaliações por estabelecimento
+      const totalReviews = 52 + (idx % 17);
       const list = [];
       const detailedPool = detailedTemplatesByCat[category] || detailedTemplatesByCat.service;
 
       for (let r = 0; r < totalReviews; r++) {
         const reviewer = reviewers[(idx * 7 + r) % reviewers.length];
-        const isDetailed = r % 3 !== 2; // 2/3 detalhadas, 1/3 curtas e diretas
+        const isDetailed = r % 3 !== 2;
         const comment = isDetailed
           ? detailedPool[(idx + r) % detailedPool.length]
           : shortTemplates[(idx * 3 + r) % shortTemplates.length];
@@ -1758,7 +1815,6 @@
       const reviews = buildRichReviewsForEstablishment(name, category, idx);
       const totalCount = reviews.length;
 
-      // Garante selos >= 75% de forma realista e variada entre os 76 locais
       const q5 = Math.round(totalCount * (0.78 + ((idx % 5) * 0.03)));
       const a5 = Math.round(totalCount * (0.76 + (((idx + 1) % 5) * 0.03)));
       const h5 = Math.round(totalCount * (0.80 + (((idx + 2) % 4) * 0.03)));
@@ -1969,6 +2025,16 @@
     ];
 
     // 6. ESTADO GLOBAL
+    let selectedNeighborhood = 'all';
+    let floodAlertActive = false;
+    let currentEstId = null;
+    let currentReviewFilter = 'all';
+    let qrUnlockedForCurrentModal = false;
+    let currentWizardStep = 0;
+    let wizardDraft = {};
+    let currentBusStopId = null;
+    let currentBusDirection = 'leaving';
+
     let map = null;
     let streetTileLayer = null;
     let satelliteTileLayer = null;
@@ -1979,7 +2045,6 @@
     let tempClickMarker = null;
     let mainMapCategoryFilter = 'all';
 
-    // Estado do Mapa Exclusivo de Pontos de Ônibus (Aba Mobilidade)
     let busMap = null;
     let busStreetTileLayer = null;
     let busSatelliteTileLayer = null;
@@ -2036,13 +2101,17 @@
     }
 
     function copyTextWithToast(text, label) {
-      const temp = document.createElement('input');
-      temp.value = text;
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      temp.remove();
-      showToast(`${label} (${text}) copiado!`);
+      try {
+        const temp = document.createElement('input');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        temp.remove();
+        showToast(`${label} (${text}) copiado!`);
+      } catch (e) {
+        showToast(`${label}: ${text}`);
+      }
     }
 
     function closeModal(id) { document.getElementById(id)?.classList.add('hidden'); }
@@ -2065,8 +2134,9 @@
           : 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all';
       });
 
-      if (viewName === 'dashboard' && map) {
-        setTimeout(() => { map.invalidateSize(true); }, 100);
+      if (viewName === 'dashboard') {
+        initMap();
+        setTimeout(() => { if (map) map.invalidateSize(true); }, 100);
       }
       if (viewName === 'risks') renderRisksDashboard();
       if (viewName === 'reviews') renderReviewsDirectory();
@@ -2080,6 +2150,7 @@
       if (viewName === 'culture') setCultureTab('all');
       if (viewName === 'donations') renderSocialUnits();
       if (viewName === 'jobs') filterOpportunities('all');
+      if (viewName === 'transparency') renderTransparencyDocs();
     }
 
     function toggleDarkMode() {
@@ -2194,7 +2265,9 @@
           </div>
         `).join('');
       }
-    // 9. MAPA LEAFLET DE ITAJUBÁ - MG (TRAVADO ESTRITAMENTE EM ITAJUBÁ, SEM PONTOS DE ÔNIBUS, FOCO EM ESTABELECIMENTOS)
+    }
+
+    // 9. MAPA LEAFLET DE ITAJUBÁ - MG (TRAVADO ESTRITAMENTE EM ITAJUBÁ, FOCO EM 76 ESTABELECIMENTOS)
     function initMap() {
       const mapEl = document.getElementById('itajubaMap');
       if (!mapEl) return;
@@ -2209,98 +2282,98 @@
         return;
       }
 
-      map = L.map('itajubaMap', {
-        center: [-22.4256, -45.4528],
-        zoom: 14,
-        minZoom: 12,
-        maxZoom: 19,
-        maxBounds: ITAJUBA_BOUNDS,
-        maxBoundsViscosity: 1.0,
-        zoomControl: true
-      });
-
-      // Camada Principal de Ruas (ArcGIS World Street Map com fallback automático para OpenStreetMap HOT)
-      let switchedToFallback = false;
-      streetTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        maxNativeZoom: 18,
-        maxZoom: 19,
-        attribution: '&copy; Esri, OpenStreetMap contributors • Civora Itajubá - MG'
-      });
-
-      streetTileLayer.on('tileerror', function () {
-        if (!switchedToFallback) {
-          switchedToFallback = true;
-          streetTileLayer.setUrl('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png');
-        }
-      });
-
-      streetTileLayer.addTo(map);
-
-      // Camada Satélite HD: maxNativeZoom: 17 evita blocos cinzas ao dar zoom máximo
-      const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxNativeZoom: 17,
-        maxZoom: 19,
-        attribution: '&copy; Esri Satélite HD • Itajubá - MG'
-      });
-      const satTransport = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
-        maxNativeZoom: 17,
-        maxZoom: 19
-      });
-      const satPlaces = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-        maxNativeZoom: 17,
-        maxZoom: 19
-      });
-      satelliteTileLayer = L.layerGroup([esriSat, satTransport, satPlaces]);
-
-      hydroRoadLayer = L.layerGroup().addTo(map);
-      selectedStreetHighlightLayer = L.layerGroup().addTo(map);
-      poisLayer = L.layerGroup().addTo(map);
-      reportsLayer = L.layerGroup().addTo(map);
-
-      drawItajubaHydroAndAvenues();
-      renderPoisOnMap();
-      renderReportsOnMap();
-      loadFullItajubaStreetIndex();
-
-      // Garante recálculo imediato e contínuo das dimensões do mapa
-      setTimeout(() => { if (map) map.invalidateSize(true); }, 80);
-      setTimeout(() => { if (map) map.invalidateSize(true); }, 400);
-      setTimeout(() => { if (map) map.invalidateSize(true); }, 1000);
-
-      if (typeof ResizeObserver !== 'undefined') {
-        const ro = new ResizeObserver(() => {
-          if (map) map.invalidateSize(true);
+      try {
+        map = L.map('itajubaMap', {
+          center: [-22.4256, -45.4528],
+          zoom: 14,
+          minZoom: 12,
+          maxZoom: 19,
+          maxBounds: ITAJUBA_BOUNDS,
+          maxBoundsViscosity: 1.0,
+          zoomControl: true
         });
-        ro.observe(mapEl);
-      }
 
-      map.on('click', (e) => {
-        if (tempClickMarker) map.removeLayer(tempClickMarker);
-        tempClickMarker = L.marker([e.latlng.lat, e.latlng.lng], {
-          icon: L.divIcon({
-            className: '',
-            html: `<div class="custom-pin" style="background:#7C3AED;width:30px;height:30px;font-size:14px;">📌</div>`,
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
+        let switchedToFallback = false;
+        streetTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+          maxNativeZoom: 18,
+          maxZoom: 19,
+          attribution: '&copy; Esri, OpenStreetMap contributors • Civora Itajubá - MG'
+        });
+
+        streetTileLayer.on('tileerror', function () {
+          if (!switchedToFallback) {
+            switchedToFallback = true;
+            streetTileLayer.setUrl('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png');
+          }
+        });
+
+        streetTileLayer.addTo(map);
+
+        const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          maxNativeZoom: 17,
+          maxZoom: 19,
+          attribution: '&copy; Esri Satélite HD • Itajubá - MG'
+        });
+        const satTransport = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
+          maxNativeZoom: 17,
+          maxZoom: 19
+        });
+        const satPlaces = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+          maxNativeZoom: 17,
+          maxZoom: 19
+        });
+        satelliteTileLayer = L.layerGroup([esriSat, satTransport, satPlaces]);
+
+        hydroRoadLayer = L.layerGroup().addTo(map);
+        selectedStreetHighlightLayer = L.layerGroup().addTo(map);
+        poisLayer = L.layerGroup().addTo(map);
+        reportsLayer = L.layerGroup().addTo(map);
+
+        drawItajubaHydroAndAvenues();
+        renderPoisOnMap();
+        renderReportsOnMap();
+        loadFullItajubaStreetIndex();
+
+        setTimeout(() => { if (map) map.invalidateSize(true); }, 80);
+        setTimeout(() => { if (map) map.invalidateSize(true); }, 400);
+        setTimeout(() => { if (map) map.invalidateSize(true); }, 1000);
+
+        if (typeof ResizeObserver !== 'undefined') {
+          const ro = new ResizeObserver(() => {
+            if (map) map.invalidateSize(true);
+          });
+          ro.observe(mapEl);
+        }
+
+        map.on('click', (e) => {
+          if (tempClickMarker) map.removeLayer(tempClickMarker);
+          tempClickMarker = L.marker([e.latlng.lat, e.latlng.lng], {
+            icon: L.divIcon({
+              className: '',
+              html: `<div class="custom-pin" style="background:#7C3AED;width:30px;height:30px;font-size:14px;">📌</div>`,
+              iconSize: [30, 30],
+              iconAnchor: [15, 15]
+            })
           })
-        })
-          .bindPopup(`
-            <div class="text-xs space-y-1.5">
-              <p class="font-extrabold text-purple-800">Ponto em Itajubá - MG</p>
-              <p class="text-[11px] text-slate-500">Lat: ${e.latlng.lat.toFixed(4)}, Lng: ${e.latlng.lng.toFixed(4)}</p>
-              <button type="button" onclick="openReportModal()" class="w-full py-1.5 px-2.5 rounded-lg bg-purple-600 text-white font-bold text-[11px]">Reportar Ocorrência Aqui</button>
-            </div>
-          `)
-          .addTo(map)
-          .openPopup();
-      });
+            .bindPopup(`
+              <div class="text-xs space-y-1.5">
+                <p class="font-extrabold text-purple-800">Ponto em Itajubá - MG</p>
+                <p class="text-[11px] text-slate-500">Lat: ${e.latlng.lat.toFixed(4)}, Lng: ${e.latlng.lng.toFixed(4)}</p>
+                <button type="button" onclick="openReportModal()" class="w-full py-1.5 px-2.5 rounded-lg bg-purple-600 text-white font-bold text-[11px]">Reportar Ocorrência Aqui</button>
+              </div>
+            `)
+            .addTo(map)
+            .openPopup();
+        });
+      } catch (err) {
+        console.error('Erro ao iniciar #itajubaMap:', err);
+      }
     }
 
     function drawItajubaHydroAndAvenues() {
       if (!hydroRoadLayer) return;
       hydroRoadLayer.clearLayers();
 
-      // Traçado do Rio Sapucaí cruzando Itajubá
       const rioSapucaiCoords = [
         [-22.4620, -45.4690], [-22.4480, -45.4625], [-22.4355, -45.4570],
         [-22.4265, -45.4552], [-22.4210, -45.4525], [-22.4145, -45.4480],
@@ -2312,7 +2385,6 @@
         opacity: 0.5
       }).bindTooltip('Rio Sapucaí (Calha Principal)', { sticky: true }).addTo(hydroRoadLayer);
 
-      // Ribeirão José Pereira
       const ribeiraoCoords = [
         [-22.4125, -45.4190], [-22.4180, -45.4295], [-22.4220, -45.4390],
         [-22.4235, -45.4470], [-22.4210, -45.4525]
@@ -2412,54 +2484,58 @@
         return;
       }
 
-      busMap = L.map('busItajubaMap', {
-        center: [-22.4265, -45.4525],
-        zoom: 14,
-        minZoom: 12,
-        maxZoom: 19,
-        maxBounds: ITAJUBA_BOUNDS,
-        maxBoundsViscosity: 1.0,
-        zoomControl: true
-      });
-
-      let switchedBusFallback = false;
-      busStreetTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        maxNativeZoom: 18,
-        maxZoom: 19,
-        attribution: '&copy; Esri, OpenStreetMap • Pontos Expresso Valônia Itajubá'
-      });
-
-      busStreetTileLayer.on('tileerror', function () {
-        if (!switchedBusFallback) {
-          switchedBusFallback = true;
-          busStreetTileLayer.setUrl('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png');
-        }
-      });
-
-      busStreetTileLayer.addTo(busMap);
-
-      const busSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxNativeZoom: 17,
-        maxZoom: 19,
-        attribution: '&copy; Esri Satélite HD • Itajubá - MG'
-      });
-      const busTrans = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
-        maxNativeZoom: 17,
-        maxZoom: 19
-      });
-      busSatelliteTileLayer = L.layerGroup([busSat, busTrans]);
-
-      busStopsLayer = L.layerGroup().addTo(busMap);
-      renderBusStopsOnDedicatedMap();
-
-      setTimeout(() => { if (busMap) busMap.invalidateSize(true); }, 100);
-      setTimeout(() => { if (busMap) busMap.invalidateSize(true); }, 450);
-
-      if (typeof ResizeObserver !== 'undefined') {
-        const ro = new ResizeObserver(() => {
-          if (busMap) busMap.invalidateSize(true);
+      try {
+        busMap = L.map('busItajubaMap', {
+          center: [-22.4265, -45.4525],
+          zoom: 14,
+          minZoom: 12,
+          maxZoom: 19,
+          maxBounds: ITAJUBA_BOUNDS,
+          maxBoundsViscosity: 1.0,
+          zoomControl: true
         });
-        ro.observe(mapEl);
+
+        let switchedBusFallback = false;
+        busStreetTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+          maxNativeZoom: 18,
+          maxZoom: 19,
+          attribution: '&copy; Esri, OpenStreetMap • Pontos Expresso Valônia Itajubá'
+        });
+
+        busStreetTileLayer.on('tileerror', function () {
+          if (!switchedBusFallback) {
+            switchedBusFallback = true;
+            busStreetTileLayer.setUrl('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png');
+          }
+        });
+
+        busStreetTileLayer.addTo(busMap);
+
+        const busSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          maxNativeZoom: 17,
+          maxZoom: 19,
+          attribution: '&copy; Esri Satélite HD • Itajubá - MG'
+        });
+        const busTrans = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
+          maxNativeZoom: 17,
+          maxZoom: 19
+        });
+        busSatelliteTileLayer = L.layerGroup([busSat, busTrans]);
+
+        busStopsLayer = L.layerGroup().addTo(busMap);
+        renderBusStopsOnDedicatedMap();
+
+        setTimeout(() => { if (busMap) busMap.invalidateSize(true); }, 100);
+        setTimeout(() => { if (busMap) busMap.invalidateSize(true); }, 450);
+
+        if (typeof ResizeObserver !== 'undefined') {
+          const ro = new ResizeObserver(() => {
+            if (busMap) busMap.invalidateSize(true);
+          });
+          ro.observe(mapEl);
+        }
+      } catch (err) {
+        console.error('Erro ao iniciar #busItajubaMap:', err);
       }
     }
 
@@ -2624,16 +2700,13 @@
         const key = normalizeText(item.name);
         if (seen.has(key)) continue;
         const normDist = normalizeText(item.district);
-      const btn = document.getElementById(`reviewCategoryFilter`);
-      if (btn) btn.value = cat;
-      renderReviewsDirectory();
-    }
-
-    function setReviewCategoryFilterBtn(cat) {
-      const sel = document.getElementById('reviewCategoryFilter');
-      if (sel) sel.value = cat;
-      renderReviewsDirectory();
-    }
+        if (key.startsWith(normQ)) {
+          seen.add(key);
+          startsWithMatches.push(item);
+        } else if (key.includes(normQ) || normDist.includes(normQ)) {
+          seen.add(key);
+          includesMatches.push(item);
+        }
       }
 
       const matches = [...startsWithMatches, ...includesMatches].slice(0, 10);
@@ -3073,6 +3146,12 @@
       showToast('Avaliação QR Code computada! Percentuais dos 5 selos atualizados.');
     }
 
+    function setReviewCategoryFilterBtn(cat) {
+      const sel = document.getElementById('reviewCategoryFilter');
+      if (sel) sel.value = cat;
+      renderReviewsDirectory();
+    }
+
     function renderReviewsDirectory() {
       const container = document.getElementById('reviewsDirectoryContainer');
       if (!container) return;
@@ -3298,7 +3377,7 @@
       showToast(`Protocolo ${newId} publicado no mapa de Itajubá!`);
     }
 
-    // 13. RENDERIZAÇÃO DAS ABAS SECUNDÁRIAS (RISCOS, e-GOV, SAÚDE, ÔNIBUS, CULTURA, DOAÇÕES, VAGAS)
+    // 13. RENDERIZAÇÃO DAS ABAS SECUNDÁRIAS (RISCOS, e-GOV, SAÚDE, ÔNIBUS, CULTURA, DOAÇÕES, VAGAS, TRANSPARÊNCIA)
     function renderRisksDashboard() {
       const level = floodAlertActive ? '3,42 m' : '1,45 m';
       const statusSub = floodAlertActive ? '⚠️ ALERTA DE CHEIA (Cota > 3,20m)' : 'Normal (Cota Atenção: 2,80m)';
@@ -3642,6 +3721,31 @@
         `).join('');
     }
 
+    function renderTransparencyDocs() {
+      const grid = document.getElementById('transparencyDocsGrid');
+      if (!grid) return;
+      const docs = [
+        { code: 'DOM-ITJ Nº 2.418', date: '24/11/2026', title: 'Diário Oficial Eletrônico • Editais e Portarias', desc: 'Publicação oficial dos atos administrativos, nomeações e convocações de Itajubá.' },
+        { code: 'PREGÃO 084/2026', date: '20/11/2026', title: 'Aquisição de Insumos Hospitalares e Medicamentos SUS', desc: 'Processo licitatório concluído com economia de 18,4% aos cofres municipais.' },
+        { code: 'RGF 3º QUADRIMESTRE', date: '15/11/2026', title: 'Relatório de Gestão Fiscal & Receita Corrente Líquida', desc: 'Demonstrativo detalhado de receitas e despesas auditado pelo TCE-MG.' }
+      ];
+      grid.innerHTML = docs.map(d => `
+        <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-[10px] font-extrabold text-indigo-700">
+              <span>${d.code}</span>
+              <span>📅 ${d.date}</span>
+            </div>
+            <h3 class="text-base font-black text-slate-900">${d.title}</h3>
+            <p class="text-xs text-slate-600">${d.desc}</p>
+          </div>
+          <button type="button" onclick="downloadOfficialDocument('${d.code}', 'PORTAL DA TRANSPARÊNCIA - ITAJUBÁ MG\\nDocumento: ${d.code}\\nData: ${d.date}\\nTítulo: ${d.title}\\nResumo: ${d.desc}')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
+            Baixar Extrato Oficial
+          </button>
+        </div>
+      `).join('');
+    }
+
     function toggleAssistantChat() {
       document.getElementById('assistantChatBox')?.classList.toggle('hidden');
     }
@@ -3659,8 +3763,22 @@
       box.scrollTop = box.scrollHeight;
     }
 
+    // Exposição explícita no escopo global para garantir compatibilidade total em iframes
+    Object.assign(window, {
+      showToast, copyTextWithToast, closeModal, openReportModal, openSettingsModal, openHowToUseModal,
+      toggleMobileSidebar, switchMainView, toggleDarkMode, openRaioxDrawer, setMapTileLayer, toggleMapLayer,
+      setMainMapCategoryFilter, setBusMapTileLayer, resetBusMapCenter, filterBusStopsOnMap,
+      handlePlaceAutocomplete, selectSuggestedLocation, searchItajubaLocation, resetMapCenter, locateUserGPS,
+      selectNeighborhood, openEstablishmentModal, setReviewDetailFilter, unlockQrEvaluationMode,
+      setWizardStars, toggleWizardCriteriaTag, changeWizardStep, submitQrEvaluation,
+      setReviewCategoryFilterBtn, renderReviewsDirectory, openBusStopModal, switchBusDirectionTab,
+      votePollOption, renderReportsList, submitNewReport, toggleFloodSimulation, openGovServiceForm,
+      submitGovServiceProtocol, downloadOfficialDocument, renderFullHealthAndEducation, activateZonaAzul,
+      renderAllBusLinesMobility, setCultureTab, filterOpportunities, toggleAssistantChat, askAssistant
+    });
+
     // 14. INICIALIZAÇÃO GERAL DA APLICAÇÃO
-    window.addEventListener('DOMContentLoaded', () => {
+    function bootstrapCivora() {
       try {
         if (localStorage.getItem('civora_dark_mode') === '1') {
           document.body.classList.add('dark-mode');
@@ -3684,8 +3802,15 @@
       setCultureTab('all');
       renderSocialUnits();
       filterOpportunities('all');
+      renderTransparencyDocs();
       initMap();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', bootstrapCivora);
+    } else {
+      bootstrapCivora();
+    }
   </script>
 </body>
 </html>
