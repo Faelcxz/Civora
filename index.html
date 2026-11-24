@@ -29,8 +29,69 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
-    * { font-family: 'Inter', sans-serif; }
+    * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    body { margin: 0; background-color: #F6F4FB; color: #0f172a; }
+
+    /* =====================================================================
+       FALLBACK CSS PURO GARANTIDO (PREVINE BARRA LATERAL BRANCA / INVISÍVEL)
+       ===================================================================== */
+    #appShell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    #sidebarNav {
+      background: linear-gradient(180deg, #2E1065 0%, #3B0764 50%, #1E1B4B 100%) !important;
+      color: #ffffff !important;
+      width: 100%;
+      flex-shrink: 0;
+      z-index: 40;
+      box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.25);
+    }
+    @media (min-width: 1024px) {
+      #appShell {
+        flex-direction: row !important;
+      }
+      #sidebarNav {
+        width: 18rem !important;
+        position: sticky !important;
+        top: 0 !important;
+        height: 100vh !important;
+        min-height: 100vh !important;
+        overflow-y: auto !important;
+      }
+      #sidebarMenuItems {
+        display: block !important;
+      }
+    }
+    .nav-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.625rem 0.875rem;
+      border-radius: 1rem;
+      border: none;
+      background: transparent;
+      color: #f3e8ff !important;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .nav-btn:hover {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+    }
+    .nav-btn.is-active {
+      background-color: rgba(255, 255, 255, 0.18) !important;
+      color: #ffffff !important;
+      font-weight: 800;
+    }
+    .hidden { display: none !important; }
+
     ::-webkit-scrollbar { width: 7px; height: 7px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.35); border-radius: 9999px; }
@@ -44,11 +105,7 @@
       display: block !important;
       position: relative !important;
       z-index: 10 !important;
-      background: #e8eef5 !important;
-    }
-    #busItajubaMap {
-      height: 470px !important;
-      min-height: 470px !important;
+      background: #e2e8f0 !important;
     }
     .leaflet-container img,
     .leaflet-tile-pane img,
@@ -56,9 +113,7 @@
       max-width: none !important;
       max-height: none !important;
     }
-    .leaflet-tile {
-      visibility: visible !important;
-    }
+    .leaflet-tile { visibility: visible !important; }
     .leaflet-control-attribution {
       font-size: 10px !important;
       background: rgba(255, 255, 255, 0.88) !important;
@@ -108,7 +163,7 @@
 </head>
 <body class="bg-[#F6F4FB] text-slate-900 antialiased selection:bg-purple-600 selection:text-white">
 
-  <div class="min-h-screen flex flex-col lg:flex-row">
+  <div id="appShell" class="min-h-screen flex flex-col lg:flex-row">
 
     <!-- BARRA LATERAL INSTITUCIONAL CIVORA -->
     <aside id="sidebarNav" class="w-full lg:w-72 lg:sticky lg:top-0 lg:h-screen shrink-0 bg-gradient-to-b from-[#2E1065] via-[#3B0764] to-[#1E1B4B] text-white flex flex-col justify-between z-40 shadow-2xl overflow-y-auto">
@@ -132,54 +187,54 @@
               </div>
             </div>
             <div>
-              <span class="text-xl font-black tracking-tight bg-gradient-to-r from-white via-purple-100 to-pink-200 bg-clip-text text-transparent">Civora</span>
+              <span class="text-xl font-black tracking-tight text-white">Civora</span>
               <p class="text-[11px] font-bold text-purple-200">Portal Municipal • Itajubá - MG</p>
             </div>
           </div>
-          <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden px-3 py-1.5 rounded-xl bg-white/15 text-xs font-bold">
+          <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden px-3 py-1.5 rounded-xl bg-white/15 text-white text-xs font-bold">
             Menu
           </button>
         </div>
 
         <!-- Menu de Navegação Completo (10 Abas) -->
         <nav id="sidebarMenuItems" class="hidden lg:block space-y-1">
-          <button type="button" data-nav="dashboard" onclick="switchMainView('dashboard')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-bold bg-white/15 text-white shadow-sm transition-all">
+          <button type="button" data-nav="dashboard" onclick="switchMainView('dashboard')" class="nav-btn is-active">
             <span>🗺️ Mapa & Raio-X Itajubá</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-400/30">37 Bairros</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-400/30 text-white">37 Bairros</span>
           </button>
-          <button type="button" data-nav="risks" onclick="switchMainView('risks')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
-            <span>🌊 Riscos & Defesa Civil</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-400/25 text-cyan-200">10 Estações</span>
+          <button type="button" data-nav="risks" onclick="switchMainView('risks')" class="nav-btn">
+            <span>⚠️ Riscos & Defesa Civil</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-400/25 text-cyan-200">5 Ameaças</span>
           </button>
-          <button type="button" data-nav="reviews" onclick="switchMainView('reviews')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="reviews" onclick="switchMainView('reviews')" class="nav-btn">
             <span>⭐ Avaliações & Selos 5★</span>
             <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/25 text-amber-200">76 Locais</span>
           </button>
-          <button type="button" data-nav="egov" onclick="switchMainView('egov')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="egov" onclick="switchMainView('egov')" class="nav-btn">
             <span>🏛️ Serviços & Tributos</span>
             <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-400/25 text-indigo-200">e-Gov</span>
           </button>
-          <button type="button" data-nav="health" onclick="switchMainView('health')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="health" onclick="switchMainView('health')" class="nav-btn">
             <span>🏥 Saúde SUS & Educação</span>
             <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-400/25 text-emerald-200">45 Unid.</span>
           </button>
-          <button type="button" data-nav="mobility" onclick="switchMainView('mobility')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="mobility" onclick="switchMainView('mobility')" class="nav-btn">
             <span>🚌 Ônibus Valônia & Zona Azul</span>
             <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-400/25 text-purple-200">56 Pontos</span>
           </button>
-          <button type="button" data-nav="culture" onclick="switchMainView('culture')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="culture" onclick="switchMainView('culture')" class="nav-btn">
             <span>🎭 Cultura, Obras & Artistas</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-pink-400/25 text-pink-200">Galeria</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-pink-400/25 text-pink-200">54 Itens</span>
           </button>
-          <button type="button" data-nav="donations" onclick="switchMainView('donations')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="donations" onclick="switchMainView('donations')" class="nav-btn">
             <span>🤝 Unidades Carentes & Abrigos</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-teal-400/25 text-teal-200">Doar</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-teal-400/25 text-teal-200">18 Unid.</span>
           </button>
-          <button type="button" data-nav="jobs" onclick="switchMainView('jobs')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="jobs" onclick="switchMainView('jobs')" class="nav-btn">
             <span>💼 Empregos, Cursos & Estágios</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/25 text-amber-200">Vagas</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/25 text-amber-200">54 Vagas</span>
           </button>
-          <button type="button" data-nav="transparency" onclick="switchMainView('transparency')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all">
+          <button type="button" data-nav="transparency" onclick="switchMainView('transparency')" class="nav-btn">
             <span>📊 Transparência & Diário</span>
             <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-400/25 text-sky-200">Dados</span>
           </button>
@@ -189,16 +244,16 @@
         <div class="pt-3 border-t border-white/15 space-y-2">
           <p class="text-[10px] font-extrabold uppercase tracking-wider text-purple-200/80">Emergência Itajubá • Copiar</p>
           <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-            <button type="button" onclick="copyTextWithToast('199', 'Defesa Civil Itajubá')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🌊 199 Defesa</button>
-            <button type="button" onclick="copyTextWithToast('193', 'Corpo de Bombeiros (3º Pelotão)')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🚒 193 Bomb.</button>
-            <button type="button" onclick="copyTextWithToast('192', 'SAMU 192')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🚑 192 SAMU</button>
-            <button type="button" onclick="copyTextWithToast('190', '56º BPM Polícia Militar')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-left font-bold">🚓 190 PMMG</button>
+            <button type="button" onclick="copyTextWithToast('199', 'Defesa Civil Itajubá')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-left font-bold">🌊 199 Defesa</button>
+            <button type="button" onclick="copyTextWithToast('193', 'Corpo de Bombeiros (3º Pelotão)')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-left font-bold">🚒 193 Bomb.</button>
+            <button type="button" onclick="copyTextWithToast('192', 'SAMU 192')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-left font-bold">🚑 192 SAMU</button>
+            <button type="button" onclick="copyTextWithToast('190', '56º BPM Polícia Militar')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-left font-bold">🚓 190 PMMG</button>
           </div>
         </div>
       </div>
 
       <div class="p-4 border-t border-white/15">
-        <button type="button" onclick="openSettingsModal()" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-xs font-extrabold transition-all">
+        <button type="button" onclick="openSettingsModal()" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-extrabold transition-all">
           <span>⚙️ Configurações & Tema</span>
           <span id="sidebarThemeTag" class="text-[10px] px-2 py-0.5 rounded-full bg-purple-400/25 text-purple-100">Claro</span>
         </button>
@@ -311,11 +366,11 @@
 
               <button type="button" onclick="openRaioxDrawer('flood')" class="text-left p-4 rounded-2xl bg-cyan-50/80 hover:bg-cyan-100/80 border-2 border-cyan-200 hover:border-cyan-500 transition-all surface-subcard group">
                 <div class="flex items-center justify-between">
-                  <p class="text-[10px] font-extrabold uppercase tracking-wider text-cyan-800">Risco de Enchente & Drenagem</p>
+                  <p class="text-[10px] font-extrabold uppercase tracking-wider text-cyan-800">Riscos & Defesa Civil</p>
                   <span class="text-[10px] font-bold text-cyan-800 group-hover:translate-x-0.5 transition-transform">Abrir ↗</span>
                 </div>
                 <p id="statFloodRisk" class="text-lg font-black text-slate-900 mt-1">Moderado • 10 Estações</p>
-                <p id="statFloodSub" class="text-[11px] text-cyan-700 font-semibold mt-0.5">Monitoramento LIH-UNIFEI & Defesa Civil</p>
+                <p id="statFloodSub" class="text-[11px] text-cyan-700 font-semibold mt-0.5">Enchentes, Encostas, Vendavais e Fogo</p>
               </button>
 
               <button type="button" onclick="openRaioxDrawer('infra')" class="text-left p-4 rounded-2xl bg-indigo-50/80 hover:bg-indigo-100/80 border-2 border-indigo-200 hover:border-indigo-500 transition-all surface-subcard group">
@@ -349,7 +404,7 @@
                   <button type="button" onclick="openRaioxDrawer('services', 'education')" id="subBtn-education" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🎓 Educação (Escolas/CMEIs)</button>
                   <button type="button" onclick="openRaioxDrawer('services', 'lines')" id="subBtn-lines" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🚌 22 Linhas Valônia</button>
                   <button type="button" onclick="openRaioxDrawer('safety')" id="subBtn-safety" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🛡️ Segurança</button>
-                  <button type="button" onclick="openRaioxDrawer('flood')" id="subBtn-flood" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🌊 Estações Rio</button>
+                  <button type="button" onclick="openRaioxDrawer('flood')" id="subBtn-flood" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">⚠️ Riscos & Estações</button>
                   <button type="button" onclick="openRaioxDrawer('infra')" id="subBtn-infra" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🏗️ Obras</button>
                 </div>
               </div>
@@ -519,14 +574,14 @@
         </section>
 
         <!-- ========================================================= -->
-        <!-- ABA 2: MONITORAMENTO HIDROLÓGICO & DEFESA CIVIL           -->
+        <!-- ABA 2: RISCOS & DEFESA CIVIL (MULTIRRISCO COMPLETO)       -->
         <!-- ========================================================= -->
         <section id="view-risks" class="hidden space-y-6">
           <div class="rounded-3xl bg-gradient-to-r from-[#1E1B4B] via-[#312E81] to-[#0F766E] text-white p-6 shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div class="space-y-1.5 max-w-2xl">
-              <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-cyan-200">Sala de Situação • Defesa Civil, CEMADEN & LIH-UNIFEI</span>
-              <h1 class="text-2xl sm:text-3xl font-black">Monitoramento Hidrológico, Tempestades & 10 Estações</h1>
-              <p class="text-xs sm:text-sm text-cyan-100/90">Acompanhe a evolução diária do Rio Sapucaí, Ribeirão José Pereira, Córrego Piranguçu, todas as 10 estações telemétricas e projeção (%) de elevação.</p>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-cyan-200">Sala de Situação • Defesa Civil, CEMADEN, CBMMG & LIH-UNIFEI</span>
+              <h1 class="text-2xl sm:text-3xl font-black">Monitoramento Multirrisco, Enchentes, Encostas & Defesa Civil</h1>
+              <p class="text-xs sm:text-sm text-cyan-100/90">Painel integrado de prevenção contra enchentes do Rio Sapucaí, deslizamentos em encostas, vendavais/descargas atmosféricas, queimadas na Serra da Mantiqueira e ocorrências rodoviárias.</p>
             </div>
             <div class="flex flex-wrap items-center gap-3">
               <div class="px-4 py-3 rounded-2xl bg-white/10 border border-white/15">
@@ -543,6 +598,9 @@
               </div>
             </div>
           </div>
+
+          <!-- Matriz Multirrisco de Itajubá (5 Grandes Ameaças Monitoradas) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5" id="multiRiskMatrixGrid"></div>
 
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div class="lg:col-span-7 bg-white rounded-3xl border border-purple-100 p-5 shadow-sm space-y-4 surface-card">
@@ -575,7 +633,7 @@
           </div>
 
           <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm space-y-3.5 surface-card">
-            <h3 class="text-base font-extrabold text-slate-900">📋 Boletins & Registros de Campo da Defesa Civil</h3>
+            <h3 class="text-base font-extrabold text-slate-900">📋 Boletins & Protocolos Preventivos da Defesa Civil (199)</h3>
             <div id="civilDefenseLogsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3.5"></div>
           </div>
         </section>
@@ -681,7 +739,7 @@
           <div class="rounded-3xl bg-gradient-to-r from-[#065F46] to-[#0D9488] text-white p-6 shadow-xl">
             <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Secretarias de Saúde & Educação • Rede Integral de Itajubá</span>
             <h1 class="text-2xl sm:text-3xl font-black mt-2">Todas as Unidades SUS, Farmácia Municipal & Rede Escolar</h1>
-            <p class="text-xs sm:text-sm text-emerald-100 mt-1">Consulte unidades de saúde, agende consultas/vacinas/Castramóvel e solicite pré-matrícula nas escolas e CMEIs de Itajubá.</p>
+            <p class="text-xs sm:text-sm text-emerald-100 mt-1">Consulte unidades de saúde, agende consultas/vacinas/Castramóvel e solicite pré-matrícula nas escolas, institutos federais e CMEIs de Itajubá.</p>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -702,7 +760,7 @@
                 <h3 class="text-base font-extrabold">🎓 Rede Completa de Educação & Creches (CMEIs)</h3>
                 <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">Rede Ensino</span>
               </div>
-              <input id="eduSearchInput" type="text" oninput="renderFullHealthAndEducation()" placeholder="Filtrar escola, CMEI, universidade ou bairro..." class="w-full px-3.5 py-2 rounded-2xl border border-slate-200 bg-slate-50 text-xs" />
+              <input id="eduSearchInput" type="text" oninput="renderFullHealthAndEducation()" placeholder="Filtrar escola, IFSULDEMINAS, UNIFEI, CMEI ou bairro..." class="w-full px-3.5 py-2 rounded-2xl border border-slate-200 bg-slate-50 text-xs" />
               <div id="allEducationUnitsList" class="space-y-2 text-xs max-h-[460px] overflow-y-auto pr-1"></div>
               <button type="button" onclick="openGovServiceForm('Pré-Matrícula Escolar / Creche CMEI 2027', 'Informe nome do aluno, data de nascimento e bairro')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
                 Iniciar Pré-Matrícula Online
@@ -803,51 +861,64 @@
         <section id="view-culture" class="hidden space-y-6">
           <div class="rounded-3xl bg-gradient-to-r from-[#581C87] via-[#86198F] to-[#BE185D] text-white p-6 shadow-xl">
             <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Secretaria de Cultura & Turismo (SECULT) • Economia Criativa Itajubá</span>
-            <h1 class="text-2xl sm:text-3xl font-black mt-2">Obras Artísticas, Galeria à Venda, Projetos Sociais & Apoio a Artistas</h1>
-            <p class="text-xs sm:text-sm text-purple-100 mt-1">Valorize a cultura de Itajubá: adquira obras originais de artistas da Serra da Mantiqueira, apoie diretamente artistas independentes via PIX e conheça os projetos sociais culturais da cidade.</p>
+            <h1 class="text-2xl sm:text-3xl font-black mt-2">54 Obras Artísticas, Artistas Independentes, Projetos Sociais & Agenda</h1>
+            <p class="text-xs sm:text-sm text-purple-100 mt-1">Valorize a cultura de Itajubá: adquira obras originais de artistas da Serra da Mantiqueira, apoie diretamente artistas independentes via PIX e participe dos projetos sociais culturais da cidade.</p>
           </div>
 
-          <div class="flex flex-wrap gap-2">
-            <button type="button" onclick="setCultureTab('all')" id="cultTabAll" class="px-4 py-2 rounded-2xl bg-purple-600 text-white text-xs font-extrabold">✨ Tudo (Completo)</button>
-            <button type="button" onclick="setCultureTab('artworks')" id="cultTabArtworks" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">🖼️ Obras de Arte à Venda</button>
-            <button type="button" onclick="setCultureTab('artists')" id="cultTabArtists" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">🎨 Artistas Independentes (Apoio PIX)</button>
-            <button type="button" onclick="setCultureTab('social_projects')" id="cultTabSocial_projects" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">🤝 Projetos Sociais Artísticos</button>
-            <button type="button" onclick="setCultureTab('events')" id="cultTabEvents" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">📅 Agenda & Patrimônio</button>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="setCultureTab('all')" id="cultTabAll" class="px-4 py-2 rounded-2xl bg-purple-600 text-white text-xs font-extrabold">✨ Todos (54 Itens)</button>
+            <button type="button" onclick="setCultureTab('artworks')" id="cultTabArtworks" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">🖼️ Obras de Arte à Venda (18)</button>
+            <button type="button" onclick="setCultureTab('artists')" id="cultTabArtists" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">🎨 Artistas Independentes (14)</button>
+            <button type="button" onclick="setCultureTab('social_projects')" id="cultTabSocial_projects" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">🤝 Projetos Sociais (12)</button>
+            <button type="button" onclick="setCultureTab('events')" id="cultTabEvents" class="px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold">📅 Agenda & Patrimônio (10)</button>
           </div>
+
+          <input id="cultureSearchInput" type="text" oninput="renderCultureItems()" placeholder="Pesquisar pintura, escultura, cerâmica, artista local, oficina cultural ou festival em Itajubá..." class="w-full px-4 py-2.5 rounded-2xl border border-purple-200 bg-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-purple-500" />
 
           <div id="cultureContentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </section>
 
         <!-- ========================================================= -->
-        <!-- ABA 8: UNIDADES CARENTES, ABRIGOS & DOAÇÕES               -->
+        <!-- ABA 8: UNIDADES CARENTES, ABRIGOS & CADASTRO DE FAMÍLIAS  -->
         <!-- ========================================================= -->
         <section id="view-donations" class="hidden space-y-6">
-          <div class="rounded-3xl bg-gradient-to-r from-[#0F766E] via-[#0E7490] to-[#1D4ED8] text-white p-6 shadow-xl">
-            <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Rede Solidária, CRAS & Assistência Social • Itajubá - MG</span>
-            <h1 class="text-2xl sm:text-3xl font-black mt-2">Abrigos & Unidades Carentes de Itajubá que Precisam de Doação</h1>
-            <p class="text-xs sm:text-sm text-cyan-100 mt-1">Veja as necessidades urgentes de cada instituição verificada em Itajubá, copie a chave PIX oficial ou agende a entrega presencial de alimentos, fraldas, roupas e cobertores.</p>
+          <div class="rounded-3xl bg-gradient-to-r from-[#0F766E] via-[#0E7490] to-[#1D4ED8] text-white p-6 shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="space-y-1.5 max-w-2xl">
+              <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Rede Solidária, CRAS & Assistência Social • Itajubá - MG</span>
+              <h1 class="text-2xl sm:text-3xl font-black">18 Unidades Carentes & Abrigos + Cadastro Solidário</h1>
+              <p class="text-xs sm:text-sm text-cyan-100">Veja as necessidades urgentes de cada instituição verificada em Itajubá, copie o PIX oficial ou cadastre sua família/abrigo para receber doações da comunidade.</p>
+            </div>
+            <button type="button" onclick="openNeedDonationModal()" class="px-4 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-lg shrink-0">
+              🙋‍♂️ Cadastrar Pedido de Doação (Família / Entidade)
+            </button>
           </div>
+
+          <input id="donationsSearchInput" type="text" oninput="renderSocialUnits()" placeholder="Filtrar instituição, bairro (ex: Boa Vista, Santa Rosa, Rebourgeon, Vila Poddis) ou item urgente..." class="w-full px-4 py-2.5 rounded-2xl border border-purple-200 bg-white text-xs font-medium" />
+
           <div id="socialUnitsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </section>
 
         <!-- ========================================================= -->
-        <!-- ABA 9: EMPREGOS, CURSOS & ESTÁGIOS EM ITAJUBÁ             -->
+        <!-- ABA 9: EMPREGOS, CURSOS & ESTÁGIOS (54 OPORTUNIDADES)     -->
         <!-- ========================================================= -->
         <section id="view-jobs" class="hidden space-y-6">
           <div class="rounded-3xl bg-gradient-to-r from-[#3B0764] via-[#4338CA] to-[#2563EB] text-white p-6 shadow-xl space-y-4">
             <div>
-              <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Balcão de Empregos SINE, SENAI, UNIFEI & Polo Industrial</span>
-              <h1 class="text-2xl sm:text-3xl font-black mt-2">Vagas de Emprego, Estágios, Jovem Aprendiz & Cursos Gratuitos</h1>
-              <p class="text-xs sm:text-sm text-purple-100 mt-1">Candidate-se diretamente às vagas reais das indústrias, hospitais, universidades e comércio de Itajubá.</p>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15">Balcão de Empregos SINE, IFSULDEMINAS, SENAI, UNIFEI & Polo Industrial</span>
+              <h1 class="text-2xl sm:text-3xl font-black mt-2">54 Vagas de Emprego, Estágios, Jovem Aprendiz & Cursos Gratuitos</h1>
+              <p class="text-xs sm:text-sm text-purple-100 mt-1">Candidate-se diretamente às vagas reais das indústrias, hospitais, universidades e cursos técnicos gratuitos em Itajubá (incluindo o Técnico em Informática do IFSULDEMINAS).</p>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button" id="jobFilter-all" onclick="filterOpportunities('all')" class="px-3.5 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold">Todas as Oportunidades</button>
-              <button type="button" id="jobFilter-emprego" onclick="filterOpportunities('emprego')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">💼 Empregos CLT</button>
-              <button type="button" id="jobFilter-estagio" onclick="filterOpportunities('estagio')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">🎓 Estágios & Trainees</button>
-              <button type="button" id="jobFilter-curso" onclick="filterOpportunities('curso')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">📚 Cursos Gratuitos SENAI/SINE</button>
+              <button type="button" id="jobFilter-all" onclick="filterOpportunities('all')" class="px-3.5 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold">Todas (54)</button>
+              <button type="button" id="jobFilter-emprego" onclick="filterOpportunities('emprego')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">💼 Empregos CLT (24)</button>
+              <button type="button" id="jobFilter-estagio" onclick="filterOpportunities('estagio')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">🎓 Estágios & Aprendiz (16)</button>
+              <button type="button" id="jobFilter-curso" onclick="filterOpportunities('curso')" class="px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold">📚 Cursos Gratuitos (14)</button>
             </div>
           </div>
-          <div id="opportunitiesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+
+          <input id="jobsSearchInput" type="text" oninput="renderOpportunitiesGrid()" placeholder="Pesquisar vaga, cargo ou instituição (ex: Informática, IFSULDEMINAS, Helibras, Balteau, Enfermagem, SENAI)..." class="w-full px-4 py-2.5 rounded-2xl border border-purple-200 bg-white text-xs font-medium" />
+
+          <div id="opportunitiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </section>
 
         <!-- ========================================================= -->
@@ -978,7 +1049,7 @@
         <div class="space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">
-              Relatos Públicos de Clientes Presenciais (<span id="modalEstReviewsCount">54</span> avaliações)
+              Relatos Públicos de Clientes (<span id="modalEstReviewsCount">54</span> avaliações)
             </h4>
             <div class="flex gap-1.5">
               <button type="button" onclick="setReviewDetailFilter('all')" id="revFilterAll" class="px-2.5 py-1 rounded-lg bg-purple-600 text-white text-[10px] font-bold">Todas</button>
@@ -986,7 +1057,7 @@
               <button type="button" onclick="setReviewDetailFilter('short')" id="revFilterShort" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[10px] font-bold">Curtas</button>
             </div>
           </div>
-          <div id="modalEstReviewsList" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+          <div id="modalEstReviewsList" class="space-y-2.5 max-h-80 overflow-y-auto pr-1"></div>
         </div>
       </div>
     </div>
@@ -1120,10 +1191,10 @@
         <button type="button" onclick="closeModal('howToUseModal')" class="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center font-bold">✕</button>
       </div>
       <div class="p-5 space-y-3 text-xs leading-relaxed">
-        <p><strong>1. Mapa de Itajubá & 37 Bairros:</strong> Escolha qualquer bairro (como <em>Santa Rosa</em>, <em>Centro</em>, <em>Pinheirinho</em>, <em>Rebourgeon</em>) para focar o mapa e abrir os botões do Raio-X (Criminalidade %, Enchente, Obras, UBSs, Escolas e 22 Linhas Valônia).</p>
+        <p><strong>1. Mapa de Itajubá & 37 Bairros:</strong> Escolha qualquer bairro (como <em>Santa Rosa</em>, <em>Centro</em>, <em>Pinheirinho</em>, <em>Rebourgeon</em>) para focar o mapa e abrir os botões do Raio-X (Criminalidade %, Riscos, Obras, UBSs, Escolas e 22 Linhas Valônia).</p>
         <p><strong>2. 76 Empresas & Avaliações via QR Code (Regra dos 75%):</strong> Clique em qualquer empresa ou estabelecimento no mapa ou na aba Avaliações para ler as mais de 50 avaliações reais de cada local e validar o QR Code para pontuar os 5 selos coloridos.</p>
         <p><strong>3. Ônibus Valônia & 56 Pontos Reais:</strong> Na aba Mobilidade, clique em qualquer parada no mapa de Itajubá para consultar previsões em tempo real e todos os horários do dia.</p>
-        <p><strong>4. Unidades Carentes & Vagas:</strong> Doe diretamente para abrigos e entidades assistenciais de Itajubá ou candidate-se às vagas de emprego, estágios e cursos gratuitos.</p>
+        <p><strong>4. Unidades Carentes & Vagas:</strong> Doe diretamente para 18 abrigos/entidades ou cadastre um pedido de doação para sua família, além de se inscrever em 54 vagas e cursos gratuitos (incluindo o Técnico em Informática do IFSULDEMINAS).</p>
       </div>
     </div>
   </div>
@@ -1137,13 +1208,13 @@
       </div>
       <div id="assistantMessages" class="p-3.5 space-y-2 text-xs max-h-56 overflow-y-auto">
         <div class="p-2.5 rounded-2xl bg-purple-50 text-purple-950 surface-subcard">
-          Olá! Pergunte sobre o <strong>nível do Rio Sapucaí</strong>, <strong>ônibus Expresso Valônia</strong>, <strong>doações</strong> ou <strong>empresas avaliadas em Itajubá</strong>.
+          Olá! Pergunte sobre o <strong>nível do Rio Sapucaí</strong>, <strong>ônibus Expresso Valônia</strong>, <strong>doações</strong> ou <strong>cursos gratuitos do IFSULDEMINAS</strong>.
         </div>
       </div>
       <div class="p-2.5 border-t border-slate-100 flex flex-wrap gap-1">
         <button type="button" onclick="askAssistant('Qual o nível do Rio Sapucaí hoje?')" class="px-2 py-1 rounded-lg bg-purple-100 text-purple-900 text-[10px] font-bold">🌊 Nível do Rio</button>
-        <button type="button" onclick="askAssistant('Como doar para entidades carentes?')" class="px-2 py-1 rounded-lg bg-purple-100 text-purple-900 text-[10px] font-bold">🤝 Doações</button>
-        <button type="button" onclick="askAssistant('Quais linhas passam no Santa Rosa?')" class="px-2 py-1 rounded-lg bg-purple-100 text-purple-900 text-[10px] font-bold">🚌 Linhas Santa Rosa</button>
+        <button type="button" onclick="askAssistant('Como cadastrar pedido de doação?')" class="px-2 py-1 rounded-lg bg-purple-100 text-purple-900 text-[10px] font-bold">🤝 Doações</button>
+        <button type="button" onclick="askAssistant('Como entrar no Técnico em Informática do IFSULDEMINAS?')" class="px-2 py-1 rounded-lg bg-purple-100 text-purple-900 text-[10px] font-bold">💻 Curso IFSULDEMINAS</button>
       </div>
     </div>
     <button type="button" onclick="toggleAssistantChat()" class="ml-auto px-4 py-3 rounded-full bg-gradient-to-r from-[#581C87] to-[#7C3AED] text-white text-xs font-extrabold shadow-xl flex items-center gap-2 hover:scale-105 transition-transform">
@@ -1167,7 +1238,7 @@
         safety: '1,14% • Queda de 10,1%',
         safetySub: 'Boletim SEJUSP-MG Out/2026 • 11,4 ocorr./mil hab.',
         floodRisk: 'Moderado • 10 Estações',
-        floodSub: 'Rio Sapucaí, Rib. José Pereira e Cór. Piranguçu',
+        floodSub: 'Enchentes, Encostas, Vendavais e Fogo',
         invest: '39 Unidades SUS • LED 100%',
         investSub: 'Prefeitura Municipal de Itajubá',
         health: '76 Empresas • HCI & UBSs',
@@ -1185,7 +1256,7 @@
         news: [
           { date: '13/11/2026', title: 'Monitoramento Hidrológico Espiaí registra 0,50m na Passarela José Miguel e Ponte do Batalhão', source: 'Defesa Civil Itajubá' },
           { date: '04/10/2026', title: 'Boletim SEJUSP-MG confirma queda de 10,1% na criminalidade em Itajubá em 12 meses', source: 'SEJUSP-MG' },
-          { date: '20/10/2026', title: 'SENAI CFP Aureliano Chaves abre edital Jovem Aprendiz 2027 para indústrias de Itajubá', source: 'FIEMG / SENAI' }
+          { date: '20/10/2026', title: 'IFSULDEMINAS Campus Itajubá abre inscrições gratuitas para Técnico em Informática 2027', source: 'IFSULDEMINAS' }
         ]
       },
       centro: {
@@ -1482,7 +1553,6 @@
       }
     };
 
-    // Completa os demais bairros até os 37 bairros oficiais de Itajubá
     const extraNeighborhoodSpecs = [
       ['santo_antonio', 'Santo Antônio (CEP 37503-130)', -22.4235, -45.4548, '1,09%', 'Moderado • Prox. Rio Sapucaí'],
       ['vila_poddis', 'Vila Poddis (CEP 37503-000)', -22.4242, -45.4595, '1,11%', 'Alto em Cheias • Comportas Ativas'],
@@ -1585,6 +1655,7 @@
     ];
 
     const fullEducationUnits = [
+      { level: 'Instituto Federal (MEC)', name: 'IFSULDEMINAS • Campus Itajubá (Técnico em Informática & Integrado)', addr: 'Rua Dr. José Pinto Vilela / Av. BPS • Itajubá', vagas: 'Inscrições Abertas' },
       { level: 'Universidade Federal', name: 'UNIFEI • Universidade Federal de Itajubá', addr: 'Av. BPS, 1303 - Pinheirinho', vagas: 'Graduação & Pós' },
       { level: 'Ensino Superior', name: 'FMIT • Faculdade de Medicina de Itajubá', addr: 'Av. Renó Júnior - Medicina', vagas: 'Medicina' },
       { level: 'Centro Universitário', name: 'FEPI • Centro Universitário de Itajubá', addr: 'Av. Dr. Antônio Braga Filho - Varginha', vagas: '18 Cursos' },
@@ -1665,15 +1736,15 @@
       ['Centro & Entorno', 'Teatro Municipal Christiane Riêra', 'Cultura & Artes Cênicas', 'service', '🎭', 'Av. Dr. Jerson Dias, 501 - Centro/Estiva, Itajubá', -22.4352, -45.4602, 'Espaço Cultural Certificado & Acessível', 'SECULT Itajubá / CBMMG', 'Ingressos gratuitos esgotam rápido em festivais.'],
       ['Centro & Entorno', 'Correios • Agência Central Itajubá', 'Serviços Postais & Logística', 'service', '📦', 'Rua Dr. Pereira Cabral, 64 - Centro, Itajubá', -22.4245, -45.4508, 'Serviço Postal Oficial', 'Empresa Brasileira de Correios', 'Fila moderada no balcão de encomendas após 15h.'],
 
-      // Pinheirinho / BPS / UNIFEI / São Vicente (11 locais)
+      // Pinheirinho / BPS / UNIFEI / IFSULDEMINAS / São Vicente (11 locais)
       ['Pinheirinho & UNIFEI', 'UNIFEI • Campus Prof. José Rodrigues Seabra', 'Universidade Federal & Inovação', 'education', '🏛️', 'Av. BPS, 1303 - Pinheirinho, Itajubá', -22.4132, -45.4485, 'Instituição Federal de Ensino Superior • MEC', 'Ministério da Educação (MEC)', 'Trânsito intenso na portaria principal da Av. BPS às 12h e 18h.'],
+      ['Pinheirinho & UNIFEI', 'IFSULDEMINAS • Campus Itajubá (Técnico em Informática)', 'Instituto Federal & Ensino Técnico', 'education', '💻', 'Av. BPS / Polo Educacional Norte - Pinheirinho, Itajubá', -22.4105, -45.4468, 'Rede Federal de Educação Profissional e Tecnológica', 'Ministério da Educação (MEC)', 'Alta procura nos cursos técnicos gratuitos em Informática e Administração.'],
       ['Pinheirinho & UNIFEI', 'INCIT • Incubadora de Empresas de Base Tecnológica', 'Tecnologia & Startups', 'industry', '🚀', 'Av. BPS, 1303 - Parque Científico, Pinheirinho', -22.4122, -45.4476, 'Polo de Inovação & Tecnologia • ANPROTEC', 'SECTI-MG / UNIFEI', 'Vagas de visitantes próximas ao prédio ficam cheias em eventos.'],
       ['Pinheirinho & UNIFEI', 'Restaurante Universitário & Cantina BPS', 'Alimentação & Refeições', 'food', '🍛', 'Av. BPS, 1180 - Pinheirinho, Itajubá', -22.4142, -45.4490, 'Alvará Sanitário & Nutrição Balanceada', 'VISA Itajubá', 'Pico de atendimento entre 11h45 e 13h00.'],
       ['Pinheirinho & UNIFEI', 'Hamburgueria Artesanal Federal Burger', 'Lanchonete & Hamburgueria', 'food', '🍔', 'Rua Eng. Pedro Fonseca Paiva, 220 - Pinheirinho', -22.4145, -45.4498, 'Selo Higiene & Produção Artesanal', 'VISA Itajubá', 'Ambiente animado com música aos finais de semana.'],
       ['Pinheirinho & UNIFEI', 'Supermercado Express Pinheirinho', 'Minimercado & Padaria', 'food', '🛍️', 'Av. BPS, 950 - Pinheirinho, Itajubá', -22.4158, -45.4494, 'Inspeção Sanitária Regular', 'VISA Itajubá', 'Corredores compactos no horário de saída das aulas.'],
       ['Pinheirinho & UNIFEI', 'Farmácia Universitária & Drogaria BPS', 'Farmácia & Perfumaria', 'health', '💊', 'Av. BPS, 890 - Pinheirinho, Itajubá', -22.4163, -45.4497, 'Certificado ANVISA & Farmacêutico Integral', 'CRF-MG / VISA', 'Atendimento ágil e convênio com estudantes.'],
       ['Pinheirinho & UNIFEI', 'Academia Arena Campus Fitness', 'Academia & Cross Training', 'service', '💪', 'Rua Prof. José Rodrigues Seabra, 115 - Pinheirinho', -22.4128, -45.4480, 'Alvará Sanitário & CREF Ativo', 'CREF6-MG / VISA', 'Necessita ampliar bicicletário coberto na entrada.'],
-      ['Pinheirinho & UNIFEI', 'Gráfica Rápida & Engenharia CopyBPS', 'Serviços Gráficos & Plotagem', 'service', '🖨️', 'Av. BPS, 1240 - Pinheirinho, Itajubá', -22.4136, -45.4487, 'Nota Fiscal Eletrônica & Atendimento Ágil', 'PMI / PROCON', 'Alta demanda em semanas de entrega de TCC.'],
       ['São Vicente', 'Posto de Combustíveis & Conveniência BPS', 'Posto & Loja 24h', 'service', '⛽', 'Av. BPS, 720 - São Vicente / Pinheirinho, Itajubá', -22.4178, -45.4508, 'Selo ANP Qualidade do Combustível', 'ANP / INMETRO', 'Acesso bem sinalizado nos dois sentidos da avenida.'],
       ['São Vicente', 'Padaria & Lanchonete São Vicente', 'Padaria de Bairro', 'food', '🥖', 'Rua Presidente Roosevelt, 310 - São Vicente, Itajubá', -22.4185, -45.4525, 'Alvará Sanitário Municipal', 'VISA Itajubá', 'Pão francês quente a cada 30 minutos pela manhã.'],
       ['São Vicente', 'Clínica Veterinária PetCampus', 'Saúde Animal & Banho/Tosa', 'service', '🐾', 'Rua Padre Rossini Cândido, 180 - São Vicente, Itajubá', -22.4195, -45.4518, 'Registro CRMV-MG & Centro Cirúrgico', 'CRMV-MG / VISA', 'Atendimento emergencial com agendamento rápido.'],
@@ -1734,16 +1805,30 @@
       ['Distrito Industrial', 'Restaurante Industrial & Refeitório Polo Sul', 'Alimentação Corporativa', 'food', '🍽️', 'Av. Poços de Caldas, 1600 - Distrito Industrial, Itajubá', -22.4490, -45.4682, 'Alvará Sanitário & Nutrição Ocupacional PAT', 'VISA Itajubá / MTE', 'Atende colaboradores do Distrito Industrial com cardápio balanceado.']
     ];
 
+    function getPersonAvatarColor(name) {
+      const palette = ['#7C3AED', '#2563EB', '#059669', '#D97706', '#DB2777', '#4F46E5', '#0D9488'];
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      return palette[Math.abs(hash) % palette.length];
+    }
+
+    function getPersonInitials(name) {
+      const clean = (name || 'US').replace(/\(.*?\)/g, '').trim();
+      const parts = clean.split(/\s+/);
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
     function buildRichReviewsForEstablishment(name, category, idx) {
       const reviewers = [
-        'Mariana C.', 'Carlos Eduardo S.', 'Fernanda Lima', 'José Antônio R.', 'Lucas Mendes',
+        'Mariana Costa', 'Carlos Eduardo Silva', 'Fernanda Lima', 'José Antônio Ribeiro', 'Lucas Mendes',
         'Beatriz Rodrigues', 'Rafael Oliveira', 'Ana Paula Ferreira', 'Gabriel Souza', 'Juliana Alves',
         'Rodrigo Pereira', 'Camila Martins', 'Thiago Barbosa', 'Larissa Gomes', 'Bruno Carvalho',
         'Patrícia Ribeiro', 'Marcelo Costa', 'Amanda Nascimento', 'Felipe Rocha', 'Vanessa Dias',
         'Gustavo Moreira', 'Renata Cardoso', 'Daniel Teixeira', 'Tatiane Vieira', 'André Nunes',
         'Letícia Monteiro', 'Matheus Araújo', 'Aline Freitas', 'Eduardo Pinto', 'Carolina Lopes',
         'Vinícius Azevedo', 'Bianca Correia', 'Leonardo Duarte', 'Natália Melo', 'Henrique Castro',
-        'Jéssica Ramos', 'Pedro Henrique M.', 'Débora Cunha', 'Ricardo Tavares', 'Sabrina Farias',
+        'Jéssica Ramos', 'Pedro Henrique Martins', 'Débora Cunha', 'Ricardo Tavares', 'Sabrina Farias',
         'Fábio Nogueira', 'Priscila Borges', 'Igor Santana', 'Simone Rezende', 'Alexandre Pires',
         'Luciana Batista', 'Diego Siqueira', 'Mônica Vasconcelos', 'Caio Guimarães', 'Elaine Silveira',
         'Sérgio Paiva', 'Adriana Campos', 'Renan Coelho', 'Cristina Moura', 'Otávio Neves'
@@ -1790,21 +1875,27 @@
       for (let r = 0; r < totalReviews; r++) {
         const reviewer = reviewers[(idx * 7 + r) % reviewers.length];
         const isDetailed = r % 3 !== 2;
+        const stars = r % 7 === 0 ? 4 : 5;
         const comment = isDetailed
           ? detailedPool[(idx + r) % detailedPool.length]
           : shortTemplates[(idx * 3 + r) % shortTemplates.length];
 
         const daysAgo = r === 0 ? 'Hoje' : (r === 1 ? 'Ontem' : `Há ${Math.min(180, r * 2 + 1)} dias`);
         const tags = isDetailed
-          ? ['QR Code Verificado', 'Ambiente limpo', 'Atendimento cordial']
-          : ['QR Code Verificado', 'Recomendo'];
+          ? ['Ambiente limpo', 'Atendimento cordial', 'Preço justo']
+          : ['Recomendo', 'Bom atendimento'];
 
         list.push({
-          author: `${reviewer} (QR Code)`,
+          id: `rev-${idx}-${r}`,
+          author: reviewer,
+          stars,
           date: daysAgo,
           isDetailed,
           tags,
-          comment
+          comment,
+          fairCount: 8 + ((idx + r) % 24),
+          unfairCount: (r % 5 === 0) ? 1 : 0,
+          userVote: null
         });
       }
       return list;
@@ -1834,7 +1925,7 @@
         sealBadge,
         sealAgency,
         sealDate: 'Verificado 2026',
-        sealDesc: `Estabelecimento/empresa regularizado em Itajubá - MG com acompanhamento de ${sealAgency} e ${totalCount} avaliações presenciais auditadas via QR Code.`,
+        sealDesc: `Estabelecimento/empresa regularizado em Itajubá - MG com acompanhamento de ${sealAgency} e ${totalCount} avaliações presenciais auditadas.`,
         issues: [issueText],
         sealStats: {
           quality: { fiveStarCount: Math.min(totalCount, q5), totalCount },
@@ -1849,7 +1940,6 @@
 
     // 5. 56 PONTOS DE ÔNIBUS REAIS ESPALHADOS POR TODO O PERÍMETRO DE ITAJUBÁ - MG (EXPRESSO VALÔNIA)
     const busStops = [
-      // Centro & Terminais (10 paradas)
       { id: 'bus-01', name: 'Terminal Urbano Mercado Municipal (Plataforma Central)', street: 'Praça Dr. José Braz • Centro', isTerminal: true, lat: -22.4243, lng: -45.4535, lines: [allValoniaLines[0], allValoniaLines[1], allValoniaLines[2], allValoniaLines[18], allValoniaLines[19]] },
       { id: 'bus-02', name: 'Ponto Rodoviária Municipal / Praça Dr. José Braz', street: 'Av. Henriqueto Cardinali • Centro', isTerminal: true, lat: -22.4265, lng: -45.4548, lines: [allValoniaLines[13], allValoniaLines[14], allValoniaLines[2]] },
       { id: 'bus-03', name: 'Ponto Av. Cel. Carneiro Júnior (Calçadão / Banco do Brasil)', street: 'Av. Cel. Carneiro Júnior, 240 • Centro', isTerminal: false, lat: -22.4256, lng: -45.4526, lines: [allValoniaLines[2], allValoniaLines[5], allValoniaLines[0]] },
@@ -1861,7 +1951,6 @@
       { id: 'bus-09', name: 'Ponto Passarela José Miguel / Beira-Rio Centro', street: 'Av. Dr. Vicente Sanches • Centro', isTerminal: false, lat: -22.4272, lng: -45.4552, lines: [allValoniaLines[0], allValoniaLines[6], allValoniaLines[16]] },
       { id: 'bus-10', name: 'Ponto Ginásio Poliesportivo Municipal Tigre', street: 'Rua Geraldino Campista • Centro', isTerminal: false, lat: -22.4237, lng: -45.4546, lines: [allValoniaLines[4], allValoniaLines[6], allValoniaLines[19]] },
 
-      // Pinheirinho, BPS, UNIFEI, São Vicente & Ponte Alta (8 paradas)
       { id: 'bus-11', name: 'Ponto UNIFEI Portaria 1 (Principal Av. BPS)', street: 'Av. BPS, 1303 • Pinheirinho', isTerminal: true, lat: -22.4132, lng: -45.4485, lines: [allValoniaLines[3], allValoniaLines[9], allValoniaLines[15], allValoniaLines[2]] },
       { id: 'bus-12', name: 'Ponto UNIFEI Portaria 2 / Parque Científico INCIT', street: 'Av. BPS, 1520 • Pinheirinho', isTerminal: false, lat: -22.4114, lng: -45.4475, lines: [allValoniaLines[3], allValoniaLines[9], allValoniaLines[15]] },
       { id: 'bus-13', name: 'Ponto Av. BPS / Restaurante Universitário & Cantinas', street: 'Av. BPS, 1150 • Pinheirinho', isTerminal: false, lat: -22.4145, lng: -45.4491, lines: [allValoniaLines[3], allValoniaLines[9], allValoniaLines[15]] },
@@ -1871,7 +1960,6 @@
       { id: 'bus-17', name: 'Ponto Bairro Açude / Acesso Norte', street: 'Rua do Açude • Açude', isTerminal: false, lat: -22.4160, lng: -45.4418, lines: [allValoniaLines[3], allValoniaLines[10]] },
       { id: 'bus-18', name: 'Ponto Bairro Ponte Alta / Saída Piranguinho', street: 'Rodovia BR-459 Norte • Ponte Alta', isTerminal: false, lat: -22.4052, lng: -45.4460, lines: [allValoniaLines[3], allValoniaLines[9]] },
 
-      // Medicina, Morro Chic, Jardim Bernadete & Anhumas (7 paradas)
       { id: 'bus-19', name: 'Ponto Hospital de Clínicas de Itajubá (HCI)', street: 'Av. Renó Júnior, 50 • Medicina', isTerminal: true, lat: -22.4212, lng: -45.4465, lines: [allValoniaLines[12], allValoniaLines[18], allValoniaLines[8]] },
       { id: 'bus-20', name: 'Ponto FMIT • Faculdade de Medicina de Itajubá', street: 'Av. Renó Júnior, 368 • Medicina', isTerminal: false, lat: -22.4202, lng: -45.4454, lines: [allValoniaLines[12], allValoniaLines[18]] },
       { id: 'bus-21', name: 'Ponto UBS Medicina I / Vila Médica', street: 'Av. Renó Júnior, 210 • Medicina', isTerminal: false, lat: -22.4216, lng: -45.4470, lines: [allValoniaLines[12], allValoniaLines[18]] },
@@ -1880,7 +1968,6 @@
       { id: 'bus-24', name: 'Ponto Jardim Bernadete / Acesso Leste', street: 'Rua Jardim Bernadete • Jardim Bernadete', isTerminal: false, lat: -22.4225, lng: -45.4395, lines: [allValoniaLines[12], allValoniaLines[18]] },
       { id: 'bus-25', name: 'Ponto Terminal Bairro Anhumas', street: 'Estrada Principal • Anhumas', isTerminal: true, lat: -22.4165, lng: -45.4260, lines: [allValoniaLines[18]] },
 
-      // Rebourgeon, Santa Luzia & Cruzeiro (6 paradas)
       { id: 'bus-26', name: 'Ponto Terminal Bairro Rebourgeon (Praça)', street: 'Rua Padre Marçal Ribeiro • Rebourgeon', isTerminal: true, lat: -22.4265, lng: -45.4362, lines: [allValoniaLines[4], allValoniaLines[5], allValoniaLines[6], allValoniaLines[7], allValoniaLines[12], allValoniaLines[21]] },
       { id: 'bus-27', name: 'Ponto PSF Rebourgeon / Supermercado', street: 'Rua Olímpio José Rodrigues • Rebourgeon', isTerminal: false, lat: -22.4262, lng: -45.4369, lines: [allValoniaLines[4], allValoniaLines[5], allValoniaLines[12]] },
       { id: 'bus-28', name: 'Ponto Bairro Santa Luzia / Drogaria', street: 'Rua Santa Luzia, 215 • Santa Luzia', isTerminal: false, lat: -22.4280, lng: -45.4385, lines: [allValoniaLines[5], allValoniaLines[7]] },
@@ -1888,7 +1975,6 @@
       { id: 'bus-30', name: 'Ponto Alto do Cruzeiro / Mirante', street: 'Rua Capitão Gomes, 510 • Cruzeiro', isTerminal: false, lat: -22.4304, lng: -45.4400, lines: [allValoniaLines[3], allValoniaLines[10]] },
       { id: 'bus-31', name: 'Ponto Nossa Senhora da Agonia / Acesso Leste', street: 'Rua N. Sra. da Agonia • N. Sra. da Agonia', isTerminal: false, lat: -22.4268, lng: -45.4480, lines: [allValoniaLines[4], allValoniaLines[5], allValoniaLines[12]] },
 
-      // Vila Poddis, Santo Antônio, Oriente, Jardim das Colinas & Nações (6 paradas)
       { id: 'bus-32', name: 'Ponto PSF Vila Poddis / Comportas', street: 'Rua João Poddis, 220 • Vila Poddis', isTerminal: false, lat: -22.4242, lng: -45.4595, lines: [allValoniaLines[4], allValoniaLines[6]] },
       { id: 'bus-33', name: 'Ponto Bairro Santo Antônio / Ponte', street: 'Rua Santo Antônio • Santo Antônio', isTerminal: false, lat: -22.4235, lng: -45.4548, lines: [allValoniaLines[4], allValoniaLines[6], allValoniaLines[8]] },
       { id: 'bus-34', name: 'Ponto PSF Bairro Oriente', street: 'Rua das Acácias, 190 • Oriente', isTerminal: false, lat: -22.4182, lng: -45.4592, lines: [allValoniaLines[8], allValoniaLines[10]] },
@@ -1896,7 +1982,6 @@
       { id: 'bus-36', name: 'Ponto Terminal Jardim das Nações', street: 'Av. das Nações • Nações', isTerminal: true, lat: -22.4290, lng: -45.4655, lines: [allValoniaLines[1], allValoniaLines[9]] },
       { id: 'bus-37', name: 'Ponto Bairro Vila Rubens / Trevo Oeste', street: 'Rua Vila Rubens • Vila Rubens', isTerminal: false, lat: -22.4345, lng: -45.4655, lines: [allValoniaLines[1], allValoniaLines[9]] },
 
-      // Avenida, São Judas, Santos Dumont, São Sebastião, Porto Velho, Piedade & Fátima (8 paradas)
       { id: 'bus-38', name: 'Ponto SESI SENAI CFP Aureliano Chaves', street: 'Rua Dr. Luiz Rennó, 715 • Avenida', isTerminal: false, lat: -22.4318, lng: -45.4532, lines: [allValoniaLines[2], allValoniaLines[6], allValoniaLines[7]] },
       { id: 'bus-39', name: 'Ponto Ponte do Batalhão / 56º BPM', street: 'Rua Dr. Luiz Rennó, 480 • Avenida', isTerminal: false, lat: -22.4302, lng: -45.4534, lines: [allValoniaLines[2], allValoniaLines[6], allValoniaLines[7]] },
       { id: 'bus-40', name: 'Ponto PSF Avenida / São Judas Tadeu', street: 'Av. Henriqueto Cardinali, 490 • São Judas', isTerminal: false, lat: -22.4336, lng: -45.4524, lines: [allValoniaLines[2], allValoniaLines[16]] },
@@ -1906,7 +1991,6 @@
       { id: 'bus-44', name: 'Ponto Nossa Senhora de Fátima / Santa Rita', street: 'Rua N. Sra. de Fátima • N. Sra. de Fátima', isTerminal: false, lat: -22.4375, lng: -45.4510, lines: [allValoniaLines[2]] },
       { id: 'bus-45', name: 'Ponto PSF Piedade / Capela', street: 'Rua Capitão João Renó, 320 • Piedade', isTerminal: false, lat: -22.4410, lng: -45.4420, lines: [allValoniaLines[12]] },
 
-      // Varginha, Estiva, Boa Vista, IMBEL, Vila Isabel, Santa Rosa, Novo Horizonte & Distrito Industrial (11 paradas)
       { id: 'bus-46', name: 'Ponto FEPI / Parque Municipal de Itajubá', street: 'Av. Dr. Antônio Braga Filho, 687 • Varginha', isTerminal: false, lat: -22.4318, lng: -45.4568, lines: [allValoniaLines[0], allValoniaLines[6], allValoniaLines[7]] },
       { id: 'bus-47', name: 'Ponto Centro Administrativo Municipal (Prefeitura)', street: 'Av. Dr. Jerson Dias, 500 • Estiva', isTerminal: false, lat: -22.4362, lng: -45.4608, lines: [allValoniaLines[13], allValoniaLines[16], allValoniaLines[11]] },
       { id: 'bus-48', name: 'Ponto Supermercado Bahamas Mix • Estiva', street: 'Av. Dr. Jerson Dias, 780 • Estiva', isTerminal: false, lat: -22.4368, lng: -45.4612, lines: [allValoniaLines[0], allValoniaLines[13], allValoniaLines[16]] },
@@ -1927,7 +2011,6 @@
         fullTitle: 'Selo Verde • Qualidade do Produto / Serviço',
         subtitle: 'Sabor, temperatura, apresentação ou eficiência técnica',
         colorHex: '#10B981',
-        badgeClass: 'bg-emerald-100 text-emerald-800',
         criteriaByStars: {
           5: ['Comida bem temperada / Execução impecável', 'Boa temperatura ao servir / Funciona perfeitamente', 'Boa aparência e apresentação', 'Sabor agradável / Resultado excelente'],
           4: ['Melhorar tempero / Pequeno ajuste técnico', 'Temperatura ok', 'Aparência não tão agradável', 'Bom no geral, mas pode evoluir'],
@@ -1942,7 +2025,6 @@
         fullTitle: 'Selo Azul • Acessibilidade & Estrutura Física',
         subtitle: 'Rampas, banheiros adaptados, sinalização e circulação',
         colorHex: '#0EA5E9',
-        badgeClass: 'bg-sky-100 text-sky-800',
         criteriaByStars: {
           5: ['Rampa com inclinação adequada', 'Banheiro adaptado e sinalizado', 'Corredores amplos sem obstáculos', 'Atendimento inclusivo (Libras / Braille)'],
           4: ['Possui rampa, mas falta corrimão', 'Banheiro acessível precisa de manutenção', 'Circulação boa na maior parte', 'Sinalização visual pode melhorar'],
@@ -1957,7 +2039,6 @@
         fullTitle: 'Selo Amarelo • Higiene & Segurança Sanitária',
         subtitle: 'Limpeza do salão, banheiros, manipulação e selo VISA',
         colorHex: '#F59E0B',
-        badgeClass: 'bg-amber-100 text-amber-800',
         criteriaByStars: {
           5: ['Ambiente e mesas impecavelmente limpos', 'Equipe usando touca/luvas e uniforme limpo', 'Banheiros higienizados e abastecidos', 'Selo da Vigilância Sanitária visível'],
           4: ['Salão limpo, mas banheiro precisa reposição', 'Boa higiene geral', 'Lixeiras cheias no horário de pico', 'Limpeza satisfatória'],
@@ -1972,7 +2053,6 @@
         fullTitle: 'Selo Roxo • Atendimento & Agilidade',
         subtitle: 'Cordialidade, tempo de espera e resolução de dúvidas',
         colorHex: '#8B5CF6',
-        badgeClass: 'bg-purple-100 text-purple-800',
         criteriaByStars: {
           5: ['Atendimento cordial e acolhedor', 'Tempo de espera rápido', 'Equipe bem treinada e atenciosa', 'Clareza nas informações'],
           4: ['Equipe educada, mas um pouco lenta', 'Boa receptividade', 'Pequena fila no caixa', 'Atendimento satisfatório'],
@@ -1987,7 +2067,6 @@
         fullTitle: 'Selo Laranja • Preço Justo & Transparência',
         subtitle: 'Custo-benefício, clareza de valores e nota fiscal',
         colorHex: '#F97316',
-        badgeClass: 'bg-orange-100 text-orange-800',
         criteriaByStars: {
           5: ['Excelente custo-benefício', 'Preços claros e visíveis no cardápio/tabela', 'Emissão espontânea de nota fiscal', 'Aceita PIX, cartões e benefícios'],
           4: ['Preço dentro da média de Itajubá', 'Boa relação qualidade/valor', 'Taxas explicadas antes do pagamento', 'Valor justo'],
@@ -2018,10 +2097,9 @@
       service: { color: '#EC4899', emoji: '🏢', label: 'Serviços, Bancos & Lazer' }
     };
 
-    // Limites geográficos estritos do município de Itajubá - MG
     const ITAJUBA_BOUNDS = [
-      [-22.5250, -45.5550],
-      [-22.3450, -45.3450]
+      [-22.5350, -45.5650],
+      [-22.3300, -45.3300]
     ];
 
     // 6. ESTADO GLOBAL
@@ -2034,6 +2112,8 @@
     let wizardDraft = {};
     let currentBusStopId = null;
     let currentBusDirection = 'leaving';
+    let currentCultureTab = 'all';
+    let currentJobFilter = 'all';
 
     let map = null;
     let streetTileLayer = null;
@@ -2129,9 +2209,7 @@
 
       document.querySelectorAll('.nav-btn').forEach(btn => {
         const active = btn.getAttribute('data-nav') === viewName;
-        btn.className = active
-          ? 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-bold bg-white/15 text-white shadow-sm transition-all'
-          : 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left text-xs font-semibold text-purple-100 hover:bg-white/10 transition-all';
+        btn.classList.toggle('is-active', active);
       });
 
       if (viewName === 'dashboard') {
@@ -2196,7 +2274,7 @@
           </div>
         `).join('');
       } else if (section === 'services' && subTab === 'education') {
-        badge.textContent = 'Rede Escolar, CMEIs & Universidades';
+        badge.textContent = 'Rede Escolar, IFSULDEMINAS, UNIFEI & CMEIs';
         title.textContent = `Instituições de Ensino em Itajubá • ${nb.name}`;
         content.innerHTML = fullEducationUnits.map(ed => `
           <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 surface-card">
@@ -2242,8 +2320,8 @@
           </div>
         `;
       } else if (section === 'flood') {
-        badge.textContent = 'Hidrologia & Alerta Itajubá / LIH-UNIFEI';
-        title.textContent = `Monitoramento de Enchentes & Estações • ${nb.name}`;
+        badge.textContent = 'Defesa Civil • Multirrisco & Estações';
+        title.textContent = `Monitoramento de Enchentes, Encostas & Riscos • ${nb.name}`;
         content.innerHTML = telemetryStations.map(st => `
           <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 surface-card">
             <div class="flex justify-between">
@@ -2920,7 +2998,7 @@
       `).join('');
     }
 
-    // 10. AVALIAÇÕES QR CODE & 5 ESTRELAS COLORIDAS (76 LOCAIS COM 50+ AVALIAÇÕES CADA)
+    // 10. AVALIAÇÕES QR CODE & 5 ESTRELAS COLORIDAS (76 LOCAIS COM FOTOS DE PERFIL + VOTOS DE JUSTIÇA)
     function computeSealPercentage(est, sealKey) {
       const stat = est.sealStats && est.sealStats[sealKey];
       if (!stat || !stat.totalCount) return 0;
@@ -3012,6 +3090,27 @@
       document.getElementById('modalEstSealsGrid').innerHTML = cards;
     }
 
+    function voteReviewFairness(estId, revId, voteType) {
+      const est = establishments.find(e => e.id === estId);
+      if (!est) return;
+      const rev = est.reviews.find(r => r.id === revId);
+      if (!rev) return;
+
+      if (rev.userVote === voteType) {
+        showToast('Sua avaliação sobre este relato já foi registrada.');
+        return;
+      }
+      if (rev.userVote === 'fair') rev.fairCount = Math.max(0, (rev.fairCount || 1) - 1);
+      if (rev.userVote === 'unfair') rev.unfairCount = Math.max(0, (rev.unfairCount || 1) - 1);
+
+      rev.userVote = voteType;
+      if (voteType === 'fair') rev.fairCount = (rev.fairCount || 0) + 1;
+      if (voteType === 'unfair') rev.unfairCount = (rev.unfairCount || 0) + 1;
+
+      renderEstablishmentReviewsInModal(est);
+      showToast(voteType === 'fair' ? 'Relato marcado como avaliação justa!' : 'Feedback de moderação registrado.');
+    }
+
     function renderEstablishmentReviewsInModal(est) {
       const list = document.getElementById('modalEstReviewsList');
       const countEl = document.getElementById('modalEstReviewsCount');
@@ -3022,18 +3121,50 @@
       });
       if (countEl) countEl.textContent = filtered.length;
 
-      list.innerHTML = filtered.map(rev => `
-        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 surface-subcard">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-extrabold">${rev.author}</span>
-            <span class="text-[11px] text-slate-500">${rev.date}</span>
+      list.innerHTML = filtered.map(rev => {
+        const bgAvatar = getPersonAvatarColor(rev.author);
+        const initials = getPersonInitials(rev.author);
+        const starsCount = rev.stars || 5;
+        const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+
+        return `
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 surface-subcard">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-xs shrink-0 shadow-sm" style="background:${bgAvatar}">
+                  ${initials}
+                </div>
+                <div>
+                  <p class="text-xs font-extrabold text-slate-900 leading-tight">${rev.author}</p>
+                  <div class="flex items-center gap-1.5 text-[11px]">
+                    <span class="text-amber-500 font-black tracking-tight">${starsHtml}</span>
+                    <span class="text-slate-400">• ${rev.date}</span>
+                  </div>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">✓ Presencial</span>
+            </div>
+
+            <div class="flex flex-wrap gap-1">
+              ${(rev.tags || []).map(t => `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">${t}</span>`).join('')}
+            </div>
+
+            <p class="text-xs text-slate-700 leading-relaxed">${rev.comment}</p>
+
+            <div class="pt-1.5 border-t border-slate-200/70 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+              <span class="text-[10px] font-bold text-slate-500">Você considera esta avaliação justa?</span>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="voteReviewFairness('${est.id}', '${rev.id}', 'fair')" class="px-2.5 py-1 rounded-lg border text-[10px] font-extrabold transition-all ${rev.userVote === 'fair' ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white border-slate-200 text-slate-700 hover:border-emerald-400'}">
+                  👍 Avaliação Justa (${rev.fairCount || 12})
+                </button>
+                <button type="button" onclick="voteReviewFairness('${est.id}', '${rev.id}', 'unfair')" class="px-2.5 py-1 rounded-lg border text-[10px] font-extrabold transition-all ${rev.userVote === 'unfair' ? 'bg-rose-600 text-white border-rose-600' : 'bg-white border-slate-200 text-slate-700 hover:border-rose-400'}">
+                  👎 Injusta / Contestar (${rev.unfairCount || 0})
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="flex flex-wrap gap-1">
-            ${(rev.tags || []).map(t => `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">${t}</span>`).join('')}
-          </div>
-          <p class="text-xs text-slate-700 leading-relaxed">${rev.comment}</p>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function unlockQrEvaluationMode() {
@@ -3120,8 +3251,10 @@
       if (!est) return;
 
       const selectedTags = [];
+      let sumStars = 0;
       sealDefinitions.forEach(s => {
         const d = wizardDraft[s.key];
+        sumStars += d.stars;
         est.sealStats[s.key].totalCount += 1;
         if (d.stars === 5) est.sealStats[s.key].fiveStarCount += 1;
         selectedTags.push(`${s.label}: ${d.stars}★`);
@@ -3132,11 +3265,16 @@
       const userText = commentInput.value.trim() || 'Avaliação presencial registrada com sucesso via plaquinha QR Code Civora.';
 
       est.reviews.unshift({
-        author: 'Cidadão Verificado (QR Code Agora)',
+        id: `rev-new-${Date.now()}`,
+        author: 'Você (Cidadão Verificado)',
+        stars: Math.round(sumStars / 5),
         date: 'Agora mesmo',
         isDetailed: userText.length > 60,
         tags: selectedTags.slice(0, 6),
-        comment: userText
+        comment: userText,
+        fairCount: 1,
+        unfairCount: 0,
+        userVote: null
       });
 
       commentInput.value = '';
@@ -3377,7 +3515,7 @@
       showToast(`Protocolo ${newId} publicado no mapa de Itajubá!`);
     }
 
-    // 13. RENDERIZAÇÃO DAS ABAS SECUNDÁRIAS (RISCOS, e-GOV, SAÚDE, ÔNIBUS, CULTURA, DOAÇÕES, VAGAS, TRANSPARÊNCIA)
+    // 13. RENDERIZAÇÃO DAS ABAS SECUNDÁRIAS (RISCOS MULTIRRISCO, e-GOV, SAÚDE, ÔNIBUS, CULTURA 54, DOAÇÕES 18, VAGAS 54, TRANSPARÊNCIA)
     function renderRisksDashboard() {
       const level = floodAlertActive ? '3,42 m' : '1,45 m';
       const statusSub = floodAlertActive ? '⚠️ ALERTA DE CHEIA (Cota > 3,20m)' : 'Normal (Cota Atenção: 2,80m)';
@@ -3393,6 +3531,27 @@
           ? 'px-3 py-1.5 rounded-full bg-rose-100 border border-rose-300 text-rose-900 text-xs font-bold flex items-center gap-1.5'
           : 'px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-1.5';
         topBadge.innerHTML = `<span class="w-2 h-2 rounded-full ${floodAlertActive ? 'bg-rose-600' : 'bg-emerald-500'} animate-pulse"></span><span>Rio Sapucaí: ${level} (${floodAlertActive ? 'Alerta' : 'Normal'})</span>`;
+      }
+
+      const multiRisks = [
+        { icon: '🌊', title: 'Enchentes & Alagamentos', level: floodAlertActive ? 'ALERTA MÁXIMO' : 'Normal (1,45m)', desc: 'Calha do Rio Sapucaí e Rib. José Pereira (Centro, Varginha, Vila Poddis e Santa Rosa).', badgeClass: floodAlertActive ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800' },
+        { icon: '⛰️', title: 'Deslizamentos & Encostas', level: 'Atenção Preventiva', desc: 'Monitoramento geotécnico CEMADEN nos bairros Rebourgeon, Cruzeiro, Santa Luzia e Morro Grande.', badgeClass: 'bg-amber-100 text-amber-800' },
+        { icon: '⛈️', title: 'Vendavais & Raios (Verão)', level: 'Moderado', desc: 'Monitoramento de rajadas de vento e poda preventiva próxima à rede elétrica CEMIG.', badgeClass: 'bg-cyan-100 text-cyan-800' },
+        { icon: '🔥', title: 'Queimadas & Incêndios Florestais', level: 'Baixo (Estação Úmida)', desc: 'Vigilância na Serra da Mantiqueira, Área Rural (Capetinga/Toledos) e Parque Municipal.', badgeClass: 'bg-emerald-100 text-emerald-800' },
+        { icon: '🛣️', title: 'Riscos Rodoviários & Cargas', level: 'Monitorado', desc: 'Trechos de serra e trevos da BR-459 (Santa Rosa / Distrito Industrial / Ponte Alta).', badgeClass: 'bg-indigo-100 text-indigo-800' }
+      ];
+      const matrixGrid = document.getElementById('multiRiskMatrixGrid');
+      if (matrixGrid) {
+        matrixGrid.innerHTML = multiRisks.map(r => `
+          <div class="bg-white rounded-3xl border border-purple-100 p-4 shadow-sm space-y-1.5 surface-card">
+            <div class="flex items-center justify-between">
+              <span class="text-xl">${r.icon}</span>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${r.badgeClass}">${r.level}</span>
+            </div>
+            <p class="text-xs font-black text-slate-900">${r.title}</p>
+            <p class="text-[11px] text-slate-600 leading-snug">${r.desc}</p>
+          </div>
+        `).join('');
       }
 
       const days = [
@@ -3444,7 +3603,7 @@
       document.getElementById('civilDefenseLogsContainer').innerHTML = [
         { code: 'BOLETIM DC-401', title: 'Vistoria Preventiva Comportas Vila Poddis', desc: 'Equipes testaram bombas de recalque e desobstruíram galerias pluviais.' },
         { code: 'BOLETIM DC-402', title: 'Monitoramento Encostas Rebourgeon & Cruzeiro', desc: 'Pluviômetros sem acumulados críticos nas últimas 72 horas.' },
-        { code: 'BOLETIM DC-403', title: 'Abrigos Municipais Mapeados e Prontos', desc: 'Ginásio Poliesportivo e escolas polo com logística cadastrada no Civora.' }
+        { code: 'BOLETIM DC-403', title: 'Plano de Contingência Queimadas & Vendavais', desc: 'Brigadistas e 3º Pelotão BM em prontidão integrada com a Defesa Civil 199.' }
       ].map(log => `
         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 surface-subcard">
           <span class="text-[10px] font-extrabold text-cyan-700">${log.code}</span>
@@ -3617,7 +3776,73 @@
         `).join('');
     }
 
+    // 14. CULTURA EXPANDIDA (54 ITENS: OBRAS À VENDA, ARTISTAS INDEPENDENTES, PROJETOS SOCIAIS E AGENDA)
+    const cultureItemsCatalog = [
+      // 18 Obras de Arte à Venda
+      { cat: 'artworks', badge: 'Pintura Original à Venda', title: 'Óleo sobre Tela: Amanhecer no Pico dos Marins', author: 'Ateliê Serra Alta • Itajubá', price: 'R$ 480,00', pix: 'arte.mantiqueira@itajuba.art.br' },
+      { cat: 'artworks', badge: 'Artesanato & Cerâmica', title: 'Conjunto Cerâmica Artesanal Sul-Mineira (6 peças)', author: 'Coletivo Barro & Arte • Centro', price: 'R$ 190,00', pix: 'ceramica.itajuba@pix.com.br' },
+      { cat: 'artworks', badge: 'Escultura em Madeira', title: 'Escultura Entalhada em Cedro: Araucária & Colibri', author: 'Mestre João Entalhador • Morro Chic', price: 'R$ 620,00', pix: 'escultura.cedro@itajuba.art.br' },
+      { cat: 'artworks', badge: 'Aquarela Fine Art', title: 'Aquarela Original: Estação Ferroviária de Itajubá', author: 'Clara Mendes • Pinheirinho', price: 'R$ 240,00', pix: 'clara.aquarela@pix.com.br' },
+      { cat: 'artworks', badge: 'Fotografia Fine Art', title: 'Série Fotográfica: Neblina no Vale do Sapucaí (Moldura)', author: 'Estúdio Luz da Serra • Centro', price: 'R$ 310,00', pix: 'foto.serra@itajuba.art.br' },
+      { cat: 'artworks', badge: 'Xilogravura & Gravura', title: 'Gravura Numerada: Arquitetura Histórica do Centro', author: 'Oficina Gráfica Mantiqueira', price: 'R$ 165,00', pix: 'gravura.itj@pix.com.br' },
+      { cat: 'artworks', badge: 'Tapeçaria & Tear Manual', title: 'Tapete Artesanal em Tear Mineiro (Algodão Cru)', author: 'Tecelãs do Ano Bom • Zona Rural', price: 'R$ 350,00', pix: 'tear.anobom@itajuba.org.br' },
+      { cat: 'artworks', badge: 'Pintura Acrílica', title: 'Tela Acrílica: Ipês Amarelos da Avenida BPS', author: 'Rafael Lima Art • São Vicente', price: 'R$ 410,00', pix: 'rafael.ipes@pix.com.br' },
+      { cat: 'artworks', badge: 'Biojoias da Mantiqueira', title: 'Colar e Brincos em Sementes Nativas e Prata 925', author: 'Ateliê Raízes • Varginha', price: 'R$ 145,00', pix: 'biojoias.itj@pix.com.br' },
+      { cat: 'artworks', badge: 'Ilustração Botânica', title: 'Quadro Botânico: Orquídeas da Reserva Biológica', author: 'Mariana Flora • Medicina', price: 'R$ 220,00', pix: 'flora.arte@pix.com.br' },
+      { cat: 'artworks', badge: 'Arte em Ferro Forjado', title: 'Luminária Artesanal em Ferro & Vidro Soprado', author: 'Forja Artística Santa Rosa', price: 'R$ 390,00', pix: 'forja.santarosa@pix.com.br' },
+      { cat: 'artworks', badge: 'Literatura Local', title: 'Livro Ilustrado: Memórias & Causos de Itajubá (Autografado)', author: 'Editora Independente Vale', price: 'R$ 68,00', pix: 'livros.itajuba@pix.com.br' },
+      { cat: 'artworks', badge: 'Mosaico Artístico', title: 'Mandala em Mosaico de Azulejos Reciclados (50cm)', author: 'Ateliê Cacos de Cor • Rebourgeon', price: 'R$ 280,00', pix: 'mosaico.itj@pix.com.br' },
+      { cat: 'artworks', badge: 'Arte Digital & Print', title: 'Pôster Ilustrado: Mapa Cultural de Itajubá A2', author: 'Coletivo Design Sul de Minas', price: 'R$ 95,00', pix: 'design.sul@pix.com.br' },
+      { cat: 'artworks', badge: 'Bordado Livre', title: 'Bastidor Bordado à Mão: Casarões da Praça Getúlio Vargas', author: 'Ateliê Ponto & Afeto • Boa Vista', price: 'R$ 130,00', pix: 'bordado.itj@pix.com.br' },
+      { cat: 'artworks', badge: 'Luthieria Artesanal', title: 'Viola Caipira Artesanal de 10 Cordas (Madeira Maciça)', author: 'Luthieria Mantiqueira • Cruzeiro', price: 'R$ 2.400,00', pix: 'luthieria.itj@pix.com.br' },
+      { cat: 'artworks', badge: 'Cerâmica Utilitária', title: 'Bule e Xícaras para Café Especial (Esmalte Mineral)', author: 'Cerâmica Alta Serra • Oriente', price: 'R$ 260,00', pix: 'ceramica.alta@pix.com.br' },
+      { cat: 'artworks', badge: 'Escultura em Pedra-Sabão', title: 'Peça Decorativa Esculpida em Pedra-Sabão Mineira', author: 'Artesão Antônio • Piedade', price: 'R$ 175,00', pix: 'pedrasabao.itj@pix.com.br' },
+
+      // 14 Artistas Independentes (Apoio PIX)
+      { cat: 'artists', badge: 'Artista Independente • Música', title: 'Lucas Violão & Choro da Mantiqueira', author: 'Músico, Violonista & Compositor Local', price: 'Apoio Livre via PIX', pix: 'lucas.choro.itajuba@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Teatro', title: 'Companhia Teatral Cena Aberta Itajubá', author: 'Espetáculos itinerantes em praças e escolas', price: 'Apoio Cultural PIX', pix: 'cenaaberta.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Muralismo', title: 'Coletivo Grafite & Cores do Vale (Arte Urbana)', author: 'Muralistas locais revitalizando muros públicos', price: 'Apoio Tintas & PIX', pix: 'coresdovale.arte@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Literatura', title: 'Sarau Poético Vozes da Serra', author: 'Poetas e escritores independentes de Itajubá', price: 'Apoio Publicações PIX', pix: 'saraupoesia.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Dança', title: 'Estúdio & Coletivo Dança Contemporânea Sul', author: 'Bailarinos e coreógrafos independentes', price: 'Apoio Figurinos PIX', pix: 'dancasul.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Audiovisual', title: 'Cineclube & Documentários da Mantiqueira', author: 'Produtores independentes de cinema regional', price: 'Apoio Equipamentos PIX', pix: 'cineclube.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Circo', title: 'Trupe Circense Saltimbancos do Sapucaí', author: 'Malabarismo, palhaçaria e oficinas para crianças', price: 'Apoio Livre PIX', pix: 'trupesapucai@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Viola', title: 'Dupla Viola & Raiz Sul-Mineira', author: 'Preservação da música caipira tradicional', price: 'Apoio Cultural PIX', pix: 'violarais.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Fotografia', title: 'Projeto Retratos da Nossa Gente (Itajubá)', author: 'Exposição itinerante de moradores históricos', price: 'Apoio Impressões PIX', pix: 'retratos.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Jazz/MPB', title: 'Quarteto Instrumental Mantiqueira Jazz', author: 'Apresentações gratuitas no Parque Municipal', price: 'Apoio Livre PIX', pix: 'mantiqueirajazz@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Artes Plásticas', title: 'Helena Costa • Pintora & Muralista', author: 'Aulas abertas de pintura ao ar livre', price: 'Apoio Materiais PIX', pix: 'helena.artes@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Contação', title: 'Grupo Encantar • Contação de Histórias', author: 'Leitura lúdica em creches e hospitais', price: 'Apoio Livros PIX', pix: 'grupoencantar.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Hip-Hop', title: 'Batalha Cultural & Rima da Praça', author: 'Cultura urbana, breakdance e poesia falada', price: 'Apoio Som & PIX', pix: 'rimadapraca.itj@pix.com.br' },
+      { cat: 'artists', badge: 'Artista Independente • Coral', title: 'Coral Comunitário Vozes de Itajubá', author: 'Regência voluntária e apresentações cívicas', price: 'Apoio Partituras PIX', pix: 'coralvozes.itj@pix.com.br' },
+
+      // 12 Projetos Sociais Artísticos
+      { cat: 'social_projects', badge: 'Projeto Social Cultural', title: 'Orquestra Jovem & Iniciação Musical nos Bairros', author: 'Associação Cultural Itajubá • Santa Rosa / Centro', price: '120 vagas gratuitas', pix: 'orquestra.social@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Inclusão', title: 'Oficina de Teatro & Expressão para Jovens e PCDs', author: 'Instituto Arte para Todos • Boa Vista', price: 'Inscrições Abertas', pix: 'arteparatodos@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Artesanato', title: 'Mulheres Criativas: Renda com Costura e Bordado', author: 'Associação Comunitária Rebourgeon', price: 'Capacitação Gratuita', pix: 'mulherescriativas@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Capoeira', title: 'Roda de Capoeira & Cultura Popular Raízes', author: 'Mestre Carlos • Ginásio Poliesportivo', price: 'Aulas Gratuitas Sábados', pix: 'capoeiraraizes@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Leitura', title: 'Biblioteca Comunitária & Geladeiroteca nos Bairros', author: 'Coletivo Leitura Viva • Novo Horizonte', price: 'Doe Livros ou PIX', pix: 'leituraviva@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Audiovisual', title: 'Oficina de Fotografia e Vídeo pelo Celular para Jovens', author: 'Núcleo Criativo Pinheirinho', price: '60 vagas gratuitas', pix: 'oficinavideo@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Balé', title: 'Balé & Dança Educativa Infantil Comunitária', author: 'Espaço Cultural Varginha', price: 'Turmas Gratuitas', pix: 'balecomunitario@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Fanfarra', title: 'Banda Marcial & Fanfarra Estudantil de Itajubá', author: 'Rede Municipal de Ensino', price: 'Instrumentos Gratuitos', pix: 'fanfarra.itj@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Cerâmica', title: 'Arte no Barro: Terapia Ocupacional para Idosos', author: 'Centro de Convivência • Vila Poddis', price: 'Atendimento Gratuito', pix: 'artenobarro@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Graffiti', title: 'Escola de Arte Urbana & Design Gráfico Comunitário', author: 'Ponto de Cultura Avenida', price: '45 vagas gratuitas', pix: 'arteurbana.itj@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Violão', title: 'Violão nas Escolas Municipais (Contraturno)', author: 'Projeto Acordes do Amanhã • Cruzeiro', price: 'Aulas Gratuitas', pix: 'acordesamanha@itajuba.org.br' },
+      { cat: 'social_projects', badge: 'Projeto Social • Circo', title: 'Circo Social & Acrobacia para Crianças', author: 'Associação Recrear • Vila Isabel', price: '80 vagas gratuitas', pix: 'circosocial.itj@pix.com.br' },
+
+      // 10 Agenda & Patrimônio
+      { cat: 'events', badge: 'Agenda Cultural SECULT', title: 'Mostra de Teatro & Música no Teatro Christiane Riêra', author: 'Sexta a Domingo • 19h30 • Av. Jerson Dias', price: 'Entrada Gratuita', pix: 'secult@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Feira Cultural & Gastronômica', title: 'Feira de Artesanato & Quitandas da Praça Getúlio Vargas', author: 'Todos os Sábados • 08h às 14h • Centro', price: 'Acesso Livre', pix: 'feira.cultura@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Patrimônio Histórico', title: 'Visita Guiada: Museu Municipal Wenceslau Braz & Casarões', author: 'Terça a Sábado • 09h às 17h • Centro', price: 'Entrada Gratuita', pix: 'museu@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Música ao Ar Livre', title: 'Domingo Musical no Parque Municipal de Itajubá', author: 'Domingos • 10h00 • Bairro Varginha', price: 'Gratuito', pix: 'parque.eventos@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Festival Gastronômico', title: 'Festival do Queijo, Café & Doce de Leite da Mantiqueira', author: 'Mercado Municipal • Próximo Fim de Semana', price: 'Entrada Franca', pix: 'festival.mercado@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Exposição de Artes', title: 'Salão de Artes Visuais da Serra da Mantiqueira', author: 'Galeria Teatro Municipal • Visitação Diária', price: 'Entrada Gratuita', pix: 'salaoartes@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Cultura & Ciência', title: 'Noite de Observação Astronômica & Cultura UNIFEI', author: 'Campus Prof. José Rodrigues Seabra • Pinheirinho', price: 'Aberto à Comunidade', pix: 'extensao@unifei.edu.br' },
+      { cat: 'events', badge: 'Encontro de Corais', title: 'Encontro Regional de Corais & Orquestras de Câmara', author: 'Igreja Matriz Nossa Senhora da Soledade', price: 'Entrada Gratuita', pix: 'corais.itj@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Cinema na Praça', title: 'Sessão Cinema Brasileiro ao Ar Livre no Santa Rosa', author: 'Praça do Bairro Santa Rosa • Sábado 19h', price: 'Pipoca e Entrada Grátis', pix: 'cinemapraca@itajuba.mg.gov.br' },
+      { cat: 'events', badge: 'Patrimônio Ferroviário', title: 'Roteiro Cultural da Antiga Estrada de Ferro Sapucaí', author: 'Saída Estação Central • Domingos 09h', price: 'Inscrição Gratuita', pix: 'patrimonio@itajuba.mg.gov.br' }
+    ];
+
     function setCultureTab(tab) {
+      currentCultureTab = tab;
       ['All', 'Artworks', 'Artists', 'Social_projects', 'Events'].forEach(t => {
         const btn = document.getElementById(`cultTab${t}`);
         if (!btn) return;
@@ -3626,46 +3851,126 @@
           ? 'px-4 py-2 rounded-2xl bg-purple-600 text-white text-xs font-extrabold'
           : 'px-4 py-2 rounded-2xl bg-white border border-purple-200 text-slate-700 text-xs font-extrabold';
       });
+      renderCultureItems();
+    }
 
-      const items = [
-        { cat: 'artworks', badge: 'Obra Original à Venda', title: 'Óleo sobre Tela: Amanhecer no Pico dos Marins', author: 'Ateliê Serra Alta • Itajubá', price: 'R$ 480,00', pix: 'arte.mantiqueira@itajuba.art.br' },
-        { cat: 'artworks', badge: 'Artesanato & Cerâmica', title: 'Conjunto Cerâmica Artesanal Sul-Mineira', author: 'Coletivo Barro & Arte', price: 'R$ 190,00', pix: 'ceramica.itajuba@pix.com.br' },
-        { cat: 'artists', badge: 'Artista Independente', title: 'Lucas Violão & Choro da Mantiqueira', author: 'Músico & Compositor Local', price: 'Apoio Livre via PIX', pix: 'lucas.choro.itajuba@pix.com.br' },
-        { cat: 'social_projects', badge: 'Projeto Social Cultural', title: 'Orquestra Jovem & Iniciação Musical nos Bairros', author: 'Associação Cultural Itajubá', price: 'Aulas Gratuitas (120 vagas)', pix: 'orquestra.social@itajuba.org.br' },
-        { cat: 'events', badge: 'Agenda Cultural SECULT', title: 'Mostra de Teatro & Música no Teatro Christiane Riêra', author: 'Sexta a Domingo • 19h30', price: 'Entrada Gratuita', pix: 'secult@itajuba.mg.gov.br' }
-      ];
-
+    function renderCultureItems() {
       const grid = document.getElementById('cultureContentGrid');
       if (!grid) return;
-      grid.innerHTML = items
-        .filter(i => tab === 'all' || i.cat === tab)
-        .map(i => `
-          <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
-            <div class="space-y-1.5">
-              <span class="text-[10px] font-extrabold uppercase text-pink-700">${i.badge}</span>
-              <h3 class="text-base font-black text-slate-900">${i.title}</h3>
-              <p class="text-xs text-slate-600">${i.author}</p>
-              <p class="text-sm font-black text-purple-700 pt-1">${i.price}</p>
-            </div>
-            <button type="button" onclick="copyTextWithToast('${i.pix}', 'Chave PIX Cultural')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
-              Copiar PIX / Reservar Agora
-            </button>
+      const q = normalizeText(document.getElementById('cultureSearchInput')?.value || '');
+
+      const filtered = cultureItemsCatalog.filter(i => {
+        const matchTab = currentCultureTab === 'all' || i.cat === currentCultureTab;
+        const matchQ = !q || normalizeText(i.title).includes(q) || normalizeText(i.author).includes(q) || normalizeText(i.badge).includes(q);
+        return matchTab && matchQ;
+      });
+
+      grid.innerHTML = filtered.map(i => `
+        <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
+          <div class="space-y-1.5">
+            <span class="text-[10px] font-extrabold uppercase text-pink-700">${i.badge}</span>
+            <h3 class="text-base font-black text-slate-900">${i.title}</h3>
+            <p class="text-xs text-slate-600">${i.author}</p>
+            <p class="text-sm font-black text-purple-700 pt-1">${i.price}</p>
           </div>
-        `).join('');
+          <button type="button" onclick="copyTextWithToast('${i.pix}', 'Chave PIX Cultural')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
+            Copiar PIX / Reservar Agora
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // 15. UNIDADES CARENTES EXPANDIDAS (18 UNIDADES + CADASTRO DE FAMÍLIAS / ENTIDADES QUE PRECISAM DE DOAÇÃO)
+    const socialUnitsCatalog = [
+      { name: 'Vila Vicentina de Itajubá (Lar de Idosos)', addr: 'Bairro Boa Vista • Itajubá', urgent: 'Fraldas geriátricas G/EG, leite integral e produtos de higiene', pix: 'doacao.vicentina@itajuba.org.br', isUserCreated: false },
+      { name: 'Casa de Acolhimento Infantil & Juvenil', addr: 'Região Central • Itajubá', urgent: 'Roupas infantojuvenis, material escolar e cestas básicas', pix: 'acolhimento.crianca@itajuba.org.br', isUserCreated: false },
+      { name: 'Associação de Apoio ao Paciente Oncológico', addr: 'Bairro Medicina • Itajubá', urgent: 'Suplementos alimentares, lenços e cobertores', pix: 'apoio.onco@itajuba.org.br', isUserCreated: false },
+      { name: 'APAE Itajubá • Associação de Pais e Amigos dos Excepcionais', addr: 'Bairro Pinheirinho / Avenida • Itajubá', urgent: 'Fraldas infantis/juvenis, materiais pedagógicos e alimentos', pix: 'doacao.apae@itajuba.org.br', isUserCreated: false },
+      { name: 'Abrigo Municipal Emergencial • Ginásio Poliesportivo', addr: 'Rua Geraldino Campista • Centro, Itajubá', urgent: 'Colchões, cobertores, água mineral e kits de higiene pessoal', pix: 'defesacivil.abrigo@itajuba.mg.gov.br', isUserCreated: false },
+      { name: 'Casa de Passagem & Acolhimento População em Situação de Rua', addr: 'Região Central / Estiva • Itajubá', urgent: 'Agasalhos masculinos, meias, sabonetes e alimentos não perecíveis', pix: 'casadepassagem@itajuba.org.br', isUserCreated: false },
+      { name: 'Cozinha Comunitária Solidária • Santa Rosa', addr: 'Bairro Santa Rosa • Itajubá', urgent: 'Arroz, feijão, óleo de soja, macarrão e gás de cozinha', pix: 'cozinha.santarosa@itajuba.org.br', isUserCreated: false },
+      { name: 'Núcleo Assistencial & Creche Comunitária Rebourgeon', addr: 'Bairro Rebourgeon • Itajubá', urgent: 'Leite em pó, achocolatado, frutas e roupas infantis (2 a 6 anos)', pix: 'nucleo.rebourgeon@itajuba.org.br', isUserCreated: false },
+      { name: 'Associação Comunitária Novo Horizonte Solidário', addr: 'Bairro Novo Horizonte • Itajubá', urgent: 'Cestas básicas completas, material de limpeza e gás', pix: 'novohorizonte.solidario@itajuba.org.br', isUserCreated: false },
+      { name: 'Casa de Apoio à Gestante & Recém-Nascido (Enxoval Solidário)', addr: 'Bairro Morro Chic • Itajubá', urgent: 'Fraldas RN/P/M, roupinhas de bebê, banheiras e pomadas', pix: 'enxovalsolidario@itajuba.org.br', isUserCreated: false },
+      { name: 'Abrigo & Protetores de Animais Abandonados de Itajubá', addr: 'Bairro Vila Poddis / Área Rural • Itajubá', urgent: 'Ração para cães e gatos, vermífugos e jornais/tapetes', pix: 'animais.itajuba@itajuba.org.br', isUserCreated: false },
+      { name: 'Centro de Convivência & Apoio ao Idoso • Vila Isabel', addr: 'Bairro Vila Isabel • Itajubá', urgent: 'Café, biscoitos, fraldas geriátricas e produtos de limpeza', pix: 'idoso.vilaisabel@itajuba.org.br', isUserCreated: false },
+      { name: 'Pastoral Social & Banco de Alimentos • Paróquia São José', addr: 'Bairro Avenida / São Judas • Itajubá', urgent: 'Cestas básicas para 85 famílias cadastradas no bairro', pix: 'pastoral.saojose@itajuba.org.br', isUserCreated: false },
+      { name: 'Projeto Sopão & Pão Solidário • Cruzeiro & Santa Luzia', addr: 'Bairro Cruzeiro • Itajubá', urgent: 'Legumes, carnes, embalagens descartáveis e pão francês', pix: 'sopao.cruzeiro@itajuba.org.br', isUserCreated: false },
+      { name: 'Associação de Moradores Piedade & São Sebastião', addr: 'Bairro Piedade • Itajubá', urgent: 'Material escolar, mochilas e cestas básicas', pix: 'associacao.piedade@itajuba.org.br', isUserCreated: false },
+      { name: 'Grupo Solidário Mãos Unidas • Porto Velho & Fátima', addr: 'Bairro Porto Velho • Itajubá', urgent: 'Cobertores, roupas de frio e leite longa vida', pix: 'maosunidas.itj@itajuba.org.br', isUserCreated: false },
+      { name: 'Casa de Recuperação & Reinserção Social Vale Verde', addr: 'Saída Rural / Ponte Alta • Itajubá', urgent: 'Alimentos em geral, ferramentas de horta e itens de higiene', pix: 'valeverde.itj@itajuba.org.br', isUserCreated: false },
+      { name: 'Rede de Apoio a Famílias Atingidas por Chuvas • Vila Poddis', addr: 'Bairro Vila Poddis • Itajubá', urgent: 'Eletrodomésticos usados, móveis básicos e cestas de limpeza', pix: 'apoio.vilapoddis@itajuba.org.br', isUserCreated: false }
+    ];
+
+    function openNeedDonationModal() {
+      document.getElementById('actionModalBadge').textContent = 'REDE SOLIDÁRIA & CRAS • ITAJUBÁ - MG';
+      document.getElementById('actionModalTitle').textContent = 'Cadastrar Pedido de Doação (Família ou Instituição)';
+      document.getElementById('actionModalBody').innerHTML = `
+        <form onsubmit="submitNeedDonationRequest(event)" class="space-y-3">
+          <div class="p-3 rounded-2xl bg-teal-50 border border-teal-200 text-[11px] text-teal-950">
+            Preencha os dados abaixo para publicar seu pedido na lista solidária de Itajubá. Moradores e voluntários poderão doar via PIX ou agendar entrega presencial.
+          </div>
+          <div>
+            <label class="font-extrabold block mb-1">Nome da Família, Responsável ou Entidade</label>
+            <input id="donReqName" required type="text" placeholder="Ex: Família Silva (4 pessoas) ou Associação Comunitária..." class="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200" />
+          </div>
+          <div>
+            <label class="font-extrabold block mb-1">Bairro & Ponto de Referência em Itajubá</label>
+            <input id="donReqAddr" required type="text" placeholder="Ex: Bairro Santa Rosa / Boa Vista / Rebourgeon - Itajubá" class="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200" />
+          </div>
+          <div>
+            <label class="font-extrabold block mb-1">Itens Urgentes Necessários</label>
+            <input id="donReqUrgent" required type="text" placeholder="Ex: Cesta básica, leite, fraldas tamanho G, agasalhos infantis..." class="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200" />
+          </div>
+          <div>
+            <label class="font-extrabold block mb-1">Chave PIX ou Telefone/WhatsApp para Contato</label>
+            <input id="donReqPix" required type="text" placeholder="Digite sua chave PIX (CPF, e-mail, celular) ou WhatsApp" class="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200" />
+          </div>
+          <button type="submit" class="w-full py-3 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-extrabold">
+            Publicar Pedido de Doação Agora
+          </button>
+        </form>
+      `;
+      document.getElementById('actionInteractionModal').classList.remove('hidden');
+    }
+
+    function submitNeedDonationRequest(e) {
+      e.preventDefault();
+      const name = document.getElementById('donReqName').value.trim();
+      const addr = document.getElementById('donReqAddr').value.trim();
+      const urgent = document.getElementById('donReqUrgent').value.trim();
+      const pix = document.getElementById('donReqPix').value.trim();
+
+      socialUnitsCatalog.unshift({
+        name,
+        addr,
+        urgent,
+        pix,
+        isUserCreated: true
+      });
+
+      renderSocialUnits();
+      closeModal('actionInteractionModal');
+      showToast('Pedido de doação cadastrado e publicado na Rede Solidária de Itajubá!');
     }
 
     function renderSocialUnits() {
-      const units = [
-        { name: 'Vila Vicentina de Itajubá (Lar de Idosos)', addr: 'Bairro Boa Vista • Itajubá', urgent: 'Fraldas geriátricas G/EG, leite integral e produtos de higiene', pix: 'doacao.vicentina@itajuba.org.br' },
-        { name: 'Casa de Acolhimento Infantil & Juvenil', addr: 'Região Central • Itajubá', urgent: 'Roupas infantojuvenis, material escolar e cestas básicas', pix: 'acolhimento.crianca@itajuba.org.br' },
-        { name: 'Associação de Apoio ao Paciente Oncológico', addr: 'Bairro Medicina • Itajubá', urgent: 'Suplementos alimentares, lenços e cobertores', pix: 'apoio.onco@itajuba.org.br' }
-      ];
       const grid = document.getElementById('socialUnitsGrid');
       if (!grid) return;
-      grid.innerHTML = units.map(u => `
-        <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
+      const q = normalizeText(document.getElementById('donationsSearchInput')?.value || '');
+
+      const filtered = socialUnitsCatalog.filter(u =>
+        !q || normalizeText(u.name).includes(q) || normalizeText(u.addr).includes(q) || normalizeText(u.urgent).includes(q)
+      );
+
+      grid.innerHTML = filtered.map(u => `
+        <div class="bg-white rounded-3xl border ${u.isUserCreated ? 'border-amber-400 ring-2 ring-amber-200/60' : 'border-purple-100'} p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
           <div class="space-y-2">
-            <span class="text-[10px] font-extrabold uppercase text-teal-700">Entidade Verificada • CRAS Itajubá</span>
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-[10px] font-extrabold uppercase ${u.isUserCreated ? 'text-amber-700' : 'text-teal-700'}">
+                ${u.isUserCreated ? '🆕 Pedido Comunitário Recente' : 'Entidade Verificada • CRAS Itajubá'}
+              </span>
+            </div>
             <h3 class="text-base font-black text-slate-900">${u.name}</h3>
             <p class="text-xs text-slate-500">📍 ${u.addr}</p>
             <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950">
@@ -3673,10 +3978,10 @@
             </div>
           </div>
           <div class="flex gap-2">
-            <button type="button" onclick="copyTextWithToast('${u.pix}', 'PIX Oficial ${u.name}')" class="flex-1 py-2.5 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-extrabold">
-              Copiar PIX Oficial
+            <button type="button" onclick="copyTextWithToast('${u.pix.replace(/'/g, "\\'")}', 'Contato / PIX ${u.name.replace(/'/g, "\\'")}')" class="flex-1 py-2.5 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-extrabold">
+              Copiar PIX / Contato
             </button>
-            <button type="button" onclick="openGovServiceForm('Agendar Entrega de Doação • ${u.name}', 'Informe os itens que deseja entregar e data preferida')" class="px-3.5 py-2.5 rounded-2xl bg-slate-100 text-slate-800 text-xs font-extrabold">
+            <button type="button" onclick="openGovServiceForm('Agendar Entrega de Doação • ${u.name.replace(/'/g, "\\'")}', 'Informe os itens que deseja entregar e data preferida')" class="px-3.5 py-2.5 rounded-2xl bg-slate-100 text-slate-800 text-xs font-extrabold">
               Agendar Entrega
             </button>
           </div>
@@ -3684,7 +3989,71 @@
       `).join('');
     }
 
+    // 16. EMPREGOS, ESTÁGIOS & CURSOS GRATUITOS EXPANDIDOS (54 OPORTUNIDADES + TÉCNICO EM INFORMÁTICA IFSULDEMINAS)
+    const opportunitiesCatalog = [
+      // 14 Cursos Gratuitos (incluindo IFSULDEMINAS Técnico em Informática em destaque)
+      { type: 'curso', company: 'IFSULDEMINAS • Campus Itajubá (MEC)', title: 'Curso Técnico Gratuito em Informática (Integrado e Subsequente)', salary: '100% Gratuito • Diploma Federal MEC', loc: 'Pinheirinho / Campus Itajubá' },
+      { type: 'curso', company: 'IFSULDEMINAS • Campus Itajubá (MEC)', title: 'Curso Técnico Gratuito em Administração & Gestão Pública', salary: '100% Gratuito • Diploma Federal MEC', loc: 'Pinheirinho / Campus Itajubá' },
+      { type: 'curso', company: 'IFSULDEMINAS • Campus Itajubá (FIC)', title: 'Qualificação Gratuita: Desenvolvimento Web, Python & Banco de Dados', salary: '100% Gratuito • Certificado Federal', loc: 'Itajubá - MG' },
+      { type: 'curso', company: 'SESI SENAI CFP Aureliano Chaves', title: 'Curso Gratuito: Eletricista Industrial & Automação CLP', salary: '100% Gratuito • Certificado FIEMG', loc: 'Avenida' },
+      { type: 'curso', company: 'SESI SENAI CFP Aureliano Chaves', title: 'Curso Gratuito: Mecânica de Usinagem CNC & Metrologia', salary: '100% Gratuito • Certificado FIEMG', loc: 'Avenida' },
+      { type: 'curso', company: 'UNIFEI • Extensão Universitária', title: 'Curso Gratuito: Robótica Educacional, IoT & Energia Solar', salary: '100% Gratuito • Aberto à Comunidade', loc: 'Pinheirinho' },
+      { type: 'curso', company: 'Prefeitura / SINE Itajubá', title: 'Capacitação Gratuita em Atendimento ao Público & Gestão MEI', salary: 'Gratuito • Turmas Noturnas', loc: 'Centro' },
+      { type: 'curso', company: 'SENAC Minas • Unidade Itajubá', title: 'Curso Gratuito PSG: Técnico em Enfermagem & Primeiros Socorros', salary: 'Bolsa Integral 100% Gratuita', loc: 'Centro / Medicina' },
+      { type: 'curso', company: 'SENAC Minas • Unidade Itajubá', title: 'Curso Gratuito PSG: Gastronomia Mineira & Boas Práticas VISA', salary: 'Bolsa Integral 100% Gratuita', loc: 'Centro' },
+      { type: 'curso', company: 'SEBRAE Minas • Sala Mineira do Empreendedor', title: 'Formação Gratuita: Marketing Digital, Vendas pelo WhatsApp e PIX', salary: '100% Gratuito • Certificado SEBRAE', loc: 'Estiva / Centro' },
+      { type: 'curso', company: 'SENAR Minas & Sindicato Rural Itajubá', title: 'Curso Gratuito: Cafeicultura de Montanha, Apicultura & Queijos', salary: '100% Gratuito • Alimentação Inclusa', loc: 'Zona Rural / Mercado' },
+      { type: 'curso', company: 'INCIT • Incubadora de Empresas Itajubá', title: 'Bootcamp Gratuito: Criação de Startups & Inteligência Artificial', salary: '100% Gratuito • Mentoria', loc: 'Parque Científico' },
+      { type: 'curso', company: 'Escola Municipal Profissionalizante', title: 'Curso Gratuito: Corte, Costura Industrial & Modelagem', salary: '100% Gratuito • Material Incluso', loc: 'Boa Vista' },
+      { type: 'curso', company: 'Defesa Civil & Corpo de Bombeiros', title: 'Formação Gratuita: Brigadista Voluntário & Prevenção de Riscos', salary: '100% Gratuito • Certificado Oficial', loc: 'Avenida / Centro' },
+
+      // 24 Empregos CLT
+      { type: 'emprego', company: 'Helibras • Airbus Helicopters Brasil', title: 'Técnico em Manutenção de Aeronaves / Estruturas', salary: 'R$ 4.200,00 + Benefícios', loc: 'Distrito Industrial' },
+      { type: 'emprego', company: 'Helibras • Airbus Helicopters Brasil', title: 'Engenheiro de Projetos Aeronáuticos & Sistemas', salary: 'R$ 8.900,00 + Plano Saúde', loc: 'Distrito Industrial' },
+      { type: 'emprego', company: 'Balteau Produtos Elétricos', title: 'Operador de Produção & Montagem de Transformadores', salary: 'R$ 2.450,00 + PLR', loc: 'Distrito Industrial' },
+      { type: 'emprego', company: 'Balteau Produtos Elétricos', title: 'Técnico em Ensaios Elétricos de Alta Tensão', salary: 'R$ 3.600,00 + Benefícios', loc: 'Distrito Industrial' },
+      { type: 'emprego', company: 'Cabelauto Brasil Condutores Elétricos', title: 'Operador de Linha de Chicotes Automotivos (1º e 2º Turno)', salary: 'R$ 2.180,00 + Fretado + Refeitório', loc: 'Distrito Industrial' },
+      { type: 'emprego', company: 'Stahl Talhas & Equipamentos', title: 'Soldador MIG/MAG & Caldeireiro Industrial', salary: 'R$ 3.350,00 + Benefícios', loc: 'Distrito Industrial' },
+      { type: 'emprego', company: 'GE Grid Solutions / Alstom Energia', title: 'Técnico em Eletrotécnica & Comissionamento', salary: 'R$ 4.100,00 + PLR', loc: 'Distrito Industrial' },
+      { type: 'emprego', company: 'Becton Dickinson (BD) Sul de Minas', title: 'Operador de Produção em Sala Limpa Hospitalar', salary: 'R$ 2.650,00 + Plano Médico/Odonto', loc: 'Corredor BR-459' },
+      { type: 'emprego', company: 'Hospital de Clínicas de Itajubá (HCI)', title: 'Técnico de Enfermagem • Clínica Médica e UTI', salary: 'Piso da Categoria + Insalubridade', loc: 'Medicina' },
+      { type: 'emprego', company: 'Hospital de Clínicas de Itajubá (HCI)', title: 'Recepcionista Hospitalar & Faturamento SUS', salary: 'R$ 2.050,00 + Vale Alimentação', loc: 'Medicina' },
+      { type: 'emprego', company: 'Santa Casa de Misericórdia de Itajubá', title: 'Enfermeiro Assistencial • Maternidade & Pronto Socorro', salary: 'Piso Nacional + Adicionais', loc: 'Morro Chic' },
+      { type: 'emprego', company: 'Supermercado Bahamas Mix • Estiva', title: 'Operador de Caixa, Repositor & Açougueiro', salary: 'R$ 1.980,00 + Vale Transporte', loc: 'Estiva' },
+      { type: 'emprego', company: 'Supermercado Central Carneiro Júnior', title: 'Padeiro Confeiteiro & Atendente de Frios', salary: 'R$ 2.250,00 + Cesta Básica', loc: 'Centro' },
+      { type: 'emprego', company: 'Expresso Valônia Transporte Urbano', title: 'Motorista de Ônibus Urbano (CNH D ou E)', salary: 'R$ 3.150,00 + Vale Alimentação', loc: 'Garagem / Itajubá' },
+      { type: 'emprego', company: 'Sicoob Mantiqueira • Cooperativa', title: 'Agente de Atendimento & Negócios Cooperativos', salary: 'R$ 3.400,00 + Vale Refeição', loc: 'Centro' },
+      { type: 'emprego', company: 'Drogaria Central Mantiqueira 24h', title: 'Farmacêutico(a) Responsável Técnico (CRF-MG)', salary: 'R$ 4.600,00 + Comissões', loc: 'Centro' },
+      { type: 'emprego', company: 'Drogaria Central Mantiqueira 24h', title: 'Balconista de Farmácia com Experiência', salary: 'R$ 2.150,00 + Premiação', loc: 'Centro' },
+      { type: 'emprego', company: 'Cantina & Grill Serra da Mantiqueira', title: 'Cozinheiro(a) & Auxiliar de Cozinha', salary: 'R$ 2.300,00 + Refeição no Local', loc: 'Centro' },
+      { type: 'emprego', company: 'Hotel & Executivo Palace Itajubá', title: 'Recepcionista Bilíngue & Camareira', salary: 'R$ 2.100,00 + Benefícios', loc: 'Centro' },
+      { type: 'emprego', company: 'Laboratório Clínico Itajubá Diagnósticos', title: 'Técnico em Análises Clínicas & Coletador', salary: 'R$ 2.480,00 + Insalubridade', loc: 'Centro' },
+      { type: 'emprego', company: 'Auto Center & Oficina Batalhão', title: 'Mecânico de Suspensão, Freios e Alinhamento 3D', salary: 'R$ 3.100,00 + Comissão', loc: 'Avenida' },
+      { type: 'emprego', company: 'Material de Construção Serra Sul', title: 'Motorista Entregador & Conferente de Estoque', salary: 'R$ 2.290,00 + Benefícios', loc: 'São Sebastião' },
+      { type: 'emprego', company: 'Startups Parque Científico INCIT', title: 'Desenvolvedor Full-Stack Júnior (React / Node.js)', salary: 'R$ 3.800,00 + Híbrido', loc: 'Pinheirinho' },
+      { type: 'emprego', company: 'Academia Arena Campus Fitness', title: 'Professor de Educação Física (CREF Ativo)', salary: 'R$ 2.750,00 + Plano Academia', loc: 'Pinheirinho' },
+
+      // 16 Estágios & Jovem Aprendiz
+      { type: 'estagio', company: 'IFSULDEMINAS / Empresas Parceiras', title: 'Estágio Técnico em Informática, Suporte TI & Redes', salary: 'Bolsa R$ 1.250,00 + Auxílio Transporte', loc: 'Itajubá - MG' },
+      { type: 'estagio', company: 'UNIFEI / INCIT Startups', title: 'Estágio em Desenvolvimento Web, Dados & Automação', salary: 'Bolsa R$ 1.450,00 + Auxílio Transporte', loc: 'Pinheirinho' },
+      { type: 'estagio', company: 'Helibras • Airbus Helicopters Brasil', title: 'Estágio em Engenharia Aeronáutica, Mecânica & Logística', salary: 'Bolsa R$ 1.850,00 + Fretado + Refeitório', loc: 'Distrito Industrial' },
+      { type: 'estagio', company: 'Cabelauto Brasil', title: 'Estágio em Engenharia de Produção / Qualidade', salary: 'Bolsa R$ 1.500,00 + Refeitório', loc: 'Distrito Industrial' },
+      { type: 'estagio', company: 'Balteau Produtos Elétricos', title: 'Estágio em Engenharia Elétrica & Projetos', salary: 'Bolsa R$ 1.550,00 + Benefícios', loc: 'Distrito Industrial' },
+      { type: 'estagio', company: 'SESI SENAI / Polo Industrial Itajubá', title: 'Jovem Aprendiz Industrial (16 a 22 anos) • 40 Vagas', salary: 'Salário Aprendiz + Curso Técnico SENAI', loc: 'Avenida / Distrito Industrial' },
+      { type: 'estagio', company: 'Prefeitura Municipal de Itajubá', title: 'Estágio em Administração, Direito, Engenharia Civil & TI', salary: 'Bolsa R$ 1.150,00 + Vale Transporte', loc: 'Estiva / Centro' },
+      { type: 'estagio', company: 'Hospital de Clínicas de Itajubá (HCI)', title: 'Estágio Curricular em Enfermagem, Farmácia & Fisioterapia', salary: 'Bolsa Auxílio + Alimentação', loc: 'Medicina' },
+      { type: 'estagio', company: 'Sicoob Mantiqueira', title: 'Estágio em Ciências Contábeis, Economia & Administração', salary: 'Bolsa R$ 1.400,00 + Vale Refeição', loc: 'Centro' },
+      { type: 'estagio', company: 'FEPI • Centro Universitário', title: 'Monitoria & Estágio em Clínicas Escola e Laboratórios', salary: 'Bolsa Desconto + Auxílio', loc: 'Varginha' },
+      { type: 'estagio', company: 'Stahl Talhas & Equipamentos', title: 'Estágio Técnico em Mecânica & Desenho CAD', salary: 'Bolsa R$ 1.380,00 + Refeitório', loc: 'Distrito Industrial' },
+      { type: 'estagio', company: 'Becton Dickinson (BD)', title: 'Estágio em Engenharia Química, Farmácia & Qualidade', salary: 'Bolsa R$ 1.750,00 + Fretado', loc: 'Corredor BR-459' },
+      { type: 'estagio', company: 'Supermercado Bahamas Mix', title: 'Jovem Aprendiz Comércio & Logística (Meio Período)', salary: 'Bolsa Aprendiz + Benefícios', loc: 'Estiva' },
+      { type: 'estagio', company: 'Gráfica Rápida & Engenharia CopyBPS', title: 'Estágio em Design Gráfico & Atendimento Digital', salary: 'Bolsa R$ 1.050,00 + Transporte', loc: 'Pinheirinho' },
+      { type: 'estagio', company: 'Clínica Veterinária PetCampus', title: 'Estágio em Medicina Veterinária (Clínica de Pequenos)', salary: 'Bolsa R$ 1.100,00', loc: 'São Vicente' },
+      { type: 'estagio', company: 'Defesa Civil & Secretaria de Meio Ambiente', title: 'Estágio em Engenharia Ambiental, Hídrica & Geoprocessamento', salary: 'Bolsa R$ 1.250,00 + Transporte', loc: 'Estiva' }
+    ];
+
     function filterOpportunities(typeFilter) {
+      currentJobFilter = typeFilter;
       ['all', 'emprego', 'estagio', 'curso'].forEach(t => {
         const btn = document.getElementById(`jobFilter-${t}`);
         if (!btn) return;
@@ -3692,33 +4061,32 @@
           ? 'px-3.5 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold'
           : 'px-3.5 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold';
       });
+      renderOpportunitiesGrid();
+    }
 
-      const opps = [
-        { type: 'emprego', company: 'Helibras • Airbus Helicopters', title: 'Técnico em Manutenção de Aeronaves / Estruturas', salary: 'R$ 4.200,00 + Benefícios', loc: 'Distrito Industrial' },
-        { type: 'emprego', company: 'Balteau Produtos Elétricos', title: 'Operador de Produção & Montagem de Transformadores', salary: 'R$ 2.450,00 + PLR', loc: 'Distrito Industrial' },
-        { type: 'emprego', company: 'Hospital de Clínicas de Itajubá (HCI)', title: 'Técnico de Enfermagem • Clínica Médica', salary: 'Piso da Categoria + Insalubridade', loc: 'Medicina' },
-        { type: 'estagio', company: 'UNIFEI / INCIT Startups', title: 'Estágio em Desenvolvimento Web & Dados', salary: 'Bolsa R$ 1.350,00 + Auxílio Transporte', loc: 'Pinheirinho' },
-        { type: 'estagio', company: 'Cabelauto Brasil', title: 'Estágio em Engenharia de Produção / Qualidade', salary: 'Bolsa R$ 1.500,00 + Refeitório', loc: 'Distrito Industrial' },
-        { type: 'curso', company: 'SESI SENAI CFP Aureliano Chaves', title: 'Curso Gratuito: Eletricista Industrial & Automação CLP', salary: '100% Gratuito • Certificado FIEMG', loc: 'Avenida' },
-        { type: 'curso', company: 'Prefeitura / SINE Itajubá', title: 'Capacitação em Atendimento ao Público & Gestão MEI', salary: 'Gratuito • Turmas Noturnas', loc: 'Centro' }
-      ];
-
+    function renderOpportunitiesGrid() {
       const grid = document.getElementById('opportunitiesGrid');
       if (!grid) return;
-      grid.innerHTML = opps
-        .filter(o => typeFilter === 'all' || o.type === typeFilter)
-        .map(o => `
-          <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
-            <div class="space-y-1.5">
-              <span class="text-[10px] font-extrabold uppercase text-indigo-700">${o.company} • ${o.loc}</span>
-              <h3 class="text-base font-black text-slate-900">${o.title}</h3>
-              <p class="text-xs font-bold text-emerald-700">${o.salary}</p>
-            </div>
-            <button type="button" onclick="openGovServiceForm('Candidatura • ${o.title}', 'Informe Nome, Telefone/WhatsApp e Formação')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
-              Candidatar-se / Inscrever-se
-            </button>
+      const q = normalizeText(document.getElementById('jobsSearchInput')?.value || '');
+
+      const filtered = opportunitiesCatalog.filter(o => {
+        const matchType = currentJobFilter === 'all' || o.type === currentJobFilter;
+        const matchQ = !q || normalizeText(o.title).includes(q) || normalizeText(o.company).includes(q) || normalizeText(o.loc).includes(q);
+        return matchType && matchQ;
+      });
+
+      grid.innerHTML = filtered.map(o => `
+        <div class="bg-white rounded-3xl border border-purple-100 p-5 shadow-sm flex flex-col justify-between gap-4 surface-card">
+          <div class="space-y-1.5">
+            <span class="text-[10px] font-extrabold uppercase text-indigo-700">${o.company} • ${o.loc}</span>
+            <h3 class="text-base font-black text-slate-900">${o.title}</h3>
+            <p class="text-xs font-bold text-emerald-700">${o.salary}</p>
           </div>
-        `).join('');
+          <button type="button" onclick="openGovServiceForm('Candidatura • ${o.title.replace(/'/g, "\\'")}', 'Informe Nome Completo, Telefone/WhatsApp e Escolaridade/Curso')" class="w-full py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-extrabold">
+            Candidatar-se / Inscrever-se
+          </button>
+        </div>
+      `).join('');
     }
 
     function renderTransparencyDocs() {
@@ -3754,8 +4122,8 @@
       const box = document.getElementById('assistantMessages');
       if (!box) return;
       let answer = 'O Rio Sapucaí está em nível normal (1,45m) nas estações de Itajubá.';
-      if (question.includes('doar')) answer = 'Acesse a aba "Unidades Carentes & Abrigos" no menu lateral para copiar o PIX oficial ou agendar entrega.';
-      if (question.includes('Santa Rosa')) answer = 'As linhas 6101, 4102, 01, 02, 03A, 03B, 04A, 04B, 05, 06 e 11A/B atendem o bairro Santa Rosa.';
+      if (question.includes('doação')) answer = 'Acesse a aba "Unidades Carentes & Abrigos" e clique em "Cadastrar Pedido de Doação" para registrar uma família ou entidade.';
+      if (question.includes('IFSULDEMINAS')) answer = 'Na aba "Empregos, Cursos & Estágios", o Curso Técnico Gratuito em Informática do IFSULDEMINAS Campus Itajubá está logo no topo com inscrição direta.';
       box.innerHTML += `
         <div class="p-2.5 rounded-2xl bg-slate-100 font-bold text-slate-800">${question}</div>
         <div class="p-2.5 rounded-2xl bg-purple-50 text-purple-950">${answer}</div>
@@ -3769,15 +4137,16 @@
       toggleMobileSidebar, switchMainView, toggleDarkMode, openRaioxDrawer, setMapTileLayer, toggleMapLayer,
       setMainMapCategoryFilter, setBusMapTileLayer, resetBusMapCenter, filterBusStopsOnMap,
       handlePlaceAutocomplete, selectSuggestedLocation, searchItajubaLocation, resetMapCenter, locateUserGPS,
-      selectNeighborhood, openEstablishmentModal, setReviewDetailFilter, unlockQrEvaluationMode,
+      selectNeighborhood, openEstablishmentModal, setReviewDetailFilter, voteReviewFairness, unlockQrEvaluationMode,
       setWizardStars, toggleWizardCriteriaTag, changeWizardStep, submitQrEvaluation,
       setReviewCategoryFilterBtn, renderReviewsDirectory, openBusStopModal, switchBusDirectionTab,
       votePollOption, renderReportsList, submitNewReport, toggleFloodSimulation, openGovServiceForm,
       submitGovServiceProtocol, downloadOfficialDocument, renderFullHealthAndEducation, activateZonaAzul,
-      renderAllBusLinesMobility, setCultureTab, filterOpportunities, toggleAssistantChat, askAssistant
+      renderAllBusLinesMobility, setCultureTab, renderCultureItems, openNeedDonationModal, submitNeedDonationRequest,
+      renderSocialUnits, filterOpportunities, renderOpportunitiesGrid, toggleAssistantChat, askAssistant
     });
 
-    // 14. INICIALIZAÇÃO GERAL DA APLICAÇÃO
+    // 17. INICIALIZAÇÃO GERAL DA APLICAÇÃO
     function bootstrapCivora() {
       try {
         if (localStorage.getItem('civora_dark_mode') === '1') {
